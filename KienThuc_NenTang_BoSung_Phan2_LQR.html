@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kiến Thức Bổ Sung Phần 2 — Tín hiệu &amp; Pha, Lyapunov, Tối ưu LQR</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+    window.MathJax = {
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']],
+            tags: 'ams'
+        },
+        chtml: { scale: 1 }
+    };
+    </script>
+    <style>
+        :root {
+            --primary: #0f172a;
+            --accent: #2563eb;
+            --bg: #ffffff;
+            --text: #1e293b;
+            --text-secondary: #475569;
+            --border: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+            font-size: 16.5px;
+            line-height: 1.9;
+            color: var(--text);
+            background: var(--bg);
+            max-width: 920px;
+            margin: 0 auto;
+            padding: 40px 25px;
+        }
+        .cover-page {
+            text-align: center;
+            padding: 50px 20px;
+            border-bottom: 3px solid var(--accent);
+            margin-bottom: 45px;
+            background: #f8fafc;
+            border-radius: 12px;
+        }
+        .cover-page h1 { font-size: 2.1em; color: var(--primary); margin-bottom: 12px; line-height: 1.3; border: none; padding: 0; }
+        .cover-page .subtitle { font-size: 1.25em; color: var(--accent); font-weight: 600; margin-bottom: 18px; }
+        .cover-page .tagline { font-size: 1em; color: var(--text-secondary); font-style: italic; max-width: 700px; margin: 0 auto 20px; }
+        .cover-page .meta { font-size: 0.93em; color: var(--text-secondary); }
+
+        h1 { font-size: 1.75em; color: var(--primary); margin: 42px 0 16px; border-bottom: 2px solid var(--accent); padding-bottom: 8px; }
+        h2 { font-size: 1.3em; color: var(--accent); margin: 30px 0 12px; }
+        h3 { font-size: 1.12em; color: var(--primary); margin: 22px 0 10px; }
+
+        .part-header {
+            color: white; padding: 24px 30px; border-radius: 10px; margin: 48px 0 26px; box-shadow: var(--shadow);
+        }
+        .part-header h1 { color: white; border: none; margin: 0; font-size: 1.55em; padding: 0; }
+        .part-header p { color: rgba(255,255,255,0.85); margin-top: 7px; font-size: 1em; }
+        .ph-orange { background: linear-gradient(135deg, #b45309, #f59e0b); }
+        .ph-blue { background: linear-gradient(135deg, #1e3a8a, #2563eb); }
+        .ph-purple { background: linear-gradient(135deg, #581c87, #a855f7); }
+        .ph-green { background: linear-gradient(135deg, #065f46, #10b981); }
+
+        p { margin: 10px 0; text-align: justify; }
+        ul, ol { margin: 9px 0 13px 22px; }
+        li { margin: 5px 0; }
+        strong { color: #0f172a; font-weight: 600; }
+        blockquote { border-left: 4px solid var(--accent); background: #f8fafc; padding: 13px 17px; margin: 16px 0; font-style: italic; color: var(--text-secondary); border-radius: 0 8px 8px 0; }
+        .highlight { background: #fef08a; padding: 2px 6px; border-radius: 4px; font-weight: 600; }
+
+        .definition, .theorem, .important-note, .example-box, .analogy-box, .visual-box {
+            padding: 17px 20px; border-radius: 8px; margin: 18px 0; border-left: 5px solid; box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .definition { background: #eff6ff; border-color: #3b82f6; }
+        .definition .box-title { color: #1d4ed8; }
+        .theorem { background: #faf5ff; border-color: #a855f7; }
+        .theorem .box-title { color: #7e22ce; }
+        .important-note { background: #fffbeb; border-color: #f59e0b; }
+        .important-note .box-title { color: #b45309; }
+        .example-box { background: #f0fdf4; border-color: #22c55e; }
+        .example-box .box-title { color: #15803d; }
+        .analogy-box { background: #fff7ed; border-color: #ea580c; }
+        .analogy-box .box-title { color: #c2410c; }
+        .visual-box { background: #f0f9ff; border-color: #0ea5e9; }
+        .visual-box .box-title { color: #0369a1; }
+        .box-title { font-weight: 700; font-size: 1.03em; margin-bottom: 9px; display: block; }
+
+        .step-card {
+            background: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid var(--accent);
+            border-radius: 6px; padding: 14px 18px; margin: 12px 0;
+        }
+        .step-number {
+            display: inline-block; background: var(--accent); color: white;
+            padding: 2px 10px; border-radius: 12px; font-size: 0.85em; font-weight: 700; margin-right: 8px;
+        }
+
+        table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.95em; }
+        th, td { border: 1px solid var(--border); padding: 9px 12px; text-align: left; }
+        th { background: var(--primary); color: white; font-weight: 600; }
+        tr:nth-child(even) { background: #f8fafc; }
+
+        pre {
+            background: #0f172a; color: #f8fafc; padding: 16px 20px; border-radius: 8px; overflow-x: auto;
+            font-family: "Fira Code", Consolas, Monaco, monospace; font-size: 0.87em; line-height: 1.55; margin: 16px 0;
+        }
+        code { font-family: "Fira Code", Consolas, Monaco, monospace; background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-size: 0.9em; color: #b91c1c; }
+        pre code { background: transparent; color: inherit; padding: 0; }
+
+        .ascii-diagram {
+            background: #f1f5f9; border: 1px solid #cbd5e1; padding: 16px 20px; border-radius: 8px;
+            font-family: "Fira Code", Consolas, Monaco, monospace; font-size: 0.84em; line-height: 1.4;
+            white-space: pre; overflow-x: auto; margin: 14px 0; color: var(--primary);
+        }
+
+        .toc { background: #f8fafc; border: 1px solid var(--border); border-radius: 10px; padding: 20px 26px; margin: 26px 0; }
+        .toc h2 { margin-top: 0; color: var(--primary); }
+        .toc ul { list-style: none; margin-left: 0; }
+        .toc > ul > li { margin: 6px 0; font-weight: 600; color: var(--primary); }
+        .toc > ul > li > ul > li { font-weight: 400; color: var(--text); margin: 3px 0; padding-left: 18px; }
+        .toc a { color: inherit; text-decoration: none; }
+        .toc a:hover { color: var(--accent); text-decoration: underline; }
+
+        .print-btn {
+            position: fixed; bottom: 30px; right: 30px; background: var(--accent); color: white;
+            border: none; padding: 12px 22px; border-radius: 30px; font-size: 0.95em; font-weight: 600;
+            cursor: pointer; box-shadow: 0 4px 14px rgba(37,99,235,0.4); transition: all 0.2s; z-index: 1000;
+        }
+        .print-btn:hover { background: #1d4ed8; transform: translateY(-2px); }
+        @media print {
+            body { padding: 15px; font-size: 11pt; max-width: 100%; }
+            .print-btn { display: none; }
+            .part-header { page-break-before: always; }
+            .definition, .theorem, .example-box, .important-note, .analogy-box, .visual-box, .step-card { break-inside: avoid; }
+        }
+    </style>
+</head>
+<body>
+
+<button class="print-btn" onclick="window.print()">📄 Xuất PDF</button>
+
+<!-- ===== COVER ===== -->
+<div class="cover-page">
+    <h1>Kiến Thức Nền Tảng Bổ Sung — Phần 2</h1>
+    <div class="subtitle">TÍN HIỆU &amp; PHA (giải thích từ con số 0) — LYAPUNOV (chứng minh chi tiết) — TỐI ƯU LQR (từng bước)</div>
+    <div class="tagline">
+        Tài liệu này giải thích cực kỳ chậm rãi và chi tiết 3 mảng kiến thức mà Phần 1 chưa làm rõ.
+        Không giả định bạn đã biết bất cứ điều gì. Mọi công thức đều được chứng minh từng bước.
+    </div>
+    <hr style="width: 50%; margin: 18px auto; border: none; border-top: 1px solid #cbd5e1;">
+    <div class="meta">
+        <p><strong>Đọc trước:</strong> Không yêu cầu kiến thức đặc biệt. Chỉ cần biết $\sin$, $\cos$ và phép nhân ma trận cơ bản.</p>
+    </div>
+</div>
+
+<!-- ===== TOC ===== -->
+<div class="toc">
+    <h2>📋 Mục Lục</h2>
+    <ul>
+        <li><a href="#partA">PHẦN A: TÍN HIỆU, PHA, TRỄ PHA, SỚM PHA — Từ con số 0</a>
+            <ul>
+                <li><a href="#a1">A.1 "Tín hiệu" là gì? Ví dụ thực tế</a></li>
+                <li><a href="#a2">A.2 Tín hiệu hình sin — Ngôn ngữ chung của kỹ thuật</a></li>
+                <li><a href="#a3">A.3 "Pha" là gì? Giải thích bằng đồng hồ kim</a></li>
+                <li><a href="#a4">A.4 "Trễ pha" vs "Sớm pha" — Bạn bè đi chung nhưng lệch bước</a></li>
+                <li><a href="#a5">A.5 Pha ảnh hưởng đến hệ thống điều khiển như thế nào?</a></li>
+                <li><a href="#a6">A.6 Tại sao trễ pha $-180°$ = Chết? (Liên hệ Nyquist)</a></li>
+                <li><a href="#a7">A.7 Gain (Biên độ) ảnh hưởng gì?</a></li>
+                <li><a href="#a8">A.8 Code Python: Tận mắt nhìn trễ pha / sớm pha</a></li>
+            </ul>
+        </li>
+        <li><a href="#partB">PHẦN B: ỔN ĐỊNH LYAPUNOV — Chứng minh Từng Bước với Số Cụ Thể</a>
+            <ul>
+                <li><a href="#b1">B.1 Vấn đề: Làm sao biết hệ ổn định mà KHÔNG giải phương trình?</a></li>
+                <li><a href="#b2">B.2 Ý tưởng Lyapunov giải thích bằng ví dụ Quả bóng + Bát</a></li>
+                <li><a href="#b3">B.3 Hàm Lyapunov $V(x) = x^T P x$ — Đó là "năng lượng ảo"</a></li>
+                <li><a href="#b4">B.4 Chứng minh $\dot{V} < 0$ từng dòng một (ví dụ số $2 \times 2$)</a></li>
+                <li><a href="#b5">B.5 Phương trình Lyapunov $A^T P + PA = -Q$: Chứng minh số</a></li>
+                <li><a href="#b6">B.6 Kết nối với LQR: Tại sao $P$ trong Riccati cũng là Lyapunov?</a></li>
+                <li><a href="#b7">B.7 Chứng minh chi tiết: Hệ vòng kín LQR luôn ổn định</a></li>
+                <li><a href="#b8">B.8 Code Python: Vẽ quỹ đạo + đường đồng mức $V(x) = x^T P x$</a></li>
+            </ul>
+        </li>
+        <li><a href="#partC">PHẦN C: TẠI SAO LQR "TỐI ƯU"? — Chứng minh Chậm Rãi Từng Bước</a>
+            <ul>
+                <li><a href="#c1">C.1 Bài toán tối ưu hóa: Tìm $u(t)$ sao cho $J$ nhỏ nhất</a></li>
+                <li><a href="#c2">C.2 Bước 1 — Đoán dạng chi phí tối ưu $J^*(x) = x^T P x$</a></li>
+                <li><a href="#c3">C.3 Bước 2 — Tính đạo hàm $\frac{d}{dt}(x^T P x)$ từng bước</a></li>
+                <li><a href="#c4">C.4 Bước 3 — Viết phương trình Bellman và tối ưu theo $u$</a></li>
+                <li><a href="#c5">C.5 Bước 4 — Phương trình Riccati xuất hiện tự nhiên</a></li>
+                <li><a href="#c6">C.6 Ví dụ số hoàn chỉnh: Tính $J^*$ cho Bài 2.1</a></li>
+                <li><a href="#c7">C.7 Tổng kết: Vì sao $u = -Kx$ là "tốt nhất có thể"?</a></li>
+            </ul>
+        </li>
+    </ul>
+</div>
+
+
+<!-- ################################################################ -->
+<!-- PHẦN A: TÍN HIỆU & PHA                                         -->
+<!-- ################################################################ -->
+<div class="part-header ph-orange" id="partA">
+    <h1>PHẦN A: TÍN HIỆU, PHA, TRỄ PHA, SỚM PHA</h1>
+    <p>Giải thích từ con số 0 — Không giả định bạn đã biết bất cứ gì</p>
+</div>
+
+<h2 id="a1">A.1 "Tín hiệu" là gì? Ví dụ Thực tế</h2>
+
+<p><strong>Tín hiệu (Signal)</strong> đơn giản là <strong>một đại lượng thay đổi theo thời gian</strong>. Trong cuộc sống, bạn gặp tín hiệu ở khắp nơi:</p>
+
+<table>
+    <tr>
+        <th>Tín hiệu</th>
+        <th>Đại lượng đo</th>
+        <th>Ký hiệu</th>
+    </tr>
+    <tr>
+        <td>Nhịp tim trên máy ECG</td>
+        <td>Điện áp tim (mV) thay đổi theo thời gian</td>
+        <td>$v(t)$</td>
+    </tr>
+    <tr>
+        <td>Âm thanh</td>
+        <td>Áp suất không khí dao động theo thời gian</td>
+        <td>$p(t)$</td>
+    </tr>
+    <tr>
+        <td>Nhiệt độ phòng</td>
+        <td>Nhiệt độ (°C) thay đổi theo thời gian</td>
+        <td>$T(t)$</td>
+    </tr>
+    <tr>
+        <td>Góc nghiêng robot</td>
+        <td>Góc $\theta$ (rad) thay đổi theo thời gian</td>
+        <td>$\theta(t)$</td>
+    </tr>
+    <tr>
+        <td>Lực động cơ</td>
+        <td>Lực $F$ (N) mà bộ điều khiển ra lệnh theo thời gian</td>
+        <td>$u(t)$</td>
+    </tr>
+</table>
+
+<p>Trong điều khiển, ta đặc biệt quan tâm đến 2 loại tín hiệu:</p>
+<ul>
+    <li><strong>Tín hiệu vào (Input)</strong> $u(t)$: Lệnh mà bộ điều khiển gửi cho hệ thống (ví dụ: điện áp cho động cơ)</li>
+    <li><strong>Tín hiệu ra (Output)</strong> $y(t)$: Phản hồi mà cảm biến đo được (ví dụ: góc nghiêng thực tế)</li>
+</ul>
+
+<h2 id="a2">A.2 Tín hiệu hình Sin — Ngôn ngữ chung của Kỹ thuật</h2>
+
+<p>Trong phân tích hệ thống, tín hiệu quan trọng nhất là <strong>sóng hình sin (Sinusoidal Wave)</strong>:</p>
+$$y(t) = A \sin(\omega t + \phi)$$
+
+<p>Có <strong>3 thông số</strong> quyết định "hình dạng" sóng sin:</p>
+
+<div class="definition">
+    <span class="box-title">📐 3 Thông số của Sóng Sin:</span>
+    <ol>
+        <li><strong>Biên độ $A$ (Amplitude)</strong> = "Sóng cao bao nhiêu?"
+            <ul><li>$A = 1$: sóng dao động từ $-1$ đến $+1$</li>
+            <li>$A = 5$: sóng dao động từ $-5$ đến $+5$ (to hơn)</li></ul>
+        </li>
+        <li><strong>Tần số $\omega$ (Frequency)</strong> = "Sóng rung nhanh bao nhiêu?" (đơn vị: rad/s)
+            <ul><li>$\omega = 1$: rung chậm (1 chu kỳ mất $2\pi \approx 6.28$ giây)</li>
+            <li>$\omega = 10$: rung nhanh gấp 10 (1 chu kỳ mất $0.628$ giây)</li></ul>
+        </li>
+        <li><strong>Pha $\phi$ (Phase)</strong> = "Sóng bắt đầu ở đâu?" (đơn vị: radian hoặc độ)
+            <ul><li>$\phi = 0$: sóng bắt đầu từ $0$ tại $t = 0$</li>
+            <li>$\phi = \frac{\pi}{2}$: sóng bắt đầu từ đỉnh tại $t = 0$</li></ul>
+        </li>
+    </ol>
+</div>
+
+<h2 id="a3">A.3 "Pha" là gì? Giải thích bằng Đồng hồ Kim</h2>
+
+<div class="analogy-box">
+    <span class="box-title">⏰ Ẩn dụ: 2 Đồng hồ cùng tốc độ, lệch kim</span>
+    <p>Tưởng tượng bạn có 2 đồng hồ quay kim giây:</p>
+    <ul>
+        <li><strong>Đồng hồ A:</strong> Kim chỉ số 12 lúc $t = 0$ (bắt đầu "chuẩn")</li>
+        <li><strong>Đồng hồ B:</strong> Kim chỉ số 3 lúc $t = 0$ (bắt đầu "lệch" so với A)</li>
+    </ul>
+    <p>Cả hai đồng hồ quay cùng tốc độ (cùng $\omega$), nhưng kim của B luôn <strong>"đi trước"</strong> A một góc $90° = \frac{\pi}{2}$ rad.</p>
+    <p>Góc lệch đó chính là <strong>Pha ($\phi$)</strong>!</p>
+</div>
+
+<p>Pha $\phi$ đo lường <strong>"sóng này đi trước hay đi sau bao nhiêu"</strong> so với sóng chuẩn.</p>
+
+<h2 id="a4">A.4 "Trễ pha" vs "Sớm pha" — Bạn bè đi chung nhưng lệch bước</h2>
+
+<p>Bây giờ đến khái niệm quan trọng nhất! Xét 2 tín hiệu cùng tần số:</p>
+$$\text{Tín hiệu vào: } u(t) = \sin(\omega t)$$
+$$\text{Tín hiệu ra: } y(t) = \sin(\omega t + \phi)$$
+
+<div class="analogy-box">
+    <span class="box-title">🚶‍♂️🚶 Ẩn dụ: 2 Người đi bộ cùng tốc độ</span>
+    <p>Bạn (tín hiệu vào $u$) và bạn bè (tín hiệu ra $y$) đi bộ trên đường, cùng tốc độ bước. Nhưng:</p>
+    <ul>
+        <li>Nếu bạn bè <strong>đi phía trước bạn</strong> (đạt đỉnh sóng trước bạn): bạn bè <strong>sớm pha</strong> ($\phi > 0$), hay nói cách khác tín hiệu ra <strong>"dẫn trước" (Lead)</strong> tín hiệu vào.</li>
+        <li>Nếu bạn bè <strong>đi phía sau bạn</strong> (đạt đỉnh sóng sau bạn): bạn bè <strong>trễ pha</strong> ($\phi < 0$), hay nói cách khác tín hiệu ra <strong>"đi sau" (Lag)</strong> tín hiệu vào.</li>
+    </ul>
+</div>
+
+<div class="visual-box">
+    <span class="box-title">📊 Hình dung bằng sóng:</span>
+</div>
+
+<div class="ascii-diagram">
+TRƯỜNG HỢP 1: SỚM PHA (φ > 0, tín hiệu ra ĐI TRƯỚC)
+                                    
+  Tín hiệu vào u(t):   ╱‾‾╲      ╱‾‾╲      ╱‾‾╲
+                       ╱    ╲    ╱    ╲    ╱    ╲
+                  ────╱──────╲──╱──────╲──╱──────╲──→ t
+                              ╲╱        ╲╱        ╲╱
+
+  Tín hiệu ra y(t):  ╱‾‾╲      ╱‾‾╲      ╱‾‾╲
+  (đi trước!)       ╱    ╲    ╱    ╲    ╱    ╲
+               ────╱──────╲──╱──────╲──╱──────╲─────→ t
+                            ╲╱        ╲╱        ╲╱
+                   ↑
+                   y đạt đỉnh TRƯỚC u
+</div>
+
+<div class="ascii-diagram">
+TRƯỜNG HỢP 2: TRỄ PHA (φ < 0, tín hiệu ra ĐI SAU)
+                                    
+  Tín hiệu vào u(t):   ╱‾‾╲      ╱‾‾╲      ╱‾‾╲
+                       ╱    ╲    ╱    ╲    ╱    ╲
+                  ────╱──────╲──╱──────╲──╱──────╲──→ t
+                              ╲╱        ╲╱        ╲╱
+
+  Tín hiệu ra y(t):      ╱‾‾╲      ╱‾‾╲      ╱‾‾╲
+  (đi sau!)              ╱    ╲    ╱    ╲    ╱    ╲
+               ──────────╱──────╲──╱──────╲──╱──────→ t
+                                  ╲╱        ╲╱
+                         ↑
+                         y đạt đỉnh SAU u
+</div>
+
+<div class="example-box">
+    <span class="box-title">🔢 Ví dụ số cụ thể:</span>
+    <p>$u(t) = \sin(2t)$ (tín hiệu vào, tần số $\omega = 2$ rad/s).</p>
+    <p><strong>Trường hợp A — Trễ pha $45°$:</strong></p>
+    $$y(t) = 0.8 \sin(2t - 45°) = 0.8 \sin(2t - \frac{\pi}{4})$$
+    <ul>
+        <li>$u(t)$ đạt đỉnh tại $t = \frac{\pi}{4} \approx 0.785$ giây</li>
+        <li>$y(t)$ đạt đỉnh tại $t = \frac{\pi}{4} + \frac{\pi/4}{2} = \frac{3\pi}{8} \approx 1.178$ giây</li>
+        <li>$y$ đạt đỉnh <strong>SAU</strong> $u$ → $y$ <strong>trễ pha</strong> $45°$</li>
+        <li>Biên độ $y$ = $0.8$ (nhỏ hơn biên độ $u$ = $1$) → Hệ thống cũng giảm biên độ</li>
+    </ul>
+    <p><strong>Trường hợp B — Sớm pha $30°$:</strong></p>
+    $$y(t) = 1.2 \sin(2t + 30°)$$
+    <ul>
+        <li>$y$ đạt đỉnh <strong>TRƯỚC</strong> $u$ → $y$ <strong>sớm pha</strong> $30°$</li>
+    </ul>
+</div>
+
+<h2 id="a5">A.5 Pha ảnh hưởng đến Hệ thống Điều khiển như thế nào?</h2>
+
+<p>Đây là phần quan trọng nhất! Trong hệ thống hồi tiếp (feedback), bộ điều khiển đo sai lệch rồi ra lệnh sửa. Nếu tín hiệu bị <strong>trễ pha</strong>, bộ điều khiển sẽ <strong>ra lệnh sai thời điểm</strong>!</p>
+
+<div class="analogy-box">
+    <span class="box-title">🏗️ Ẩn dụ Cực kỳ Trực quan: Xích đu</span>
+    <p>Bạn đẩy em bé trên xích đu. Để xích đu bay cao nhất, bạn phải <strong>đẩy đúng lúc</strong> — khi xích đu đang ở điểm xa nhất phía sau và bắt đầu lao tới.</p>
+    <ul>
+        <li><strong>Đẩy đúng pha ($\phi = 0°$):</strong> Xích đu bay cao hơn mỗi lần → <strong>Hệ hoạt động tốt!</strong></li>
+        <li><strong>Đẩy trễ một chút ($\phi = -90°$):</strong> Bạn đẩy khi xích đu đang ở giữa → hiệu quả giảm. Xích đu không bay cao lắm nhưng vẫn ổn.</li>
+        <li><strong>Đẩy trễ $180°$ ($\phi = -180°$):</strong> Bạn đẩy <strong>ĐÚNG LÚC xích đu lao về phía bạn</strong> → bạn đang <strong>PHANH</strong> thay vì đẩy! Nhưng nếu lực đẩy đủ mạnh (Gain $\ge 1$), bạn sẽ khiến xích đu chuyển sang dao động ngược chiều → <strong>HỆ THỐNG MẤT ỔN ĐỊNH!</strong></li>
+    </ul>
+</div>
+
+<div class="important-note">
+    <span class="box-title">⚡ QUY TẮC CỐT LÕI:</span>
+    <p>Trong hệ hồi tiếp, nếu tín hiệu vòng lặp bị:</p>
+    <ul>
+        <li>Trễ pha $-180°$ (tín hiệu ra ngược pha hoàn toàn với tín hiệu vào), VÀ</li>
+        <li>Gain $\ge 1$ (hệ thống khuếch đại tín hiệu lên ≥ nguyên bản)</li>
+    </ul>
+    <p>→ <strong>Tín hiệu hồi tiếp ÂM trở thành hồi tiếp DƯƠNG</strong> → Sai lệch bị khuếch đại vô hạn → <strong>HỆ MẤT ỔN ĐỊNH!</strong></p>
+</div>
+
+<h2 id="a6">A.6 Tại sao Trễ pha $-180°$ = Chết? (Liên hệ Nyquist)</h2>
+
+<p>Giờ kết nối lại với biểu đồ Nyquist và điểm $-1$:</p>
+
+<div class="step-card">
+    <span class="step-number">1</span> <strong>Hồi tiếp âm bình thường:</strong>
+    <p>Tín hiệu vào: "Nhiệt độ đang 25°C, cao hơn mục tiêu 22°C → SAI LỆCH = +3°C".<br>
+    Bộ điều khiển: "Bật điều hòa MÁT, giảm nhiệt" → Đúng! Nhiệt giảm về 22°C. ✓</p>
+</div>
+
+<div class="step-card">
+    <span class="step-number">2</span> <strong>Nếu tín hiệu bị trễ pha $-180°$ với Gain = 1:</strong>
+    <p>Tín hiệu vào: "Nhiệt 25°C, cao hơn mục tiêu" → SAI LỆCH = +3°C.<br>
+    Nhưng do trễ $180°$, bộ điều khiển nhận được tín hiệu <strong>ngược dấu</strong>: nó "tưởng" sai lệch = $-3°C$ (nhiệt đang THẤP hơn mục tiêu).<br>
+    Bộ điều khiển: "Bật SƯỞi, tăng nhiệt!" → <strong>SAI!</strong> Nhiệt tăng lên 28°C → sai lệch tăng → bật sưởi mạnh hơn → 31°C → ... → <strong>BÙ LÊN VÔ CỰC!</strong> ✗</p>
+</div>
+
+<div class="step-card">
+    <span class="step-number">3</span> <strong>Liên hệ Nyquist:</strong>
+    <p>Trên biểu đồ Nyquist, điểm $L(j\omega) = -1$ nghĩa là tại tần số $\omega$:</p>
+    <ul>
+        <li>$|L| = 1$ → Gain = 1 (không khuếch đại, không giảm)</li>
+        <li>$\angle L = -180°$ → Trễ pha $180°$ (ngược pha hoàn toàn)</li>
+    </ul>
+    <p>→ Kết hợp cả hai = <strong>Hồi tiếp âm biến thành hồi tiếp dương cường độ 100%</strong> → Tín hiệu tự khuếch đại vô hạn = <strong>MẤT ỔN ĐỊNH!</strong></p>
+</div>
+
+<h2 id="a7">A.7 Gain (Biên độ) ảnh hưởng gì?</h2>
+
+<p>Ngoài pha, <strong>Gain</strong> (biên độ khuếch đại) cũng rất quan trọng:</p>
+
+<table>
+    <tr>
+        <th>Gain $|G|$</th>
+        <th>Ý nghĩa</th>
+        <th>Ví dụ</th>
+    </tr>
+    <tr>
+        <td>$|G| = 2$</td>
+        <td>Hệ thống khuếch đại tín hiệu lên <strong>gấp 2</strong></td>
+        <td>Bạn hét "hello" vào micro, loa phát ra to gấp 2</td>
+    </tr>
+    <tr>
+        <td>$|G| = 1$</td>
+        <td>Hệ thống giữ nguyên biên độ</td>
+        <td>Loa phát ra đúng âm lượng bạn hét</td>
+    </tr>
+    <tr>
+        <td>$|G| = 0.5$</td>
+        <td>Hệ thống <strong>giảm</strong> biên độ xuống 50%</td>
+        <td>Loa phát ra nhỏ hơn</td>
+    </tr>
+    <tr>
+        <td>$|G| = 0$</td>
+        <td>Hệ thống <strong>chặn hoàn toàn</strong> tín hiệu</td>
+        <td>Loa tắt tiếng</td>
+    </tr>
+</table>
+
+<p>Kết hợp Gain + Phase:</p>
+<div class="important-note">
+    <span class="box-title">⚡ Tóm tắt Ảnh hưởng của Gain và Phase:</span>
+    <ul>
+        <li><strong>Gain lớn + Phase tốt ($|\phi| < 90°$):</strong> Hệ phản ứng mạnh, nhanh, chính xác ✓</li>
+        <li><strong>Gain nhỏ + Phase xấu:</strong> Hệ phản ứng yếu, chậm, nhưng ít nhất không nguy hiểm</li>
+        <li><strong>Gain $\ge 1$ + Phase $= -180°$:</strong> <span class="highlight">CHẾT! Hệ mất ổn định!</span></li>
+        <li><strong>Gain lớn + Phase $\approx -180°$:</strong> Gần chết! Hệ dao động rất mạnh trước khi ổn định (nếu may mắn)</li>
+    </ul>
+</div>
+
+<h2 id="a8">A.8 Code Python: Tận mắt nhìn Trễ pha / Sớm pha</h2>
+
+<pre><code>import numpy as np
+import matplotlib.pyplot as plt
+
+t = np.linspace(0, 4*np.pi, 500)  # Thời gian
+omega = 1  # Tần số
+
+# Tín hiệu gốc (vào)
+u = np.sin(omega * t)
+
+# 3 trường hợp Phase khác nhau
+y_cung_pha    = 0.8 * np.sin(omega * t)           # φ = 0° (cùng pha)
+y_tre_pha     = 0.8 * np.sin(omega * t - np.pi/4) # φ = -45° (trễ pha)
+y_nguoc_pha   = 1.0 * np.sin(omega * t - np.pi)   # φ = -180° (ngược pha!)
+
+fig, axes = plt.subplots(3, 1, figsize=(10, 9))
+
+# --- Trường hợp 1: Cùng pha ---
+axes[0].plot(t, u, 'b-', linewidth=2, label='Tín hiệu VÀO u(t)')
+axes[0].plot(t, y_cung_pha, 'r--', linewidth=2, label='Tín hiệu RA y(t), φ = 0°')
+axes[0].set_title('CÙNG PHA (φ = 0°): y đạt đỉnh CÙNG LÚC với u', fontsize=12)
+axes[0].legend(fontsize=10)
+axes[0].grid(True, alpha=0.3)
+axes[0].set_ylabel('Biên độ')
+
+# --- Trường hợp 2: Trễ pha 45° ---
+axes[1].plot(t, u, 'b-', linewidth=2, label='Tín hiệu VÀO u(t)')
+axes[1].plot(t, y_tre_pha, 'r--', linewidth=2, label='Tín hiệu RA y(t), φ = -45°')
+# Vẽ mũi tên chỉ khoảng trễ
+axes[1].annotate('', xy=(np.pi/2 + np.pi/4, 0.85), xytext=(np.pi/2, 0.85),
+                arrowprops=dict(arrowstyle='<->', color='green', lw=2))
+axes[1].text(np.pi/2 + np.pi/8, 0.92, 'Trễ 45°', color='green', fontsize=11, ha='center')
+axes[1].set_title('TRỄ PHA (φ = -45°): y đạt đỉnh SAU u', fontsize=12)
+axes[1].legend(fontsize=10)
+axes[1].grid(True, alpha=0.3)
+axes[1].set_ylabel('Biên độ')
+
+# --- Trường hợp 3: Ngược pha 180° ---
+axes[2].plot(t, u, 'b-', linewidth=2, label='Tín hiệu VÀO u(t)')
+axes[2].plot(t, y_nguoc_pha, 'r--', linewidth=2, label='Tín hiệu RA y(t), φ = -180°')
+axes[2].fill_between(t, u, y_nguoc_pha, alpha=0.1, color='red')
+axes[2].set_title('NGƯỢC PHA (φ = -180°): u lên thì y xuống → NGUY HIỂM!', fontsize=12, color='red')
+axes[2].legend(fontsize=10)
+axes[2].grid(True, alpha=0.3)
+axes[2].set_ylabel('Biên độ')
+axes[2].set_xlabel('Thời gian t')
+
+plt.tight_layout()
+plt.show()
+</code></pre>
+
+<div class="example-box">
+    <span class="box-title">💡 Chạy code trên và quan sát:</span>
+    <ul>
+        <li><strong>Hình 1 (Cùng pha):</strong> Hai sóng lên/xuống CÙNG LÚC → hệ phản ứng đúng.</li>
+        <li><strong>Hình 2 (Trễ pha $-45°$):</strong> Sóng đỏ đạt đỉnh SAU sóng xanh → hệ phản ứng chậm hơn.</li>
+        <li><strong>Hình 3 (Ngược pha $-180°$):</strong> Khi sóng xanh lên thì sóng đỏ xuống → hệ "đẩy ngược"! Nếu Gain $= 1$ → mất ổn định!</li>
+    </ul>
+</div>
+
+
+<!-- ################################################################ -->
+<!-- PHẦN B: LYAPUNOV CHI TIẾT                                       -->
+<!-- ################################################################ -->
+<div class="part-header ph-purple" id="partB">
+    <h1>PHẦN B: ỔN ĐỊNH LYAPUNOV — Chứng minh Từng Bước với Số Cụ Thể</h1>
+    <p>Không bỏ qua bất kỳ dòng tính toán nào</p>
+</div>
+
+<h2 id="b1">B.1 Vấn đề: Làm sao biết Hệ Ổn định mà KHÔNG giải Phương trình?</h2>
+
+<p>Khi hệ thống phức tạp (bậc 10, bậc 100...), giải phương trình vi phân để tìm đáp ứng $x(t)$ gần như bất khả thi. <strong>Lyapunov đề xuất:</strong> Ta không cần giải phương trình! Chỉ cần tìm một "hàm năng lượng ảo" mà chứng minh nó luôn giảm → hệ ổn định.</p>
+
+<h2 id="b2">B.2 Ý tưởng Lyapunov: Quả bóng + Bát — Giải thích Siêu chậm</h2>
+
+<div class="analogy-box">
+    <span class="box-title">🏀 Ẩn dụ Hoàn chỉnh:</span>
+    <p>Thả quả bóng vào cái bát có ma sát.</p>
+    <p><strong>Câu hỏi:</strong> Quả bóng có dừng ở đáy bát không?</p>
+    <p><strong>Cách 1 (Giải phương trình):</strong> Viết phương trình chuyển động Newton $m\ddot{x} = -kx - b\dot{x}$, giải ra $x(t) = ...$, rồi kiểm tra $\lim_{t \to \infty} x(t) = 0$. → Rất khó khi hệ phức tạp!</p>
+    <p><strong>Cách 2 (Lyapunov):</strong> Không cần giải! Chỉ cần:</p>
+    <ol>
+        <li>Đo "năng lượng" quả bóng: $V = \frac{1}{2}kx^2 + \frac{1}{2}m\dot{x}^2$ (thế năng + động năng).</li>
+        <li>Kiểm tra: Năng lượng có luôn giảm không? $\dot{V} = -b\dot{x}^2 < 0$ (ma sát luôn tiêu hao năng lượng).</li>
+        <li>Kết luận: Năng lượng giảm mãi → quả bóng sẽ dừng ở đáy bát ($x = 0$). ✓</li>
+    </ol>
+</div>
+
+<h2 id="b3">B.3 Hàm Lyapunov $V(x) = x^T P x$ — Đó là "Năng lượng ảo"</h2>
+
+<p>Trong hệ tuyến tính $\dot{x} = Ax$, "năng lượng thật" không phải lúc nào cũng dễ tính. Lyapunov cho phép ta dùng <strong>"năng lượng ảo"</strong> — bất kỳ hàm nào thỏa mãn 3 điều kiện:</p>
+
+<div class="definition">
+    <span class="box-title">📐 3 Điều kiện của Hàm Lyapunov $V(x)$:</span>
+    <ol>
+        <li>$V(0) = 0$ — Năng lượng ảo bằng $0$ tại điểm cân bằng</li>
+        <li>$V(x) > 0$ khi $x \neq 0$ — Năng lượng ảo luôn dương ở mọi nơi khác</li>
+        <li>$\dot{V}(x) < 0$ khi $x \neq 0$ — Năng lượng ảo luôn giảm theo thời gian</li>
+    </ol>
+    <p>Nếu tìm được hàm $V$ thỏa cả 3 → Hệ <strong>ổn định tiệm cận</strong> (mọi quỹ đạo hội tụ về $x = 0$).</p>
+</div>
+
+<p>Với hệ tuyến tính, ta chọn dạng toàn phương: $V(x) = x^T P x$, trong đó $P$ là ma trận đối xứng.</p>
+
+<p>Kiểm tra 3 điều kiện:</p>
+<ul>
+    <li>Điều kiện 1: $V(0) = 0^T P \cdot 0 = 0$ ✓ (Hiển nhiên)</li>
+    <li>Điều kiện 2: $V(x) > 0$ khi $x \neq 0$ ⟺ $P > 0$ (xác định dương). Đây là lý do ta cần $P > 0$!</li>
+    <li>Điều kiện 3: $\dot{V}(x) < 0$? → Phải tính $\dot{V}$ (bước tiếp theo)</li>
+</ul>
+
+<h2 id="b4">B.4 Chứng minh $\dot{V} < 0$ — Từng dòng một (Ví dụ số $2 \times 2$)</h2>
+
+<p><strong>Cho hệ ổn định:</strong> $\dot{x} = Ax$ với $A = \begin{bmatrix} -1 & 0 \\ 0 & -2 \end{bmatrix}$ (cả hai trị riêng $\lambda_1 = -1, \lambda_2 = -2$ đều âm → ta biết hệ ổn định. Mục tiêu: dùng Lyapunov để chứng minh lại điều này).</p>
+
+<p><strong>Chọn:</strong> $P = \begin{bmatrix} 3 & 0 \\ 0 & 1 \end{bmatrix}$ (xác định dương vì $3 > 0$ và $\det = 3 > 0$).</p>
+
+<div class="step-card">
+    <span class="step-number">Bước 1</span> <strong>Viết $V(x)$:</strong>
+    $$V(x) = x^T P x = \begin{bmatrix} x_1 & x_2 \end{bmatrix} \begin{bmatrix} 3 & 0 \\ 0 & 1 \end{bmatrix} \begin{bmatrix} x_1 \\ x_2 \end{bmatrix} = 3x_1^2 + x_2^2$$
+    <p>Rõ ràng $V > 0$ khi $(x_1, x_2) \neq (0, 0)$. ✓</p>
+</div>
+
+<div class="step-card">
+    <span class="step-number">Bước 2</span> <strong>Tính đạo hàm $\dot{V}$ theo thời gian:</strong>
+    <p>Ta dùng quy tắc chuỗi (chain rule). Vì $V = 3x_1^2 + x_2^2$:</p>
+    $$\dot{V} = \frac{\partial V}{\partial x_1} \dot{x}_1 + \frac{\partial V}{\partial x_2} \dot{x}_2 = 6x_1 \dot{x}_1 + 2x_2 \dot{x}_2$$
+</div>
+
+<div class="step-card">
+    <span class="step-number">Bước 3</span> <strong>Thay $\dot{x} = Ax$:</strong>
+    <p>$\dot{x}_1 = -x_1$ (từ hàng 1 của $Ax$), $\dot{x}_2 = -2x_2$ (từ hàng 2 của $Ax$).</p>
+    $$\dot{V} = 6x_1 \cdot (-x_1) + 2x_2 \cdot (-2x_2) = -6x_1^2 - 4x_2^2$$
+</div>
+
+<div class="step-card">
+    <span class="step-number">Bước 4</span> <strong>Kiểm tra dấu:</strong>
+    $$\dot{V} = -(6x_1^2 + 4x_2^2) < 0 \quad \text{khi } (x_1, x_2) \neq (0, 0)$$
+    <p>$\dot{V}$ luôn ÂM (vì $6x_1^2 + 4x_2^2 > 0$ khi $x \neq 0$). ✓</p>
+</div>
+
+<div class="step-card">
+    <span class="step-number">Kết luận</span> <strong>3 điều kiện Lyapunov đều thỏa:</strong>
+    <ol>
+        <li>$V(0) = 0$ ✓</li>
+        <li>$V(x) = 3x_1^2 + x_2^2 > 0$ khi $x \neq 0$ ✓</li>
+        <li>$\dot{V}(x) = -6x_1^2 - 4x_2^2 < 0$ khi $x \neq 0$ ✓</li>
+    </ol>
+    <p>→ Hệ $\dot{x} = Ax$ <strong>ổn định tiệm cận</strong>! Mọi quỹ đạo $x(t)$ đều hội tụ về gốc tọa độ $(0, 0)$.</p>
+</div>
+
+<h2 id="b5">B.5 Viết lại bằng Ma trận: Phương trình Lyapunov</h2>
+
+<p>Ở Bước 2-3 trên, ta đã tính $\dot{V}$ "thủ công" bằng cách khai triển từng thành phần. Có cách viết gọn hơn bằng ma trận:</p>
+
+<div class="step-card">
+    <span class="step-number">Ma trận</span> <strong>Công thức tổng quát cho $\dot{V}$:</strong>
+    $$\dot{V} = \dot{x}^T P x + x^T P \dot{x}$$
+    <p><strong>Tại sao lại có 2 số hạng?</strong> Vì $V = x^T P x$ là tích của 3 thứ: $x^T$, $P$, $x$. Khi lấy đạo hàm theo $t$, ta dùng quy tắc tích:</p>
+    $$\dot{V} = \frac{d}{dt}(x^T) \cdot Px + x^T P \cdot \frac{d}{dt}(x) = \dot{x}^T P x + x^T P \dot{x}$$
+    <p>(Nhớ: $P$ là hằng số, không phụ thuộc $t$, nên đạo hàm của $P$ = $0$).</p>
+</div>
+
+<p>Thay $\dot{x} = Ax$:</p>
+$$\dot{V} = (Ax)^T P x + x^T P (Ax) = x^T A^T P x + x^T P A x = x^T \underbrace{(A^T P + PA)}_{\text{Ma trận}} x$$
+
+<p>Để $\dot{V} < 0$, cần ma trận $(A^T P + PA)$ phải <strong>xác định âm</strong>. Đặt $-\tilde{Q} = A^T P + PA$ với $\tilde{Q} > 0$:</p>
+$$A^T P + PA = -\tilde{Q}$$
+<p>Đây là <strong>Phương trình Lyapunov</strong>!</p>
+
+<div class="example-box">
+    <span class="box-title">🔢 Kiểm tra bằng số (tiếp ví dụ trên):</span>
+    $$A^T P + PA = \begin{bmatrix} -1 & 0 \\ 0 & -2 \end{bmatrix} \begin{bmatrix} 3 & 0 \\ 0 & 1 \end{bmatrix} + \begin{bmatrix} 3 & 0 \\ 0 & 1 \end{bmatrix} \begin{bmatrix} -1 & 0 \\ 0 & -2 \end{bmatrix}$$
+    $$= \begin{bmatrix} -3 & 0 \\ 0 & -2 \end{bmatrix} + \begin{bmatrix} -3 & 0 \\ 0 & -2 \end{bmatrix} = \begin{bmatrix} -6 & 0 \\ 0 & -4 \end{bmatrix} = -\underbrace{\begin{bmatrix} 6 & 0 \\ 0 & 4 \end{bmatrix}}_{\tilde{Q} > 0}$$
+    <p>→ $\tilde{Q} = \text{diag}(6, 4) > 0$ ✓ → Phương trình Lyapunov thỏa mãn → Hệ ổn định! ✓</p>
+    <p>Và $\dot{V} = x^T (-\tilde{Q}) x = -(6x_1^2 + 4x_2^2)$, đúng với kết quả tính tay ở Bước 3!</p>
+</div>
+
+<h2 id="b6">B.6 Kết nối với LQR: Tại sao $P$ trong Riccati cũng là Lyapunov?</h2>
+
+<p>Bây giờ đến phần quan trọng nhất! Ta sẽ chứng minh rằng <strong>ma trận $P$ giải được từ phương trình Riccati (ARE) cũng chính là ma trận Lyapunov cho hệ vòng kín</strong>.</p>
+
+<div class="definition">
+    <span class="box-title">📐 Nhắc lại: Phương trình Riccati (ARE):</span>
+    $$A^T P + PA - PBR^{-1}B^T P + Q = 0 \quad \text{...(ARE)}$$
+    <p>Luật điều khiển tối ưu: $u = -Kx$ với $K = R^{-1}B^T P$.</p>
+    <p>Ma trận vòng kín: $A_{cl} = A - BK = A - BR^{-1}B^T P$.</p>
+</div>
+
+<h2 id="b7">B.7 Chứng minh Chi tiết: Hệ vòng kín LQR Luôn Ổn định</h2>
+
+<p><strong>Mục tiêu:</strong> Chứng minh $A_{cl}^T P + PA_{cl} < 0$, tức $V(x) = x^T Px$ là hàm Lyapunov cho hệ vòng kín $\dot{x} = A_{cl} x$.</p>
+
+<div class="step-card">
+    <span class="step-number">Bước 1</span> <strong>Viết lại ARE theo $A_{cl}$:</strong>
+    <p>Từ ARE: $A^T P + PA = PBR^{-1}B^T P - Q$.</p>
+    <p>Nhớ: $K = R^{-1}B^T P$, nên $BK = BR^{-1}B^T P$. Ta viết:</p>
+    $$A = A_{cl} + BK$$
+    <p>(vì $A_{cl} = A - BK \implies A = A_{cl} + BK$)</p>
+</div>
+
+<div class="step-card">
+    <span class="step-number">Bước 2</span> <strong>Tính $A_{cl}^T P + PA_{cl}$:</strong>
+    <p>Thay $A = A_{cl} + BK$ vào ARE: $(A_{cl} + BK)^T P + P(A_{cl} + BK) = PBR^{-1}B^T P - Q$.</p>
+    <p>Khai triển vế trái:</p>
+    $$\underbrace{A_{cl}^T P + PA_{cl}}_{\text{Cái ta cần tìm}} + \underbrace{K^T B^T P + PBK}_{\text{(**)}} = PBR^{-1}B^T P - Q$$
+</div>
+
+<div class="step-card">
+    <span class="step-number">Bước 3</span> <strong>Tính phần $(**)$:</strong>
+    <p>$K = R^{-1}B^T P \implies B^T P = RK$. Vậy:</p>
+    $$K^T B^T P = K^T RK, \quad PBK = (K^T B^T P)^T = (K^T RK)^T = K^T RK$$
+    <p>(vì $K^T RK$ là ma trận đối xứng: $(K^TRK)^T = K^T R^T K = K^T RK$ do $R = R^T$).</p>
+    <p>Nên: $K^T B^T P + PBK = 2K^T RK$.</p>
+    <p>Tương tự, $PBR^{-1}B^T P = K^T R \cdot R^{-1} \cdot RK = K^T RK$.</p>
+</div>
+
+<div class="step-card">
+    <span class="step-number">Bước 4</span> <strong>Thay vào và rút gọn:</strong>
+    $$A_{cl}^T P + PA_{cl} + 2K^T RK = K^T RK - Q$$
+    $$A_{cl}^T P + PA_{cl} = K^T RK - 2K^T RK - Q$$
+    $$\boxed{A_{cl}^T P + PA_{cl} = -(Q + K^T RK)}$$
+</div>
+
+<div class="step-card">
+    <span class="step-number">Bước 5</span> <strong>Kiểm tra dấu:</strong>
+    <p>$Q \ge 0$ (bán xác định dương), $K^T RK \ge 0$ (vì $R > 0$).</p>
+    <p>Nên $Q + K^T RK \ge Q \ge 0$.</p>
+    <p>Với điều kiện $(A, Q^{1/2})$ detectable, $Q + K^T RK > 0$ (xác định dương) khi $x \neq 0$.</p>
+    $$\implies A_{cl}^T P + PA_{cl} = -(Q + K^T RK) < 0$$
+</div>
+
+<div class="theorem">
+    <span class="box-title">⭐ KẾT LUẬN:</span>
+    <p>$A_{cl}^T P + PA_{cl} = -(Q + K^T RK) < 0$.</p>
+    <p>Đây chính là <strong>Phương trình Lyapunov</strong> với $\tilde{Q} = Q + K^T RK > 0$!</p>
+    <p>→ $V(x) = x^T Px$ là hàm Lyapunov hợp lệ cho hệ vòng kín.</p>
+    <p>→ <span class="highlight">Hệ vòng kín LQR ($\dot{x} = A_{cl}x$) LUÔN ổn định tiệm cận!</span></p>
+    <p><strong>Ý nghĩa vật lý:</strong> "Năng lượng ảo" $V = x^T Px$ luôn giảm theo thời gian. Tốc độ giảm = $x^T(Q + K^TRK)x$, tức năng lượng giảm do cả "phạt trạng thái $Q$" lẫn "phạt điều khiển $K^TRK$". Hệ thống bị "hút" về gốc tọa độ $x = 0$.</p>
+</div>
+
+<h2 id="b8">B.8 Code Python: Vẽ Quỹ đạo + Đường đồng mức $V(x) = x^T P x$</h2>
+
+<pre><code>import numpy as np
+import matplotlib.pyplot as plt
+from scipy.linalg import solve_continuous_are
+from scipy.integrate import solve_ivp
+
+# === Hệ thống từ Bài 2.1 ===
+A = np.array([[0, 1], [0, -2]])
+B = np.array([[0], [1]])
+Q = np.diag([4.0, 1.0])
+R = np.array([[1.0]])
+
+# Giải LQR
+P = solve_continuous_are(A, B, Q, R)
+K = np.linalg.inv(R) @ B.T @ P
+A_cl = A - B @ K
+
+print("P =\n", np.round(P, 3))
+print("K =", np.round(K, 3))
+
+# Mô phỏng 5 quỹ đạo từ các điểm khởi đầu khác nhau
+fig, ax = plt.subplots(figsize=(8, 8))
+
+# 1) Vẽ đường đồng mức V(x) = x^T P x
+x1_grid = np.linspace(-3, 3, 300)
+x2_grid = np.linspace(-3, 3, 300)
+X1, X2 = np.meshgrid(x1_grid, x2_grid)
+V = P[0,0]*X1**2 + 2*P[0,1]*X1*X2 + P[1,1]*X2**2
+
+# Các mức năng lượng
+levels = [0.5, 1, 2, 4, 8, 16]
+cs = ax.contour(X1, X2, V, levels=levels, colors='lightblue', linewidths=1, linestyles='--')
+ax.clabel(cs, fmt='V=%.1f', fontsize=8)
+
+# 2) Vẽ 5 quỹ đạo
+colors = ['#ef4444', '#f97316', '#22c55e', '#3b82f6', '#a855f7']
+starts = [[2.5, 0], [-2, 1], [0, -2.5], [-1.5, -2], [2, 2]]
+
+for i, x0 in enumerate(starts):
+    def dynamics(t, x):
+        return (A_cl @ x).flatten()
+    sol = solve_ivp(dynamics, (0, 6), x0, t_eval=np.linspace(0, 6, 300))
+    ax.plot(sol.y[0], sol.y[1], color=colors[i], linewidth=2)
+    ax.plot(x0[0], x0[1], 'o', color=colors[i], markersize=8)  # Điểm bắt đầu
+    ax.annotate(f'x₀={x0}', xy=(x0[0], x0[1]), fontsize=8, color=colors[i])
+
+# Đánh dấu gốc tọa độ
+ax.plot(0, 0, 'k*', markersize=15, zorder=5)
+ax.annotate('Đích (0,0)', xy=(0.1, 0.1), fontsize=10, fontweight='bold')
+
+ax.set_xlabel('x₁ (vị trí)', fontsize=12)
+ax.set_ylabel('x₂ (vận tốc)', fontsize=12)
+ax.set_title('Quỹ đạo LQR trên Đường đồng mức Lyapunov V(x) = x^T P x\n'
+             'Mọi quỹ đạo đều "cắt ngang" đường V, hướng về V nhỏ hơn → Ổn định!', fontsize=11)
+ax.grid(True, alpha=0.2)
+ax.set_aspect('equal')
+ax.set_xlim(-3, 3)
+ax.set_ylim(-3, 3)
+plt.tight_layout()
+plt.show()
+</code></pre>
+
+<div class="example-box">
+    <span class="box-title">💡 Cách đọc đồ thị:</span>
+    <ul>
+        <li>Các <strong>đường nét đứt xanh nhạt</strong> là đường đồng mức $V = x^TPx = \text{const}$ (giống đường bình độ trên bản đồ).</li>
+        <li>Các <strong>đường cong màu</strong> là quỹ đạo $x(t)$ từ các điểm khởi đầu khác nhau.</li>
+        <li>Quan sát: Mọi quỹ đạo đều <strong>cắt ngang</strong> đường đồng mức từ $V$ lớn sang $V$ nhỏ hơn → <strong>$V$ luôn giảm</strong> → Hệ ổn định!</li>
+        <li>Tất cả quỹ đạo đều hội tụ về ngôi sao ★ tại gốc $(0,0)$.</li>
+    </ul>
+</div>
+
+
+<!-- ################################################################ -->
+<!-- PHẦN C: TẠI SAO LQR TỐI ƯU?                                    -->
+<!-- ################################################################ -->
+<div class="part-header ph-green" id="partC">
+    <h1>PHẦN C: TẠI SAO LQR "TỐI ƯU"? — Chứng minh Chậm Rãi Từng Bước</h1>
+    <p>Không bỏ qua bất kỳ phép tính nào — Chứng minh Phương trình Riccati xuất hiện tự nhiên</p>
+</div>
+
+<h2 id="c1">C.1 Bài toán Tối ưu hóa: Tìm $u(t)$ sao cho $J$ nhỏ nhất</h2>
+
+<div class="analogy-box">
+    <span class="box-title">🗺️ Nhắc lại Ẩn dụ Google Maps:</span>
+    <p>Bạn đi từ nhà (trạng thái $x_0$) đến công ty (trạng thái $x = 0$). Có vô số con đường. Mỗi đường có "chi phí" = thời gian đi + tiền xăng. LQR tìm đường có <strong>tổng chi phí nhỏ nhất</strong>.</p>
+</div>
+
+<p><strong>Bài toán chính thức:</strong> Cho hệ $\dot{x} = Ax + Bu$. Tìm luật điều khiển $u(t)$ để tối thiểu hóa:</p>
+$$J = \int_0^\infty \left( x^T Q x + u^T R u \right) dt$$
+
+<p>Trong đó:</p>
+<ul>
+    <li>$x^T Q x$ = "Phí ở ngoài nhà" (trạng thái $x$ càng xa $0$, phí càng đắt)</li>
+    <li>$u^T R u$ = "Phí xăng" (lực điều khiển $u$ càng lớn, xăng càng tốn)</li>
+    <li>$\int_0^\infty$ = Tổng phí từ bây giờ đến muôn đời</li>
+</ul>
+
+<h2 id="c2">C.2 Bước 1 — Đoán dạng Chi phí Tối ưu $J^*(x) = x^T P x$</h2>
+
+<p><strong>Ý tưởng chìa khóa:</strong> Giả sử ta đã tìm được luật điều khiển tối ưu $u^*$. Khi đó, chi phí tối ưu <strong>chỉ phụ thuộc vào trạng thái hiện tại $x$</strong> (vì từ $x$, bộ điều khiển tối ưu sẽ tự động chọn đường đi tốt nhất).</p>
+
+<p>Gọi $J^*(x)$ là chi phí tối ưu khi xuất phát từ trạng thái $x$. Ta <strong>đoán</strong> (sẽ chứng minh) rằng:</p>
+$$J^*(x) = x^T P x$$
+<p>cho một ma trận $P > 0$ nào đó chưa biết.</p>
+
+<div class="important-note">
+    <span class="box-title">❓ Tại sao đoán dạng $x^T P x$?</span>
+    <p>Vì hàm chi phí $J$ là tổng các dạng toàn phương ($x^T Q x$ và $u^T R u$), hệ là tuyến tính ($\dot{x} = Ax + Bu$), và luật điều khiển tối ưu là tuyến tính ($u = -Kx$). Khi mọi thứ đều "bậc 2", chi phí tối ưu cũng phải "bậc 2", tức dạng $x^T P x$.</p>
+</div>
+
+<h2 id="c3">C.3 Bước 2 — Tính đạo hàm $\frac{d}{dt}(x^T P x)$ từng bước</h2>
+
+<p>Ta cần tính $\dot{V} = \frac{d}{dt}(x^T P x)$ khi $\dot{x} = Ax + Bu$.</p>
+
+<div class="step-card">
+    <span class="step-number">2a</span> <strong>Áp dụng quy tắc tích (product rule):</strong>
+    $$\frac{d}{dt}(x^T P x) = \dot{x}^T P x + x^T P \dot{x}$$
+    <p>(Giải thích: $x^T P x$ = (thứ 1) × (thứ 2). Đạo hàm tích = đạo hàm thứ 1 × thứ 2 + thứ 1 × đạo hàm thứ 2. Ở đây $P$ là hằng số nên không cần đạo hàm.)</p>
+</div>
+
+<div class="step-card">
+    <span class="step-number">2b</span> <strong>Thay $\dot{x} = Ax + Bu$:</strong>
+    $$= (Ax + Bu)^T P x + x^T P (Ax + Bu)$$
+</div>
+
+<div class="step-card">
+    <span class="step-number">2c</span> <strong>Khai triển chuyển vị:</strong>
+    <p>$(Ax + Bu)^T = x^T A^T + u^T B^T$ (vì $(M + N)^T = M^T + N^T$ và $(Ax)^T = x^T A^T$).</p>
+    $$= (x^T A^T + u^T B^T) P x + x^T P (Ax + Bu)$$
+    $$= x^T A^T P x + u^T B^T P x + x^T P A x + x^T P B u$$
+</div>
+
+<div class="step-card">
+    <span class="step-number">2d</span> <strong>Gom nhóm:</strong>
+    <p>Nhận xét: $u^T B^T P x$ là vô hướng (số $1 \times 1$), nên nó bằng chuyển vị của chính nó: $u^T B^T P x = x^T P B u$.</p>
+    $$\frac{d}{dt}(x^T P x) = x^T (A^T P + PA) x + 2 x^T P B u$$
+</div>
+
+<div class="example-box">
+    <span class="box-title">📌 Ghi nhớ kết quả quan trọng:</span>
+    $$\boxed{\frac{d}{dt}(x^T P x) = x^T (A^T P + PA) x + 2 x^T P B u}$$
+    <p>Công thức này sẽ được dùng ngay trong bước tiếp theo.</p>
+</div>
+
+<h2 id="c4">C.4 Bước 3 — Viết Phương trình Bellman và Tối ưu theo $u$</h2>
+
+<p><strong>Nguyên lý Tối ưu Bellman</strong> phát biểu (bằng ngôn ngữ dễ hiểu):</p>
+
+<blockquote>
+"Nếu bạn đang ở trạng thái $x$ và dùng luật điều khiển tối ưu, thì chi phí tối ưu $J^*(x) = x^T Px$ phải thỏa mãn:
+<strong>Tốc độ giảm chi phí = Tốc độ chi tiêu tức thời</strong>."
+</blockquote>
+
+<p>Viết chính thức: Tại luật điều khiển tối ưu $u^*$, tổng chi phí phải "cân bằng" tại mọi thời điểm:</p>
+$$\underbrace{x^T Q x + u^T R u}_{\text{Chi phí tức thời}} + \underbrace{\frac{d}{dt}(x^T P x)}_{\text{Tốc độ thay đổi chi phí tương lai}} = 0$$
+
+<p><strong>Tại sao bằng $0$?</strong> Vì nếu tổng &gt; $0$: chi phí đang tăng, chưa tối ưu. Nếu tổng &lt; $0$: chi phí đang giảm quá nhanh, cũng chưa tối ưu (vì ta có thể tiết kiệm $u$ hơn). Tối ưu = cân bằng = $0$.</p>
+
+<p>Với tất cả $u$ (không chỉ $u^*$), ta viết bài toán tối thiểu hóa:</p>
+$$0 = \min_u \left[ x^T Q x + u^T R u + x^T(A^T P + PA)x + 2x^T PBu \right]$$
+
+<div class="step-card">
+    <span class="step-number">3a</span> <strong>Gom lại thành hàm $f(u)$ cần tối thiểu:</strong>
+    $$f(u) = u^T R u + 2 x^T P B u + x^T(Q + A^T P + PA)x$$
+    <p>Số hạng cuối không chứa $u$ → khi tối thiểu theo $u$, nó là hằng số.</p>
+</div>
+
+<div class="step-card">
+    <span class="step-number">3b</span> <strong>Lấy đạo hàm theo $u$ và cho bằng $0$:</strong>
+    $$\frac{\partial f}{\partial u} = 2Ru + 2B^T Px = 0$$
+    <p><strong>Giải thích từng thành phần:</strong></p>
+    <ul>
+        <li>$\frac{\partial}{\partial u}(u^T R u) = 2Ru$ — Đây là đạo hàm của dạng toàn phương (giống $\frac{d}{du}(ru^2) = 2ru$ ở 1D)</li>
+        <li>$\frac{\partial}{\partial u}(2x^T PBu) = 2B^T Px$ — Đây là đạo hàm của hàm tuyến tính theo $u$ (giống $\frac{d}{du}(au) = a$ ở 1D)</li>
+    </ul>
+</div>
+
+<div class="step-card">
+    <span class="step-number">3c</span> <strong>Giải ra $u^*$:</strong>
+    $$2Ru^* = -2B^T Px$$
+    $$u^* = -R^{-1} B^T P x$$
+    <p>Đặt $K = R^{-1} B^T P$:</p>
+    $$\boxed{u^* = -Kx}$$
+    <p><strong>Đây chính là Luật điều khiển LQR!</strong> Nó xuất hiện tự nhiên từ phép tối ưu hóa, không phải bịa ra.</p>
+</div>
+
+<h2 id="c5">C.5 Bước 4 — Phương trình Riccati Xuất hiện Tự nhiên</h2>
+
+<p>Thay $u^* = -R^{-1}B^T Px$ ngược lại vào phương trình Bellman $f(u^*) = 0$:</p>
+
+<div class="step-card">
+    <span class="step-number">4a</span> <strong>Tính $u^{*T} R u^*$:</strong>
+    $$u^{*T} R u^* = (R^{-1}B^T Px)^T R (R^{-1}B^T Px)$$
+    $$= x^T PB \underbrace{R^{-T} R R^{-1}}_{= R^{-1}} B^T Px = x^T PB R^{-1} B^T Px$$
+    <p>(Dùng $R^{-T} = R^{-1}$ vì $R$ đối xứng.)</p>
+</div>
+
+<div class="step-card">
+    <span class="step-number">4b</span> <strong>Tính $2x^T PB u^*$:</strong>
+    $$2x^T PB (-R^{-1}B^T Px) = -2 x^T PBR^{-1}B^T Px$$
+</div>
+
+<div class="step-card">
+    <span class="step-number">4c</span> <strong>Thay tất cả vào $f(u^*) = 0$:</strong>
+    $$x^T(Q + A^T P + PA)x + x^T PBR^{-1}B^T Px - 2x^T PBR^{-1}B^T Px = 0$$
+    $$x^T(Q + A^T P + PA - PBR^{-1}B^T P)x = 0$$
+</div>
+
+<div class="step-card">
+    <span class="step-number">4d</span> <strong>Vì phương trình phải đúng với MỌI $x$:</strong>
+    <p>Biểu thức $x^T M x = 0$ với mọi $x$ ⟺ $M = 0$. Vậy:</p>
+    $$\boxed{A^T P + PA - PBR^{-1}B^T P + Q = 0}$$
+    <p><strong>Đây chính là Phương trình Đại số Riccati (ARE)!</strong></p>
+</div>
+
+<div class="theorem">
+    <span class="box-title">🎉 Tóm tắt: Mọi thứ Xuất hiện Tự nhiên!</span>
+    <ol>
+        <li>Đặt bài toán: Tối thiểu $J = \int (x^TQx + u^TRu)dt$.</li>
+        <li>Đoán chi phí tối ưu $J^* = x^TPx$.</li>
+        <li>Viết phương trình Bellman (cân bằng chi phí).</li>
+        <li>Tối ưu theo $u$ → Ra luật điều khiển $u^* = -R^{-1}B^TPx = -Kx$.</li>
+        <li>Thay ngược lại → Ra phương trình Riccati $A^TP + PA - PBR^{-1}B^TP + Q = 0$.</li>
+    </ol>
+    <p>Không có phép thuật, không có công thức rơi từ trên trời. <span class="highlight">Mọi thứ đều là hệ quả logic của phép tối ưu hóa!</span></p>
+</div>
+
+<h2 id="c6">C.6 Ví dụ Số Hoàn chỉnh: Tính $J^*$ cho Bài 2.1</h2>
+
+<p>Từ Bài 2.1, ta đã giải tay được $P = \begin{bmatrix} 6 & 2 \\ 2 & 1 \end{bmatrix}$, $K = \begin{bmatrix} 2 & 1 \end{bmatrix}$.</p>
+
+<p><strong>Câu hỏi:</strong> Nếu hệ đang ở trạng thái $x_0 = \begin{bmatrix} 1 \\ 0 \end{bmatrix}$ (lệch vị trí 1 đơn vị, vận tốc = 0), tổng chi phí tối ưu từ bây giờ đến vô cực là bao nhiêu?</p>
+
+<div class="step-card">
+    <span class="step-number">Tính</span> <strong>Chi phí tối ưu $J^*$:</strong>
+    $$J^* = x_0^T P x_0 = \begin{bmatrix} 1 & 0 \end{bmatrix} \begin{bmatrix} 6 & 2 \\ 2 & 1 \end{bmatrix} \begin{bmatrix} 1 \\ 0 \end{bmatrix} = 6$$
+</div>
+
+<p><strong>Ý nghĩa:</strong> Nếu bạn dùng bộ điều khiển LQR tối ưu ($u = -Kx$), tổng "hóa đơn" $J = \int_0^\infty (4x_1^2 + x_2^2 + u^2)dt$ từ bây giờ đến muôn đời chính xác bằng $6$. <strong>Không có bộ điều khiển nào khác</strong> (dù tốn bao nhiêu công sức thiết kế) có thể cho $J < 6$!</p>
+
+<div class="example-box">
+    <span class="box-title">🔢 So sánh các trạng thái khởi đầu:</span>
+    <table>
+        <tr><th>Trạng thái $x_0$</th><th>$J^* = x_0^T P x_0$</th><th>Nhận xét</th></tr>
+        <tr><td>$\begin{bmatrix} 1 \\ 0 \end{bmatrix}$</td><td>$6$</td><td>Lệch vị trí $x_1 = 1$: đắt!</td></tr>
+        <tr><td>$\begin{bmatrix} 0 \\ 1 \end{bmatrix}$</td><td>$1$</td><td>Lệch vận tốc $x_2 = 1$: rẻ hơn nhiều</td></tr>
+        <tr><td>$\begin{bmatrix} 1 \\ 1 \end{bmatrix}$</td><td>$6 + 2(2) + 1 = 11$</td><td>Lệch cả hai: đắt nhất</td></tr>
+        <tr><td>$\begin{bmatrix} 0 \\ 0 \end{bmatrix}$</td><td>$0$</td><td>Đã ở đích: chi phí = 0 ✓</td></tr>
+    </table>
+    <p><strong>Nhận xét:</strong> $p_{11} = 6 > p_{22} = 1$ → Lệch ở $x_1$ "đắt" hơn lệch ở $x_2$. Điều này hợp lý vì $Q = \text{diag}(4, 1)$ phạt $x_1$ nặng hơn ($q_{11} = 4 > q_{22} = 1$)!</p>
+</div>
+
+<h2 id="c7">C.7 Tổng kết: Vì sao $u = -Kx$ là "Tốt nhất Có thể"?</h2>
+
+<div style="background: linear-gradient(135deg, #0f172a, #1e293b); color: white; padding: 28px; border-radius: 10px; margin: 28px 0;">
+    <h3 style="color: #60a5fa; margin-top: 0;">🏆 LQR = Tối ưu = Tốt nhất Có thể</h3>
+    <p style="color: #e2e8f0; margin: 12px 0;">Khi bạn chọn $Q$ và $R$, bộ LQR tìm <strong>duy nhất một ma trận $K$</strong> sao cho:</p>
+    <ol style="color: #e2e8f0; margin: 8px 0 8px 20px;">
+        <li>Hàm chi phí $J = \int(x^TQx + u^TRu)dt$ đạt <strong>giá trị nhỏ nhất tuyệt đối</strong></li>
+        <li>Hệ vòng kín luôn <strong>ổn định</strong> (chứng minh bằng Lyapunov, Phần B)</li>
+        <li>Hệ có <strong>Gain Margin $\ge 2$ và Phase Margin $\ge 60°$</strong> (chứng minh bằng Nyquist, Phần A)</li>
+    </ol>
+    <p style="color: #fbbf24; font-weight: 600; margin-top: 14px;">Tất cả những đảm bảo trên đều là HỆ QUẢ TỰ NHIÊN của phép tối ưu hóa — không cần thêm bất kỳ thủ thuật nào!</p>
+</div>
+
+
+<!-- ===== FOOTER ===== -->
+<div style="text-align: center; margin: 40px 0; color: var(--text-secondary); font-size: 0.9em;">
+    <p>— Hết Kiến Thức Nền Tảng Bổ Sung Phần 2 —</p>
+    <p><em>Sau khi đọc xong tài liệu này, hãy quay lại <a href="KienThuc_NenTang_BoSung_LQR.html">Phần 1</a> và <a href="BaiTap_LQR_ToanTap.html">Bài Tập LQR</a> để ôn tập!</em></p>
+    <p><em>Nhấn "📄 Xuất PDF" ở góc phải dưới để lưu.</em></p>
+</div>
+
+</body>
+</html>

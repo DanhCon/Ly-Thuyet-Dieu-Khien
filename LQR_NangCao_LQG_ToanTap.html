@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tài Liệu Học Tập Tập 2: LQR Nâng Cao, LQG &amp; Triển Khai Thực Tế</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+    window.MathJax = {
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']],
+            tags: 'ams'
+        },
+        chtml: { scale: 1 }
+    };
+    </script>
+    <style>
+        :root {
+            --primary: #0f172a;
+            --accent: #2563eb;
+            --accent-light: #3b82f6;
+            --bg: #ffffff;
+            --text: #1e293b;
+            --text-secondary: #475569;
+            --quiz-bg: #f0f9ff;
+            --quiz-border: #bae6fd;
+            --answer-bg: #f0fdf4;
+            --answer-border: #86efac;
+            --warning-bg: #fffbeb;
+            --warning-border: #fde68a;
+            --code-bg: #0f172a;
+            --border: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+            font-size: 16.5px;
+            line-height: 1.8;
+            color: var(--text);
+            background: var(--bg);
+            max-width: 920px;
+            margin: 0 auto;
+            padding: 40px 25px;
+        }
+
+        /* ===== COVER PAGE ===== */
+        .cover-page {
+            text-align: center;
+            padding: 60px 20px;
+            border-bottom: 3px solid var(--accent);
+            margin-bottom: 50px;
+            background: #f8fafc;
+            border-radius: 12px;
+        }
+        .cover-page h1 {
+            font-size: 2.3em;
+            color: var(--primary);
+            margin-bottom: 12px;
+            line-height: 1.3;
+            border: none;
+            padding: 0;
+        }
+        .cover-page .subtitle {
+            font-size: 1.35em;
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: 25px;
+        }
+        .cover-page .tagline {
+            font-size: 1.05em;
+            color: var(--text-secondary);
+            font-style: italic;
+            margin-bottom: 30px;
+        }
+        .cover-page .meta {
+            font-size: 0.95em;
+            color: var(--text-secondary);
+        }
+
+        /* ===== HEADINGS ===== */
+        h1 { font-size: 1.85em; color: var(--primary); margin: 45px 0 20px; border-bottom: 2px solid var(--accent); padding-bottom: 8px; }
+        h2 { font-size: 1.4em; color: var(--accent); margin: 35px 0 15px; }
+        h3 { font-size: 1.18em; color: var(--primary); margin: 25px 0 12px; }
+        h4 { font-size: 1.05em; color: var(--text); margin: 18px 0 8px; }
+
+        .part-header {
+            background: linear-gradient(135deg, #1e3a8a, #2563eb);
+            color: white;
+            padding: 28px 35px;
+            border-radius: 10px;
+            margin: 50px 0 30px;
+            box-shadow: var(--shadow);
+        }
+        .part-header h1 { color: white; border: none; margin: 0; font-size: 1.7em; padding: 0; }
+        .part-header p { color: #dbeafe; margin-top: 8px; font-size: 1.05em; }
+
+        .part-header-intro {
+            background: linear-gradient(135deg, #059669, #10b981);
+            color: white;
+            padding: 28px 35px;
+            border-radius: 10px;
+            margin: 40px 0 30px;
+            box-shadow: var(--shadow);
+        }
+        .part-header-intro h1 { color: white; border: none; margin: 0; font-size: 1.7em; padding: 0; }
+        .part-header-intro p { color: #ecfdf5; margin-top: 8px; font-size: 1.05em; }
+
+        /* ===== CONTENT ===== */
+        p { margin: 12px 0; text-align: justify; }
+        ul, ol { margin: 10px 0 15px 25px; }
+        li { margin: 6px 0; }
+
+        strong { color: #0f172a; font-weight: 600; }
+
+        .highlight {
+            background: #fef08a;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        blockquote {
+            border-left: 4px solid var(--accent);
+            background: #f8fafc;
+            padding: 15px 20px;
+            margin: 20px 0;
+            font-style: italic;
+            color: var(--text-secondary);
+            border-radius: 0 8px 8px 0;
+        }
+
+        /* ===== DEFINITION / THEOREM BOXES ===== */
+        .definition, .theorem, .important-note, .example-box, .analogy-box {
+            padding: 20px 24px;
+            border-radius: 8px;
+            margin: 22px 0;
+            border-left: 5px solid;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .definition {
+            background: #eff6ff;
+            border-color: #3b82f6;
+        }
+        .definition .box-title { color: #1d4ed8; }
+        
+        .theorem {
+            background: #faf5ff;
+            border-color: #a855f7;
+        }
+        .theorem .box-title { color: #7e22ce; }
+        
+        .important-note {
+            background: var(--warning-bg);
+            border-color: #f59e0b;
+        }
+        .important-note .box-title { color: #b45309; }
+        
+        .example-box {
+            background: #f0fdf4;
+            border-color: #22c55e;
+        }
+        .example-box .box-title { color: #15803d; }
+
+        .analogy-box {
+            background: #fff7ed;
+            border-color: #ea580c;
+        }
+        .analogy-box .box-title { color: #c2410c; }
+
+        .box-title {
+            font-weight: 700;
+            font-size: 1.05em;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        /* ===== STEP BY STEP CARDS ===== */
+        .step-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-left: 4px solid var(--accent);
+            border-radius: 6px;
+            padding: 16px 20px;
+            margin: 14px 0;
+        }
+        .step-number {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: 700;
+            margin-right: 8px;
+        }
+
+        /* ===== QUIZ ===== */
+        .quiz-section {
+            background: var(--quiz-bg);
+            border: 1px solid var(--quiz-border);
+            border-radius: 10px;
+            padding: 22px 26px;
+            margin: 30px 0;
+        }
+        .quiz-section h3 {
+            color: #0369a1;
+            margin-top: 0;
+            font-size: 1.15em;
+        }
+        .quiz-question {
+            margin: 15px 0 8px;
+        }
+        .quiz-question strong {
+            color: #0284c7;
+        }
+
+        .answer-section {
+            background: var(--answer-bg);
+            border: 1px solid var(--answer-border);
+            border-radius: 8px;
+            padding: 18px 22px;
+            margin: 10px 0 20px;
+        }
+        .answer-section .box-title {
+            color: #16a34a;
+        }
+
+        /* ===== TABLE ===== */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.95em;
+        }
+        th, td {
+            border: 1px solid var(--border);
+            padding: 10px 14px;
+            text-align: left;
+        }
+        th {
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+        }
+        tr:nth-child(even) { background: #f8fafc; }
+        tr:hover { background: #f1f5f9; }
+
+        /* ===== CODE ===== */
+        pre {
+            background: var(--code-bg);
+            color: #f8fafc;
+            padding: 18px 22px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: "Fira Code", Consolas, Monaco, monospace;
+            font-size: 0.88em;
+            line-height: 1.6;
+            margin: 20px 0;
+        }
+        code {
+            font-family: "Fira Code", Consolas, Monaco, monospace;
+            background: #f1f5f9;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            color: #b91c1c;
+        }
+        pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+        }
+
+        /* ===== TOC ===== */
+        .toc {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 25px 30px;
+            margin: 30px 0;
+        }
+        .toc h2 { margin-top: 0; color: var(--primary); }
+        .toc ul { list-style: none; margin-left: 0; }
+        .toc > ul > li {
+            margin: 8px 0;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        .toc > ul > li > ul > li {
+            font-weight: 400;
+            color: var(--text);
+            margin: 4px 0;
+            padding-left: 20px;
+        }
+        .toc a { color: inherit; text-decoration: none; }
+        .toc a:hover { color: var(--accent); text-decoration: underline; }
+
+        /* ===== PRINT ===== */
+        .print-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 12px 22px;
+            border-radius: 30px;
+            font-size: 0.95em;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(37,99,235,0.4);
+            transition: all 0.2s;
+            z-index: 1000;
+        }
+        .print-btn:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+        }
+
+        @media print {
+            body { padding: 15px; font-size: 11pt; max-width: 100%; }
+            .print-btn { display: none; }
+            .cover-page { padding: 40px 20px; }
+            .part-header, .part-header-intro { page-break-before: always; }
+            .quiz-section, .answer-section, .definition, .theorem, .example-box, .important-note, .analogy-box {
+                break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<button class="print-btn" onclick="window.print()">📄 Xuất PDF</button>
+
+<!-- COVER PAGE -->
+<div class="cover-page">
+    <h1>Tài Liệu Học Tập — Tập 2</h1>
+    <div class="subtitle">LQR NÂNG CAO, LQG &amp; TRIỂN KHAI THỰC TẾ</div>
+    <div class="tagline">
+        LQR Rời rạc hóa (DLQR), Bộ lọc Kalman (LQE), Bộ điều khiển LQG &amp; Lập trình C++/Python Nhúng Real-Time
+    </div>
+    <hr style="width: 50%; margin: 25px auto; border: none; border-top: 1px solid #cbd5e1;">
+    <div class="meta">
+        <p><strong>Chuyên ngành:</strong> Kỹ thuật Điều khiển &amp; Robot</p>
+        <p><strong>Phương pháp:</strong> Cuốn chiếu từ Toán Xác suất / Rời rạc $\rightarrow$ Lý thuyết LQG $\rightarrow$ Lập trình C++ Thực tế</p>
+        <p><strong>Phiên bản:</strong> 1.0 (Bổ sung Kiến thức Nền chi tiết từng bước)</p>
+    </div>
+</div>
+
+<!-- TOC -->
+<div class="toc">
+    <h2>📋 Mục Lục Tập 2</h2>
+    <ul>
+        <li><a href="#part0">PHẦN 0: BỔ TRỢ NỀN TẢNG — XÁC SUẤT THỐNG KÊ &amp; MẠCH RỜI RẠC</a>
+            <ul>
+                <li><a href="#s0.1">0.1 Chuỗi thời gian rời rạc &amp; Chu kỳ lấy mẫu $T_s$</a></li>
+                <li><a href="#s0.2">0.2 Biến đổi từ Liên tục $\rightarrow$ Rời rạc ($A_d, B_d$) từng bước</a></li>
+                <li><a href="#s0.3">0.3 Nhiễu ngẫu nhiên, Biến Gauss &amp; Ma trận Hiệp biến $\Sigma$</a></li>
+            </ul>
+        </li>
+        <li><a href="#part1">PHẦN 1: LQR RỜI RẠC (DLQR) &amp; LẬP TRÌNH NHÚNG C/C++</a>
+            <ul>
+                <li><a href="#s1.1">1.1 Hàm chi phí Rời rạc &amp; Phương trình Riccati DARE</a></li>
+                <li><a href="#s1.2">1.2 Triển khai LQR trên Vi điều khiển (STM32/ESP32) bằng C++</a></li>
+                <li><a href="#s1.3">1.3 Xử lý Bão hòa Actuator (Anti-Windup / Saturation)</a></li>
+            </ul>
+        </li>
+        <li><a href="#part2">PHẦN 2: LQE (LINEAR QUADRATIC ESTIMATOR) &amp; BỘ LỌC KALMAN</a>
+            <ul>
+                <li><a href="#s2.1">2.1 Vấn đề thực tế: Nhiễu cảm biến &amp; Thiếu biến trạng thái</a></li>
+                <li><a href="#s2.2">2.2 Bản chất 5 bước của Bộ lọc Kalman (Trực quan từng bước)</a></li>
+                <li><a href="#s2.3">2.3 Giải thích chi tiết Công thức Kalman Gain $L_k$</a></li>
+            </ul>
+        </li>
+        <li><a href="#part3">PHẦN 3: BỘ ĐIỀU KHIỂN LQG (LINEAR QUADRATIC GAUSSIAN)</a>
+            <ul>
+                <li><a href="#s3.1">3.1 Kiến trúc LQG = LQR + Kalman Filter</a></li>
+                <li><a href="#s3.2">3.2 Chứng minh Nguyên lý Phân tách (Separation Principle)</a></li>
+                <li><a href="#s3.3">3.3 Cảnh báo Thực tế: Hiện tượng Doyle (1978) &amp; Giới thiệu LTR</a></li>
+            </ul>
+        </li>
+        <li><a href="#part4">PHẦN 4: LQR BÁM QUĨ ĐẠO (TRAJECTORY TRACKING) &amp; TIỀN ĐỀ MPC</a>
+            <ul>
+                <li><a href="#s4.1">4.1 LQR Bám Quỹ đạo Chuyển động (Tracking LQR) cho Robot</a></li>
+                <li><a href="#s4.2">4.2 Giới thiệu Thuật toán iLQR (Iterative LQR) cho Hệ Phi tuyến</a></li>
+            </ul>
+        </li>
+    </ul>
+</div>
+
+<!-- =========================================================== -->
+<!-- PHẦN 0: BỔ TRỢ NỀN TẢNG — XÁC SUẤT & RỜI RẠC                 -->
+<!-- =========================================================== -->
+<div class="part-header-intro" id="part0">
+    <h1>PHẦN 0: BỔ TRỢ NỀN TẢNG — XÁC SUẤT THỐNG KÊ &amp; MẠCH RỜI RẠC</h1>
+    <p>Kiến thức Chuẩn bị — Dành cho người chưa từng làm việc với Tín hiệu Rời rạc hay Nhiễu Ngẫu nhiên (Gaussian Noise)</p>
+</div>
+
+<div class="analogy-box">
+    <span class="box-title">💡 Tại sao Tập 2 lại cần Phần 0 này?</span>
+    <p>Trong thực tế, máy tính hay vi điều khiển (như STM32, ESP32) **không thể chạy liên tục thời gian real-time** mà nó hoạt động theo từng nhịp đồng hồ (clock tick). Cảm biến thực tế (IMU, Encoder) cũng luôn bị nhiễu. Nếu nhảy ngay vào công thức Kalman hay LQG, bạn sẽ bị rối với các khái niệm như $Q_w, R_v$, $x_{k+1} = A_d x_k$. Phần 0 này giúp bạn làm quen từ từ!</p>
+</div>
+
+<h2 id="s0.1">0.1 Chuỗi thời gian Rời rạc &amp; Chu kỳ Lấy mẫu $T_s$</h2>
+
+<h3>1. Sự khác biệt giữa Liên tục ($t$) và Rời rạc ($k$)</h3>
+<ul>
+    <li>**Thời gian liên tục $t$:** Thời gian trôi qua mượt mà trong tự nhiên ($t = 0.001s, 0.0010001s, \dots$). Phương trình mô tả: $\dot{x}(t) = Ax(t) + Bu(t)$.</li>
+    <li>**Thời gian rời rạc $k$:** Máy tính đọc dữ liệu và đưa ra lệnh điều khiển tại các thời điểm cố định: $t = 0, T_s, 2T_s, 3T_s, \dots, k T_s$.
+        <br>Trong đó **$T_s$** gọi là **Chu kỳ lấy mẫu (Sampling Time)** (ví dụ: $T_s = 0.01\text{s} = 10\text{ms}$).
+    </li>
+</ul>
+
+<hr style="margin: 30px 0; border: none; border-top: 1px dashed #cbd5e1;">
+
+<h2 id="s0.2">0.2 Biến đổi từ Liên tục $\rightarrow$ Rời rạc ($A_d, B_d$) từng bước</h2>
+
+<p>Làm thế nào để chuyển đổi ma trận hệ thống $A, B$ trong liên tục sang $A_d, B_d$ trong máy tính?</p>
+
+<div class="step-card">
+    <span class="step-number">Bước 1</span> <strong>Nhắc lại Đạo hàm theo Định nghĩa</strong>
+    $$\dot{x}(t) \approx \frac{x(t + T_s) - x(t)}{T_s}$$
+    <p>Đặt $x_k = x(t)$ và $x_{k+1} = x(t + T_s)$, ta có:</p>
+    $$\frac{x_{k+1} - x_k}{T_s} = A x_k + B u_k$$
+</div>
+
+<div class="step-card">
+    <span class="step-number">Bước 2</span> <strong>Nhân $T_s$ lên vế phải và chuyển $x_k$ sang</strong>
+    $$x_{k+1} - x_k = T_s A x_k + T_s B u_k$$
+    $$x_{k+1} = x_k + T_s A x_k + T_s B u_k$$
+    $$x_{k+1} = (I + A T_s) x_k + (B T_s) u_k$$
+</div>
+
+<div class="step-card">
+    <span class="step-number">Bước 3</span> <strong>Rút ra Ma trận Rời rạc hóa Xấp xỉ Euler (Euler Discretization)</strong>
+    $$\boxed{x_{k+1} = A_d x_k + B_d u_k}$$
+    <p>với:</p>
+    $$\begin{cases} A_d \approx I + A T_s \\ B_d \approx B T_s \end{cases}$$
+    <p><em>(Ghi chú: Nếu cần chính xác tuyệt đối, ta dùng Ma trận Mũ $A_d = e^{A T_s}$ và $B_d = \int_0^{T_s} e^{A \tau} B d\tau$. Hàm <code>scipy.signal.cont2discrete</code> trong Python tự làm điều này).</em></p>
+</div>
+
+<div class="example-box">
+    <span class="box-title">📌 Ví dụ số cụ thể: Rời rạc hóa hệ xe chạy 1D</span>
+    <p>Xét xe có vị trí $p$, vận tốc $v$, lực $F$. $A = \begin{bmatrix} 0 & 1 \\ 0 & 0 \end{bmatrix}$, $B = \begin{bmatrix} 0 \\ 1 \end{bmatrix}$.</p>
+    <p>Chọn chu kỳ lấy mẫu $T_s = 0.1\text{ giây}$. Dùng công thức Euler:</p>
+    $$A_d = I + A T_s = \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix} + \begin{bmatrix} 0 & 0.1 \\ 0 & 0 \end{bmatrix} = \begin{bmatrix} 1 & 0.1 \\ 0 & 1 \end{bmatrix}$$
+    $$B_d = B T_s = \begin{bmatrix} 0 \\ 0.1 \end{bmatrix}$$
+    <p>Ý nghĩa vật lý rất rõ ràng:</p>
+    <ul>
+        <li>$p_{k+1} = 1 \cdot p_k + 0.1 \cdot v_k$ (Vị trí mới = Vị trí cũ + Vận tốc $\times 0.1\text{s}$).</li>
+        <li>$v_{k+1} = 1 \cdot v_k + 0.1 \cdot F_k$ (Vận tốc mới = Vận tốc cũ + Gia tốc $\times 0.1\text{s}$).</li>
+    </ul>
+</div>
+
+<hr style="margin: 30px 0; border: none; border-top: 1px dashed #cbd5e1;">
+
+<h2 id="s0.3">0.3 Nhiễu ngẫu nhiên, Biến Gauss &amp; Ma trận Hiệp biến $\Sigma$</h2>
+
+<h3>1. Nhiễu Trắng Gaussian (Gaussian White Noise)</h3>
+<p>
+Trong thực tế, khi bạn đọc cảm biến góc IMU hay Encoder, tín hiệu luôn bị rung lắc xung quanh giá trị thực. Nhiễu này thường tuân theo **Phân bố Chuông Gauss** $\mathcal{N}(\mu, \sigma^2)$ với:
+</p>
+<ul>
+    <li>Giá trị trung bình $\mu = 0$ (Nhiễu không bị lệch bias).</li>
+    <li>Phương sai $\sigma^2$ (Độ lớn của mức độ rung nhiễu).</li>
+</ul>
+
+<h3>2. Ma trận Hiệp biến (Covariance Matrix $Q_w, R_v$) là gì?</h3>
+<p>Khi có nhiều trạng thái hoặc nhiều cảm biến, người ta gộp độ nhiễu vào **Ma trận Hiệp biến (Covariance Matrix)**:</p>
+<ul>
+    <li><strong>Ma trận $Q_w$ (Process Noise Covariance):</strong> Mức độ nhiễu từ môi trường tác động lên hệ thống (ví dụ: gió thổi làm rung drone, đường xóc làm rung xe).</li>
+    <li><strong>Ma trận $R_v$ (Measurement Noise Covariance):</strong> Mức độ nhiễu của bản thân cảm biến (ví dụ: cảm biến IMU bị nhiễu $0.05\text{ rad}$).</li>
+</ul>
+
+<!-- Quiz 0 -->
+<div class="quiz-section">
+    <h3>📝 Quick Quiz 0 — Kiểm tra K<h2 id="s1.3">1.3 Xử lý Bão hòa Actuator (Anti-Windup / Actuator Saturation)</h2>
+
+<p>Trong thực tế, mọi cơ cấu chấp hành (Actuator) như Động cơ DC, Xi-lanh thủy lực hay Cánh quạt Drone đều có <strong>giới hạn vật lý cứng</strong> (Ví dụ: Điện áp động cơ tối đa $\pm 12\text{V}$, xung PWM $\pm 100\%$, góc bẻ lái tối đa $\pm 30^\circ$).</p>
+
+<div class="important-note">
+    <span class="box-title">⚠️ Hiện tượng Bão hòa Actuator (Actuator Saturation) là gì?</span>
+    <p>Thuật toán LQR lý thuyết $u = -Kx$ có thể tính ra tín hiệu điều khiển khổng lồ, ví dụ $u = 500\text{V}$. Tuy nhiên mạch công suất chỉ cấp được tối đa $12\text{V}$. Nếu ta không xử lý:</p>
+    <ul>
+        <li>Hệ thống thực tế sẽ không đạt được gia tốc như thuật toán LQR "tưởng tượng".</li>
+        <li>Nếu trong LQR có tích hợp khâu tích phân (Integrator) để triệt tiêu sai số xác lập, số hạng tích phân sẽ bị **tích lũy dồn nén đến vô cùng (Windup)**, khiến hệ thống phản ứng cực chậm hoặc bị dao động dữ dội khi thoát bão hòa.</li>
+    </ul>
+</div>
+
+<h3>Các giải pháp Kỹ thuật Thực tế</h3>
+
+<div class="step-card">
+    <span class="step-number">Giải pháp 1</span> <strong>Hàm Cắt Ngưỡng Cứng (Hard Saturation Clipping)</strong>
+    <p>Trước khi xuất tín hiệu $u$ ra cầu H động cơ, bắt buộc đi qua hàm giới hạn:</p>
+    $$u_{\text{thực}} = \text{sat}(u_{\text{LQR}}, u_{\min}, u_{\max}) = \begin{cases} u_{\max} & \text{nếu } u_{\text{LQR}} > u_{\max} \\ u_{\min} & \text{nếu } u_{\text{LQR}} < u_{\min} \\ u_{\text{LQR}} & \text{nếu } u_{\min} \leq u_{\text{LQR}} \leq u_{\max} \end{cases}$$
+</div>
+
+<div class="step-card">
+    <span class="step-number">Giải pháp 2</span> <strong>Điều chỉnh tăng ma trận trọng số $R$ (Bryson's Rule)</strong>
+    <p>Nếu trong quá trình mô phỏng bạn thấy $u_{\text{LQR}}$ liên tục bị tràn ngưỡng $u_{\max}$, hãy tăng giá trị $R$ trong hàm chi phí LQR lên (theo Quy tắc Bryson $R = 1/u_{\max}^2$). Việc phạt $R$ nặng hơn sẽ tự động buộc thuật toán LQR tìm một Ma trận Gain $K$ nhỏ hơn, giữ cho $u$ nằm trong vùng an toàn.</p>
+</div>
+
+<!-- =========================================================== -->
+<!-- PHẦN 2: LQE & BỘ LỌC KALMAN (KALMAN FILTER)                -->
+<!-- =========================================================== -->
+<div class="part-header" id="part2">
+    <h1>PHẦN 2: LQE (LINEAR QUADRATIC ESTIMATOR) &amp; BỘ LỌC KALMAN</h1>
+    <p>Giải quyết bài toán Nhiễu Cảm biến &amp; Thiếu biến Trạng thái trong Thực tế</p>
+</div>
+
+<h2 id="s2.1">2.1 Vấn đề Thực tế: Nhiễu cảm biến &amp; Thiếu biến trạng thái</h2>
+
+<p>Trong thực tế:</p>
+<ol>
+    <li>Bạn không thể đo hết 4 trạng thái. Ví dụ: Bạn chỉ có cảm biến đo góc $\theta$, không có cảm biến đo vận tốc góc $\omega$.</li>
+    <li>Tín hiệu cảm biến trả về $y_k = C x_k + v_k$ bị rung nhiễu mạnh ($v_k$).</li>
+</ol>
+
+<p>Ta cần một <strong>Bộ ước lượng trạng thái (State Observer)</strong> để đoán ra vector $\hat{x}_k$ chính xác nhất từ dữ liệu $y_k$ bị nhiễu. Bộ ước lượng tối ưu nhất chính là <strong>Bộ lọc Kalman (Kalman Filter / LQE)</strong>!</p>
+
+<hr style="margin: 30px 0; border: none; border-top: 1px dashed #cbd5e1;">
+
+<h2 id="s2.2">2.2 Bản chất 5 bước của Bộ lọc Kalman (Trực quan từng bước)</h2>
+
+<p>Bộ lọc Kalman hoạt động theo một vòng lặp gồm 2 giai đoạn: <strong>Dự báo (Predict)</strong> và <strong>Cập nhật (Update)</strong>:</p>
+
+<div class="step-card">
+    <span class="step-number">Bước 1</span> <strong>Dự báo Trạng thái Tiếp theo (State Predict)</strong>
+    $$\hat{x}_{k|k-1} = A_d \hat{x}_{k-1|k-1} + B_d u_{k-1}$$
+    <p><em>(Dùng mô hình toán của xe để đoán xem ở bước $k$ xe đang ở đâu).</em></p>
+</div>
+
+<div class="step-card">
+    <span class="step-number">Bước 2</span> <strong>Dự báo Sai số Hiệp biến (Covariance Predict)</strong>
+    $$P_{k|k-1} = A_d P_{k-1|k-1} A_d^T + Q_w$$
+    <p><em>(Tính toán xem độ tin tưởng vào con số dự báo ở Bước 1 là bao nhiêu, cộng thêm nhiễu môi trường $Q_w$).</em></p>
+</div>
+
+<div class="step-card">
+    <span class="step-number">Bước 3</span> <strong>Tính Ma trận Kalman Gain ($L_k$)</strong>
+    $$\boxed{L_k = P_{k|k-1} C^T (C P_{k|k-1} C^T + R_v)^{-1}}$$
+    <p><em>(Kalman Gain $L_k$ đóng vai trò như một "cán cân": Nếu cảm biến rất xịn ($R_v$ nhỏ) $\rightarrow$ Tin cảm biến nhiều hơn. Nếu cảm biến quá nhiễu ($R_v$ lớn) $\rightarrow$ Tin vào mô hình toán hơn).</em></p>
+</div>
+
+<div class="step-card">
+    <span class="step-number">Bước 4</span> <strong>Hiệu chỉnh Trạng thái dựa trên Cảm biến (State Update)</strong>
+    $$\boxed{\hat{x}_{k|k} = \hat{x}_{k|k-1} + L_k \left( y_k - C \hat{x}_{k|k-1} \right)}$$
+    <p><em>(Lấy con số dự báo cộng thêm phần chênh lệch giữa Cảm biến thực tế $y_k$ và Dự báo $C\hat{x}$, nhân với Kalman Gain $L_k$).</em></p>
+</div>
+
+<div class="step-card">
+    <span class="step-number">Bước 5</span> <strong>Cập nhật Sai số Hiệp biến (Covariance Update)</strong>
+    $$P_{k|k} = (I - L_k C) P_{k|k-1}$$
+    <p><em>(Cập nhật lại độ tin tưởng mới để chuẩn bị cho vòng lặp tiếp theo ở bước $k+1$).</em></p>
+</div>
+
+<hr style="margin: 30px 0; border: none; border-top: 1px dashed #cbd5e1;">
+
+<h2 id="s2.3">2.3 Giải thích Chi tiết &amp; Chứng minh Công thức Kalman Gain $L_k$</h2>
+
+<p>Tại sao Kalman Gain lại có công thức $L_k = P_{k|k-1} C^T (C P_{k|k-1} C^T + R_v)^{-1}$?</p>
+
+<div class="theorem">
+    <span class="box-title">🔷 Chứng minh Tối thiểu hóa Phương sai Sai số (Minimum Variance Unbiased Estimator)</span>
+    <p><strong>1. Định nghĩa Vector Sai số sau khi cập nhật:</strong></p>
+    $$e_{k|k} = x_k - \hat{x}_{k|k} = x_k - \left[ \hat{x}_{k|k-1} + L_k (C x_k + v_k - C \hat{x}_{k|k-1}) \right]$$
+    $$e_{k|k} = (I - L_k C) e_{k|k-1} - L_k v_k$$
+
+    <p><strong>2. Tính Ma trận Hiệp biến Sai số $P_{k|k} = E[e_{k|k} e_{k|k}^T]$:</strong></p>
+    $$P_{k|k} = (I - L_k C) P_{k|k-1} (I - L_k C)^T + L_k R_v L_k^T$$
+    $$P_{k|k} = P_{k|k-1} - L_k C P_{k|k-1} - P_{k|k-1} C^T L_k^T + L_k (C P_{k|k-1} C^T + R_v) L_k^T$$
+
+    <p><strong>3. Mục tiêu: Tìm $L_k$ để tối thiểu hóa Vết của ma trận $P_{k|k}$ (tức $\text{Trace}(P_{k|k})$):</strong></p>
+    <p>Lấy đạo hàm ma trận $\frac{\partial \text{Trace}(P_{k|k})}{\partial L_k} = 0$:</p>
+    $$-2 (C P_{k|k-1})^T + 2 L_k (C P_{k|k-1} C^T + R_v) = 0$$
+    $$\implies L_k (C P_{k|k-1} C^T + R_v) = P_{k|k-1} C^T$$
+    $$\implies \boxed{L_k = P_{k|k-1} C^T (C P_{k|k-1} C^T + R_v)^{-1}} \quad \blacksquare$$
+</div>
+
+<!-- Quiz 2 -->
+<div class="quiz-section">
+    <h3>📝 Quick Quiz 2 — Kiểm tra Phần 2</h3>
+    <div class="quiz-question">
+        <strong>Câu 1:</strong> Ý nghĩa của Kalman Gain $L_k$ trong Bước 4 là gì?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án Câu 1:</span>
+        <p>$L_k$ quyết định mức độ dung hòa giữa <strong>Mô hình toán dự báo</strong> và <strong>Dữ liệu đo thực tế từ Cảm biến</strong>. Nó giúp lọc sạch nhiễu cảm biến mà vẫn khôi phục lại được chính xác các trạng thái bị ẩn/thiếu.</p>
+    </div>
+</div>
+
+<!-- =========================================================== -->
+<!-- PHẦN 3: BỘ ĐIỀU KHIỂN LQG (LINEAR QUADRATIC GAUSSIAN)       -->
+<!-- =========================================================== -->
+<div class="part-header" id="part3">
+    <h1>PHẦN 3: BỘ ĐIỀU KHIỂN LQG (LINEAR QUADRATIC GAUSSIAN)</h1>
+    <p>Sự Kết Hợp Hoàn Hảo giữa LQR và Bộ Lọc Kalman</p>
+</div>
+
+<h2 id="s3.1">3.1 Kiến trúc LQG = LQR + Kalman Filter</h2>
+
+<p>Khi ghép hai thuật toán tối ưu lại với nhau:</p>
+<ul>
+    <li><strong>Kalman Filter (LQE):</strong> Nhận đầu ra cảm biến bị nhiễu $y$, ước lượng ra vector trạng thái sạch $\hat{x}$.</li>
+    <li><strong>LQR:</strong> Nhận $\hat{x}$ sạch từ Kalman Filter, tính ra lệnh điều khiển $u = -K \hat{x}$.</li>
+</ul>
+
+<hr style="margin: 30px 0; border: none; border-top: 1px dashed #cbd5e1;">
+
+<h2 id="s3.2">3.2 Chứng minh &amp; Bản chất của Nguyên lý Phân tách (Separation Principle)</h2>
+
+<div class="theorem">
+    <span class="box-title">🔷 Chứng minh Nguyên lý Phân tách (Separation Principle)</span>
+    <p>Hệ thống vòng kín LQG có 2 vector biến: Trạng thái thực $x_k$ và Sai số ước lượng $e_k = x_k - \hat{x}_k$.</p>
+    <p>Lệnh điều khiển là $u_k = -K_d \hat{x}_k = -K_d (x_k - e_k)$. Thay vào phương trình trạng thái:</p>
+    $$x_{k+1} = A_d x_k + B_d (-K_d x_k + K_d e_k) = (A_d - B_d K_d) x_k + B_d K_d e_k$$
+    <p>Phương trình sai số ước lượng Kalman:</p>
+    $$e_{k+1} = (A_d - L_k C) e_k + \text{nhiễu}$$
+
+    <p>Gộp 2 phương trình lại thành <strong>Ma trận Vòng kín Tổng hợp</strong>:</p>
+    $$\begin{bmatrix} x_{k+1} \\ e_{k+1} \end{bmatrix} = \begin{bmatrix} A_d - B_d K_d & B_d K_d \\ 0 & A_d - L_k C \end{bmatrix} \begin{bmatrix} x_k \\ e_k \end{bmatrix}$$
+
+    <p><strong>Ý nghĩa cực kỳ quan trọng:</strong> Đây là một <strong>Ma trận Tam giác Khối (Block Triangular Matrix)</strong>! Do đó các giá trị riêng (cực vòng kín) của toàn bộ hệ LQG chính là hợp của:</p>
+    <ul>
+        <li>Tập các giá trị riêng của $(A_d - B_d K_d)$ $\rightarrow$ Được quyết định hoàn toàn bởi <strong>Bộ LQR</strong>.</li>
+        <li>Tập các giá trị riêng của $(A_d - L_k C)$ $\rightarrow$ Được quyết định hoàn toàn bởi <strong>Bộ lọc Kalman</strong>.</li>
+    </ul>
+    <p>$\implies$ Bạn có thể thiết kế LQR Gain $K_d$ và Kalman Gain $L_k$ <strong>hoàn toàn độc lập với nhau</strong> mà không sợ làm mất ổn định hệ thống! $\quad \blacksquare$</p>
+</div>
+
+<h2 id="s3.3">3.3 Cảnh báo Thực tế: Hiện tượng Doyle (1978)</h2>
+
+<div class="important-note">
+    <span class="box-title">⚠️ Cảnh báo quan trọng từ John Doyle (1978):</span>
+    <p>Trong khi LQR gốc đảm bảo độ ổn định dự trữ tuyệt vời (Gain Margin $[\frac{1}{2}, \infty)$, Phase Margin $\geq 60^\circ$), thì khi ghép thành <strong>LQG</strong>, các chỉ số bền vững này <strong>KHÔNG CÒN ĐƯỢC ĐẢM BẢO NỮA</strong>! Nếu mô hình toán $A, B$ bị sai lệch so với thực tế, hệ LQG có thể bị mất ổn định. Kỹ thuật LTR (Loop Transfer Recovery) được sinh ra để khắc phục nhược điểm này.</p>
+</div>
+
+<!-- =========================================================== -->
+<!-- PHẦN 4: LQR BÁM QUĨ ĐẠO & TIỀN ĐỀ MPC                      -->
+<!-- =========================================================== -->
+<div class="part-header" id="part4">
+    <h1>PHẦN 4: LQR BÁM QUĨ ĐẠO &amp; TIỀN ĐỀ MPC</h1>
+    <p>Ứng dụng LQR cho Xe tự hành &amp; Giới thiệu Thuật toán iLQR</p>
+</div>
+
+<h2 id="s4.1">4.1 LQR Bám Quỹ đạo (Trajectory Tracking LQR) cho Robot</h2>
+
+<p>Thay vì giữ xe ở vị trí $0$, ta muốn xe bám theo một quỹ đạo di động $x_\text{ref}(k)$:</p>
+<ol>
+    <li>Định nghĩa sai số bám: $e_k = x_k - x_\text{ref}(k)$.</li>
+    <li>Tín hiệu điều khiển: $u_k = u_\text{ref}(k) - K e_k$.</li>
+</ol>
+<p>Điều này cho phép xe tự hành (AGV) bám theo đường cong chuyển động cực mượt!</p>
+
+<hr style="margin: 30px 0; border: none; border-top: 1px dashed #cbd5e1;">
+
+<h2 id="s4.2">4.2 Giới thiệu Thuật toán iLQR (Iterative LQR) cho Hệ Phi tuyến</h2>
+
+<p>Đối với hệ phi tuyến mạnh $\dot{x} = f(x, u)$ (như Robot 2 chân Bipedal, Drone nhào lộn, Xe tự lái chạy tốc độ cao), LQR chuẩn bị thất bại vì ma trận $A, B$ biến thiên liên tục.</p>
+
+<div class="theorem">
+    <span class="box-title">🔷 Bản chất Thuật toán iLQR (Iterative LQR)</span>
+    <p>iLQR lặp lại 2 bước chính cho đến khi quỹ đạo chuyển động tối ưu hội tụ:</p>
+    <ol>
+        <li><strong>Tuyến tính hóa Quỹ đạo (Backward Pass):</strong> Tuyến tính hóa hệ phi tuyến $f(x, u)$ quanh quỹ đạo hiện tại $A_k = \frac{\partial f}{\partial x}, B_k = \frac{\partial f}{\partial u}$, giải phương trình Riccati ngược từ tương lai về quá khứ để tìm bộ $K_k$ và độ lệch $\delta u_k$.</li>
+        <li><strong>Mô phỏng Chuyển động Mới (Forward Pass):</strong> Bơm tín hiệu $u_k^{\text{mới}} = u_k + \delta u_k - K_k (x_k^{\text{mới}} - x_k)$ vào hệ phi tuyến thực tế để thu được quỹ đạo chuyển động mới tốt hơn.</li>
+    </ol>
+    <p>iLQR chính là tiền đề trực tiếp cho thuật toán **Model Predictive Control (MPC)** hiện đại dùng trong xe tự lái Tesla và robot Boston Dynamics!</p>
+</div>->
+<!-- =========================================================== -->
+<div class="part-header" id="part3">
+    <h1>PHẦN 3: BỘ ĐIỀU KHIỂN LQG (LINEAR QUADRATIC GAUSSIAN)</h1>
+    <p>Sự Kết Hợp Hoàn Hảo giữa LQR và Bộ Lọc Kalman</p>
+</div>
+
+<h2 id="s3.1">3.1 Kiến trúc LQG = LQR + Kalman Filter</h2>
+
+<p>Khi ghép hai thuật toán tối ưu lại với nhau:</p>
+<ul>
+    <li>**Kalman Filter (LQE):** Nhận đầu ra cảm biến bị nhiễu $y$, ước lượng ra vector trạng thái sạch $\hat{x}$.</li>
+    <li>**LQR:** Nhận $\hat{x}$ sạch từ Kalman Filter, tính ra lệnh điều khiển $u = -K \hat{x}$.</li>
+</ul>
+
+<div class="theorem">
+    <span class="box-title">🔷 Nguyên lý Phân tách (Separation Principle)</span>
+    <p>Bạn có thể thiết kế ma trận LQR Gain $K$ (dựa trên $Q, R$) và ma trận Kalman Gain $L$ (dựa trên $Q_w, R_v$) **hoàn toàn độc lập với nhau**! Việc ghép $u = -K\hat{x}$ vẫn đảm bảo hệ vòng kín ổn định và tối ưu.</p>
+</div>
+
+<h2 id="s3.3">3.3 Cảnh báo Thực tế: Hiện tượng Doyle (1978)</h2>
+
+<div class="important-note">
+    <span class="box-title">⚠️ Cảnh báo quan trọng từ John Doyle (1978):</span>
+    <p>Trong khi LQR gốc đảm bảo độ ổn định dự trữ tuyệt vời (Gain Margin $[\frac{1}{2}, \infty)$, Phase Margin $\geq 60^\circ$), thì khi ghép thành **LQG**, các chỉ số bền vững này **KHÔNG CÒN ĐƯỢC ĐẢM BẢO NỮA**! Nếu mô hình toán $A, B$ bị sai lệch so với thực tế, hệ LQG có thể bị mất ổn định. Kỹ thuật LTR (Loop Transfer Recovery) được sinh ra để khắc phục nhược điểm này.</p>
+</div>
+
+<!-- =========================================================== -->
+<!-- PHẦN 4: LQR BÁM QUỸ ĐẠO & TIỀN ĐỀ MPC                      -->
+<!-- =========================================================== -->
+<div class="part-header" id="part4">
+    <h1>PHẦN 4: LQR BÁM QUĨ ĐẠO &amp; TIỀN ĐỀ MPC</h1>
+    <p>Ứng dụng LQR cho Xe tự hành &amp; Giới thiệu Thuật toán iLQR</p>
+</div>
+
+<h2 id="s4.1">4.1 LQR Bám Quỹ đạo (Trajectory Tracking LQR) cho Robot</h2>
+
+<p>Thay vì giữ xe ở vị trí $0$, ta muốn xe bám theo một quỹ đạo di động $x_\text{ref}(k)$:</p>
+<ol>
+    <li>Định nghĩa sai số bám: $e_k = x_k - x_\text{ref}(k)$.</li>
+    <li>Tín hiệu điều khiển: $u_k = u_\text{ref}(k) - K e_k$.</li>
+</ol>
+<p>Điều này cho phép xe tự hành (AGV) bám theo đường cong chuyển động cực mượt!</p>
+
+<!-- TỔNG KẾT TẬP 2 -->
+<div style="background: linear-gradient(135deg, #0f172a, #1e293b); color: white; padding: 35px; border-radius: 10px; margin-top: 50px; text-align: center;">
+    <h2 style="color: #60a5fa; margin-top: 0;">🎯 Tổng Kết Tập 2</h2>
+    <p style="font-size: 1.05em; color: #cbd5e1; max-width: 750px; margin: 10px auto;">
+        1. **DLQR:** LQR trên máy tính/vi điều khiển thời gian rời rạc $x_{k+1} = A_d x_k + B_d u_k$.<br>
+        2. **Kalman Filter (LQE):** Xử lý nhiễu cảm biến và khôi phục trạng thái bị ẩn.<br>
+        3. **LQG:** Ghép LQR + Kalman Filter để điều khiển tối ưu trong môi trường thực tế đầy nhiễu.
+    </p>
+</div>
+
+<div style="text-align: center; margin: 35px 0; color: var(--text-secondary); font-size: 0.9em;">
+    <p>— Hết Tập 2 —</p>
+    <p><em>Nhấn nút "📄 Xuất PDF" ở góc phải dưới để lưu tài liệu dưới dạng PDF</em></p>
+</div>
+
+</body>
+</html>

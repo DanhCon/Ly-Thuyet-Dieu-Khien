@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>The Linear Kalman Filter — Complete Guide · SteppeSchool</title>
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$','$']], displayMath: [['$$','$$']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+<style>
+  /* ── Reset & base ── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Georgia', serif;
+    font-size: 11pt;
+    line-height: 1.75;
+    color: #1a1a2e;
+    background: #fff;
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 48px 40px 80px;
+  }
+
+  /* ── Cover ── */
+  .cover {
+    text-align: center;
+    padding: 80px 0 60px;
+    border-bottom: 2px solid #e0e4ef;
+    margin-bottom: 48px;
+  }
+  .cover .school { font-size: 13pt; letter-spacing: .12em; color: #5a6480; text-transform: uppercase; }
+  .cover h1 { font-size: 28pt; font-weight: 700; color: #0d1b3e; margin: 16px 0 10px; line-height: 1.2; }
+  .cover .subtitle { font-size: 13pt; color: #4a5568; max-width: 540px; margin: 0 auto 32px; }
+  .cover .tag { display: inline-block; border: 1px solid #8094c8; color: #3a50a0; font-size: 9pt; padding: 4px 14px; border-radius: 20px; margin: 0 4px 8px; letter-spacing: .06em; }
+
+  /* ── TOC ── */
+  .toc { background: #f7f9ff; border: 1px solid #dce3f5; border-radius: 8px; padding: 28px 32px; margin-bottom: 52px; }
+  .toc h2 { font-size: 11pt; text-transform: uppercase; letter-spacing: .1em; color: #5a6480; margin-bottom: 12px; font-weight: 600; }
+  .toc ol { padding-left: 22px; }
+  .toc li { margin-bottom: 5px; font-size: 10.5pt; color: #2d3a6e; }
+
+  /* ── Section headings ── */
+  h2.section-title {
+    font-size: 18pt;
+    font-weight: 700;
+    color: #0d1b3e;
+    margin: 52px 0 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #dce3f5;
+    page-break-after: avoid;
+  }
+  h3.subsection-title {
+    font-size: 13pt;
+    font-weight: 700;
+    color: #2d3a6e;
+    margin: 32px 0 12px;
+    page-break-after: avoid;
+  }
+
+  /* ── Body text ── */
+  p { margin-bottom: 14px; }
+  ul, ol { padding-left: 24px; margin-bottom: 14px; }
+  li { margin-bottom: 6px; }
+  strong { color: #0d1b3e; }
+  em { color: #2d3a6e; }
+
+  /* ── Callout ── */
+  .callout {
+    background: #eef2ff;
+    border-left: 4px solid #4361c8;
+    padding: 14px 18px;
+    margin: 20px 0;
+    border-radius: 0 6px 6px 0;
+    font-size: 10.5pt;
+  }
+
+  /* ── Worked example ── */
+  .worked-example {
+    background: #f0fff4;
+    border: 1px solid #9ae6b4;
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin: 24px 0;
+  }
+  .worked-example-label {
+    font-size: 9pt;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: #276749;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+
+  /* ── Display math ── */
+  .math-block {
+    text-align: center;
+    margin: 18px 0;
+    overflow-x: auto;
+  }
+
+  /* ── Comparison table ── */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 9.5pt;
+    margin: 20px 0;
+  }
+  .compare-table th {
+    background: #0d1b3e;
+    color: #fff;
+    padding: 10px 14px;
+    text-align: center;
+    font-weight: 600;
+  }
+  .compare-table td {
+    padding: 10px 14px;
+    border: 1px solid #dce3f5;
+    vertical-align: middle;
+  }
+  .compare-table tr:nth-child(even) td { background: #f7f9ff; }
+  .compare-table .cmp-step { font-weight: 600; color: #2d3a6e; white-space: nowrap; }
+
+  /* ── Equation reference card ── */
+  .ref-card {
+    border: 2px solid #4361c8;
+    border-radius: 10px;
+    padding: 24px 28px;
+    margin: 28px 0;
+    background: #f7f9ff;
+  }
+  .ref-card h4 { color: #0d1b3e; font-size: 11pt; margin-bottom: 14px; }
+  .ref-card .eq-row { display: flex; align-items: center; margin-bottom: 10px; gap: 16px; }
+  .ref-card .eq-label { min-width: 160px; font-weight: 600; font-size: 9pt; color: #4a5568; text-transform: uppercase; letter-spacing: .05em; }
+
+  /* ── Info box ── */
+  .info-box {
+    background: #fffbeb;
+    border: 1px solid #f6c90e;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 20px 0;
+    font-size: 10pt;
+    color: #744210;
+  }
+
+  /* ── Matrix display ── */
+  .matrix-label { font-size: 9pt; color: #5a6480; text-align: center; margin-top: -10px; margin-bottom: 16px; }
+
+  /* ── Section divider ── */
+  hr { border: none; border-top: 1px solid #e8ecf5; margin: 40px 0; }
+
+  /* ── Footer ── */
+  .footer { text-align: center; font-size: 9pt; color: #8094a8; margin-top: 80px; padding-top: 24px; border-top: 1px solid #dce3f5; }
+
+  /* ── Interactive tutorial banner ── */
+  .interactive-banner {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: #f0f4ff;
+    border: 1px solid #c0cdf5;
+    border-left: 4px solid #3a50a0;
+    border-radius: 8px;
+    padding: 14px 20px;
+    margin-bottom: 32px;
+    font-size: 10.5pt;
+    color: #2d3a6e;
+  }
+  .interactive-banner svg { flex-shrink: 0; color: #3a50a0; }
+  .interactive-banner a { color: #3a50a0; font-weight: 600; }
+  .interactive-banner a:hover { text-decoration: underline; }
+
+  /* ── Print styles ── */
+  @media print {
+    body { padding: 0; max-width: none; font-size: 10pt; }
+    h2.section-title { page-break-before: always; }
+    h2.section-title:first-of-type { page-break-before: avoid; }
+    .cover { page-break-after: always; }
+    .toc  { page-break-after: always; }
+    .worked-example, .ref-card, .callout { page-break-inside: avoid; }
+    a { color: inherit; text-decoration: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════ COVER ══════════════════ -->
+<div class="cover">
+  <div class="school">SteppeSchool</div>
+  <h1>The Linear Kalman Filter</h1>
+  <p class="subtitle">A complete guide — from Gaussian distributions to the full multivariate filter, with equations, worked examples, and Python code.</p>
+  <span class="tag">Gaussian Distributions</span>
+  <span class="tag">Data Fusion</span>
+  <span class="tag">Covariance Matrix</span>
+  <span class="tag">State-Space</span>
+  <span class="tag">Python</span>
+</div>
+
+<!-- ══════════════════ INTERACTIVE TUTORIAL BANNER ══════════════════ -->
+<div class="interactive-banner">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <polygon points="5 3 19 12 5 21 5 3"/>
+  </svg>
+  <span>This notebook has an interactive companion — visualize every concept in your browser:
+    <a href="https://kalmanfilter.steppeschool.com" target="_blank" rel="noopener noreferrer">kalmanfilter.steppeschool.com</a>
+  </span>
+</div>
+
+<!-- ══════════════════ TABLE OF CONTENTS ══════════════════ -->
+<div class="toc">
+  <h2>Contents</h2>
+  <ol>
+    <li>What Is the Kalman Filter?</li>
+    <li>Why Do We Need Random Variables?</li>
+    <li>The Gaussian Distribution and Sensor Noise</li>
+    <li>Variance and Sensor Quality</li>
+    <li>Data Fusion: Combining Noisy Sensor Measurements</li>
+    <li>The One-Dimensional Kalman Filter</li>
+    <li>The Covariance Matrix Explained</li>
+    <li>State-Space Representation</li>
+    <li>The Multivariate Linear Kalman Filter</li>
+    <li>Quick-Reference: All Equations</li>
+    <li>Python Implementation</li>
+  </ol>
+</div>
+
+<!-- ══════════════════ 1. INTRODUCTION ══════════════════ -->
+<h2 class="section-title">1 · What Is the Kalman Filter?</h2>
+<p>I first ran into the Kalman Filter as an undergraduate. I was building a drone, and I needed to estimate its <strong>tilt angle</strong> from a handful of cheap, noisy sensors. With no background in estimation, I did what everyone does — I searched for "Kalman Filter." What came back was a wall of bewildering matrix equations that left me completely clueless.</p>
+<p>It took years of projects before I could finally appreciate how beautiful and how <em>important</em> the Kalman Filter really is. It guided the <strong>Apollo spacecraft</strong> to the Moon: the craft had to follow a strict trajectory, which demanded an accurate estimate of its position even as noise and interference corrupted every sensor reading. The filter handled it. More than sixty years later, it is still everywhere — robots, drones, self-driving cars, phones, satellites — quietly withstanding the test of time.</p>
+<div class="callout">
+  <strong>So what is the Kalman Filter?</strong> The honest answer depends on your background. From an engineering perspective, it is a <strong>data fusion algorithm</strong>: every real sensor reports its true measurement <em>plus</em> noise. No single sensor is trustworthy on its own. The Kalman Filter combines several imperfect sources — and a model of how things move — into one estimate that is better than any of them alone.
+</div>
+<p>To get there, we build up the ideas systematically, from easy to hard. First, <strong>random variables</strong> and <strong>variance</strong> to quantify noise. Then the <strong>Gaussian distribution</strong>, and a simple <strong>data fusion</strong> rule. That gives us the <strong>one-dimensional Kalman Filter</strong>. From there we add <strong>covariance</strong> and matrices to reach the full <strong>linear Kalman Filter</strong> in two dimensions.</p>
+
+<!-- ══════════════════ 2. RANDOM VARIABLES ══════════════════ -->
+<h2 class="section-title">2 · Why Do We Need Random Variables?</h2>
+<p>In a perfectly deterministic world we would not need random variables. The temperature would be exactly $30^\circ C$, an exam score would be exactly 90, and a sensor would report the exact truth every time.</p>
+<p>But the real world is noisy. Every real sensor — GPS, an encoder, an accelerometer — returns a value that is <em>close</em> to the truth, but never exactly the truth.</p>
+<div class="callout">To describe the real world correctly, we need random variables. The single most important one for the Kalman Filter is the <strong>Gaussian (normal) distribution</strong>.</div>
+
+<!-- ══════════════════ 3. GAUSSIAN ══════════════════ -->
+<h2 class="section-title">3 · The Gaussian Distribution and Sensor Noise</h2>
+<p>A Gaussian distribution describes how likely each value of a random variable is. It is fully defined by just two numbers: the <strong>mean</strong> $\mu$ (where the bell is centered) and the <strong>variance</strong> $\sigma^2$ (how wide it spreads). Its probability density function is:</p>
+<div class="math-block">$$p(x) = \frac{1}{\sqrt{2\pi\sigma^2}}\; \exp\!\left(-\frac{(x-\mu)^2}{2\sigma^2}\right)$$</div>
+<p>In practice we almost never plug numbers into it directly. What matters is the simplicity hidden behind it: a Gaussian is <em>completely</em> described by just two numbers — its mean $\mu$ and variance $\sigma^2$. To model the noise of any real sensor, that is all we need.</p>
+<p>Here $\sigma$ is the <strong>standard deviation</strong> and $\sigma^2$ the variance. A useful rule of thumb:</p>
+<ul>
+  <li>About <strong>68%</strong> of all samples fall within $\pm 1\sigma$ of the mean</li>
+  <li>About <strong>95%</strong> fall within $\pm 2\sigma$</li>
+</ul>
+<p>There is a second reason Gaussians are so convenient: they <strong>combine with almost no effort</strong>. If you add independent random variables, their means and variances simply add up:</p>
+<div class="math-block">$$\mathbb{E}[x_1 + x_2] = \mathbb{E}[x_1] + \mathbb{E}[x_2] \qquad \operatorname{Var}(x_1 + x_2) = \operatorname{Var}(x_1) + \operatorname{Var}(x_2)$$</div>
+<p>And scaling a variable by a constant $a$ scales its variance by $a^2$:</p>
+<div class="math-block">$$\operatorname{Var}(a\,x) = a^2\,\operatorname{Var}(x)$$</div>
+<div class="callout">These few rules are essentially the entire algebra we will need. Every step of the Kalman Filter — predicting the state forward, fusing two sensors — turns out to be nothing more than these simple manipulations of means and variances.</div>
+
+<!-- ══════════════════ 4. SENSOR QUALITY ══════════════════ -->
+<h2 class="section-title">4 · Variance and Sensor Quality</h2>
+<p>Every measurement is the true value plus some noise: $y = x + e$, where the noise $e \sim \mathcal{N}(0,\,\sigma^2)$ is a zero-mean Gaussian. The <strong>variance</strong> of that noise is exactly what tells us how much to trust the sensor.</p>
+<ul>
+  <li>A <strong>high-quality sensor</strong> has a small variance — its readings cluster tightly around the truth (narrow, tall bell curve).</li>
+  <li>A <strong>low-quality sensor</strong> has a large variance — its readings are spread out and unreliable (wide, flat bell curve).</li>
+</ul>
+<p>Both sensors are centered on the same true value $\mu$, so on average they are both correct. But the narrow, tall curve is far more <em>certain</em> about any single reading. When we combine sensors, we should lean toward the one we trust more. This is the whole game.</p>
+
+<!-- ══════════════════ 5. DATA FUSION ══════════════════ -->
+<h2 class="section-title">5 · Data Fusion: Combining Noisy Sensor Measurements</h2>
+<p>Suppose two sensors measure the same quantity at the same moment:</p>
+<div class="math-block">$$y_1 = x + e_1,\quad e_1 \sim \mathcal{N}(0,\sigma_1^2) \qquad y_2 = x + e_2,\quad e_2 \sim \mathcal{N}(0,\sigma_2^2)$$</div>
+<p>What single number is our best estimate of the truth $x$? Not the simple average — that would trust a bad sensor as much as a good one. Instead we use a <strong>weighted average</strong>, giving more weight to the sensor with the smaller variance. We define the <strong>gain</strong> $K$ and nudge the first reading toward the second:</p>
+<div class="math-block">$$K = \frac{\sigma_1^2}{\sigma_1^2 + \sigma_2^2}, \qquad \hat{x} = y_1 + K\,(y_2 - y_1)$$</div>
+<p>The fused estimate has <em>smaller</em> variance than either sensor alone:</p>
+<div class="math-block">$$\operatorname{Var}(\hat{x}) = \sigma_1^2\,(1 - K)$$</div>
+<p>The cleanest way to see why is to flip it over. <strong>Precisions add:</strong></p>
+<div class="math-block">$$\frac{1}{\operatorname{Var}(\hat{x})} = \frac{1}{\sigma_1^2} + \frac{1}{\sigma_2^2}$$</div>
+<p>Each sensor adds its information to the pile, so the combined precision is always <em>larger</em> than either sensor's — adding an independent measurement can never make you less certain.</p>
+
+<div class="worked-example">
+  <div class="worked-example-label">Worked Example · Fusing two thermometers</div>
+  <p>Two thermometers read the same room. The cheap one says $y_1 = 10°$ with variance $\sigma_1^2 = 4$ (σ = 2°); the better one says $y_2 = 16°$ with variance $\sigma_2^2 = 1$ (σ = 1°).</p>
+  <p><strong>Gain:</strong></p>
+  <div class="math-block">$$K = \frac{\sigma_1^2}{\sigma_1^2 + \sigma_2^2} = \frac{4}{4 + 1} = 0.8$$</div>
+  <p><strong>Fused estimate</strong> — move 80% of the way from 10° toward 16°:</p>
+  <div class="math-block">$$\hat{x} = 10 + 0.8\,(16 - 10) = 14.8°$$</div>
+  <p><strong>Fused variance:</strong></p>
+  <div class="math-block">$$\operatorname{Var}(\hat{x}) = \sigma_1^2\,(1 - K) = 4\,(1 - 0.8) = 0.8$$</div>
+  <p>The estimate <strong>14.8°</strong> leans toward the more precise thermometer, just as it should. The fused variance <strong>0.8</strong> is smaller than <em>both</em> inputs — even the good sensor's 1.0. Check: precisions add, $\tfrac14 + \tfrac11 = \tfrac54$, and $1/\tfrac54 = 0.8$. ✓</p>
+</div>
+
+<!-- ══════════════════ 6. 1D KALMAN FILTER ══════════════════ -->
+<h2 class="section-title">6 · The One-Dimensional Kalman Filter</h2>
+<p>Now we add <strong>time</strong>. A robot drives along a line, carrying two noisy sensors: an <strong>encoder</strong> that measures velocity, and a <strong>GPS</strong> that measures position directly.</p>
+
+<h3 class="subsection-title">Encoder only: the estimate drifts</h3>
+<p>With just the encoder, we use <strong>dead reckoning</strong>: start at a known position and keep adding the measured velocity, step after step.</p>
+<div class="math-block">$$x_{\text{pred}}[n] = \hat{x}[n-1] + v[n]\,\Delta t \qquad \sigma_{\text{pred}}^2[n] = \sigma^2[n-1] + \sigma_{\text{enc}}^2$$</div>
+<p>The problem: every velocity reading carries noise, and we are <em>summing</em> those errors. They accumulate — the variance grows without bound and the estimate slowly <strong>drifts</strong> away from the truth.</p>
+
+<h3 class="subsection-title">GPS only: accurate but jumpy</h3>
+<p>The GPS measures position directly, so it never drifts — on average it is always right. But each reading is corrupted by noise:</p>
+<div class="math-block">$$x_{\text{meas}}[n] = x_{\text{true}}[n] + \omega[n], \qquad \omega[n] \sim \mathcal{N}(0,\,\sigma_{\text{gps}}^2)$$</div>
+<p>Each reading could be far off. The encoder is <strong>smooth but drifts</strong>; the GPS is <strong>accurate on average but jumpy</strong>. The Kalman Filter combines them.</p>
+
+<h3 class="subsection-title">The Kalman Filter: predict then correct</h3>
+<p>Each timestep runs in two phases.</p>
+<p><strong>Predict</strong> (with the encoder, like dead reckoning):</p>
+<div class="math-block">$$x_{\text{pred}} = \hat{x}[n-1] + v[n]\,\Delta t \qquad \sigma_{\text{pred}}^2 = \sigma^2[n-1] + \sigma_{\text{enc}}^2$$</div>
+<p><strong>Correct</strong> (fuse prediction and GPS using the data-fusion formula):</p>
+<div class="math-block">$$K = \frac{\sigma_{\text{pred}}^2}{\sigma_{\text{pred}}^2 + \sigma_{\text{gps}}^2}$$</div>
+<div class="math-block">$$\hat{x}[n] = x_{\text{pred}} + K\,\big(x_{\text{meas}} - x_{\text{pred}}\big) \qquad \sigma^2[n] = \sigma_{\text{pred}}^2\,(1 - K)$$</div>
+
+<div class="worked-example">
+  <div class="worked-example-label">Worked Example · One update with real numbers</div>
+  <p>Last estimate: $\hat{x} = 30$ m, $\sigma^2 = 4$. Encoder: $v = 5$ m/step, $\sigma_{\text{enc}}^2 = 1$. GPS reads $x_{\text{meas}} = 38$ m, $\sigma_{\text{gps}}^2 = 9$.</p>
+  <p><strong>1. Predict:</strong></p>
+  <div class="math-block">$$x_{\text{pred}} = 30 + 5 = 35 \qquad \sigma_{\text{pred}}^2 = 4 + 1 = 5$$</div>
+  <p><strong>2. Gain:</strong></p>
+  <div class="math-block">$$K = \frac{5}{5 + 9} = \frac{5}{14} \approx 0.36$$</div>
+  <p><strong>3. Correct:</strong></p>
+  <div class="math-block">$$\hat{x} = 35 + 0.36\,(38 - 35) \approx 36.07 \qquad \sigma^2 = 5\,(1 - 0.36) \approx 3.21$$</div>
+  <p>The estimate moved 36% of the way from the prediction (35) toward the GPS (38) — because the prediction and GPS were comparably trustworthy. The variance dropped from 5 to 3.21: fusing made us more certain.</p>
+</div>
+
+<!-- ══════════════════ 7. COVARIANCE MATRIX ══════════════════ -->
+<h2 class="section-title">7 · The Covariance Matrix Explained</h2>
+<p>In the 1D filter, uncertainty was a single number — the variance $\sigma^2$. In the real world, we track <em>several</em> quantities at once. Individual variances tell you how much each variable spreads on its own, but miss something important: two variables can be <strong>correlated</strong>. The <strong>covariance matrix</strong> captures that joint information.</p>
+
+<h3 class="subsection-title">Covariance between two variables</h3>
+<div class="math-block">$$\sigma_{x_1 x_2} = \frac{1}{N}\sum_{k=1}^{N}\bigl(x_1[k] - \mu_{x_1}\bigr)\bigl(x_2[k] - \mu_{x_2}\bigr)$$</div>
+<ul>
+  <li>$\sigma_{x_1 x_2} > 0$: positively correlated — when one is high, the other tends to be high too</li>
+  <li>$\sigma_{x_1 x_2} < 0$: negatively correlated — they move in opposite directions</li>
+  <li>$\sigma_{x_1 x_2} \approx 0$: independent</li>
+</ul>
+
+<h3 class="subsection-title">The covariance matrix</h3>
+<div class="math-block">$$\boldsymbol{\Sigma} = \begin{bmatrix} \sigma_{x_1}^2 & \sigma_{x_1 x_2} \\ \sigma_{x_2 x_1} & \sigma_{x_2}^2 \end{bmatrix}$$</div>
+<ul>
+  <li><strong>Diagonal</strong>: individual variances — how much each variable spreads on its own</li>
+  <li><strong>Off-diagonal</strong>: covariance — correlation between the pair</li>
+  <li>Always <strong>symmetric</strong>: $\sigma_{x_1 x_2} = \sigma_{x_2 x_1}$</li>
+</ul>
+<p>We write $\mathbf{x} \sim \mathcal{N}(\boldsymbol{\mu},\, \boldsymbol{\Sigma})$ to say the whole vector follows a multivariate Gaussian. This structure scales to any number of variables — the Kalman Filter handles them all with exactly the same equations.</p>
+
+<h3 class="subsection-title">How a covariance matrix transforms</h3>
+<p>If we build a new random vector by a linear transformation $\mathbf{y} = \mathbf{A}\mathbf{x} + \mathbf{b}$, the mean and covariance of $\mathbf{y}$ are:</p>
+<div class="math-block">$$\boldsymbol{\mu}_\mathbf{y} = \mathbf{A}\,\boldsymbol{\mu}_\mathbf{x} + \mathbf{b} \qquad \boldsymbol{\Sigma}_\mathbf{y} = \mathbf{A}\,\boldsymbol{\Sigma}_\mathbf{x}\,\mathbf{A}^{\!\top}$$</div>
+<p>Compare with the scalar rule: scaling by $a$ gives variance $a^2\sigma^2$; transforming by $\mathbf{A}$ gives $\mathbf{A}\boldsymbol{\Sigma}\mathbf{A}^{\!\top}$ — the same structure, lifted to matrices. This is the rule the Kalman Filter uses in every prediction step.</p>
+
+<!-- ══════════════════ 8. STATE-SPACE ══════════════════ -->
+<h2 class="section-title">8 · State-Space Representation</h2>
+<p>The Kalman Filter does two things every tick: it <strong>predicts</strong> where the system will be next, and then it <strong>corrects</strong> that prediction with a sensor reading. The prediction step requires a model of how the system evolves.</p>
+
+<h3 class="subsection-title">What is the state?</h3>
+<p>The <strong>state</strong> is the smallest set of variables you need right now to predict what happens next. For a robot moving along a line, knowing its position is not enough — you need position <em>and</em> velocity: $\mathbf{x} = [\,x,\, v\,]^\top$.</p>
+<ul>
+  <li>Robot on a line: $\mathbf{x} = [\,x,\, v\,]^\top$ (2 variables)</li>
+  <li>Drone in 3D: position + velocity in x, y, z = 6 variables; add orientation = 12 variables</li>
+  <li>Weather model: potentially millions of variables — same equations, bigger matrices</li>
+</ul>
+
+<h3 class="subsection-title">The discrete state-space model</h3>
+<div class="math-block">$$\mathbf{x}_k = \mathbf{F}\,\mathbf{x}_{k-1} + \mathbf{G}\,\mathbf{u}_{k-1} \qquad \mathbf{y}_k = \mathbf{H}\,\mathbf{x}_k$$</div>
+<ul>
+  <li><strong>F</strong> — transition matrix: steps the state forward one tick</li>
+  <li><strong>G</strong> — input matrix: maps external control inputs (motor, force) into the state</li>
+  <li><strong>H</strong> — measurement matrix: selects which parts of the state a sensor can see</li>
+</ul>
+
+<h3 class="subsection-title">Example: constant-velocity model</h3>
+<div class="math-block">$$\begin{bmatrix} x \\ v \end{bmatrix}_k = \underbrace{\begin{bmatrix} 1 & \Delta t \\ 0 & 1 \end{bmatrix}}_{\mathbf{F}}\begin{bmatrix} x \\ v \end{bmatrix}_{k-1}$$</div>
+<p>This $\mathbf{F}$ encodes one physical fact: in one tick, position changes by $v \cdot \Delta t$. A GPS that measures position but not velocity uses $\mathbf{H} = [\,1\ \ 0\,]$ — it keeps only the first component of the state.</p>
+
+<!-- ══════════════════ 9. MULTIVARIATE ══════════════════ -->
+<h2 class="section-title">9 · The Multivariate Linear Kalman Filter</h2>
+<p>We have everything we need. The only thing that changes from 1D is that scalars become matrices.</p>
+
+<p>The state-space model with noise terms added:</p>
+<div class="math-block">$$\mathbf{x}_k = \mathbf{F}\,\mathbf{x}_{k-1} + \mathbf{G}\,\mathbf{u}_{k-1} + \mathbf{w}_k, \quad \mathbf{w}_k \sim \mathcal{N}(\mathbf{0},\,\mathbf{Q})$$</div>
+<div class="math-block">$$\mathbf{z}_k = \mathbf{H}\,\mathbf{x}_k + \mathbf{v}_k, \quad \mathbf{v}_k \sim \mathcal{N}(\mathbf{0},\,\mathbf{R})$$</div>
+<ul>
+  <li>$\mathbf{w}$: <strong>process noise</strong> — small random disturbances the model ignores; $\mathbf{Q}$ is its covariance (counterpart of $\sigma_{\text{enc}}^2$)</li>
+  <li>$\mathbf{v}$: <strong>measurement noise</strong>; $\mathbf{R}$ is its covariance (counterpart of $\sigma_{\text{gps}}^2$)</li>
+</ul>
+
+<h3 class="subsection-title">Phase 1 — Predict</h3>
+<div class="math-block">$$\mathbf{x}_{\text{pred}} = \mathbf{F}\,\hat{\mathbf{x}} + \mathbf{G}\,\mathbf{u}$$</div>
+<div class="math-block">$$\boldsymbol{\Sigma}_{\text{pred}} = \mathbf{F}\,\boldsymbol{\Sigma}\,\mathbf{F}^{\!\top} + \mathbf{Q}$$</div>
+<p>The covariance <em>grows</em> — we became less certain, because we moved without looking.</p>
+
+<h3 class="subsection-title">Phase 2 — Correct</h3>
+<p>A new measurement $\mathbf{z}$ arrives. Compute the <strong>Kalman gain</strong>:</p>
+<div class="math-block">$$\mathbf{K} = \boldsymbol{\Sigma}_{\text{pred}}\,\mathbf{H}^{\!\top}\Big(\mathbf{H}\,\boldsymbol{\Sigma}_{\text{pred}}\,\mathbf{H}^{\!\top} + \mathbf{R}\Big)^{-1}$$</div>
+<p>The term $\mathbf{z} - \mathbf{H}\,\mathbf{x}_{\text{pred}}$ is the <strong>innovation</strong> — how surprised the sensor reading made us. Update state and covariance:</p>
+<div class="math-block">$$\hat{\mathbf{x}} = \mathbf{x}_{\text{pred}} + \mathbf{K}\,(\mathbf{z} - \mathbf{H}\,\mathbf{x}_{\text{pred}})$$</div>
+<div class="math-block">$$\boldsymbol{\Sigma} = (\mathbf{I} - \mathbf{K}\mathbf{H})\,\boldsymbol{\Sigma}_{\text{pred}}$$</div>
+
+<h3 class="subsection-title">Matrices for a 2D GPS tracker</h3>
+<p>State: $\mathbf{x} = [x,\, y,\, v_x,\, v_y]^\top$</p>
+<div class="math-block">$$\mathbf{F} = \begin{bmatrix} 1 & 0 & \Delta t & 0 \\ 0 & 1 & 0 & \Delta t \\ 0 & 0 & 1 & 0 \\ 0 & 0 & 0 & 1 \end{bmatrix} \qquad \mathbf{H} = \begin{bmatrix} 1 & 0 & 0 & 0 \\ 0 & 1 & 0 & 0 \end{bmatrix} \qquad \mathbf{R} = \begin{bmatrix} \sigma_{\text{gps}}^2 & 0 \\ 0 & \sigma_{\text{gps}}^2 \end{bmatrix}$$</div>
+
+<div class="worked-example">
+  <div class="worked-example-label">Worked Example · One full predict–correct cycle with matrices</div>
+  <p>Two-variable state (position and velocity), $\Delta t = 1$:</p>
+  <div class="math-block">$$\hat{\mathbf{x}} = \begin{bmatrix} 30 \\ 5 \end{bmatrix},\quad \boldsymbol{\Sigma} = \begin{bmatrix} 4 & 0 \\ 0 & 1 \end{bmatrix},\quad \mathbf{F} = \begin{bmatrix} 1 & 1 \\ 0 & 1 \end{bmatrix},\quad \mathbf{Q} = \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}$$</div>
+  <p><strong>1. Predict:</strong></p>
+  <div class="math-block">$$\mathbf{x}_{\text{pred}} = \mathbf{F}\,\hat{\mathbf{x}} = \begin{bmatrix} 35 \\ 5 \end{bmatrix}$$</div>
+  <div class="math-block">$$\boldsymbol{\Sigma}_{\text{pred}} = \mathbf{F}\,\boldsymbol{\Sigma}\,\mathbf{F}^{\!\top} + \mathbf{Q} = \begin{bmatrix} 6 & 1 \\ 1 & 2 \end{bmatrix}$$</div>
+  <p><strong>2. Gain</strong> — $\mathbf{H} = [\,1\ \ 0\,]$, $R = 4$:</p>
+  <div class="math-block">$$S = \mathbf{H}\,\boldsymbol{\Sigma}_{\text{pred}}\,\mathbf{H}^{\!\top} + R = 6 + 4 = 10$$</div>
+  <div class="math-block">$$\mathbf{K} = \boldsymbol{\Sigma}_{\text{pred}}\,\mathbf{H}^{\!\top} S^{-1} = \begin{bmatrix} 0.6 \\ 0.1 \end{bmatrix}$$</div>
+  <p><strong>3. Correct</strong> — GPS reading $z = 38$, innovation $= 38 - 35 = 3$:</p>
+  <div class="math-block">$$\hat{\mathbf{x}} = \begin{bmatrix} 35 \\ 5 \end{bmatrix} + \begin{bmatrix} 0.6 \\ 0.1 \end{bmatrix}(3) = \begin{bmatrix} 36.8 \\ 5.3 \end{bmatrix}$$</div>
+  <div class="math-block">$$\boldsymbol{\Sigma} = \begin{bmatrix} 2.4 & 0.4 \\ 0.4 & 1.9 \end{bmatrix}$$</div>
+  <p>Position variance fell from 6 to 2.4 as the GPS pinned it down. A non-zero off-diagonal (0.4) appeared — the filter now knows position and velocity errors are <em>correlated</em>. That single matrix update is the entire Kalman Filter, in numbers.</p>
+</div>
+
+<h3 class="subsection-title">1D vs Multivariate — side-by-side</h3>
+<table class="compare-table">
+  <thead>
+    <tr><th></th><th>1D scalar filter</th><th>Multivariate filter</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="cmp-step">Predict state</td>
+      <td>$x_{\text{pred}} = \hat{x} + v\,\Delta t$</td>
+      <td>$\mathbf{x}_{\text{pred}} = \mathbf{F}\,\hat{\mathbf{x}}$</td>
+    </tr>
+    <tr>
+      <td class="cmp-step">Predict uncertainty</td>
+      <td>$\sigma_{\text{pred}}^2 = \sigma^2 + \sigma_{\text{enc}}^2$</td>
+      <td>$\boldsymbol{\Sigma}_{\text{pred}} = \mathbf{F}\boldsymbol{\Sigma}\mathbf{F}^{\!\top} + \mathbf{Q}$</td>
+    </tr>
+    <tr>
+      <td class="cmp-step">Kalman gain</td>
+      <td>$K = \dfrac{\sigma_{\text{pred}}^2}{\sigma_{\text{pred}}^2 + \sigma_{\text{gps}}^2}$</td>
+      <td>$\mathbf{K} = \boldsymbol{\Sigma}_{\text{pred}}\mathbf{H}^{\!\top}(\mathbf{H}\boldsymbol{\Sigma}_{\text{pred}}\mathbf{H}^{\!\top} + \mathbf{R})^{-1}$</td>
+    </tr>
+    <tr>
+      <td class="cmp-step">Correct state</td>
+      <td>$\hat{x} = x_{\text{pred}} + K\,(z - x_{\text{pred}})$</td>
+      <td>$\hat{\mathbf{x}} = \mathbf{x}_{\text{pred}} + \mathbf{K}\,(\mathbf{z} - \mathbf{H}\mathbf{x}_{\text{pred}})$</td>
+    </tr>
+    <tr>
+      <td class="cmp-step">Correct uncertainty</td>
+      <td>$\sigma^2 = \sigma_{\text{pred}}^2\,(1 - K)$</td>
+      <td>$\boldsymbol{\Sigma} = (\mathbf{I} - \mathbf{K}\mathbf{H})\,\boldsymbol{\Sigma}_{\text{pred}}$</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- ══════════════════ 10. QUICK REFERENCE ══════════════════ -->
+<h2 class="section-title">10 · Quick Reference — All Equations</h2>
+
+<div class="ref-card">
+  <h4>Notation</h4>
+  <ul>
+    <li><strong>F</strong> — state transition matrix (n×n)</li>
+    <li><strong>H</strong> — observation matrix (m×n)</li>
+    <li><strong>Q</strong> — process noise covariance (n×n)</li>
+    <li><strong>R</strong> — measurement noise covariance (m×m)</li>
+    <li><strong>x̂</strong> — state estimate (n×1)</li>
+    <li><strong>Σ</strong> — state covariance (n×n)</li>
+    <li><strong>z</strong> — measurement vector (m×1)</li>
+    <li><strong>K</strong> — Kalman gain (n×m)</li>
+  </ul>
+</div>
+
+<h3 class="subsection-title">Predict step</h3>
+<div class="math-block">$$\mathbf{x}_{\text{pred}} = \mathbf{F}\,\hat{\mathbf{x}} + \mathbf{G}\,\mathbf{u}$$</div>
+<div class="math-block">$$\boldsymbol{\Sigma}_{\text{pred}} = \mathbf{F}\,\boldsymbol{\Sigma}\,\mathbf{F}^{\!\top} + \mathbf{Q}$$</div>
+
+<h3 class="subsection-title">Update step</h3>
+<div class="math-block">$$\mathbf{K} = \boldsymbol{\Sigma}_{\text{pred}}\,\mathbf{H}^{\!\top}\bigl(\mathbf{H}\,\boldsymbol{\Sigma}_{\text{pred}}\,\mathbf{H}^{\!\top} + \mathbf{R}\bigr)^{-1}$$</div>
+<div class="math-block">$$\hat{\mathbf{x}} = \mathbf{x}_{\text{pred}} + \mathbf{K}\,\underbrace{(\mathbf{z} - \mathbf{H}\,\mathbf{x}_{\text{pred}})}_{\text{innovation}}$$</div>
+<div class="math-block">$$\boldsymbol{\Sigma} = \bigl(\mathbf{I} - \mathbf{K}\,\mathbf{H}\bigr)\,\boldsymbol{\Sigma}_{\text{pred}}$$</div>
+
+<h3 class="subsection-title">Tuning</h3>
+<ul>
+  <li><strong>Increase Q</strong> → filter trusts the model less, follows measurements more closely</li>
+  <li><strong>Increase R</strong> → filter trusts measurements less, relies more on the model (smoother output)</li>
+  <li><strong>Large initial P</strong> → filter starts uncertain, converges quickly as measurements arrive</li>
+</ul>
+
+<!-- ══════════════════ 11. PYTHON ══════════════════ -->
+<h2 class="section-title">11 · Python Implementation</h2>
+<p>The accompanying Jupyter notebook (<code>kalman_filter.ipynb</code>) contains runnable code for every concept in this guide. Here is the core <code>KalmanFilter</code> class:</p>
+
+<pre style="background:#f7f9ff;border:1px solid #dce3f5;border-radius:8px;padding:20px 24px;font-size:9pt;line-height:1.6;overflow-x:auto;font-family:'Consolas','Courier New',monospace;color:#1a1a2e;">
+import numpy as np
+
+class KalmanFilter:
+    """
+    Linear Kalman Filter.
+
+    Parameters
+    ----------
+    F  : state transition matrix       (n x n)
+    H  : observation matrix            (m x n)
+    Q  : process noise covariance      (n x n)
+    R  : measurement noise covariance  (m x m)
+    x0 : initial state estimate
+    P0 : initial covariance estimate
+    """
+
+    def __init__(self, F, H, Q, R, x0, P0):
+        self.F = np.array(F, dtype=float)
+        self.H = np.array(H, dtype=float)
+        self.Q = np.array(Q, dtype=float)
+        self.R = np.array(R, dtype=float)
+        self.x = np.array(x0, dtype=float).reshape(-1, 1)
+        self.P = np.array(P0, dtype=float)
+
+    def predict(self):
+        self.x = self.F @ self.x
+        self.P = self.F @ self.P @ self.F.T + self.Q
+        return self.x.flatten().copy(), self.P.copy()
+
+    def update(self, z):
+        z = np.array(z, dtype=float).reshape(-1, 1)
+        innovation = z - self.H @ self.x
+        S = self.H @ self.P @ self.H.T + self.R
+        K = self.P @ self.H.T @ np.linalg.inv(S)
+        self.x = self.x + K @ innovation
+        self.P = (np.eye(self.P.shape[0]) - K @ self.H) @ self.P
+        return self.x.flatten().copy(), self.P.copy(), innovation.flatten()
+
+    def step(self, z):
+        """Predict then update in one call."""
+        self.predict()
+        return self.update(z)
+</pre>
+
+<h3 class="subsection-title">Usage: 2D GPS tracking</h3>
+<pre style="background:#f7f9ff;border:1px solid #dce3f5;border-radius:8px;padding:20px 24px;font-size:9pt;line-height:1.6;overflow-x:auto;font-family:'Consolas','Courier New',monospace;color:#1a1a2e;">
+dt = 1.0
+
+F = [[1, 0, dt,  0],
+     [0, 1,  0, dt],
+     [0, 0,  1,  0],
+     [0, 0,  0,  1]]
+
+H = [[1, 0, 0, 0],
+     [0, 1, 0, 0]]
+
+q = 0.05
+Q = [[q*0.25, 0,      q*0.5, 0    ],
+     [0,      q*0.25, 0,     q*0.5],
+     [q*0.5,  0,      q,     0    ],
+     [0,      q*0.5,  0,     q    ]]
+
+r = gps_noise_std**2
+R = [[r, 0], [0, r]]
+
+kf = KalmanFilter(F, H, Q, R, x0=[x0, y0, 0, 0], P0=np.eye(4))
+
+for gps_x, gps_y in gps_readings:
+    state, cov, innovation = kf.step([gps_x, gps_y])
+    x_est, y_est, vx_est, vy_est = state
+</pre>
+
+<div class="info-box">
+  <strong>Notebook contents:</strong> The Jupyter notebook walks through (1) Gaussian distributions, (2) sensor quality, (3) data fusion and Kalman gain, (4) covariance matrices with ellipse plots, (5) state-space simulation, (6) 1D filter step-by-step, (7) the KalmanFilter class, and (8) 2D GPS tracking with tuning experiments.
+</div>
+
+<hr />
+<div class="footer">
+  <strong>SteppeSchool</strong> · The Linear Kalman Filter — Complete Guide<br />
+  <a href="https://kalmanfilter.steppeschool.com">kalmanfilter.steppeschool.com</a>
+</div>
+
+</body>
+</html>

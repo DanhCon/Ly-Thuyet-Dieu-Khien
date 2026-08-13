@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tài Liệu Học Tập Toàn Tập: Bộ Lọc Kalman (Kalman Filter)</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+    window.MathJax = {
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']],
+            tags: 'ams'
+        },
+        chtml: { scale: 1 }
+    };
+    </script>
+    <style>
+        :root {
+            --primary: #0f172a;
+            --accent: #2563eb;
+            --accent-light: #3b82f6;
+            --bg: #ffffff;
+            --text: #1e293b;
+            --text-secondary: #475569;
+            --quiz-bg: #f0f9ff;
+            --quiz-border: #bae6fd;
+            --answer-bg: #f0fdf4;
+            --answer-border: #86efac;
+            --warning-bg: #fffbeb;
+            --warning-border: #fde68a;
+            --code-bg: #0f172a;
+            --border: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+            font-size: 16.5px;
+            line-height: 1.8;
+            color: var(--text);
+            background: var(--bg);
+            max-width: 920px;
+            margin: 0 auto;
+            padding: 40px 25px;
+        }
+
+        /* ===== COVER PAGE ===== */
+        .cover-page {
+            text-align: center;
+            padding: 60px 20px;
+            border-bottom: 3px solid var(--accent);
+            margin-bottom: 50px;
+            background: #f8fafc;
+            border-radius: 12px;
+        }
+        .cover-page h1 {
+            font-size: 2.4em;
+            color: var(--primary);
+            margin-bottom: 12px;
+            line-height: 1.3;
+            border: none;
+            padding: 0;
+        }
+        .cover-page .subtitle {
+            font-size: 1.35em;
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: 25px;
+        }
+        .cover-page .tagline {
+            font-size: 1.05em;
+            color: var(--text-secondary);
+            font-style: italic;
+            margin-bottom: 30px;
+        }
+        .cover-page .meta {
+            font-size: 0.95em;
+            color: var(--text-secondary);
+        }
+
+        /* ===== HEADINGS ===== */
+        h1 { font-size: 1.85em; color: var(--primary); margin: 45px 0 20px; border-bottom: 2px solid var(--accent); padding-bottom: 8px; }
+        h2 { font-size: 1.4em; color: var(--accent); margin: 35px 0 15px; }
+        h3 { font-size: 1.18em; color: var(--primary); margin: 25px 0 12px; }
+        h4 { font-size: 1.05em; color: var(--text); margin: 18px 0 8px; }
+
+        .part-header {
+            background: linear-gradient(135deg, #1e3a8a, #2563eb);
+            color: white;
+            padding: 28px 35px;
+            border-radius: 10px;
+            margin: 50px 0 30px;
+            box-shadow: var(--shadow);
+        }
+        .part-header h1 { color: white; border: none; margin: 0; font-size: 1.7em; padding: 0; }
+        .part-header p { color: #dbeafe; margin-top: 8px; font-size: 1.05em; }
+
+        .part-header-intro {
+            background: linear-gradient(135deg, #059669, #10b981);
+            color: white;
+            padding: 28px 35px;
+            border-radius: 10px;
+            margin: 40px 0 30px;
+            box-shadow: var(--shadow);
+        }
+        .part-header-intro h1 { color: white; border: none; margin: 0; font-size: 1.7em; padding: 0; }
+        .part-header-intro p { color: #ecfdf5; margin-top: 8px; font-size: 1.05em; }
+
+        /* ===== CONTENT ===== */
+        p { margin: 12px 0; text-align: justify; }
+        ul, ol { margin: 10px 0 15px 25px; }
+        li { margin: 6px 0; }
+
+        strong { color: #0f172a; font-weight: 600; }
+
+        .highlight {
+            background: #fef08a;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        blockquote {
+            border-left: 4px solid var(--accent);
+            background: #f8fafc;
+            padding: 15px 20px;
+            margin: 20px 0;
+            font-style: italic;
+            color: var(--text-secondary);
+            border-radius: 0 8px 8px 0;
+        }
+
+        /* ===== DEFINITION / THEOREM BOXES ===== */
+        .definition, .theorem, .important-note, .example-box, .analogy-box {
+            padding: 20px 24px;
+            border-radius: 8px;
+            margin: 22px 0;
+            border-left: 5px solid;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .definition {
+            background: #eff6ff;
+            border-color: #3b82f6;
+        }
+        .definition .box-title { color: #1d4ed8; }
+        
+        .theorem {
+            background: #faf5ff;
+            border-color: #a855f7;
+        }
+        .theorem .box-title { color: #7e22ce; }
+        
+        .important-note {
+            background: var(--warning-bg);
+            border-color: #f59e0b;
+        }
+        .important-note .box-title { color: #b45309; }
+        
+        .example-box {
+            background: #f0fdf4;
+            border-color: #22c55e;
+        }
+        .example-box .box-title { color: #15803d; }
+
+        .analogy-box {
+            background: #fff7ed;
+            border-color: #ea580c;
+        }
+        .analogy-box .box-title { color: #c2410c; }
+
+        .box-title {
+            font-weight: 700;
+            font-size: 1.05em;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        /* ===== STEP BY STEP CARDS ===== */
+        .step-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-left: 4px solid var(--accent);
+            border-radius: 6px;
+            padding: 16px 20px;
+            margin: 14px 0;
+        }
+        .step-number {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: 700;
+            margin-right: 8px;
+        }
+
+        /* ===== QUIZ ===== */
+        .quiz-section {
+            background: var(--quiz-bg);
+            border: 1px solid var(--quiz-border);
+            border-radius: 10px;
+            padding: 22px 26px;
+            margin: 30px 0;
+        }
+        .quiz-section h3 {
+            color: #0369a1;
+            margin-top: 0;
+            font-size: 1.15em;
+        }
+        .quiz-question {
+            margin: 15px 0 8px;
+        }
+        .quiz-question strong {
+            color: #0284c7;
+        }
+
+        .answer-section {
+            background: var(--answer-bg);
+            border: 1px solid var(--answer-border);
+            border-radius: 8px;
+            padding: 18px 22px;
+            margin: 10px 0 20px;
+        }
+        .answer-section .box-title {
+            color: #16a34a;
+        }
+
+        /* ===== TABLE ===== */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.95em;
+        }
+        th, td {
+            border: 1px solid var(--border);
+            padding: 10px 14px;
+            text-align: left;
+        }
+        th {
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+        }
+        tr:nth-child(even) { background: #f8fafc; }
+        tr:hover { background: #f1f5f9; }
+
+        /* ===== CODE ===== */
+        pre {
+            background: var(--code-bg);
+            color: #f8fafc;
+            padding: 18px 22px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: "Fira Code", Consolas, Monaco, monospace;
+            font-size: 0.88em;
+            line-height: 1.6;
+            margin: 20px 0;
+        }
+        code {
+            font-family: "Fira Code", Consolas, Monaco, monospace;
+            background: #f1f5f9;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            color: #b91c1c;
+        }
+        pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+        }
+
+        /* ===== TOC ===== */
+        .toc {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 25px 30px;
+            margin: 30px 0;
+        }
+        .toc h2 { margin-top: 0; color: var(--primary); }
+        .toc ul { list-style: none; margin-left: 0; }
+        .toc > ul > li {
+            margin: 8px 0;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        .toc > ul > li > ul > li {
+            font-weight: 400;
+            color: var(--text);
+            margin: 4px 0;
+            padding-left: 20px;
+        }
+        .toc a { color: inherit; text-decoration: none; }
+        .toc a:hover { color: var(--accent); text-decoration: underline; }
+
+        /* ===== PRINT ===== */
+        .print-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 12px 22px;
+            border-radius: 30px;
+            font-size: 0.95em;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(37,99,235,0.4);
+            transition: all 0.2s;
+            z-index: 1000;
+        }
+        .print-btn:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+        }
+
+        @media print {
+            body { padding: 15px; font-size: 11pt; max-width: 100%; }
+            .print-btn { display: none; }
+            .cover-page { padding: 40px 20px; }
+            .part-header, .part-header-intro { page-break-before: always; }
+            .quiz-section, .answer-section, .definition, .theorem, .example-box, .important-note, .analogy-box {
+                break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<button class="print-btn" onclick="window.print()">📄 Xuất PDF</button>
+
+<!-- COVER PAGE -->
+<div class="cover-page">
+    <h1>Tài Liệu Học Tập Toàn Tập</h1>
+    <div class="subtitle">BỘ LỌC KALMAN (KALMAN FILTER)</div>
+    <div class="tagline">
+        Giải mã Toán học &amp; Thuật toán Ước lượng Tối ưu — Từ Phân bố Gauss đến Lập trình C++/Python Nhúng
+    </div>
+    <hr style="width: 50%; margin: 25px auto; border: none; border-top: 1px solid #cbd5e1;">
+    <div class="meta">
+        <p><strong>Chuyên ngành:</strong> Kỹ thuật Điều khiển, Xử lý Tín hiệu &amp; Chế tạo Robot</p>
+        <p><strong>Phương pháp Sư phạm:</strong> Cuốn chiếu từng bước từ Xác suất Thống kê cơ bản $\rightarrow$ Chứng minh 5 bước $\rightarrow$ Lập trình thực tế</p>
+        <p><strong>Phiên bản:</strong> 1.0 (Hoàn chỉnh &amp; Đầy đủ Bổ trợ Kiến thức)</p>
+    </div>
+</div>
+
+<!-- TOC -->
+<div class="toc">
+    <h2>📋 Mục Lục Chi Tiết</h2>
+    <ul>
+        <li><a href="#part0">PHẦN 0: NHẬP MÔN XÁC SUẤT THỐNG KÊ (Nền tảng từ con số 0)</a>
+            <ul>
+                <li><a href="#s0.1">0.1 Giá trị ngẫu nhiên, Kỳ vọng $E[X]$ &amp; Phương sai $\sigma^2$</a></li>
+                <li><a href="#s0.2">0.2 Đường cong Chuông Gauss $\mathcal{N}(\mu, \sigma^2)$</a></li>
+                <li><a href="#s0.3">0.3 Bí mật cốt lõi: Phép nhân 2 Phân bố Gauss (Nguồn gốc Kalman Gain)</a></li>
+                <li><a href="#s0.4">0.4 Hiệp biến &amp; Ma trận Hiệp biến ($P, Q, R$)</a></li>
+            </ul>
+        </li>
+        <li><a href="#part1">PHẦN 1: BẢN CHẤT VẬT LÝ &amp; MÔ HÌNH TOÁN KALMAN</a>
+            <ul>
+                <li><a href="#s1.1">1.1 Ẩn dụ Thực tế: Định vị Xe bằng GPS + Đồng hồ Tốc độ (Odometer)</a></li>
+                <li><a href="#s1.2">1.2 Mô hình Không gian Trạng thái Rời rạc có Nhiễu (Stochastic State-Space)</a></li>
+            </ul>
+        </li>
+        <li><a href="#part2">PHẦN 2: CHỨNG MINH &amp; MỔ XẺ 5 BƯỚC THUẬT TOÁN KALMAN</a>
+            <ul>
+                <li><a href="#s2.1">2.1 Bước 1: Dự báo Trạng thái ($\hat{x}_{k|k-1}$)</a></li>
+                <li><a href="#s2.2">2.2 Bước 2: Dự báo Hiệp biến Sai số ($P_{k|k-1}$) &amp; Chứng minh công thức</a></li>
+                <li><a href="#s2.3">2.3 Bước 3: Tính toán Hệ số Kalman Gain ($K_k$) &amp; Phân tích 2 cực trị</a></li>
+                <li><a href="#s2.4">2.4 Bước 4: Cập nhật Trạng thái ($\hat{x}_{k|k}$) &amp; Khái niệm Innovation</a></li>
+                <li><a href="#s2.5">2.5 Bước 5: Cập nhật Hiệp biến Sai số ($P_{k|k}$)</a></li>
+            </ul>
+        </li>
+        <li><a href="#part3">PHẦN 3: TRIỂN KHAI LẬP TRÌNH THỰC TẾ (PYTHON &amp; C++)</a>
+            <ul>
+                <li><a href="#s3.1">3.1 Ví dụ 1D (Python): Lọc nhiễu cảm biến Nhiệt độ / Điện áp (Code + Đồ thị)</a></li>
+                <li><a href="#s3.2">3.2 Ví dụ 2D (Python): Lọc nhiễu Vị trí &amp; Vận tốc Xe tự hành (GPS + IMU)</a></li>
+                <li><a href="#s3.3">3.3 Lập trình C++ Nhúng Real-time cho Vi điều khiển (STM32/ESP32)</a></li>
+                <li><a href="#s3.4">3.4 Sơ lược về Extended Kalman Filter (EKF) cho Hệ Phi tuyến</a></li>
+            </ul>
+        </li>
+    </ul>
+</div>
+
+<!-- =========================================================== -->
+<!-- PHẦN 0: NHẬP MÔN XÁC SUẤT THỐNG KÊ                           -->
+<!-- =========================================================== -->
+<div class="part-header-intro" id="part0">
+    <h1>PHẦN 0: NHẬP MÔN XÁC SUẤT THỐNG KÊ</h1>
+    <p>Nền tảng Bổ trợ — Dành cho người chưa học hoặc đã quên Xác suất Thống kê</p>
+</div>
+
+<div class="analogy-box">
+    <span class="box-title">💡 Tại sao Bộ lọc Kalman lại cần Xác suất Thống kê?</span>
+    <p>Trong thế giới thực, **không có cảm biến nào hoàn hảo**. Khi bạn dùng thước đo hay cảm biến IMU, cùng một vị trí thực tế là $1.00\text{m}$, cảm biến lần 1 báo $1.02\text{m}$, lần 2 báo $0.98\text{m}$, lần 3 báo $1.01\text{m}$. Nếu không có công cụ xác suất thống kê để mô tả "độ tin tưởng" vào dữ liệu này, chúng ta không thể viết được bộ lọc Kalman!</p>
+</div>
+
+<h2 id="s0.1">0.1 Giá trị ngẫu nhiên, Kỳ vọng $E[X]$ &amp; Phương sai $\sigma^2$</h2>
+
+<h3>1. Kỳ vọng (Expectation / Mean — $\mu$)</h3>
+<p>Kỳ vọng $E[X]$ (thường ký hiệu là $\mu$) là **giá trị trung bình** của rất nhiều lần đo ngẫu nhiên. Ví dụ: Nếu đo nhiệt độ phòng 100 lần và lấy trung bình cộng, kết quả là $25^\circ\text{C}$ thì $\mu = 25$.</p>
+
+<h3>2. Phương sai (Variance — $\sigma^2$) &amp; Độ lệch chuẩn ($\sigma$)</h3>
+<p>Phương sai $\sigma^2$ đo lường **mức độ phân tán/rung lắc** của dữ liệu đo xung quanh giá trị trung bình $\mu$:</p>
+$$\sigma^2 = E[(X - \mu)^2]$$
+
+<ul>
+    <li>**$\sigma^2$ nhỏ:** Các lần đo nằm rất gần nhau $\rightarrow$ Cảm biến xịn, ít nhiễu (Độ tin tưởng cao).</li>
+    <li>**$\sigma^2$ lớn:** Các lần đo nhảy lung tung từ rất âm đến rất dương $\rightarrow$ Cảm biến rác, nhiễu mạnh (Độ tin tưởng thấp).</li>
+</ul>
+
+<hr style="margin: 30px 0; border: none; border-top: 1px dashed #cbd5e1;">
+
+<h2 id="s0.2">0.2 Đường cong Chuông Gauss (Gaussian Distribution $\mathcal{N}(\mu, \sigma^2)$)</h2>
+
+<p>Hầu hết nhiễu trong tự nhiên (nhiễu nhiệt điện trở, nhiễu cảm biến gia tốc) tuân theo **Phân bố Chuông Gauss**:</p>
+
+$$p(x) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left( -\frac{(x - \mu)^2}{2\sigma^2} \right)$$
+
+<div class="example-box">
+    <span class="box-title">📌 Ý nghĩa hình học của Đường cong Gauss:</span>
+    <ul>
+        <li>Đỉnh của hình chuông nằm đúng tại **$\mu$** (Giá trị đoán tốt nhất).</li>
+        <li>Độ rộng mở rộng ra hai bên được quyết định bởi **$\sigma^2$** (Phương sai / Mức độ không chắc chắn).</li>
+        <li>Chuông càng nhọn và hẹp $\rightarrow$ Ta càng chắc chắn về vị trí của vật!</li>
+    </ul>
+</div>
+
+<hr style="margin: 30px 0; border: none; border-top: 1px dashed #cbd5e1;">
+
+<h2 id="s0.3">0.3 Bí mật cốt lõi: Phép nhân 2 Phân bố Gauss (Nguồn gốc Kalman Gain)</h2>
+
+<p>Đây chính là **trái tim toán học của Bộ lọc Kalman**! Hãy cùng suy luận xem làm thế nào để kết hợp 2 nguồn thông tin có nhiễu:</p>
+
+<div class="step-card">
+    <span class="step-number">Tình huống</span> <strong>Bạn có 2 nguồn thông tin về vị trí xe $x$:</strong>
+    <ol>
+        <li>Nguồn 1 (Dự đoán từ mô hình toán): Xe ở vị trí $\mu_1$ với độ không chắc chắn $\sigma_1^2$. Phân bố: $\mathcal{N}(\mu_1, \sigma_1^2)$.</li>
+        <li>Nguồn 2 (Đọc từ cảm biến GPS): Xe ở vị trí $\mu_2$ với độ không chắc chắn $\sigma_2^2$. Phân bố: $\mathcal{N}(\mu_2, \sigma_2^2)$.</li>
+    </ol>
+</div>
+
+<p>Để tìm vị trí chính xác nhất, ta nhân 2 mật độ xác suất lại với nhau: $p(x) = p_1(x) \cdot p_2(x)$. Khi nhân 2 hàm Gauss, kết quả thu được là **một Phân bố Gauss mới $\mathcal{N}(\mu_{\text{mới}}, \sigma_{\text{mới}}^2)$**!</p>
+
+<div class="theorem">
+    <span class="box-title">🔷 Công thức Hợp nhất 2 Phân bố Gauss (Bayesian Fusion)</span>
+    <p>Phương sai mới (Độ rộng hình chuông mới):</p>
+    $$\frac{1}{\sigma_{\text{mới}}^2} = \frac{1}{\sigma_1^2} + \frac{1}{\sigma_2^2} \implies \boxed{\sigma_{\text{mới}}^2 = \frac{\sigma_1^2 \cdot \sigma_2^2}{\sigma_1^2 + \sigma_2^2}}$$
+    
+    <p>Giá trị trung bình mới (Vị trí đoán chính xác nhất):</p>
+    $$\mu_{\text{mới}} = \mu_1 + \frac{\sigma_1^2}{\sigma_1^2 + \sigma_2^2} (\mu_2 - \mu_1)$$
+</div>
+
+<div class="important-note">
+    <span class="box-title">🎉 ĐỘT PHÁ TOÁN HỌC: Kalman Gain sinh ra từ đâu?</span>
+    <p>Hãy đặt hệ số $K = \frac{\sigma_1^2}{\sigma_1^2 + \sigma_2^2}$. Công thức vị trí mới trở thành:</p>
+    $$\boxed{\mu_{\text{mới}} = \mu_1 + K \cdot (\mu_2 - \mu_1)}$$
+    <ul>
+        <li>$\mu_1$: Vị trí dự đoán trước.</li>
+        <li>$\mu_2$: Vị trí đo từ cảm biến.</li>
+        <li>$(\mu_2 - \mu_1)$: Chênh lệch giữa Cảm biến và Dự đoán (Innovation).</li>
+        <li><strong>$K = \frac{\sigma_1^2}{\sigma_1^2 + \sigma_2^2}$ chính là KALMAN GAIN!</strong></li>
+    </ul>
+    <p>Đặc biệt: Nhìn vào công thức $\sigma_{\text{mới}}^2 = \frac{\sigma_1^2 \sigma_2^2}{\sigma_1^2 + \sigma_2^2}$, ta thấy $\sigma_{\text{mới}}^2$ **LUÔN NHỎ HƠN cả $\sigma_1^2$ lẫn $\sigma_2^2$**! Nghĩa là khi kết hợp 2 nguồn thông tin có nhiễu, kết quả thu được luôn chính xác hơn bất kỳ nguồn đơn lẻ nào!</p>
+</div>
+
+<hr style="margin: 30px 0; border: none; border-top: 1px dashed #cbd5e1;">
+
+<h2 id="s0.4">0.4 Hiệp biến &amp; Ma trận Hiệp biến ($P, Q, R$)</h2>
+
+<p>Khi chuyển từ 1 biến (1D) sang nhiều biến (Vector trạng thái $x = [vị\_trí, vận\_tốc]^T$), ta mở rộng Phương sai $\sigma^2$ thành **Ma trận Hiệp biến (Covariance Matrix)**:</p>
+
+$$\Sigma = \begin{bmatrix} \text{Var}(x_1) & \text{Cov}(x_1, x_2) \\ \text{Cov}(x_2, x_1) & \text{Var}(x_2) \end{bmatrix}$$
+
+<p>Trong thuật toán Kalman Filter, có 3 Ma trận Hiệp biến cực kỳ quan trọng:</p>
+
+<table>
+    <tr>
+        <th>Ký hiệu</th>
+        <th>Tên gọi</th>
+        <th>Ý nghĩa vật lý</th>
+    </tr>
+    <tr>
+        <td><strong>$P_k$</strong></td>
+        <td>Ma trận Hiệp biến Sai số Trạng thái</td>
+        <td>Đại diện cho <strong>độ không chắc chắn</strong> về các biến trạng thái hiện tại (Vị trí, Vận tốc đang lệch bao nhiêu).</td>
+    </tr>
+    <tr>
+        <td><strong>$Q$</strong></td>
+        <td>Ma trận Hiệp biến Nhiễu Hệ thống (Process Noise)</td>
+        <td>Đại diện cho nhiễu không đoán trước từ <strong>môi trường</strong> (Gió thổi mạnh, đường xóc làm xe nảy lên).</td>
+    </tr>
+    <tr>
+        <td><strong>$R$</strong></td>
+        <td>Ma trận Hiệp biến Nhiễu Đo lường (Measurement Noise)</td>
+        <td>Đại diện cho nhiễu rung của bản thân <strong>cảm biến</strong> (Cảm biến IMU/GPS nhiễu bao nhiêu).</td>
+    </tr>
+</table>
+
+<!-- Quiz 0 -->
+<div class="quiz-section">
+    <h3>📝 Quick Quiz 0 — Kiểm tra Kiến thức Nền Phần 0</h3>
+    
+    <div class="quiz-question">
+        <strong>Câu 1:</strong> Giả sử dự đoán từ mô hình có độ sai lệch $\sigma_1^2 = 4$, và cảm biến GPS có độ sai lệch $\sigma_2^2 = 1$. Hãy tính hệ số Kalman Gain $K$ và phương sai mới $\sigma_{\text{mới}}^2$.
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án Câu 1:</span>
+        <p>$K = \frac{\sigma_1^2}{\sigma_1^2 + \sigma_2^2} = \frac{4}{4 + 1} = 0.8$.</p>
+        <p>$\sigma_{\text{mới}}^2 = \frac{4 \times 1}{4 + 1} = 0.8$. Vì $K = 0.8$ rất gần 1, thuật toán sẽ nghiêng về tin tưởng dữ liệu từ cảm biến GPS ($80\%$) nhiều hơn là mô hình toán ($20\%$).</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>Câu 2:</strong> Nếu cảm biến GPS bị hỏng và cực kỳ nhiễu ($\sigma_2^2 \to \infty$), hệ số $K$ sẽ bằng bao nhiêu và vị trí mới $\mu_{\text{mới}}$ được tính thế nào?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án Câu 2:</span>
+        <p>Khi $\sigma_2^2 \to \infty$, $K = \frac{\sigma_1^2}{\sigma_1^2 + \infty} = 0$.</p>
+        <p>Thay $K = 0$ vào công thức: $\mu_{\text{mới}} = \mu_1 + 0 \cdot (\mu_2 - \mu_1) = \mu_1$. Thuật toán hoàn toàn bỏ qua dữ liệu rác từ cảm biến và tin $100\%$ vào mô hình toán!</p>
+    </div>
+</div>
+
+<!-- =========================================================== -->
+<!-- PHẦN 1: BẢN CHẤT VẬT LÝ & MÔ HÌNH TOÁN                      -->
+<!-- =========================================================== -->
+<div class="part-header" id="part1">
+    <h1>PHẦN 1: BẢN CHẤT VẬT LÝ &amp; MÔ HÌNH TOÁN KALMAN</h1>
+    <p>Cách Kết Hợp Thông Minh 2 Nguồn Thông Tin Cùng Có Nhiễu</p>
+</div>
+
+<h2 id="s1.1">1.1 Ẩn dụ Thực tế: Định vị Xe bằng GPS + Odometer</h2>
+
+<div class="analogy-box">
+    <span class="box-title">🚗 Câu chuyện Định vị Xe Ô tô Tự hành:</span>
+    <p>Bạn thiết kế một chiếc xe tự hành và cần biết chính xác vị trí xe $x_k$ tại mọi thời điểm:</p>
+    <ul>
+        <li><strong>Nguồn 1: Cảm biến tốc độ xe (Odometer / IMU)</strong>
+            <br>Nhược điểm: Bạn tính vị trí mới bằng cách lấy $x_k = x_{k-1} + v \cdot T_s$. Ban đầu rất mượt, nhưng theo thời gian, sai số ma sát lốp xe nhỏ sẽ **tích lũy dồn nén lại (Drift)**, làm xe bị lệch hàng chục mét sau vài phút!
+        </li>
+        <li><strong>Nguồn 2: Cảm biến định vị vệ tinh GPS</strong>
+            <br>Nhược điểm: GPS không bị tích lũy sai số theo thời gian, nhưng tín hiệu từng giây bị **rung giật (Jitter)** lệch xung quanh vị trí thực từ $1\text{m}$ đến $3\text{m}$.
+        </li>
+    </ul>
+    <p>👉 **Bộ lọc Kalman chính là người điều phối thông minh:** Nó dùng Odometer để cập nhật vị trí mượt mà từng miligiây, và dùng GPS để định kỳ kéo vị trí xe trở lại đúng đường, triệt tiêu hoàn toàn hiện tượng trôi sai số!</p>
+</div>
+
+<hr style="margin: 30px 0; border: none; border-top: 1px dashed #cbd5e1;">
+
+<h2 id="s1.2">1.2 Mô hình Không gian Trạng thái Rời rạc có Nhiễu</h2>
+
+<p>Bộ lọc Kalman làm việc với hệ không gian trạng thái rời rạc bị tác động bởi 2 nguồn nhiễu ngẫu nhiên:</p>
+
+<div class="theorem">
+    <span class="box-title">🔷 Phương trình Trạng thái Rời rạc Ngẫu nhiên (Stochastic Discrete State-Space)</span>
+    $$\mathbf{x_k = A x_{k-1} + B u_{k-1} + w_{k-1}} \quad \text{(Phương trình Động lực học có Nhiễu)}$$
+    $$\mathbf{y_k = C x_k + v_k} \quad \text{(Phương trình Đo lường Cảm biến có Nhiễu)}$$
+    <p>trong đó:</p>
+    <ul>
+        <li>$x_k \in \mathbb{R}^n$: Vector trạng thái thực tế tại bước $k$.</li>
+        <li>$u_{k-1} \in \mathbb{R}^m$: Tín hiệu điều khiển đầu vào.</li>
+        <li>$y_k \in \mathbb{R}^p$: Tín hiệu thô đọc từ cảm biến.</li>
+        <li>$w_{k-1} \sim \mathcal{N}(0, Q)$: Nhiễu quá trình/môi trường (Process Noise).</li>
+        <li>$v_k \sim \mathcal{N}(0, R)$: Nhiễu đo lường của cảm biến (Measurement Noise).</li>
+    </ul>
+</div>
+
+<!-- =========================================================== -->
+<!-- PHẦN 2: CHỨNG MINH & MỔ XẺ 5 BƯỚC THUẬT TOÁN KALMAN         -->
+<!-- =========================================================== -->
+<div class="part-header" id="part2">
+    <h1>PHẦN 2: CHỨNG MINH &amp; MỔ XẺ 5 BƯỚC THUẬT TOÁN KALMAN</h1>
+    <p>Quy trình 5 Bước Tính toán Toàn diện từ Dự báo đến Cập nhật</p>
+</div>
+
+<p>Thuật toán Bộ lọc Kalman gồm 5 bước chia làm 2 giai đoạn chính:</p>
+<ul>
+    <li><strong>Giai đoạn 1: Dự báo (Predict / Time Update)</strong> — Bước 1 &amp; Bước 2</li>
+    <li><strong>Giai đoạn 2: Cập nhật (Correct / Measurement Update)</strong> — Bước 3, 4 &amp; 5</li>
+</ul>
+
+<h2 id="s2.1">2.1 Bước 1: Dự báo Trạng thái ($\hat{x}_{k|k-1}$)</h2>
+
+<p>Sử dụng mô hình vật lý toán học để đoán trạng thái ở bước $k$ dựa trên thông tin bước $k-1$:</p>
+
+$$\boxed{\hat{x}_{k|k-1} = A \hat{x}_{k-1|k-1} + B u_{k-1}}$$
+
+<p><em>(Lưu ý: Kỳ vọng của nhiễu $E[w_{k-1}] = 0$ nên $w_{k-1}$ triệt tiêu trong công thức dự báo).</em></p>
+
+<h2 id="s2.2">2.2 Bước 2: Dự báo Hiệp biến Sai số ($P_{k|k-1}$) &amp; Chứng minh</h2>
+
+$$\boxed{P_{k|k-1} = A P_{k-1|k-1} A^T + Q}$$
+
+<div class="important-note">
+    <span class="box-title">🔍 Chứng minh công thức Bước 2 (Tại sao lại có $A P A^T + Q$?):</span>
+    <p>Định nghĩa sai số dự báo: $e_{k|k-1} = x_k - \hat{x}_{k|k-1}$.</p>
+    <p>Thay $x_k = A x_{k-1} + B u_{k-1} + w_{k-1}$ và $\hat{x}_{k|k-1} = A \hat{x}_{k-1|k-1} + B u_{k-1}$ vào:</p>
+    $$e_{k|k-1} = A (x_{k-1} - \hat{x}_{k-1|k-1}) + w_{k-1} = A e_{k-1|k-1} + w_{k-1}$$
+    <p>Tính Ma trận Hiệp biến $P_{k|k-1} = E[e_{k|k-1} \cdot e_{k|k-1}^T]$:</p>
+    $$P_{k|k-1} = E[(A e_{k-1|k-1} + w_{k-1})(A e_{k-1|k-1} + w_{k-1})^T]$$
+    $$= E[A e_{k-1|k-1} e_{k-1|k-1}^T A^T] + E[w_{k-1} w_{k-1}^T] \quad \text{(Do } e \text{ và } w \text{ độc lập)}$$
+    $$= A \cdot E[e_{k-1|k-1} e_{k-1|k-1}^T] \cdot A^T + Q = A P_{k-1|k-1} A^T + Q \quad \blacksquare$$
+</div>
+
+<h2 id="s2.3">2.3 Bước 3: Tính toán Hệ số Kalman Gain ($K_k$)</h2>
+
+$$\boxed{K_k = P_{k|k-1} C^T \left( C P_{k|k-1} C^T + R \right)^{-1}}$$
+
+<p><strong>Phân tích 2 trường hợp cực trị của Kalman Gain:</strong></p>
+<ul>
+    <li>**Trường hợp 1 (Cảm biến cực xịn, nhiễu $R \to 0$):**
+        $$K_k \approx P C^T (C P C^T)^{-1} = C^{-1}$$
+        Khi đó ở Bước 4: $\hat{x}_{k|k} = \hat{x} + C^{-1}(y_k - C\hat{x}) = C^{-1}y_k$ $\rightarrow$ Trạng thái lấy 100% theo cảm biến!
+    </li>
+    <li>**Trường hợp 2 (Cảm biến nhiễu nặng, $R \to \infty$):**
+        $$K_k \approx 0$$
+        Khi đó ở Bước 4: $\hat{x}_{k|k} = \hat{x}_{k|k-1} + 0 = \hat{x}_{k|k-1}$ $\rightarrow$ Trạng thái hoàn toàn tin theo mô hình dự báo!
+    </li>
+</ul>
+
+<h2 id="s2.4">2.4 Bước 4: Cập nhật Trạng thái ($\hat{x}_{k|k}$) &amp; Khái niệm Innovation</h2>
+
+$$\boxed{\hat{x}_{k|k} = \hat{x}_{k|k-1} + K_k \cdot \underbrace{\left( y_k - C \hat{x}_{k|k-1} \right)}_{\text{Innovation / Measurement Residual}}}$$
+
+<p>Thành phần $\tilde{y}_k = y_k - C \hat{x}_{k|k-1}$ được gọi là **Innovation (Độ đột biến/Sai số giữa cảm biến đo được và dự báo)**.</p>
+
+<h2 id="s2.5">2.5 Bước 5: Cập nhật Ma trận Hiệp biến Sai số ($P_{k|k}$)</h2>
+
+$$\boxed{P_{k|k} = (I - K_k C) P_{k|k-1}}$$
+
+<p>Sau bước này, độ không chắc chắn $P_{k|k}$ đã giảm xuống, chuẩn bị cho vòng lặp tiếp theo tại bước $k+1$.</p>
+
+<!-- Quiz 2 -->
+<div class="quiz-section">
+    <h3>📝 Quick Quiz 2 — Kiểm tra 5 Bước Kalman Filter</h3>
+    
+    <div class="quiz-question">
+        <strong>Câu 1:</strong> Thứ tự thực hiện 5 bước trong vòng lặp Kalman Filter là gì?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án Câu 1:</span>
+        <p>1. Dự báo Trạng thái ($\hat{x}_{k|k-1}$) $\rightarrow$ 2. Dự báo Hiệp biến ($P_{k|k-1}$) $\rightarrow$ 3. Tính Kalman Gain ($K_k$) $\rightarrow$ 4. Cập nhật Trạng thái ($\hat{x}_{k|k}$) $\rightarrow$ 5. Cập nhật Hiệp biến ($P_{k|k}$).</p>
+    </div>
+</div>
+
+<!-- =========================================================== -->
+<!-- PHẦN 3: TRIỂN KHAI LẬP TRÌNH PYTHON & C++                   -->
+<!-- =========================================================== -->
+<div class="part-header" id="part3">
+    <h1>PHẦN 3: TRIỂN KHAI LẬP TRÌNH PYTHON &amp; C++</h1>
+    <p>Từ Thuật toán Toán học đến Mã nguồn Thực tế trên Vi điều khiển</p>
+</div>
+
+<h2 id="s3.1">3.1 Ví dụ 1D (Python): Lọc nhiễu cảm biến Nhiệt độ / Điện áp</h2>
+
+<p>Giả sử ta đo điện áp pin $3.3\text{V}$ cố định, nhưng cảm biến ADC bị nhiễu rung lắc.</p>
+
+<pre><code>import numpy as np
+import matplotlib.pyplot as plt
+
+# ==========================================================
+# 1. KHAI BÁO THAM SỐ KALMAN FILTER 1D
+# ==========================================================
+np.random.seed(42)
+n_samples = 100
+
+# Giá trị điện áp thực tế (True state)
+true_voltage = 3.3
+
+# Tạo dữ liệu cảm biến bị nhiễu (Measurement with noise R = 0.09)
+R = 0.09 # Phương sai nhiễu cảm biến
+measurements = true_voltage + np.random.normal(0, np.sqrt(R), size=n_samples)
+
+# Tham số khởi tạo Bộ lọc Kalman
+x_hat = 0.0 # Khởi tạo đoán điện áp ban đầu = 0V
+P = 1.0     # Sai số khởi tạo ban đầu lớn
+Q = 1e-5    # Nhiễu mô hình rất nhỏ (vì điện áp pin cố định)
+A = 1.0
+C = 1.0
+
+kalman_estimates = []
+
+# ==========================================================
+# 2. VÒNG LẶP KALMAN FILTER 1D
+# ==========================================================
+for y in measurements:
+    # --- GIAI ĐOẠN DỰ BÁO (PREDICT) ---
+    x_hat_minus = A * x_hat
+    P_minus = A * P * A + Q
+
+    # --- GIAI ĐOẠN CẬP NHẬT (CORRECT) ---
+    K = P_minus * C / (C * P_minus * C + R) # Tính Kalman Gain K
+    x_hat = x_hat_minus + K * (y - C * x_hat_minus) # Cập nhật trạng thái
+    P = (1 - K * C) * P_minus # Cập nhật phương sai sai số
+
+    kalman_estimates.append(x_hat)
+
+# ==========================================================
+# 3. VẼ ĐỒ THỊ SO SÁNH
+# ==========================================================
+plt.figure(figsize=(10, 5))
+plt.plot(measurements, 'r.', alpha=0.6, label='Cảm biến thô (Bị nhiễu)')
+plt.plot(kalman_estimates, 'b-', linewidth=2.5, label='Sau khi lọc bằng Kalman Filter')
+plt.axhline(y=true_voltage, color='g', linestyle='--', label='Điện áp thực (3.3V)')
+plt.xlabel('Mẫu đo (k)')
+plt.ylabel('Điện áp (V)')
+plt.title('Mô phỏng Bộ lọc Kalman 1D Lọc Nhiễu Điện áp ADC')
+plt.legend()
+plt.grid(True)
+plt.show()
+</code></pre>
+
+<hr style="margin: 30px 0; border: none; border-top: 1px dashed #cbd5e1;">
+
+<h2 id="s3.3">3.3 Lập trình C++ Nhúng Real-time cho Vi điều khiển (STM32/ESP32)</h2>
+
+<p>Đây là Class C++ chuẩn công nghiệp cho vi điều khiển để lọc góc nghiêng IMU MPU6050 / BNO055:</p>
+
+<pre><code>// ==========================================================
+// THƯ VIỆN BỘ LỌC KALMAN 1D TRONG C++ CHO VI ĐIỀU KHIỂN
+// ==========================================================
+
+#ifndef KALMAN_FILTER_H
+#define KALMAN_FILTER_H
+
+class KalmanFilter1D {
+private:
+    float Q; // Nhiễu quá trình
+    float R; // Nhiễu đo lường cảm biến
+    float P; // Phương sai sai số ước lượng
+    float K; // Kalman Gain
+    float x; // Trạng thái ước lượng (Giá trị sau lọc)
+
+public:
+    /**
+     * @brief Khởi tạo Bộ lọc Kalman
+     * @param process_noise Nhiễu mô hình Q (vd: 0.001f)
+     * @param sensor_noise Nhiễu cảm biến R (vd: 0.03f)
+     * @param init_p Sai số khởi tạo P (vd: 1.0f)
+     * @param init_x Trạng thái ban đầu x (vd: 0.0f)
+     */
+    KalmanFilter1D(float process_noise, float sensor_noise, float init_p, float init_x) {
+        Q = process_noise;
+        R = sensor_noise;
+        P = init_p;
+        x = init_x;
+    }
+
+    /**
+     * @brief Cập nhật giá trị đo mới từ Cảm biến
+     * @param measurement Tín hiệu thô từ ADC/IMU
+     * @return float Giá trị sạch sau khi qua bộ lọc Kalman
+     */
+    float update(float measurement) {
+        // 1. Giai đoạn Dự báo (Predict)
+        // x_minus = x (vì A = 1)
+        P = P + Q;
+
+        // 2. Giai đoạn Cập nhật (Update)
+        K = P / (P + R);                   // Tính Kalman Gain K
+        x = x + K * (measurement - x);     // Hiệu chỉnh giá trị x
+        P = (1.0f - K) * P;               // Cập nhật phương sai P
+
+        return x;
+    }
+};
+
+#endif // KALMAN_FILTER_H
+
+// ==========================================================
+// VÍ DỤ SỬ DỤNG TRONG MAIN.CPP (STM32 / ARDUINO)
+// ==========================================================
+/*
+KalmanFilter1D kalmanIMU(0.001f, 0.05f, 1.0f, 0.0f);
+
+void loop() {
+    float raw_angle = MPU6050_ReadAngle(); // Đọc góc bị nhiễu
+    float clean_angle = kalmanIMU.update(raw_angle); // Lọc sạch bằng Kalman
+    
+    PWM_SetOutput(clean_angle);
+    delay(10); // Chu kỳ 10ms
+}
+*/
+</code></pre>
+
+<!-- TỔNG KẾT KALMAN FILTER -->
+<div style="background: linear-gradient(135deg, #0f172a, #1e293b); color: white; padding: 35px; border-radius: 10px; margin-top: 50px; text-align: center;">
+    <h2 style="color: #60a5fa; margin-top: 0;">🎯 Tóm Tắt Bộ Lọc Kalman</h2>
+    <p style="font-size: 1.05em; color: #cbd5e1; max-width: 750px; margin: 10px auto;">
+        1. **Bản chất:** Nhân 2 phân bố Gauss (Dự đoán từ mô hình + Đo từ cảm biến) để thu được phân bố mới có phương sai $\sigma^2$ nhỏ hơn cả hai.<br>
+        2. **Kalman Gain $K$:** Cân bằng thông minh giữa Độ tin tưởng Mô hình toán và Độ tin tưởng Cảm biến.<br>
+        3. **Ứng dụng:** Lọc sạch nhiễu cảm biến và khôi phục các trạng thái không đo trực tiếp được trong Robot, Xe tự hành và Máy bay không người lái.
+    </p>
+</div>
+
+<div style="text-align: center; margin: 35px 0; color: var(--text-secondary); font-size: 0.9em;">
+    <p>— Hết tài liệu Kalman Filter —</p>
+    <p><em>Nhấn nút "📄 Xuất PDF" ở góc phải dưới để lưu tài liệu dưới dạng PDF</em></p>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tuần 1-2: Mô Hình Hóa — Từ Vật Lý đến State Space (A, B)</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+    window.MathJax = {
+        tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']], tags: 'ams' },
+        chtml: { scale: 1 }
+    };
+    </script>
+    <style>
+        :root{--primary:#0f172a;--accent:#2563eb;--bg:#fff;--text:#1e293b;--text-secondary:#475569;--border:#e2e8f0;--shadow:0 4px 6px -1px rgba(0,0,0,0.1)}
+        *{box-sizing:border-box;margin:0;padding:0}
+        body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif;font-size:16.5px;line-height:1.85;color:var(--text);background:var(--bg);max-width:920px;margin:0 auto;padding:40px 25px}
+        .cover{text-align:center;padding:48px 20px;border-bottom:3px solid var(--accent);margin-bottom:42px;background:#f8fafc;border-radius:12px}
+        .cover h1{font-size:2em;color:var(--primary);margin-bottom:10px;line-height:1.3;border:none;padding:0}
+        .cover .subtitle{font-size:1.22em;color:var(--accent);font-weight:600;margin-bottom:16px}
+        .cover .tagline{font-size:0.98em;color:var(--text-secondary);font-style:italic;max-width:720px;margin:0 auto 18px}
+        .cover .meta{font-size:0.9em;color:var(--text-secondary)}
+        h1{font-size:1.65em;color:var(--primary);margin:40px 0 15px;border-bottom:2px solid var(--accent);padding-bottom:8px}
+        h2{font-size:1.25em;color:var(--accent);margin:26px 0 11px}
+        h3{font-size:1.08em;color:var(--primary);margin:18px 0 8px}
+        .ph{color:white;padding:22px 28px;border-radius:10px;margin:44px 0 22px;box-shadow:var(--shadow)}
+        .ph h1{color:white;border:none;margin:0;font-size:1.45em;padding:0}
+        .ph p{color:rgba(255,255,255,0.85);margin-top:6px;font-size:0.98em}
+        .ph-blue{background:linear-gradient(135deg,#1e3a8a,#2563eb)}
+        .ph-green{background:linear-gradient(135deg,#065f46,#10b981)}
+        .ph-orange{background:linear-gradient(135deg,#b45309,#f59e0b)}
+        .ph-purple{background:linear-gradient(135deg,#581c87,#a855f7)}
+        .ph-red{background:linear-gradient(135deg,#991b1b,#ef4444)}
+        .ph-teal{background:linear-gradient(135deg,#134e4a,#14b8a6)}
+        .ph-indigo{background:linear-gradient(135deg,#312e81,#6366f1)}
+        p{margin:9px 0;text-align:justify}
+        ul,ol{margin:8px 0 12px 22px}
+        li{margin:4px 0}
+        strong{color:#0f172a;font-weight:600}
+        blockquote{border-left:4px solid var(--accent);background:#f8fafc;padding:12px 16px;margin:15px 0;font-style:italic;color:var(--text-secondary);border-radius:0 8px 8px 0}
+        .hl{background:#fef08a;padding:2px 6px;border-radius:4px;font-weight:600}
+        .box{padding:15px 19px;border-radius:8px;margin:16px 0;border-left:5px solid;box-shadow:0 1px 3px rgba(0,0,0,0.05)}
+        .def{background:#eff6ff;border-color:#3b82f6} .def .bt{color:#1d4ed8}
+        .thm{background:#faf5ff;border-color:#a855f7} .thm .bt{color:#7e22ce}
+        .imp{background:#fffbeb;border-color:#f59e0b} .imp .bt{color:#b45309}
+        .ex{background:#f0fdf4;border-color:#22c55e} .ex .bt{color:#15803d}
+        .analogy{background:#fff7ed;border-color:#ea580c} .analogy .bt{color:#c2410c}
+        .vis{background:#f0f9ff;border-color:#0ea5e9} .vis .bt{color:#0369a1}
+        .warn{background:#fef2f2;border-color:#ef4444} .warn .bt{color:#b91c1c}
+        .bt{font-weight:700;font-size:1.01em;margin-bottom:8px;display:block}
+        .sc{background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid var(--accent);border-radius:6px;padding:12px 16px;margin:10px 0}
+        .sn{display:inline-block;background:var(--accent);color:white;padding:2px 10px;border-radius:12px;font-size:0.84em;font-weight:700;margin-right:7px}
+        table{width:100%;border-collapse:collapse;margin:14px 0;font-size:0.93em}
+        th,td{border:1px solid var(--border);padding:8px 11px;text-align:left}
+        th{background:var(--primary);color:white;font-weight:600}
+        tr:nth-child(even){background:#f8fafc}
+        pre{background:#0f172a;color:#f8fafc;padding:14px 17px;border-radius:8px;overflow-x:auto;font-family:"Fira Code",Consolas,Monaco,monospace;font-size:0.85em;line-height:1.5;margin:14px 0}
+        code{font-family:"Fira Code",Consolas,Monaco,monospace;background:#f1f5f9;padding:2px 5px;border-radius:4px;font-size:0.9em;color:#b91c1c}
+        pre code{background:transparent;color:inherit;padding:0}
+        .ascii{background:#f1f5f9;border:1px solid #cbd5e1;padding:13px 17px;border-radius:8px;font-family:"Fira Code",Consolas,Monaco,monospace;font-size:0.81em;line-height:1.4;white-space:pre;overflow-x:auto;margin:12px 0;color:var(--primary)}
+        .toc{background:#f8fafc;border:1px solid var(--border);border-radius:10px;padding:18px 24px;margin:22px 0}
+        .toc h2{margin-top:0;color:var(--primary)}
+        .toc ul{list-style:none;margin-left:0}
+        .toc>ul>li{margin:5px 0;font-weight:600;color:var(--primary)}
+        .toc>ul>li>ul>li{font-weight:400;color:var(--text);margin:3px 0;padding-left:16px}
+        .toc a{color:inherit;text-decoration:none}.toc a:hover{color:var(--accent);text-decoration:underline}
+        .quiz{background:#fef3c7;border:2px solid #f59e0b;border-radius:10px;padding:18px 22px;margin:20px 0}
+        .quiz .bt{color:#92400e}
+        .quiz-answer{background:#d1fae5;border:1px solid #6ee7b7;border-radius:6px;padding:10px 14px;margin:8px 0;display:none}
+        .quiz-btn{background:#f59e0b;color:white;border:none;padding:6px 16px;border-radius:6px;cursor:pointer;font-size:0.9em;font-weight:600;margin-top:6px}
+        .quiz-btn:hover{background:#d97706}
+        .pbtn{position:fixed;bottom:30px;right:30px;background:var(--accent);color:white;border:none;padding:11px 20px;border-radius:28px;font-size:0.93em;font-weight:600;cursor:pointer;box-shadow:0 4px 14px rgba(37,99,235,0.4);transition:all 0.2s;z-index:1000}
+        .pbtn:hover{background:#1d4ed8;transform:translateY(-2px)}
+        @media print{body{padding:15px;font-size:11pt;max-width:100%}.pbtn{display:none}.ph{page-break-before:always}.box,.sc{break-inside:avoid}}
+    </style>
+    <script>
+    function toggleAnswer(id) {
+        var el = document.getElementById(id);
+        el.style.display = (el.style.display === 'none' || el.style.display === '') ? 'block' : 'none';
+    }
+    </script>
+</head>
+<body>
+<button class="pbtn" onclick="window.print()">📄 Xuất PDF</button>
+
+<!-- COVER -->
+<div class="cover">
+    <h1>Tuần 1-2: MÔ HÌNH HÓA</h1>
+    <div class="subtitle">Từ Vật Lý Thật → Phương trình Toán → Không gian Trạng thái $(A, B)$</div>
+    <div class="tagline">
+        Tài liệu học tập toàn diện: Lý thuyết giải thích từng bước — Lagrangian từ con số 0 — Tuyến tính hóa chi tiết — Code Python mô phỏng — Bài tập tự kiểm tra có đáp án
+    </div>
+    <hr style="width:50%;margin:16px auto;border:none;border-top:1px solid #cbd5e1;">
+    <div class="meta">
+        <p><strong>Mục tiêu:</strong> Sau 2 tuần, bạn tự tay viết được phương trình con lắc ngược, lấy $A, B$, và mô phỏng bằng Python.</p>
+        <p><strong>Yêu cầu:</strong> Biết đạo hàm, tích phân cơ bản. Biết nhân ma trận.</p>
+    </div>
+</div>
+
+<!-- TOC -->
+<div class="toc">
+    <h2>📋 Mục Lục</h2>
+    <ul>
+        <li><a href="#p1">Phần 1: "Mô hình" là gì? Tại sao cần?</a></li>
+        <li><a href="#p2">Phần 2: Phương pháp Newton — Đơn giản nhưng bị giới hạn</a>
+            <ul>
+                <li><a href="#p2.1">2.1 Ví dụ: Lò xo - Khối lượng - Giảm chấn</a></li>
+                <li><a href="#p2.2">2.2 Ví dụ: Con lắc đơn (Newton)</a></li>
+                <li><a href="#p2.3">2.3 Hạn chế của Newton với hệ phức tạp</a></li>
+            </ul>
+        </li>
+        <li><a href="#p3">Phần 3: Phương pháp Lagrangian — Vũ khí Tối thượng</a>
+            <ul>
+                <li><a href="#p3.1">3.1 Năng lượng: Động năng $T$ và Thế năng $V$</a></li>
+                <li><a href="#p3.2">3.2 Hàm Lagrangian $L = T - V$</a></li>
+                <li><a href="#p3.3">3.3 Phương trình Euler-Lagrange</a></li>
+                <li><a href="#p3.4">3.4 Ví dụ 1: Con lắc đơn (Lagrangian)</a></li>
+                <li><a href="#p3.5">3.5 Ví dụ 2: Lò xo-Khối lượng (Lagrangian)</a></li>
+            </ul>
+        </li>
+        <li><a href="#p4">Phần 4: CON LẮC NGƯỢC — Bài toán Kinh điển (Lagrangian đầy đủ)</a>
+            <ul>
+                <li><a href="#p4.1">4.1 Mô tả hệ thống &amp; Chọn tọa độ</a></li>
+                <li><a href="#p4.2">4.2 Tính Động năng $T$ từng bước</a></li>
+                <li><a href="#p4.3">4.3 Tính Thế năng $V$</a></li>
+                <li><a href="#p4.4">4.4 Viết Lagrangian &amp; Áp dụng Euler-Lagrange</a></li>
+                <li><a href="#p4.5">4.5 Phương trình chuyển động Phi tuyến</a></li>
+            </ul>
+        </li>
+        <li><a href="#p5">Phần 5: Tuyến tính hóa — Biến Phi tuyến thành Tuyến tính</a>
+            <ul>
+                <li><a href="#p5.1">5.1 Tại sao phải tuyến tính hóa?</a></li>
+                <li><a href="#p5.2">5.2 Khai triển Taylor &amp; Xấp xỉ góc nhỏ</a></li>
+                <li><a href="#p5.3">5.3 Tuyến tính hóa con lắc ngược — Từng dòng</a></li>
+            </ul>
+        </li>
+        <li><a href="#p6">Phần 6: Không gian Trạng thái — Viết dạng $\dot{x} = Ax + Bu$</a>
+            <ul>
+                <li><a href="#p6.1">6.1 "Trạng thái" là gì? Cách chọn</a></li>
+                <li><a href="#p6.2">6.2 Trích ma trận $A, B$ cho Con lắc ngược</a></li>
+                <li><a href="#p6.3">6.3 Kiểm tra: Controllability</a></li>
+            </ul>
+        </li>
+        <li><a href="#p7">Phần 7: Code Python Toàn diện — Mô phỏng &amp; Kiểm chứng</a>
+            <ul>
+                <li><a href="#p7.1">7.1 Mô phỏng Phi tuyến (con lắc ngược)</a></li>
+                <li><a href="#p7.2">7.2 So sánh Tuyến tính vs Phi tuyến</a></li>
+                <li><a href="#p7.3">7.3 Thiết kế LQR &amp; Mô phỏng cân bằng</a></li>
+            </ul>
+        </li>
+        <li><a href="#p8">Phần 8: Bài tập Tự kiểm tra (Có đáp án)</a></li>
+    </ul>
+</div>
+
+
+<!-- ===================================================== -->
+<!-- PHẦN 1: MÔ HÌNH LÀ GÌ?                                -->
+<!-- ===================================================== -->
+<div class="ph ph-blue" id="p1">
+    <h1>Phần 1: "Mô hình" là gì? Tại sao cần?</h1>
+    <p>Bước đầu tiên của MỌI project điều khiển</p>
+</div>
+
+<div class="analogy">
+    <span class="bt">🗺️ Ẩn dụ: Bản đồ của Robot</span>
+    <p>"Mô hình" của robot giống như <strong>bản đồ Google Maps</strong> của thế giới thật. Bản đồ không phải thế giới thật (nó thiếu chi tiết), nhưng nó <strong>đủ chính xác</strong> để bạn tìm đường đi.</p>
+    <p>Tương tự, phương trình toán mô tả robot không hoàn hảo (bỏ qua ma sát nhỏ, biến dạng...), nhưng đủ để bộ điều khiển LQR tính ra lực cần thiết.</p>
+</div>
+
+<div class="def">
+    <span class="bt">📐 Định nghĩa: Mô hình Toán học</span>
+    <p>Là tập hợp các <strong>phương trình toán</strong> mô tả cách hệ thống vật lý (robot, động cơ, xe...) phản ứng khi được tác động bởi lực/điện áp.</p>
+    <p><strong>Input:</strong> Lực $F$ hoặc Điện áp $V$ mà ta điều khiển.</p>
+    <p><strong>Output:</strong> Vị trí $x(t)$, góc $\theta(t)$, vận tốc $\dot{x}(t)$... theo thời gian.</p>
+</div>
+
+<p>Có 2 dạng mô hình phổ biến:</p>
+<table>
+    <tr><th>Dạng</th><th>Công thức</th><th>Khi nào dùng</th></tr>
+    <tr><td><strong>Hàm truyền</strong> (Transfer Function)</td><td>$G(s) = \frac{Y(s)}{U(s)}$</td><td>1 input, 1 output (PID, Bode)</td></tr>
+    <tr><td><strong>Không gian Trạng thái</strong> (State Space)</td><td>$\dot{x} = Ax + Bu$</td><td>Nhiều trạng thái, nhiều input (LQR!) ⭐</td></tr>
+</table>
+
+<div class="imp">
+    <span class="bt">⚡ LQR BẮT BUỘC dùng dạng State Space!</span>
+    <p>Vì LQR cần biết <strong>tất cả</strong> trạng thái ($\theta, \dot{\theta}, x, \dot{x}$) để tính $u = -Kx$. Hàm truyền chỉ mô tả quan hệ 1 input → 1 output, không đủ.</p>
+</div>
+
+<h2>Quy trình Mô hình hóa:</h2>
+<div class="ascii">
+Robot thật     Phương trình         Phương trình          Ma trận
+(vật lý)   →   vật lý (Newton    →  tuyến tính hóa   →   A, B
+               hoặc Lagrangian)     (xấp xỉ góc nhỏ)     (State Space)
+   │                │                     │                   │
+   │           PHI TUYẾN             TUYẾN TÍNH          SẴN SÀNG
+   │         (sin θ, cos θ)          (sin θ ≈ θ)        CHO LQR!
+   ▼                ▼                     ▼                   ▼
+  Phần 2-4        Phần 3-4              Phần 5              Phần 6
+</div>
+
+
+<!-- ===================================================== -->
+<!-- PHẦN 2: PHƯƠNG PHÁP NEWTON                             -->
+<!-- ===================================================== -->
+<div class="ph ph-green" id="p2">
+    <h1>Phần 2: Phương pháp Newton — Đơn giản nhưng bị Giới hạn</h1>
+    <p>Bắt đầu từ $F = ma$ quen thuộc</p>
+</div>
+
+<h2 id="p2.1">2.1 Ví dụ: Lò xo - Khối lượng - Giảm chấn</h2>
+
+<div class="ascii">
+                 ┌──────┐
+    ╱╲╱╲╱╲──────│  m   │──────╢ b (giảm chấn)
+    (k: lò xo) │      │──────╢
+                └──┬───┘
+                   │
+             ──────┴──────── (mặt phẳng không ma sát)
+                   x →    F →
+                (vị trí)  (lực đẩy)
+</div>
+
+<div class="sc">
+    <span class="sn">Newton</span> <strong>Phân tích lực trên khối $m$:</strong>
+    <ul>
+        <li>Lực lò xo (kéo ngược): $F_k = -kx$ (Hooke's Law)</li>
+        <li>Lực giảm chấn (chống chuyển động): $F_b = -b\dot{x}$</li>
+        <li>Lực bên ngoài (ta điều khiển): $F$</li>
+    </ul>
+    $$F = ma \implies m\ddot{x} = -kx - b\dot{x} + F$$
+    $$\boxed{m\ddot{x} + b\dot{x} + kx = F}$$
+</div>
+
+<p>Chuyển sang State Space bằng cách chọn trạng thái $x_1 = x$ (vị trí), $x_2 = \dot{x}$ (vận tốc):</p>
+$$\dot{x}_1 = x_2$$
+$$\dot{x}_2 = \frac{F - bx_2 - kx_1}{m} = -\frac{k}{m}x_1 - \frac{b}{m}x_2 + \frac{1}{m}F$$
+
+$$\begin{bmatrix} \dot{x}_1 \\ \dot{x}_2 \end{bmatrix} = \underbrace{\begin{bmatrix} 0 & 1 \\ -k/m & -b/m \end{bmatrix}}_{A} \begin{bmatrix} x_1 \\ x_2 \end{bmatrix} + \underbrace{\begin{bmatrix} 0 \\ 1/m \end{bmatrix}}_{B} F$$
+
+<div class="ex">
+    <span class="bt">🔢 Ví dụ số:</span>
+    <p>$m = 1$ kg, $k = 4$ N/m, $b = 1$ N·s/m:</p>
+    $$A = \begin{bmatrix} 0 & 1 \\ -4 & -1 \end{bmatrix}, \quad B = \begin{bmatrix} 0 \\ 1 \end{bmatrix}$$
+</div>
+
+<h2 id="p2.2">2.2 Ví dụ: Con lắc Đơn (Newton)</h2>
+
+<div class="ascii">
+         O (điểm treo)
+         │╲
+         │  ╲  l (dây dài)
+         │ θ  ╲
+         │      ● m (quả nặng)
+         │
+</div>
+
+<p>Phân tích lực theo phương tiếp tuyến (vuông góc với dây):</p>
+$$m l \ddot{\theta} = -mg\sin\theta$$
+$$\boxed{\ddot{\theta} = -\frac{g}{l}\sin\theta}$$
+
+<div class="imp">
+    <span class="bt">⚡ Đây là phương trình PHI TUYẾN!</span>
+    <p>Có $\sin\theta$ → không viết được dạng $\dot{x} = Ax$ trực tiếp. Phải <strong>tuyến tính hóa</strong> (Phần 5) mới dùng LQR được!</p>
+</div>
+
+<h2 id="p2.3">2.3 Hạn chế của Newton với Hệ phức tạp</h2>
+
+<p>Với hệ con lắc ngược trên xe (2 vật thể liên kết), phương pháp Newton yêu cầu:</p>
+<ul>
+    <li>Vẽ <strong>Free Body Diagram</strong> cho TỪNG vật thể riêng</li>
+    <li>Phân tích lực theo phương x VÀ phương y cho TỪNG vật</li>
+    <li>Xử lý <strong>lực liên kết</strong> (lực kéo dây, lực tiếp xúc) — rất phiền phức!</li>
+</ul>
+
+<div class="analogy">
+    <span class="bt">🧮 Lagrangian giải quyết hết!</span>
+    <p>Phương pháp Lagrangian <strong>không cần phân tích lực liên kết</strong>. Chỉ cần tính <strong>năng lượng</strong> (động năng + thế năng) → tự động ra phương trình chuyển động! Đây là lý do nó được ưa chuộng hơn Newton cho hệ phức tạp.</p>
+</div>
+
+
+<!-- ===================================================== -->
+<!-- PHẦN 3: LAGRANGIAN                                     -->
+<!-- ===================================================== -->
+<div class="ph ph-orange" id="p3">
+    <h1>Phần 3: Phương pháp Lagrangian — Vũ khí Tối thượng</h1>
+    <p>Chỉ cần năng lượng, tự động ra phương trình chuyển động</p>
+</div>
+
+<h2 id="p3.1">3.1 Năng lượng: Động năng $T$ và Thế năng $V$</h2>
+
+<div class="def">
+    <span class="bt">📐 Hai loại năng lượng cơ bản:</span>
+    <ul>
+        <li><strong>Động năng $T$ (Kinetic Energy):</strong> Năng lượng do <strong>chuyển động</strong>. Vật càng nhanh → $T$ càng lớn.
+            <ul>
+                <li>Chuyển động thẳng: $T = \frac{1}{2}mv^2$</li>
+                <li>Chuyển động quay: $T = \frac{1}{2}I\omega^2$</li>
+                <li>Cả hai: $T = \frac{1}{2}mv^2 + \frac{1}{2}I\omega^2$</li>
+            </ul>
+        </li>
+        <li><strong>Thế năng $V$ (Potential Energy):</strong> Năng lượng do <strong>vị trí</strong> (chiều cao). Vật càng cao → $V$ càng lớn.
+            <ul>
+                <li>Trọng lực: $V = mgh$ ($h$ = chiều cao so với mốc)</li>
+                <li>Lò xo: $V = \frac{1}{2}kx^2$</li>
+            </ul>
+        </li>
+    </ul>
+</div>
+
+<h2 id="p3.2">3.2 Hàm Lagrangian $L = T - V$</h2>
+
+<div class="thm">
+    <span class="bt">⭐ Hàm Lagrangian:</span>
+    $$\boxed{L = T - V = \text{Động năng} - \text{Thế năng}}$$
+    <p>Đây là "hàm kỳ diệu" chứa toàn bộ thông tin động lực học của hệ thống!</p>
+</div>
+
+<h2 id="p3.3">3.3 Phương trình Euler-Lagrange</h2>
+
+<p>Từ hàm $L$, phương trình chuyển động tự động "tuôn ra" qua công thức:</p>
+
+<div class="thm">
+    <span class="bt">⭐ Phương trình Euler-Lagrange:</span>
+    $$\boxed{\frac{d}{dt}\left(\frac{\partial L}{\partial \dot{q}_i}\right) - \frac{\partial L}{\partial q_i} = \tau_i}$$
+    <p>Trong đó:</p>
+    <ul>
+        <li>$q_i$ = <strong>Tọa độ suy rộng</strong> (generalized coordinate) — biến mô tả vị trí (ví dụ: $x, \theta$)</li>
+        <li>$\dot{q}_i$ = Đạo hàm thời gian của $q_i$ (vận tốc suy rộng)</li>
+        <li>$\tau_i$ = <strong>Lực suy rộng</strong> — lực/mô-men bên ngoài tác dụng theo $q_i$</li>
+    </ul>
+</div>
+
+<div class="analogy">
+    <span class="bt">🍳 Ẩn dụ: "Công thức nấu phương trình chuyển động"</span>
+    <ol>
+        <li><strong>Chọn "nguyên liệu":</strong> Xác định tọa độ $q_i$ (ví dụ: vị trí xe $x$, góc con lắc $\theta$)</li>
+        <li><strong>Nấu nước sốt:</strong> Tính $T$ (động năng) và $V$ (thế năng) → $L = T - V$</li>
+        <li><strong>Cho vào lò:</strong> Áp dụng Euler-Lagrange cho TỪNG $q_i$</li>
+        <li><strong>Ra món ăn:</strong> Phương trình chuyển động!</li>
+    </ol>
+</div>
+
+<h2 id="p3.4">3.4 Ví dụ 1: Con lắc Đơn (Lagrangian)</h2>
+
+<p><strong>Tọa độ suy rộng:</strong> $q = \theta$ (góc lệch so với phương thẳng đứng).</p>
+
+<div class="sc"><span class="sn">Bước 1</span> <strong>Vị trí quả nặng trong tọa độ Descartes:</strong>
+$$x_m = l\sin\theta, \quad y_m = -l\cos\theta$$
+<p>(Gốc tọa độ ở điểm treo, trục $y$ hướng lên.)</p></div>
+
+<div class="sc"><span class="sn">Bước 2</span> <strong>Vận tốc (đạo hàm vị trí theo $t$):</strong>
+$$\dot{x}_m = l\dot{\theta}\cos\theta, \quad \dot{y}_m = l\dot{\theta}\sin\theta$$
+$$v^2 = \dot{x}_m^2 + \dot{y}_m^2 = l^2\dot{\theta}^2(\cos^2\theta + \sin^2\theta) = l^2\dot{\theta}^2$$</div>
+
+<div class="sc"><span class="sn">Bước 3</span> <strong>Động năng $T$:</strong>
+$$T = \frac{1}{2}mv^2 = \frac{1}{2}ml^2\dot{\theta}^2$$</div>
+
+<div class="sc"><span class="sn">Bước 4</span> <strong>Thế năng $V$:</strong>
+$$V = mgy_m = mg(-l\cos\theta) = -mgl\cos\theta$$</div>
+
+<div class="sc"><span class="sn">Bước 5</span> <strong>Lagrangian:</strong>
+$$L = T - V = \frac{1}{2}ml^2\dot{\theta}^2 + mgl\cos\theta$$</div>
+
+<div class="sc"><span class="sn">Bước 6</span> <strong>Euler-Lagrange (không lực ngoài: $\tau = 0$):</strong>
+
+<p>Tính $\frac{\partial L}{\partial \dot{\theta}}$: (đạo hàm $L$ theo $\dot{\theta}$, coi $\theta$ là hằng số)</p>
+$$\frac{\partial L}{\partial \dot{\theta}} = ml^2\dot{\theta}$$
+
+<p>Tính $\frac{d}{dt}\left(\frac{\partial L}{\partial \dot{\theta}}\right)$:</p>
+$$\frac{d}{dt}(ml^2\dot{\theta}) = ml^2\ddot{\theta}$$
+
+<p>Tính $\frac{\partial L}{\partial \theta}$: (đạo hàm $L$ theo $\theta$, coi $\dot{\theta}$ là hằng số)</p>
+$$\frac{\partial L}{\partial \theta} = -mgl\sin\theta$$
+
+<p>Thay vào Euler-Lagrange:</p>
+$$ml^2\ddot{\theta} - (-mgl\sin\theta) = 0$$
+$$ml^2\ddot{\theta} + mgl\sin\theta = 0$$
+$$\boxed{\ddot{\theta} + \frac{g}{l}\sin\theta = 0}$$
+<p>✅ Đúng hệt kết quả Newton ở Phần 2.2!</p>
+</div>
+
+<h2 id="p3.5">3.5 Ví dụ 2: Lò xo-Khối lượng (Lagrangian)</h2>
+
+<p>$q = x$ (vị trí), lực ngoài $\tau = F$ (lực đẩy), có giảm chấn $b$.</p>
+
+<p>$T = \frac{1}{2}m\dot{x}^2$, $V = \frac{1}{2}kx^2$, $L = \frac{1}{2}m\dot{x}^2 - \frac{1}{2}kx^2$.</p>
+
+$$\frac{\partial L}{\partial \dot{x}} = m\dot{x}, \quad \frac{d}{dt}(m\dot{x}) = m\ddot{x}, \quad \frac{\partial L}{\partial x} = -kx$$
+
+<p>Euler-Lagrange (lực suy rộng gồm $F$ và giảm chấn $-b\dot{x}$):</p>
+$$m\ddot{x} - (-kx) = F - b\dot{x}$$
+$$\boxed{m\ddot{x} + b\dot{x} + kx = F} \quad \checkmark$$
+
+<div class="imp">
+    <span class="bt">💡 Lưu ý về lực giảm chấn:</span>
+    <p>Lực giảm chấn $-b\dot{x}$ là lực <strong>tiêu tán</strong> (dissipative), không thể đưa vào $L = T - V$. Nó được thêm trực tiếp vào vế phải của Euler-Lagrange như lực suy rộng $\tau_i$.</p>
+</div>
+
+
+<!-- ===================================================== -->
+<!-- PHẦN 4: CON LẮC NGƯỢC                                  -->
+<!-- ===================================================== -->
+<div class="ph ph-red" id="p4">
+    <h1>Phần 4: CON LẮC NGƯỢC — Bài toán Kinh điển</h1>
+    <p>Lagrangian đầy đủ, từng dòng — Không bỏ qua bất kỳ phép tính nào</p>
+</div>
+
+<h2 id="p4.1">4.1 Mô tả Hệ thống &amp; Chọn Tọa độ</h2>
+
+<div class="ascii">
+                    ● Đỉnh con lắc (trọng tâm thân)
+                   ╱│
+                  ╱ │ l (chiều dài đến trọng tâm)
+                 ╱  │
+                ╱ θ │  (θ đo từ phương thẳng đứng)
+               ╱    │
+     ┌────────●─────┘
+     │   Xe (M)     │
+     │               │
+     └──○─────────○──┘
+    ←───────────────────→ x (vị trí xe)
+           F → (lực đẩy xe)
+</div>
+
+<p><strong>Hệ gồm 2 phần:</strong></p>
+<ul>
+    <li><strong>Xe (cart):</strong> khối lượng $M$, chuyển động ngang trên ray, vị trí $x$.</li>
+    <li><strong>Con lắc (pendulum):</strong> khối lượng $m$, chiều dài đến trọng tâm $l$, góc $\theta$.</li>
+</ul>
+
+<p><strong>2 tọa độ suy rộng:</strong> $q_1 = x$ (vị trí xe), $q_2 = \theta$ (góc con lắc).</p>
+
+<div class="imp">
+    <span class="bt">⚡ Quy ước góc $\theta$:</span>
+    <p>$\theta = 0$ khi con lắc <strong>đứng thẳng lên trên</strong> (vị trí cân bằng BẤT ỔN ĐỊNH mà ta muốn giữ). $\theta > 0$ khi nghiêng sang phải.</p>
+</div>
+
+<h2 id="p4.2">4.2 Tính Động năng $T$ — Từng bước</h2>
+
+<h3>Bước 2a: Vị trí trọng tâm con lắc</h3>
+<p>Trọng tâm con lắc cách trục bánh xe một đoạn $l$ theo phương thanh:</p>
+$$x_p = x + l\sin\theta$$
+$$y_p = l\cos\theta$$
+<p>(Gốc ở mặt ray, $y$ hướng lên. Khi $\theta = 0$, trọng tâm ở $(x, l)$ — cao nhất.)</p>
+
+<h3>Bước 2b: Vận tốc trọng tâm con lắc</h3>
+<p>Đạo hàm theo thời gian $t$:</p>
+$$\dot{x}_p = \dot{x} + l\dot{\theta}\cos\theta$$
+$$\dot{y}_p = -l\dot{\theta}\sin\theta$$
+
+<h3>Bước 2c: Bình phương vận tốc con lắc</h3>
+$$v_p^2 = \dot{x}_p^2 + \dot{y}_p^2 = (\dot{x} + l\dot{\theta}\cos\theta)^2 + (-l\dot{\theta}\sin\theta)^2$$
+
+<p>Khai triển $\dot{x}_p^2$:</p>
+$$(\dot{x} + l\dot{\theta}\cos\theta)^2 = \dot{x}^2 + 2l\dot{x}\dot{\theta}\cos\theta + l^2\dot{\theta}^2\cos^2\theta$$
+
+<p>Khai triển $\dot{y}_p^2$:</p>
+$$l^2\dot{\theta}^2\sin^2\theta$$
+
+<p>Cộng lại:</p>
+$$v_p^2 = \dot{x}^2 + 2l\dot{x}\dot{\theta}\cos\theta + l^2\dot{\theta}^2\underbrace{(\cos^2\theta + \sin^2\theta)}_{= 1}$$
+$$\boxed{v_p^2 = \dot{x}^2 + 2l\dot{x}\dot{\theta}\cos\theta + l^2\dot{\theta}^2}$$
+
+<h3>Bước 2d: Tổng Động năng</h3>
+$$T = \underbrace{\frac{1}{2}M\dot{x}^2}_{\text{Động năng xe}} + \underbrace{\frac{1}{2}mv_p^2}_{\text{Động năng con lắc (tịnh tiến)}} + \underbrace{\frac{1}{2}I\dot{\theta}^2}_{\text{Động năng con lắc (quay)}}$$
+
+<p>(Nếu coi con lắc là thanh đều: $I = \frac{1}{12}ml_{\text{total}}^2$ quanh trọng tâm. Nhiều bài đơn giản hóa $I \approx 0$ khi con lắc là dây + quả nặng nhỏ.)</p>
+
+$$\boxed{T = \frac{1}{2}(M + m)\dot{x}^2 + ml\dot{x}\dot{\theta}\cos\theta + \frac{1}{2}(I + ml^2)\dot{\theta}^2}$$
+
+<h2 id="p4.3">4.3 Tính Thế năng $V$</h2>
+
+<p>Chỉ con lắc có thế năng (xe ở cùng độ cao mặt ray):</p>
+$$\boxed{V = mgl\cos\theta}$$
+<p>(Khi $\theta = 0$ → $V = mgl$ (cao nhất). Khi $\theta = \pi/2$ → $V = 0$. Hợp lý!)</p>
+
+<h2 id="p4.4">4.4 Viết Lagrangian &amp; Áp dụng Euler-Lagrange</h2>
+
+$$L = T - V = \frac{1}{2}(M + m)\dot{x}^2 + ml\dot{x}\dot{\theta}\cos\theta + \frac{1}{2}(I + ml^2)\dot{\theta}^2 - mgl\cos\theta$$
+
+<h3>Euler-Lagrange cho $q_1 = x$:</h3>
+
+<div class="sc"><span class="sn">$\frac{\partial L}{\partial \dot{x}}$</span>
+$$(M + m)\dot{x} + ml\dot{\theta}\cos\theta$$</div>
+
+<div class="sc"><span class="sn">$\frac{d}{dt}(\frac{\partial L}{\partial \dot{x}})$</span>
+$$(M + m)\ddot{x} + ml\ddot{\theta}\cos\theta - ml\dot{\theta}^2\sin\theta$$
+<p>(Dùng quy tắc tích: $\frac{d}{dt}(\dot{\theta}\cos\theta) = \ddot{\theta}\cos\theta - \dot{\theta}^2\sin\theta$)</p></div>
+
+<div class="sc"><span class="sn">$\frac{\partial L}{\partial x}$</span>
+$$0 \quad \text{(L không chứa } x \text{ trực tiếp)}$$</div>
+
+<p>Lực suy rộng theo $x$: $\tau_x = F$ (lực đẩy xe). Phương trình:</p>
+$$\boxed{(M + m)\ddot{x} + ml\ddot{\theta}\cos\theta - ml\dot{\theta}^2\sin\theta = F} \quad \text{...(1)}$$
+
+<h3>Euler-Lagrange cho $q_2 = \theta$:</h3>
+
+<div class="sc"><span class="sn">$\frac{\partial L}{\partial \dot{\theta}}$</span>
+$$ml\dot{x}\cos\theta + (I + ml^2)\dot{\theta}$$</div>
+
+<div class="sc"><span class="sn">$\frac{d}{dt}(\frac{\partial L}{\partial \dot{\theta}})$</span>
+$$ml\ddot{x}\cos\theta - ml\dot{x}\dot{\theta}\sin\theta + (I + ml^2)\ddot{\theta}$$</div>
+
+<div class="sc"><span class="sn">$\frac{\partial L}{\partial \theta}$</span>
+$$-ml\dot{x}\dot{\theta}\sin\theta + mgl\sin\theta$$</div>
+
+<p>Lực suy rộng theo $\theta$: $\tau_\theta = 0$ (không có mô-men ngoài). Phương trình:</p>
+$$ml\ddot{x}\cos\theta \cancel{- ml\dot{x}\dot{\theta}\sin\theta} + (I + ml^2)\ddot{\theta} - (\cancel{-ml\dot{x}\dot{\theta}\sin\theta} + mgl\sin\theta) = 0$$
+
+$$\boxed{ml\ddot{x}\cos\theta + (I + ml^2)\ddot{\theta} - mgl\sin\theta = 0} \quad \text{...(2)}$$
+
+<h2 id="p4.5">4.5 Phương trình Chuyển động Phi tuyến</h2>
+
+<div class="thm">
+    <span class="bt">⭐ Hệ phương trình Con lắc Ngược (Phi tuyến):</span>
+    $$(M + m)\ddot{x} + ml\ddot{\theta}\cos\theta - ml\dot{\theta}^2\sin\theta = F \quad \text{...(1)}$$
+    $$ml\ddot{x}\cos\theta + (I + ml^2)\ddot{\theta} - mgl\sin\theta = 0 \quad \text{...(2)}$$
+    <p>Đây là hệ 2 phương trình, 2 ẩn ($\ddot{x}$ và $\ddot{\theta}$), phi tuyến do có $\sin\theta$, $\cos\theta$, $\dot{\theta}^2\sin\theta$.</p>
+</div>
+
+
+<!-- ===================================================== -->
+<!-- PHẦN 5: TUYẾN TÍNH HÓA                                 -->
+<!-- ===================================================== -->
+<div class="ph ph-purple" id="p5">
+    <h1>Phần 5: Tuyến tính hóa — Biến Phi tuyến thành Tuyến tính</h1>
+    <p>Xấp xỉ "đủ tốt" quanh điểm cân bằng</p>
+</div>
+
+<h2 id="p5.1">5.1 Tại sao phải Tuyến tính hóa?</h2>
+
+<p>LQR yêu cầu hệ tuyến tính $\dot{x} = Ax + Bu$. Phương trình con lắc ngược có $\sin\theta, \cos\theta, \dot{\theta}^2$ → <strong>phi tuyến</strong>. Ta cần loại bỏ chúng.</p>
+
+<div class="analogy">
+    <span class="bt">📏 Ẩn dụ: Zoom vào bản đồ</span>
+    <p>Trái đất hình cầu (phi tuyến). Nhưng nếu bạn zoom vào khu phố nhà mình, nó <strong>trông phẳng</strong> (tuyến tính). Tương tự, quanh $\theta = 0$ (con lắc gần thẳng đứng), các hàm phi tuyến trở nên gần tuyến tính.</p>
+</div>
+
+<h2 id="p5.2">5.2 Khai triển Taylor &amp; Xấp xỉ Góc nhỏ</h2>
+
+<p>Quanh $\theta = 0$ (con lắc đứng thẳng):</p>
+
+<div class="def">
+    <span class="bt">📐 Xấp xỉ Góc nhỏ (Small Angle Approximation):</span>
+    <table>
+        <tr><th>Hàm gốc</th><th>Khai triển Taylor tại $\theta = 0$</th><th>Xấp xỉ bậc 1</th></tr>
+        <tr><td>$\sin\theta$</td><td>$\theta - \frac{\theta^3}{6} + ...$</td><td>$\sin\theta \approx \theta$</td></tr>
+        <tr><td>$\cos\theta$</td><td>$1 - \frac{\theta^2}{2} + ...$</td><td>$\cos\theta \approx 1$</td></tr>
+    </table>
+    <p>Ngoài ra: $\dot{\theta}^2 \sin\theta \approx \dot{\theta}^2 \cdot \theta \approx 0$ (tích 2 đại lượng nhỏ ≈ 0).</p>
+</div>
+
+<div class="ex">
+    <span class="bt">🔢 Kiểm tra xấp xỉ có chính xác không?</span>
+    <table>
+        <tr><th>$\theta$ (°)</th><th>$\theta$ (rad)</th><th>$\sin\theta$</th><th>Sai số</th></tr>
+        <tr><td>5°</td><td>0.087</td><td>0.087</td><td>0.01% ✓</td></tr>
+        <tr><td>10°</td><td>0.175</td><td>0.174</td><td>0.5% ✓</td></tr>
+        <tr><td>15°</td><td>0.262</td><td>0.259</td><td>1.2% ✓</td></tr>
+        <tr><td>30°</td><td>0.524</td><td>0.500</td><td>4.7% ⚠️</td></tr>
+        <tr><td>45°</td><td>0.785</td><td>0.707</td><td>11% ❌</td></tr>
+    </table>
+    <p><strong>Kết luận:</strong> Xấp xỉ góc nhỏ chính xác khi $|\theta| < 15°$. Robot cân bằng hoạt động trong vùng $|\theta| < 5°$ → <span class="hl">Sai số < 0.5%, hoàn toàn OK!</span></p>
+</div>
+
+<h2 id="p5.3">5.3 Tuyến tính hóa Con lắc Ngược — Từng dòng</h2>
+
+<p>Thay $\sin\theta \approx \theta$, $\cos\theta \approx 1$, $\dot{\theta}^2\sin\theta \approx 0$ vào (1) và (2):</p>
+
+<div class="sc"><span class="sn">PT (1)</span> <strong>sau tuyến tính hóa:</strong>
+$$(M + m)\ddot{x} + ml\ddot{\theta} \cdot 1 - ml\dot{\theta}^2 \cdot \underbrace{\theta}_{\approx 0} = F$$
+$$\boxed{(M + m)\ddot{x} + ml\ddot{\theta} = F} \quad \text{...(1')}$$</div>
+
+<div class="sc"><span class="sn">PT (2)</span> <strong>sau tuyến tính hóa:</strong>
+$$ml\ddot{x} \cdot 1 + (I + ml^2)\ddot{\theta} - mgl \cdot \theta = 0$$
+$$\boxed{ml\ddot{x} + (I + ml^2)\ddot{\theta} - mgl\theta = 0} \quad \text{...(2')}$$</div>
+
+<p>Bây giờ hệ hoàn toàn tuyến tính! Không còn $\sin, \cos, \dot{\theta}^2$.</p>
+
+
+<!-- ===================================================== -->
+<!-- PHẦN 6: STATE SPACE                                    -->
+<!-- ===================================================== -->
+<div class="ph ph-teal" id="p6">
+    <h1>Phần 6: Không gian Trạng thái — Viết dạng $\dot{x} = Ax + Bu$</h1>
+    <p>Bước cuối cùng trước khi dùng LQR!</p>
+</div>
+
+<h2 id="p6.1">6.1 "Trạng thái" là gì? Cách chọn</h2>
+
+<div class="def">
+    <span class="bt">📐 Trạng thái = Tất cả thông tin cần thiết để dự đoán tương lai</span>
+    <p>Nếu bạn biết <strong>tất cả trạng thái tại thời điểm hiện tại</strong> + input $u$, bạn có thể tính được trạng thái ở thời điểm tiếp theo.</p>
+</div>
+
+<p>Cho con lắc ngược, ta chọn 4 trạng thái:</p>
+$$\mathbf{x} = \begin{bmatrix} x \\ \dot{x} \\ \theta \\ \dot{\theta} \end{bmatrix} = \begin{bmatrix} \text{Vị trí xe} \\ \text{Vận tốc xe} \\ \text{Góc con lắc} \\ \text{Tốc độ góc con lắc} \end{bmatrix}$$
+
+<div class="imp">
+    <span class="bt">❓ Tại sao cần cả $x$ lẫn $\dot{x}$ (và $\theta$ lẫn $\dot{\theta}$)?</span>
+    <p>Vì phương trình là bậc 2 ($\ddot{x}, \ddot{\theta}$). Nếu chỉ biết vị trí $x$ mà không biết vận tốc $\dot{x}$, bạn không biết xe đang đứng yên hay đang lao nhanh → không đủ thông tin dự đoán tương lai.</p>
+</div>
+
+<h2 id="p6.2">6.2 Trích Ma trận $A, B$ cho Con lắc Ngược</h2>
+
+<p>Cần giải $\ddot{x}$ và $\ddot{\theta}$ từ hệ (1') và (2'). Viết dạng ma trận:</p>
+
+$$\underbrace{\begin{bmatrix} M + m & ml \\ ml & I + ml^2 \end{bmatrix}}_{\mathbf{D}} \begin{bmatrix} \ddot{x} \\ \ddot{\theta} \end{bmatrix} = \begin{bmatrix} F \\ mgl\theta \end{bmatrix}$$
+
+<p>Giải bằng ma trận nghịch đảo $\mathbf{D}^{-1}$:</p>
+
+<div class="sc"><span class="sn">Tính</span> <strong>$\det(\mathbf{D})$:</strong>
+$$\Delta = (M + m)(I + ml^2) - (ml)^2 = (M + m)(I + ml^2) - m^2l^2$$
+$$= MI + Mml^2 + mI + \cancel{m^2l^2} - \cancel{m^2l^2} = I(M + m) + Mml^2$$</div>
+
+<p>Ma trận nghịch đảo $2 \times 2$: $\begin{bmatrix} a & b \\ c & d \end{bmatrix}^{-1} = \frac{1}{ad - bc}\begin{bmatrix} d & -b \\ -c & a \end{bmatrix}$</p>
+
+$$\begin{bmatrix} \ddot{x} \\ \ddot{\theta} \end{bmatrix} = \frac{1}{\Delta}\begin{bmatrix} I + ml^2 & -ml \\ -ml & M + m \end{bmatrix} \begin{bmatrix} F \\ mgl\theta \end{bmatrix}$$
+
+<p>Khai triển:</p>
+$$\ddot{x} = \frac{(I + ml^2)F - m^2gl^2\theta}{\Delta}$$
+$$\ddot{\theta} = \frac{-mlF + (M + m)mgl\theta}{\Delta}$$
+
+<p>Viết $\dot{\mathbf{x}} = A\mathbf{x} + B u$ với $u = F$:</p>
+
+$$\begin{bmatrix} \dot{x} \\ \ddot{x} \\ \dot{\theta} \\ \ddot{\theta} \end{bmatrix} = \begin{bmatrix} 0 & 1 & 0 & 0 \\ 0 & 0 & -\frac{m^2gl^2}{\Delta} & 0 \\ 0 & 0 & 0 & 1 \\ 0 & 0 & \frac{(M+m)mgl}{\Delta} & 0 \end{bmatrix} \begin{bmatrix} x \\ \dot{x} \\ \theta \\ \dot{\theta} \end{bmatrix} + \begin{bmatrix} 0 \\ \frac{I + ml^2}{\Delta} \\ 0 \\ \frac{-ml}{\Delta} \end{bmatrix} F$$
+
+<div class="thm">
+    <span class="bt">⭐ Ma trận $A, B$ cho Con Lắc Ngược:</span>
+    <p>Với $\Delta = I(M + m) + Mml^2$:</p>
+    $$A = \begin{bmatrix} 0 & 1 & 0 & 0 \\ 0 & 0 & -\frac{m^2gl^2}{\Delta} & 0 \\ 0 & 0 & 0 & 1 \\ 0 & 0 & \frac{(M+m)mgl}{\Delta} & 0 \end{bmatrix}, \quad B = \begin{bmatrix} 0 \\ \frac{I + ml^2}{\Delta} \\ 0 \\ \frac{-ml}{\Delta} \end{bmatrix}$$
+</div>
+
+<h2 id="p6.3">6.3 Kiểm tra: Controllability</h2>
+
+<p>Trước khi thiết kế LQR, kiểm tra hệ có <strong>Controllable</strong> không:</p>
+
+<div class="def">
+    <span class="bt">📐 Ma trận Controllability:</span>
+    $$\mathcal{C} = \begin{bmatrix} B & AB & A^2B & A^3B \end{bmatrix}$$
+    <p>Hệ Controllable ⟺ $\text{rank}(\mathcal{C}) = n = 4$ (= số trạng thái).</p>
+    <p><strong>Ý nghĩa:</strong> Nếu Controllable, ta có thể điều khiển mọi trạng thái bằng lực $F$ → LQR giải được!</p>
+</div>
+
+
+<!-- ===================================================== -->
+<!-- PHẦN 7: CODE PYTHON                                    -->
+<!-- ===================================================== -->
+<div class="ph ph-indigo" id="p7">
+    <h1>Phần 7: Code Python Toàn diện — Mô phỏng &amp; Kiểm chứng</h1>
+    <p>Copy, chạy, và TẬN MẮT nhìn mọi thứ hoạt động!</p>
+</div>
+
+<h2 id="p7.1">7.1 Mô phỏng Phi tuyến (Con lắc ngược KHÔNG điều khiển)</h2>
+
+<pre><code>"""
+=== BÀI 7.1: Con lắc ngược — Mô phỏng PHI TUYẾN ===
+Mục đích: Xem con lắc ngã như thế nào khi không có điều khiển (F = 0).
+"""
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.integrate import solve_ivp
+
+# === THÔNG SỐ VẬT LÝ ===
+M = 1.0     # Khối lượng xe (kg)
+m = 0.3     # Khối lượng con lắc (kg)
+l = 0.5     # Chiều dài đến trọng tâm (m)
+g = 9.81    # Gia tốc trọng trường (m/s^2)
+I = (1/12) * m * (2*l)**2  # Mô-men quán tính thanh đều
+
+# === PHƯƠNG TRÌNH PHI TUYẾN (từ Phần 4) ===
+def inverted_pendulum_nonlinear(t, state, F=0):
+    x, x_dot, theta, theta_dot = state
+    
+    # Ma trận D
+    D11 = M + m
+    D12 = m * l * np.cos(theta)
+    D21 = m * l * np.cos(theta)
+    D22 = I + m * l**2
+    det_D = D11 * D22 - D12 * D21
+    
+    # Vế phải
+    rhs1 = F + m * l * theta_dot**2 * np.sin(theta)
+    rhs2 = m * g * l * np.sin(theta)
+    
+    # Giải [x_ddot, theta_ddot]
+    x_ddot = (D22 * rhs1 - D12 * rhs2) / det_D
+    theta_ddot = (-D21 * rhs1 + D11 * rhs2) / det_D
+    
+    return [x_dot, x_ddot, theta_dot, theta_ddot]
+
+# === MÔ PHỎNG: Thả con lắc từ θ = 5° ===
+theta0 = 5 * np.pi / 180  # 5 độ
+x0 = [0, 0, theta0, 0]    # [x, x_dot, θ, θ_dot]
+t_span = (0, 3)
+t_eval = np.linspace(0, 3, 500)
+
+sol = solve_ivp(inverted_pendulum_nonlinear, t_span, x0, t_eval=t_eval, method='RK45')
+
+# === VẼ ĐỒ THỊ ===
+fig, axes = plt.subplots(2, 1, figsize=(10, 7))
+
+axes[0].plot(sol.t, sol.y[2] * 180/np.pi, 'r-', linewidth=2)
+axes[0].set_ylabel('Góc θ (°)', fontsize=12)
+axes[0].set_title('Con lắc ngược KHÔNG điều khiển — Ngã tự do từ θ₀ = 5°', fontsize=13)
+axes[0].grid(True, alpha=0.3)
+axes[0].axhline(y=0, color='k', linestyle='--', alpha=0.3)
+
+axes[1].plot(sol.t, sol.y[0], 'b-', linewidth=2)
+axes[1].set_ylabel('Vị trí xe x (m)', fontsize=12)
+axes[1].set_xlabel('Thời gian (s)', fontsize=12)
+axes[1].grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.suptitle('BÀI 7.1: Mô phỏng Phi tuyến — Con lắc ngã!', fontsize=14, y=1.02)
+plt.show()
+print("→ Quan sát: Con lắc ngã rất nhanh! Cần LQR để giữ nó đứng!")
+</code></pre>
+
+<h2 id="p7.2">7.2 So sánh Tuyến tính vs Phi tuyến</h2>
+
+<pre><code>"""
+=== BÀI 7.2: So sánh mô hình Tuyến tính vs Phi tuyến ===
+Mục đích: Kiểm tra xấp xỉ tuyến tính có chính xác không.
+"""
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.integrate import solve_ivp
+
+# Thông số (giữ nguyên từ 7.1)
+M, m, l, g = 1.0, 0.3, 0.5, 9.81
+I = (1/12) * m * (2*l)**2
+Delta = I*(M + m) + M*m*l**2
+
+# Ma trận A, B (từ Phần 6.2)
+A = np.array([
+    [0, 1, 0, 0],
+    [0, 0, -m**2*g*l**2/Delta, 0],
+    [0, 0, 0, 1],
+    [0, 0, (M+m)*m*g*l/Delta, 0]
+])
+B = np.array([
+    [0],
+    [(I + m*l**2)/Delta],
+    [0],
+    [-m*l/Delta]
+])
+
+print("=== MA TRẬN A ===")
+print(np.round(A, 4))
+print("\n=== MA TRẬN B ===")
+print(np.round(B, 4))
+
+# --- Mô hình TUYẾN TÍNH ---
+def linear_model(t, state):
+    return (A @ np.array(state).reshape(-1,1)).flatten()
+
+# --- Mô hình PHI TUYẾN (từ 7.1) ---
+def nonlinear_model(t, state):
+    x, xd, th, thd = state
+    D11, D12 = M+m, m*l*np.cos(th)
+    D22 = I + m*l**2
+    det_D = D11*D22 - D12**2
+    r1 = m*l*thd**2*np.sin(th)
+    r2 = m*g*l*np.sin(th)
+    xdd = (D22*r1 - D12*r2)/det_D
+    thdd = (-D12*r1 + D11*r2)/det_D
+    return [xd, xdd, thd, thdd]
+
+# === So sánh ở các góc khởi đầu khác nhau ===
+fig, axes = plt.subplots(2, 2, figsize=(12, 8))
+angles = [2, 5, 15, 30]  # độ
+t_eval = np.linspace(0, 2, 300)
+
+for i, angle_deg in enumerate(angles):
+    ax = axes[i//2][i%2]
+    theta0 = angle_deg * np.pi / 180
+    x0 = [0, 0, theta0, 0]
+    
+    sol_nl = solve_ivp(nonlinear_model, (0,2), x0, t_eval=t_eval)
+    sol_l = solve_ivp(linear_model, (0,2), x0, t_eval=t_eval)
+    
+    ax.plot(sol_nl.t, sol_nl.y[2]*180/np.pi, 'r-', lw=2, label='Phi tuyến (thật)')
+    ax.plot(sol_l.t, sol_l.y[2]*180/np.pi, 'b--', lw=2, label='Tuyến tính (xấp xỉ)')
+    ax.set_title(f'θ₀ = {angle_deg}°', fontsize=12)
+    ax.legend(fontsize=9)
+    ax.grid(True, alpha=0.3)
+    ax.set_ylabel('θ (°)')
+    ax.set_xlabel('t (s)')
+
+plt.suptitle('BÀI 7.2: So sánh Tuyến tính vs Phi tuyến — Xấp xỉ chính xác đến bao nhiêu độ?', fontsize=13)
+plt.tight_layout()
+plt.show()
+print("→ Quan sát: Ở 2-5°, hai đường TRÙNG NHAU. Ở 30°, sai lệch lớn!")
+print("→ Kết luận: LQR (dựa trên mô hình tuyến tính) hoạt động tốt khi θ < 15°")
+</code></pre>
+
+<h2 id="p7.3">7.3 Thiết kế LQR &amp; Mô phỏng Cân bằng</h2>
+
+<pre><code>"""
+=== BÀI 7.3: Thiết kế LQR — Giữ con lắc đứng thẳng! ===
+Mục đích: Tính K, mô phỏng hệ vòng kín. Con lắc tự cân bằng!
+"""
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.integrate import solve_ivp
+from scipy.linalg import solve_continuous_are
+
+# === Thông số (giữ nguyên) ===
+M, m, l, g = 1.0, 0.3, 0.5, 9.81
+I = (1/12) * m * (2*l)**2
+Delta = I*(M+m) + M*m*l**2
+
+A = np.array([
+    [0, 1, 0, 0],
+    [0, 0, -m**2*g*l**2/Delta, 0],
+    [0, 0, 0, 1],
+    [0, 0, (M+m)*m*g*l/Delta, 0]
+])
+B = np.array([[0], [(I+m*l**2)/Delta], [0], [-m*l/Delta]])
+
+# === BƯỚC 1: Kiểm tra Controllability ===
+from numpy.linalg import matrix_rank
+C_mat = np.hstack([B, A@B, A@A@B, A@A@A@B])
+print(f"Rank(Controllability) = {matrix_rank(C_mat)} (cần = 4)")
+print(f"→ {'Controllable ✓' if matrix_rank(C_mat) == 4 else 'KHÔNG Controllable ✗'}")
+
+# === BƯỚC 2: Kiểm tra trị riêng hệ mở (xem hệ mở ổn định không?) ===
+eigenvalues_open = np.linalg.eigvals(A)
+print(f"\nTrị riêng hệ MỞ: {np.round(eigenvalues_open, 4)}")
+print("→ Có trị riêng dương → Hệ mở BẤT ỔN ĐỊNH (con lắc sẽ ngã)!")
+
+# === BƯỚC 3: Chọn Q, R (Bryson's Rule) ===
+Q = np.diag([
+    1/0.5**2,     # x: cho phép lệch 0.5m
+    1/1.0**2,     # x_dot: cho phép 1 m/s
+    1/0.1**2,     # theta: cho phép lệch ~6° (0.1 rad)
+    1/1.0**2      # theta_dot: cho phép 1 rad/s
+])
+R = np.array([[1/10**2]])  # F: cho phép 10N
+
+print(f"\nQ = diag{np.diag(Q).tolist()}")
+print(f"R = {R[0,0]}")
+
+# === BƯỚC 4: Giải ARE → Tính K ===
+P = solve_continuous_are(A, B, Q, R)
+K = np.linalg.inv(R) @ B.T @ P
+print(f"\nGain K = {np.round(K, 4)}")
+
+# === BƯỚC 5: Kiểm tra trị riêng hệ VÒNG KÍN ===
+A_cl = A - B @ K
+eigenvalues_closed = np.linalg.eigvals(A_cl)
+print(f"\nTrị riêng hệ VÒNG KÍN: {np.round(eigenvalues_closed, 4)}")
+all_stable = all(np.real(eigenvalues_closed) < 0)
+print(f"→ Tất cả phần thực < 0? {'CÓ ✓ → Ổn định!' if all_stable else 'KHÔNG ✗ → Lỗi!'}")
+
+# === BƯỚC 6: Mô phỏng hệ vòng kín (PHI TUYẾN!) ===
+def closed_loop_nonlinear(t, state):
+    x, xd, th, thd = state
+    # LQR control law
+    u = -float(K @ np.array(state).reshape(-1,1))
+    # Giới hạn lực (bão hòa ±50N)
+    u = np.clip(u, -50, 50)
+    # Mô hình phi tuyến
+    D11, D12 = M+m, m*l*np.cos(th)
+    D22 = I + m*l**2
+    det_D = D11*D22 - D12**2
+    r1 = u + m*l*thd**2*np.sin(th)
+    r2 = m*g*l*np.sin(th)
+    xdd = (D22*r1 - D12*r2)/det_D
+    thdd = (-D12*r1 + D11*r2)/det_D
+    return [xd, xdd, thd, thdd]
+
+# Thả từ θ = 10°
+theta0 = 10 * np.pi / 180
+x0 = [0, 0, theta0, 0]
+t_eval = np.linspace(0, 5, 1000)
+sol = solve_ivp(closed_loop_nonlinear, (0,5), x0, t_eval=t_eval, max_step=0.01)
+
+# Tính lực điều khiển
+u_history = [-float(K @ sol.y[:, i]) for i in range(len(sol.t))]
+
+# === VẼ KẾT QUẢ ===
+fig, axes = plt.subplots(3, 1, figsize=(10, 9))
+
+# Góc θ
+axes[0].plot(sol.t, sol.y[2]*180/np.pi, 'r-', lw=2)
+axes[0].axhline(y=0, color='k', ls='--', alpha=0.3)
+axes[0].set_ylabel('Góc θ (°)', fontsize=12)
+axes[0].set_title('LQR giữ con lắc ngược cân bằng! (θ₀ = 10°)', fontsize=13)
+axes[0].grid(True, alpha=0.3)
+axes[0].fill_between(sol.t, -1, 1, alpha=0.1, color='green', label='Vùng "gần 0°"')
+axes[0].legend()
+
+# Vị trí xe
+axes[1].plot(sol.t, sol.y[0], 'b-', lw=2)
+axes[1].axhline(y=0, color='k', ls='--', alpha=0.3)
+axes[1].set_ylabel('Vị trí xe x (m)', fontsize=12)
+axes[1].grid(True, alpha=0.3)
+
+# Lực điều khiển
+axes[2].plot(sol.t, u_history, 'g-', lw=1.5)
+axes[2].axhline(y=0, color='k', ls='--', alpha=0.3)
+axes[2].set_ylabel('Lực F (N)', fontsize=12)
+axes[2].set_xlabel('Thời gian (s)', fontsize=12)
+axes[2].grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.show()
+
+print("\n🎉 THÀNH CÔNG! Con lắc tự cân bằng!")
+print(f"   → θ về 0° sau ~2 giây")
+print(f"   → Lực tối đa: {max(abs(np.array(u_history))):.1f} N")
+print(f"   → Xe dịch chuyển: {sol.y[0][-1]:.3f} m")
+</code></pre>
+
+
+<!-- ===================================================== -->
+<!-- PHẦN 8: BÀI TẬP                                       -->
+<!-- ===================================================== -->
+<div class="ph ph-red" id="p8">
+    <h1>Phần 8: Bài tập Tự kiểm tra (Có đáp án)</h1>
+    <p>Kiểm tra xem bạn thật sự hiểu chưa!</p>
+</div>
+
+<!-- BT 1 -->
+<div class="quiz">
+    <span class="bt">📝 Bài 1: Lò xo-Khối lượng (Lagrangian)</span>
+    <p>Cho hệ lò xo-khối lượng: $m = 2$ kg, $k = 8$ N/m, $b = 0$ (không giảm chấn), lực ngoài $F$.</p>
+    <ol>
+        <li>Viết Lagrangian $L = T - V$.</li>
+        <li>Áp dụng Euler-Lagrange → phương trình chuyển động.</li>
+        <li>Viết dạng State Space $\dot{x} = Ax + Bu$.</li>
+        <li>Tính trị riêng của $A$. Hệ ổn định không?</li>
+    </ol>
+    <button class="quiz-btn" onclick="toggleAnswer('ans1')">Xem đáp án</button>
+    <div id="ans1" class="quiz-answer">
+        <p><strong>1.</strong> $T = \frac{1}{2}(2)\dot{x}^2 = \dot{x}^2$, $V = \frac{1}{2}(8)x^2 = 4x^2$, $L = \dot{x}^2 - 4x^2$.</p>
+        <p><strong>2.</strong> $\frac{\partial L}{\partial \dot{x}} = 2\dot{x}$, $\frac{d}{dt}(2\dot{x}) = 2\ddot{x}$, $\frac{\partial L}{\partial x} = -8x$. → $2\ddot{x} - (-8x) = F$ → $2\ddot{x} + 8x = F$.</p>
+        <p><strong>3.</strong> $x_1 = x, x_2 = \dot{x}$: $A = \begin{bmatrix} 0 & 1 \\ -4 & 0 \end{bmatrix}$, $B = \begin{bmatrix} 0 \\ 0.5 \end{bmatrix}$.</p>
+        <p><strong>4.</strong> $\det(A - \lambda I) = \lambda^2 + 4 = 0$ → $\lambda = \pm 2j$ (thuần ảo). Hệ <strong>biên ổn định</strong> (dao động mãi, không tắt dần vì không có giảm chấn $b$).</p>
+    </div>
+</div>
+
+<!-- BT 2 -->
+<div class="quiz">
+    <span class="bt">📝 Bài 2: Xấp xỉ Góc nhỏ</span>
+    <p>Cho phương trình phi tuyến: $\ddot{\theta} + 3\dot{\theta}\cos\theta + 5\sin\theta - 2\dot{\theta}^2\sin\theta = u\cos\theta$.</p>
+    <p>Tuyến tính hóa quanh $\theta = 0, \dot{\theta} = 0$.</p>
+    <button class="quiz-btn" onclick="toggleAnswer('ans2')">Xem đáp án</button>
+    <div id="ans2" class="quiz-answer">
+        <p>Thay: $\sin\theta \approx \theta$, $\cos\theta \approx 1$, $\dot{\theta}^2\sin\theta \approx 0$.</p>
+        <p>$\ddot{\theta} + 3\dot{\theta}(1) + 5\theta - 0 = u(1)$</p>
+        <p>$\boxed{\ddot{\theta} + 3\dot{\theta} + 5\theta = u}$</p>
+        <p>State Space: $x_1 = \theta, x_2 = \dot{\theta}$:</p>
+        <p>$A = \begin{bmatrix} 0 & 1 \\ -5 & -3 \end{bmatrix}$, $B = \begin{bmatrix} 0 \\ 1 \end{bmatrix}$.</p>
+    </div>
+</div>
+
+<!-- BT 3 -->
+<div class="quiz">
+    <span class="bt">📝 Bài 3: Controllability</span>
+    <p>Cho $A = \begin{bmatrix} 0 & 1 \\ -2 & -3 \end{bmatrix}$, $B = \begin{bmatrix} 0 \\ 1 \end{bmatrix}$. Hệ có Controllable không?</p>
+    <button class="quiz-btn" onclick="toggleAnswer('ans3')">Xem đáp án</button>
+    <div id="ans3" class="quiz-answer">
+        <p>$AB = \begin{bmatrix} 0 & 1 \\ -2 & -3 \end{bmatrix}\begin{bmatrix} 0 \\ 1 \end{bmatrix} = \begin{bmatrix} 1 \\ -3 \end{bmatrix}$.</p>
+        <p>$\mathcal{C} = [B \quad AB] = \begin{bmatrix} 0 & 1 \\ 1 & -3 \end{bmatrix}$.</p>
+        <p>$\det(\mathcal{C}) = 0 \cdot (-3) - 1 \cdot 1 = -1 \neq 0$.</p>
+        <p>$\text{rank}(\mathcal{C}) = 2 = n$ → <strong>Controllable ✓</strong></p>
+    </div>
+</div>
+
+<!-- BT 4 -->
+<div class="quiz">
+    <span class="bt">📝 Bài 4: Thay số vào Con lắc Ngược</span>
+    <p>Cho $M = 1$ kg, $m = 0.1$ kg, $l = 0.3$ m, $g = 9.81$, $I = 0.006$ kg·m². Tính ma trận $A, B$ cụ thể (thay số vào công thức Phần 6.2).</p>
+    <button class="quiz-btn" onclick="toggleAnswer('ans4')">Xem đáp án</button>
+    <div id="ans4" class="quiz-answer">
+        <p>$\Delta = I(M+m) + Mml^2 = 0.006(1.1) + 1(0.1)(0.09) = 0.0066 + 0.009 = 0.0156$.</p>
+        <p>$A_{23} = -m^2gl^2/\Delta = -(0.01)(9.81)(0.09)/0.0156 = -0.00883/0.0156 = -0.566$.</p>
+        <p>$A_{43} = (M+m)mgl/\Delta = (1.1)(0.1)(9.81)(0.3)/0.0156 = 0.3237/0.0156 = 20.76$.</p>
+        <p>$B_2 = (I+ml^2)/\Delta = (0.006+0.009)/0.0156 = 0.962$.</p>
+        <p>$B_4 = -ml/\Delta = -0.03/0.0156 = -1.923$.</p>
+        <p>$$A = \begin{bmatrix} 0 & 1 & 0 & 0 \\ 0 & 0 & -0.566 & 0 \\ 0 & 0 & 0 & 1 \\ 0 & 0 & 20.76 & 0 \end{bmatrix}, \quad B = \begin{bmatrix} 0 \\ 0.962 \\ 0 \\ -1.923 \end{bmatrix}$$</p>
+    </div>
+</div>
+
+<!-- BT 5 -->
+<div class="quiz">
+    <span class="bt">📝 Bài 5: Python Challenge</span>
+    <p>Sử dụng code từ Bài 7.3, thay đổi:</p>
+    <ol>
+        <li>Đổi $Q_{33}$ từ $100$ thành $1$ (bớt phạt góc). Quan sát θ(t) thay đổi thế nào?</li>
+        <li>Đổi $R$ từ $0.01$ thành $10$ (phạt lực nặng hơn). Lực $F$ thay đổi thế nào?</li>
+        <li>Tăng θ₀ từ $10°$ lên $30°$. LQR còn giữ được con lắc không?</li>
+    </ol>
+    <button class="quiz-btn" onclick="toggleAnswer('ans5')">Xem đáp án</button>
+    <div id="ans5" class="quiz-answer">
+        <p><strong>1.</strong> $Q_{33} = 1$: Con lắc vẫn ổn định nhưng θ dao động lớn hơn trước khi về 0. Vì bộ điều khiển ít "quan tâm" đến góc.</p>
+        <p><strong>2.</strong> $R = 10$: Lực $F$ nhỏ hơn nhiều (bộ điều khiển "tiết kiệm"). Nhưng con lắc mất thời gian lâu hơn để cân bằng, hoặc có thể ngã nếu $R$ quá lớn.</p>
+        <p><strong>3.</strong> $θ_0 = 30°$: LQR có thể vẫn giữ được (vì mô phỏng dùng mô hình phi tuyến), nhưng hiệu suất giảm vì $K$ được thiết kế cho góc nhỏ. Với $θ_0 > 45°$, nhiều khả năng sẽ thất bại.</p>
+    </div>
+</div>
+
+
+<!-- ===== TÓM TẮT ===== -->
+<div style="background:linear-gradient(135deg,#0f172a,#1e293b);color:white;padding:26px;border-radius:10px;margin:35px 0;">
+    <h2 style="color:#60a5fa;margin-top:0;">📌 Tóm tắt Tuần 1-2</h2>
+    <table style="width:100%;color:#e2e8f0;border:none;">
+        <tr style="background:transparent;border:none;"><td style="border:none;padding:6px;width:30%">✅ Bạn đã biết:</td><td style="border:none;padding:6px;">Lagrangian $L=T-V$ → Euler-Lagrange → Phương trình chuyển động</td></tr>
+        <tr style="background:transparent;border:none;"><td style="border:none;padding:6px;">✅ Bạn đã làm:</td><td style="border:none;padding:6px;">Con lắc ngược từ đầu: vật lý → phi tuyến → tuyến tính hóa → $A, B$</td></tr>
+        <tr style="background:transparent;border:none;"><td style="border:none;padding:6px;">✅ Bạn đã mô phỏng:</td><td style="border:none;padding:6px;">Phi tuyến vs Tuyến tính, LQR cân bằng, thay đổi $Q, R$</td></tr>
+        <tr style="background:transparent;border:none;"><td style="border:none;padding:6px;color:#fbbf24;">📅 Tuần 3:</td><td style="border:none;padding:6px;color:#fbbf24;">Sensor Fusion + Đo thông số robot thật!</td></tr>
+    </table>
+</div>
+
+<div style="text-align:center;margin:35px 0;color:var(--text-secondary);font-size:0.9em;">
+    <p>— Hết Tài liệu Tuần 1-2 —</p>
+    <p><em>Nhấn "📄 Xuất PDF" ở góc phải dưới để lưu.</em></p>
+</div>
+
+</body>
+</html>

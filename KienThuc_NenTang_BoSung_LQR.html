@@ -1,0 +1,1362 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kiến Thức Nền Tảng Bổ Sung — Hiểu Sâu LQR từ Gốc Rễ</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+    window.MathJax = {
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']],
+            tags: 'ams'
+        },
+        chtml: { scale: 1 }
+    };
+    </script>
+    <style>
+        :root {
+            --primary: #0f172a;
+            --accent: #2563eb;
+            --accent-light: #3b82f6;
+            --bg: #ffffff;
+            --text: #1e293b;
+            --text-secondary: #475569;
+            --code-bg: #0f172a;
+            --border: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+            font-size: 16.5px;
+            line-height: 1.85;
+            color: var(--text);
+            background: var(--bg);
+            max-width: 920px;
+            margin: 0 auto;
+            padding: 40px 25px;
+        }
+
+        /* ===== COVER ===== */
+        .cover-page {
+            text-align: center;
+            padding: 55px 20px;
+            border-bottom: 3px solid var(--accent);
+            margin-bottom: 45px;
+            background: #f8fafc;
+            border-radius: 12px;
+        }
+        .cover-page h1 {
+            font-size: 2.2em;
+            color: var(--primary);
+            margin-bottom: 12px;
+            line-height: 1.3;
+            border: none;
+            padding: 0;
+        }
+        .cover-page .subtitle {
+            font-size: 1.3em;
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        .cover-page .tagline {
+            font-size: 1.02em;
+            color: var(--text-secondary);
+            font-style: italic;
+            margin-bottom: 25px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .cover-page .meta {
+            font-size: 0.95em;
+            color: var(--text-secondary);
+        }
+
+        /* ===== HEADINGS ===== */
+        h1 { font-size: 1.8em; color: var(--primary); margin: 45px 0 18px; border-bottom: 2px solid var(--accent); padding-bottom: 8px; }
+        h2 { font-size: 1.35em; color: var(--accent); margin: 32px 0 14px; }
+        h3 { font-size: 1.15em; color: var(--primary); margin: 24px 0 10px; }
+        h4 { font-size: 1.02em; color: var(--text); margin: 16px 0 8px; }
+
+        .part-header {
+            background: linear-gradient(135deg, #1e3a8a, #2563eb);
+            color: white;
+            padding: 26px 32px;
+            border-radius: 10px;
+            margin: 50px 0 28px;
+            box-shadow: var(--shadow);
+        }
+        .part-header h1 { color: white; border: none; margin: 0; font-size: 1.6em; padding: 0; }
+        .part-header p { color: #dbeafe; margin-top: 8px; font-size: 1.02em; }
+
+        .part-header-warm {
+            background: linear-gradient(135deg, #b45309, #f59e0b);
+            color: white;
+            padding: 26px 32px;
+            border-radius: 10px;
+            margin: 50px 0 28px;
+            box-shadow: var(--shadow);
+        }
+        .part-header-warm h1 { color: white; border: none; margin: 0; font-size: 1.6em; padding: 0; }
+        .part-header-warm p { color: #fef3c7; margin-top: 8px; font-size: 1.02em; }
+
+        .part-header-green {
+            background: linear-gradient(135deg, #065f46, #10b981);
+            color: white;
+            padding: 26px 32px;
+            border-radius: 10px;
+            margin: 50px 0 28px;
+            box-shadow: var(--shadow);
+        }
+        .part-header-green h1 { color: white; border: none; margin: 0; font-size: 1.6em; padding: 0; }
+        .part-header-green p { color: #ecfdf5; margin-top: 8px; font-size: 1.02em; }
+
+        .part-header-purple {
+            background: linear-gradient(135deg, #581c87, #a855f7);
+            color: white;
+            padding: 26px 32px;
+            border-radius: 10px;
+            margin: 50px 0 28px;
+            box-shadow: var(--shadow);
+        }
+        .part-header-purple h1 { color: white; border: none; margin: 0; font-size: 1.6em; padding: 0; }
+        .part-header-purple p { color: #f3e8ff; margin-top: 8px; font-size: 1.02em; }
+
+        /* ===== CONTENT ===== */
+        p { margin: 11px 0; text-align: justify; }
+        ul, ol { margin: 10px 0 14px 24px; }
+        li { margin: 5px 0; }
+        strong { color: #0f172a; font-weight: 600; }
+        blockquote {
+            border-left: 4px solid var(--accent);
+            background: #f8fafc;
+            padding: 14px 18px;
+            margin: 18px 0;
+            font-style: italic;
+            color: var(--text-secondary);
+            border-radius: 0 8px 8px 0;
+        }
+        .highlight {
+            background: #fef08a;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        /* ===== BOXES ===== */
+        .definition, .theorem, .important-note, .example-box, .analogy-box, .visual-box {
+            padding: 18px 22px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 5px solid;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .definition { background: #eff6ff; border-color: #3b82f6; }
+        .definition .box-title { color: #1d4ed8; }
+        .theorem { background: #faf5ff; border-color: #a855f7; }
+        .theorem .box-title { color: #7e22ce; }
+        .important-note { background: #fffbeb; border-color: #f59e0b; }
+        .important-note .box-title { color: #b45309; }
+        .example-box { background: #f0fdf4; border-color: #22c55e; }
+        .example-box .box-title { color: #15803d; }
+        .analogy-box { background: #fff7ed; border-color: #ea580c; }
+        .analogy-box .box-title { color: #c2410c; }
+        .visual-box { background: #f0f9ff; border-color: #0ea5e9; }
+        .visual-box .box-title { color: #0369a1; }
+        .box-title {
+            font-weight: 700;
+            font-size: 1.04em;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        /* ===== STEP CARDS ===== */
+        .step-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-left: 4px solid var(--accent);
+            border-radius: 6px;
+            padding: 14px 18px;
+            margin: 12px 0;
+        }
+        .step-number {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: 700;
+            margin-right: 8px;
+        }
+
+        /* ===== TABLE ===== */
+        table { width: 100%; border-collapse: collapse; margin: 18px 0; font-size: 0.95em; }
+        th, td { border: 1px solid var(--border); padding: 9px 13px; text-align: left; }
+        th { background: var(--primary); color: white; font-weight: 600; }
+        tr:nth-child(even) { background: #f8fafc; }
+        tr:hover { background: #f1f5f9; }
+
+        /* ===== CODE ===== */
+        pre {
+            background: var(--code-bg);
+            color: #f8fafc;
+            padding: 16px 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: "Fira Code", Consolas, Monaco, monospace;
+            font-size: 0.88em;
+            line-height: 1.55;
+            margin: 18px 0;
+        }
+        code {
+            font-family: "Fira Code", Consolas, Monaco, monospace;
+            background: #f1f5f9;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            color: #b91c1c;
+        }
+        pre code { background: transparent; color: inherit; padding: 0; }
+
+        /* ===== TOC ===== */
+        .toc {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 22px 28px;
+            margin: 28px 0;
+        }
+        .toc h2 { margin-top: 0; color: var(--primary); }
+        .toc ul { list-style: none; margin-left: 0; }
+        .toc > ul > li { margin: 7px 0; font-weight: 600; color: var(--primary); }
+        .toc > ul > li > ul > li { font-weight: 400; color: var(--text); margin: 4px 0; padding-left: 18px; }
+        .toc a { color: inherit; text-decoration: none; }
+        .toc a:hover { color: var(--accent); text-decoration: underline; }
+
+        /* ===== ASCII ART DIAGRAM ===== */
+        .ascii-diagram {
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            padding: 18px 22px;
+            border-radius: 8px;
+            font-family: "Fira Code", Consolas, Monaco, monospace;
+            font-size: 0.85em;
+            line-height: 1.45;
+            white-space: pre;
+            overflow-x: auto;
+            margin: 16px 0;
+            color: var(--primary);
+        }
+
+        /* ===== PRINT ===== */
+        .print-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 12px 22px;
+            border-radius: 30px;
+            font-size: 0.95em;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(37,99,235,0.4);
+            transition: all 0.2s;
+            z-index: 1000;
+        }
+        .print-btn:hover { background: #1d4ed8; transform: translateY(-2px); }
+        @media print {
+            body { padding: 15px; font-size: 11pt; max-width: 100%; }
+            .print-btn { display: none; }
+            .cover-page { padding: 35px 15px; }
+            .part-header, .part-header-warm, .part-header-green, .part-header-purple { page-break-before: always; }
+            .definition, .theorem, .example-box, .important-note, .analogy-box, .visual-box, .step-card { break-inside: avoid; }
+        }
+    </style>
+</head>
+<body>
+
+<button class="print-btn" onclick="window.print()">📄 Xuất PDF</button>
+
+<!-- ===== COVER PAGE ===== -->
+<div class="cover-page">
+    <h1>Kiến Thức Nền Tảng Bổ Sung</h1>
+    <div class="subtitle">HIỂU SÂU LQR TỪ GỐC RỄ — KHÔNG CÒN LỖ HỔNG</div>
+    <div class="tagline">
+        Tài liệu này giải thích tường tận từng khái niệm mà bạn cần biết trước khi làm Bài Tập LQR:
+        Dạng Toàn Phương &amp; "Mặt Bẫy Năng Lượng" — Trị riêng &amp; Mặt phẳng Phức — 
+        Hàm Truyền &amp; Đáp ứng Tần số — Biểu đồ Bode &amp; Nyquist — Gain Margin &amp; Phase Margin — 
+        Ổn định Lyapunov — Ma trận Xác định Dương — Controllability &amp; Observability — 
+        Và tại sao LQR thực sự "Tối ưu"
+    </div>
+    <hr style="width: 50%; margin: 20px auto; border: none; border-top: 1px solid #cbd5e1;">
+    <div class="meta">
+        <p><strong>Phong cách:</strong> Giải thích trực quan, dùng ẩn dụ đời thường, có ví dụ số cụ thể</p>
+        <p><strong>Đối tượng:</strong> Người đã biết sơ sơ LQR, muốn lấp đầy lỗ hổng kiến thức nền</p>
+    </div>
+</div>
+
+<!-- ===== TABLE OF CONTENTS ===== -->
+<div class="toc">
+    <h2>📋 Mục Lục</h2>
+    <ul>
+        <li><a href="#ch1">Chương 1: Dạng Toàn Phương $x^T Q x$ &amp; "Mặt Bẫy Năng Lượng"</a>
+            <ul>
+                <li><a href="#ch1.1">1.1 Dạng toàn phương là gì? Tại sao hàm chi phí LQR dùng nó?</a></li>
+                <li><a href="#ch1.2">1.2 Hình dung "Mặt Bẫy Năng Lượng" (Energy Potential Landscape)</a></li>
+                <li><a href="#ch1.3">1.3 Q thay đổi hình dạng mặt bẫy như thế nào?</a></li>
+                <li><a href="#ch1.4">1.4 Code Python vẽ mặt bẫy 3D</a></li>
+            </ul>
+        </li>
+        <li><a href="#ch2">Chương 2: Ma trận Xác định Dương, Bán Xác định Dương — Trực giác Hình học</a>
+            <ul>
+                <li><a href="#ch2.1">2.1 Xác định dương ($P > 0$) nghĩa là gì?</a></li>
+                <li><a href="#ch2.2">2.2 Bán Xác định dương ($Q \ge 0$) và tại sao LQR chấp nhận nó</a></li>
+                <li><a href="#ch2.3">2.3 Cách kiểm tra nhanh bằng tay</a></li>
+            </ul>
+        </li>
+        <li><a href="#ch3">Chương 3: Trị riêng (Eigenvalues) &amp; Mặt phẳng Phức s — Ngôn ngữ của Ổn định</a>
+            <ul>
+                <li><a href="#ch3.1">3.1 Trị riêng là gì? Ý nghĩa vật lý</a></li>
+                <li><a href="#ch3.2">3.2 Mặt phẳng phức s: "Bản đồ sức khỏe" của hệ thống</a></li>
+                <li><a href="#ch3.3">3.3 Cực (Poles) — Vị trí trị riêng trên bản đồ</a></li>
+                <li><a href="#ch3.4">3.4 Ví dụ số: Đọc trị riêng và suy ra hành vi</a></li>
+            </ul>
+        </li>
+        <li><a href="#ch4">Chương 4: Controllability &amp; Observability — "Tay lái" &amp; "Mắt nhìn"</a>
+            <ul>
+                <li><a href="#ch4.1">4.1 Controllability: Bạn có lái xe đến đó được không?</a></li>
+                <li><a href="#ch4.2">4.2 Stabilizability: Yêu cầu tối thiểu cho LQR</a></li>
+                <li><a href="#ch4.3">4.3 Observability: Bạn có nhìn thấy tình trạng xe không?</a></li>
+                <li><a href="#ch4.4">4.4 Detectability &amp; điều kiện cho Phương trình Riccati</a></li>
+            </ul>
+        </li>
+        <li><a href="#ch5">Chương 5: Hàm Truyền (Transfer Function) &amp; Đáp ứng Tần số — Nền tảng cho Nyquist</a>
+            <ul>
+                <li><a href="#ch5.1">5.1 Biến đổi Laplace: "Phiên dịch" vi phân thành đại số</a></li>
+                <li><a href="#ch5.2">5.2 Hàm Truyền $G(s)$: Tỷ lệ Đầu ra / Đầu vào</a></li>
+                <li><a href="#ch5.3">5.3 Đáp ứng Tần số: Thay $s = j\omega$</a></li>
+                <li><a href="#ch5.4">5.4 Gain (Biên độ) và Phase (Pha) — 2 thông tin cốt lõi</a></li>
+            </ul>
+        </li>
+        <li><a href="#ch6">Chương 6: Biểu đồ Bode — Đọc "Hồ sơ Sức khỏe Tần số"</a>
+            <ul>
+                <li><a href="#ch6.1">6.1 Biểu đồ Bode gồm những gì?</a></li>
+                <li><a href="#ch6.2">6.2 Đọc Bode: Gain Crossover &amp; Phase Crossover</a></li>
+                <li><a href="#ch6.3">6.3 Ví dụ bằng Python</a></li>
+            </ul>
+        </li>
+        <li><a href="#ch7">Chương 7: Biểu đồ Nyquist &amp; Điểm $-1$ — Trái Tim của Độ Bền Vững</a>
+            <ul>
+                <li><a href="#ch7.1">7.1 Biểu đồ Nyquist là gì? Vẽ nó từ đâu?</a></li>
+                <li><a href="#ch7.2">7.2 Tại sao điểm $-1$ lại "chết người"?</a></li>
+                <li><a href="#ch7.3">7.3 Gain Margin &amp; Phase Margin — 2 "khoảng cách an toàn"</a></li>
+                <li><a href="#ch7.4">7.4 Đường tròn đơn vị tâm $-1$ &amp; Bất đẳng thức LQR</a></li>
+                <li><a href="#ch7.5">7.5 Tại sao LQR được đảm bảo GM &amp; PM tốt?</a></li>
+                <li><a href="#ch7.6">7.6 Ví dụ Python vẽ Nyquist</a></li>
+            </ul>
+        </li>
+        <li><a href="#ch8">Chương 8: Ổn định Lyapunov &amp; Ma trận $P$ trong LQR</a>
+            <ul>
+                <li><a href="#ch8.1">8.1 Ý tưởng Lyapunov: "Năng lượng phải luôn giảm"</a></li>
+                <li><a href="#ch8.2">8.2 Hàm Lyapunov $V(x) = x^T P x$ và mối liên hệ với LQR</a></li>
+                <li><a href="#ch8.3">8.3 Phương trình Lyapunov $A^T P + PA = -Q$</a></li>
+            </ul>
+        </li>
+        <li><a href="#ch9">Chương 9: Tại sao LQR "Tối ưu"? — Hiểu Bản chất Sâu nhất</a>
+            <ul>
+                <li><a href="#ch9.1">9.1 "Tối ưu" nghĩa là gì trong Điều khiển?</a></li>
+                <li><a href="#ch9.2">9.2 Ma trận $P$ = "Bảng giá Chi phí còn lại" (Cost-to-go)</a></li>
+                <li><a href="#ch9.3">9.3 Phương trình Riccati xuất hiện tự nhiên từ Nguyên lý Tối ưu</a></li>
+                <li><a href="#ch9.4">9.4 Tổng kết: Bức tranh Toàn cảnh LQR</a></li>
+            </ul>
+        </li>
+    </ul>
+</div>
+
+
+<!-- ################################################################ -->
+<!-- CHƯƠNG 1: DẠNG TOÀN PHƯƠNG & MẶT BẪY NĂNG LƯỢNG               -->
+<!-- ################################################################ -->
+<div class="part-header-warm" id="ch1">
+    <h1>Chương 1: Dạng Toàn Phương $x^T Q x$ &amp; "Mặt Bẫy Năng Lượng"</h1>
+    <p>Hiểu hàm chi phí LQR bằng hình ảnh 3D trực quan</p>
+</div>
+
+<h2 id="ch1.1">1.1 Dạng Toàn Phương là gì? Tại sao hàm chi phí LQR dùng nó?</h2>
+
+<div class="analogy-box">
+    <span class="box-title">🎯 Ẩn dụ Đời thường:</span>
+    <p>Bạn đang chơi bi-a (billiards). Mục tiêu là đưa quả bi trắng về chính giữa bàn (gốc tọa độ $x = 0$). Bạn muốn một công thức để tính <strong>"mức độ tệ hại"</strong> khi quả bi nằm ở vị trí $x$ bất kỳ. Công thức đơn giản nhất là $x^2$ — vì:</p>
+    <ul>
+        <li>Khi $x = 0$ (giữa bàn): "mức tệ hại" = $0^2 = 0$ ✓ (Hoàn hảo)</li>
+        <li>Khi $x = 3$ (lệch 3 đơn vị): "mức tệ hại" = $9$ (Tệ)</li>
+        <li>Khi $x = -3$ (lệch 3 đơn vị sang trái): "mức tệ hại" = $9$ (Cũng tệ ngang)</li>
+    </ul>
+    <p>$x^2$ luôn $\ge 0$, bằng $0$ chỉ khi $x = 0$, và sai lệch càng lớn thì chi phí càng lớn. Đó chính là bản chất của Dạng Toàn Phương!</p>
+</div>
+
+<p>Bây giờ nếu quả bi có <strong>2 tọa độ</strong> $(x_1, x_2)$ trên bàn, ta cần công thức đo "mức tệ hại" cho cả 2 chiều. Đó là <strong>Dạng Toàn Phương (Quadratic Form)</strong>:</p>
+
+$$f(x_1, x_2) = x^T Q x = \begin{bmatrix} x_1 & x_2 \end{bmatrix} \begin{bmatrix} q_{11} & q_{12} \\ q_{12} & q_{22} \end{bmatrix} \begin{bmatrix} x_1 \\ x_2 \end{bmatrix}$$
+
+<p>Khai triển ra:</p>
+$$f(x_1, x_2) = q_{11} x_1^2 + 2 q_{12} x_1 x_2 + q_{22} x_2^2$$
+
+<div class="definition">
+    <span class="box-title">📐 Trường hợp đơn giản nhất: $Q$ là ma trận đường chéo</span>
+    <p>Khi $q_{12} = 0$, công thức đơn giản thành:</p>
+    $$f(x_1, x_2) = q_{11} x_1^2 + q_{22} x_2^2$$
+    <p>Đây chính xác là dạng mà <strong>Hàm chi phí LQR</strong> sử dụng bên trong tích phân $J$! Mỗi $q_{ii}$ cho biết bạn <strong>"phạt" trạng thái $x_i$ nặng đến mức nào</strong>.</p>
+</div>
+
+<h2 id="ch1.2">1.2 Hình dung "Mặt Bẫy Năng Lượng" (Energy Potential Landscape)</h2>
+
+<p>Khái niệm "Mặt Bẫy Năng Lượng" (Energy Potential Landscape) nghe rất hàn lâm, nhưng thực chất cực kỳ trực quan:</p>
+
+<div class="analogy-box">
+    <span class="box-title">🏔️ Ẩn dụ Trực quan: Cái Bát úp ngược</span>
+    <p>Hãy tưởng tượng bạn có một <strong>cái bát (bowl) úp lên</strong>, với đáy bát ở phía trên. Bạn thả một viên bi lên "cảnh quan" này. Viên bi sẽ lăn xuống chỗ thấp nhất — đó là đáy bát.</p>
+    <p>Bây giờ lật cái bát lại, đáy bát ở dưới. Bạn đặt viên bi lên thành bát. Viên bi sẽ lăn xuống đáy (điểm thấp nhất, chi phí = 0). <strong>Cái bát chính là "Mặt Bẫy Năng Lượng"!</strong></p>
+    <p>Hàm $f(x_1, x_2) = q_1 x_1^2 + q_2 x_2^2$ tạo ra một mặt cong hình bát 3D, trong đó:</p>
+    <ul>
+        <li>Trục ngang 1 = $x_1$ (trạng thái 1)</li>
+        <li>Trục ngang 2 = $x_2$ (trạng thái 2)</li>
+        <li>Trục dọc = $f$ (mức chi phí / "độ cao" bẫy năng lượng)</li>
+    </ul>
+</div>
+
+<div class="visual-box">
+    <span class="box-title">🎨 Hình dung các đường đồng mức (Contour Lines):</span>
+    <p>Nếu nhìn cái bát <strong>từ trên xuống</strong> (chụp ảnh từ trên cao), bạn sẽ thấy các <strong>đường đồng mức</strong> — giống đường bình độ trên bản đồ địa hình.</p>
+    <ul>
+        <li>Khi $q_1 = q_2$: Các đường đồng mức là <strong>đường tròn</strong> (bát tròn đều). Hệ thống phạt $x_1$ và $x_2$ ngang nhau.</li>
+        <li>Khi $q_1 > q_2$: Các đường đồng mức bị <strong>bẹp lại theo hướng $x_1$</strong> thành hình elip. Bát dốc hơn theo hướng $x_1$. Hệ thống phạt $x_1$ nặng hơn.</li>
+        <li>Khi $q_1 \gg q_2$ (rất lớn hơn): Elip bẹp dẹt cực kỳ, bát <strong>gần như là hẻm núi chữ V</strong> theo hướng $x_1$. Hệ thống rất "khắc nghiệt" với sai lệch $x_1$.</li>
+    </ul>
+</div>
+
+<h2 id="ch1.3">1.3 $Q$ thay đổi hình dạng mặt bẫy như thế nào?</h2>
+
+<p>Quay lại câu hỏi bài tập: "Khi tăng $q_1$ lên 10 lần, mặt bẫy thay đổi ra sao?" Bây giờ bạn đã có thể trả lời!</p>
+
+<table>
+    <tr>
+        <th>$Q$</th>
+        <th>Hình dạng Đường đồng mức</th>
+        <th>Ý nghĩa Vật lý</th>
+    </tr>
+    <tr>
+        <td>$Q = \text{diag}(1, 1)$</td>
+        <td>Đường tròn (bát tròn đều)</td>
+        <td>Phạt $x_1$ và $x_2$ ngang nhau</td>
+    </tr>
+    <tr>
+        <td>$Q = \text{diag}(10, 1)$</td>
+        <td>Elip bẹp theo trục $x_1$</td>
+        <td>Phạt $x_1$ nặng gấp 10 lần → bộ điều khiển ưu tiên dập $x_1$ trước</td>
+    </tr>
+    <tr>
+        <td>$Q = \text{diag}(100, 1)$</td>
+        <td>Elip rất bẹp (gần hẻm núi)</td>
+        <td>Phạt $x_1$ nặng gấp 100 → bộ điều khiển "điên cuồng" dập $x_1$, bất chấp $x_2$</td>
+    </tr>
+    <tr>
+        <td>$Q = \text{diag}(1, 0)$</td>
+        <td>Các đường song song (bát bị xẻ rãnh, phẳng theo $x_2$)</td>
+        <td>Hoàn toàn không phạt $x_2$ → bộ điều khiển "mù" với $x_2$</td>
+    </tr>
+</table>
+
+<h2 id="ch1.4">1.4 Code Python vẽ Mặt Bẫy Năng Lượng 3D</h2>
+
+<p>Chạy code sau để tận mắt nhìn thấy mặt bẫy thay đổi khi $Q$ thay đổi:</p>
+
+<pre><code>import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+
+x1 = np.linspace(-3, 3, 100)
+x2 = np.linspace(-3, 3, 100)
+X1, X2 = np.meshgrid(x1, x2)
+
+fig, axes = plt.subplots(1, 3, subplot_kw={'projection': '3d'}, figsize=(16, 5))
+
+# Trường hợp 1: Q = diag(1, 1) → Bát tròn đều
+Z1 = 1*X1**2 + 1*X2**2
+axes[0].plot_surface(X1, X2, Z1, cmap='coolwarm', alpha=0.8)
+axes[0].set_title('Q = diag(1, 1)\nBát tròn đều', fontsize=11)
+
+# Trường hợp 2: Q = diag(10, 1) → Bát bẹp theo x1
+Z2 = 10*X1**2 + 1*X2**2
+axes[1].plot_surface(X1, X2, Z2, cmap='coolwarm', alpha=0.8)
+axes[1].set_title('Q = diag(10, 1)\nBát bẹp (dốc hơn theo x1)', fontsize=11)
+
+# Trường hợp 3: Q = diag(1, 0) → Rãnh phẳng theo x2
+Z3 = 1*X1**2 + 0*X2**2
+axes[2].plot_surface(X1, X2, Z3, cmap='coolwarm', alpha=0.8)
+axes[2].set_title('Q = diag(1, 0)\nRãnh phẳng (mù x2)', fontsize=11)
+
+for ax in axes:
+    ax.set_xlabel('x1')
+    ax.set_ylabel('x2')
+    ax.set_zlabel('Chi phí f')
+
+plt.tight_layout()
+plt.show()
+</code></pre>
+
+
+<!-- ################################################################ -->
+<!-- CHƯƠNG 2: MA TRẬN XÁC ĐỊNH DƯƠNG                               -->
+<!-- ################################################################ -->
+<div class="part-header" id="ch2">
+    <h1>Chương 2: Ma trận Xác định Dương &amp; Bán Xác định Dương</h1>
+    <p>Trực giác Hình học — Tại sao LQR cần $P > 0$ nhưng chỉ cần $Q \ge 0$?</p>
+</div>
+
+<h2 id="ch2.1">2.1 Xác định Dương ($P > 0$) nghĩa là gì?</h2>
+
+<div class="analogy-box">
+    <span class="box-title">🍜 Ẩn dụ: Cái bát luôn hứng nước</span>
+    <p>Ma trận $P > 0$ (xác định dương) có nghĩa: "Cái bát" mà $P$ tạo ra <strong>luôn hướng lên</strong>, có đáy duy nhất ở gốc tọa độ. Dù bạn đổ nước từ bất kỳ phía nào, nước đều chảy về đáy bát (gốc tọa độ $x = 0$).</p>
+    <p>Về mặt toán: $x^T P x > 0$ với mọi $x \neq 0$. Dạng toàn phương luôn dương, trừ khi $x$ chính xác bằng $0$.</p>
+</div>
+
+<p><strong>Tại sao LQR cần $P > 0$?</strong> Vì $P$ đại diện cho "chi phí tối ưu còn lại" (Cost-to-go). Nếu $P$ không xác định dương, thì sẽ tồn tại một hướng nào đó mà trạng thái chạy theo đó mà chi phí lại bằng $0$ hoặc âm — vô lý! Chi phí phải luôn dương khi hệ chưa về gốc.</p>
+
+<h2 id="ch2.2">2.2 Bán Xác định Dương ($Q \ge 0$) và tại sao LQR chấp nhận nó</h2>
+
+<p>Ma trận $Q \ge 0$ (bán xác định dương) cho phép <strong>một số hướng không bị phạt</strong>:</p>
+$$x^T Q x \ge 0 \quad \text{với mọi } x$$
+<p>Chú ý dấu $\ge$ (thay vì $>$). Tức là có thể tồn tại $x \neq 0$ mà $x^T Q x = 0$.</p>
+
+<div class="example-box">
+    <span class="box-title">💡 Ví dụ cụ thể:</span>
+    <p>$Q = \begin{bmatrix} 1 & 0 \\ 0 & 0 \end{bmatrix}$. Khi đó $x^T Q x = x_1^2$.</p>
+    <ul>
+        <li>Nếu $x = \begin{bmatrix} 0 \\ 5 \end{bmatrix}$ (chỉ $x_2$ lớn) → chi phí = $0$. Hệ thống <strong>không phạt $x_2$</strong>!</li>
+        <li>Điều này giống "cái bát" bị xẻ thành "rãnh" — phẳng lì theo hướng $x_2$.</li>
+    </ul>
+    <p><strong>Hệ quả:</strong> Bộ điều khiển LQR sẽ <strong>không chủ động dập $x_2$</strong> (vì $x_2$ lớn hay nhỏ đều chi phí = $0$). Tuy nhiên, nếu $(A, Q^{1/2})$ quan sát được, thì $x_2$ vẫn bị kéo về $0$ gián tiếp qua sự liên kết động lực học (coupling) giữa $x_1$ và $x_2$ trong ma trận $A$.</p>
+</div>
+
+<h2 id="ch2.3">2.3 Cách kiểm tra nhanh bằng tay</h2>
+
+<p>Cho ma trận $2 \times 2$: $M = \begin{bmatrix} a & b \\ b & d \end{bmatrix}$</p>
+
+<table>
+    <tr>
+        <th>Tính chất</th>
+        <th>Điều kiện kiểm tra</th>
+        <th>Ý nghĩa Hình học</th>
+    </tr>
+    <tr>
+        <td>Xác định dương ($M > 0$)</td>
+        <td>$a > 0$ VÀ $\det(M) = ad - b^2 > 0$</td>
+        <td>Bát lõm, đáy ở gốc tọa độ</td>
+    </tr>
+    <tr>
+        <td>Bán xác định dương ($M \ge 0$)</td>
+        <td>$a \ge 0$ VÀ $\det(M) = ad - b^2 \ge 0$</td>
+        <td>Bát lõm hoặc phẳng theo 1 hướng</td>
+    </tr>
+    <tr>
+        <td>Không xác định (Indefinite)</td>
+        <td>$\det(M) < 0$</td>
+        <td>Mặt yên ngựa (saddle) — có chỗ lõm, chỗ lồi</td>
+    </tr>
+</table>
+
+<div class="example-box">
+    <span class="box-title">✏️ Kiểm tra nhanh:</span>
+    <p>$P = \begin{bmatrix} 6 & 2 \\ 2 & 1 \end{bmatrix}$ (kết quả Bài 2.1 trong Tài liệu Bài tập):</p>
+    <ul>
+        <li>$a = 6 > 0$ ✓</li>
+        <li>$\det(P) = 6 \times 1 - 2^2 = 6 - 4 = 2 > 0$ ✓</li>
+    </ul>
+    <p>→ $P > 0$. Ma trận nghiệm Riccati hợp lệ!</p>
+</div>
+
+
+<!-- ################################################################ -->
+<!-- CHƯƠNG 3: TRỊ RIÊNG & MẶT PHẲNG PHỨC                          -->
+<!-- ################################################################ -->
+<div class="part-header-green" id="ch3">
+    <h1>Chương 3: Trị riêng &amp; Mặt phẳng Phức $s$ — Ngôn ngữ của Ổn định</h1>
+    <p>Hiểu tại sao "cực nằm bên trái" = hệ ổn định</p>
+</div>
+
+<h2 id="ch3.1">3.1 Trị riêng là gì? Ý nghĩa Vật lý</h2>
+
+<div class="analogy-box">
+    <span class="box-title">🎸 Ẩn dụ: Dây đàn guitar</span>
+    <p>Khi bạn gảy dây đàn guitar, dây dao động với tần số riêng (frequency) và biên độ tắt dần theo thời gian (damping). Mỗi dây có một "nhịp rung riêng" — đó chính là <strong>Trị riêng (Eigenvalue)</strong> của hệ cơ học đó.</p>
+    <p>Một hệ thống bậc $n$ có $n$ trị riêng = $n$ "nhịp rung riêng", gọi là các <strong>Mode dao động</strong>.</p>
+</div>
+
+<p>Cho ma trận $A$ kích thước $n \times n$, trị riêng $\lambda$ là nghiệm của phương trình:</p>
+$$\det(\lambda I - A) = 0$$
+
+<p>Mỗi trị riêng $\lambda$ là một <strong>số phức</strong>: $\lambda = \sigma + j\omega$, trong đó:</p>
+<ul>
+    <li><strong>$\sigma$ (phần thực)</strong> = tốc độ tăng/giảm biên độ ($\sigma < 0$: tắt dần, $\sigma > 0$: phân kỳ)</li>
+    <li><strong>$\omega$ (phần ảo)</strong> = tần số dao động ($\omega = 0$: không dao động, $|\omega|$ lớn: rung nhanh)</li>
+</ul>
+
+<h2 id="ch3.2">3.2 Mặt phẳng Phức $s$: "Bản đồ Sức khỏe" của Hệ thống</h2>
+
+<p>Mặt phẳng phức $s$ là một "bản đồ" 2D, trong đó:</p>
+<ul>
+    <li>Trục ngang = Phần thực $\sigma$ (Re)</li>
+    <li>Trục dọc = Phần ảo $\omega$ (Im)</li>
+</ul>
+
+<div class="ascii-diagram">
+         Im (ω)
+          ↑
+          |    × λ₂ = -1 + 3j  (tắt dần + dao động)
+          |   
+  --------|--------|--------→ Re (σ)
+          |        |
+          |    × λ₃ = -1 - 3j  (liên hợp phức)
+          |
+     NỬA TRÁI     NỬA PHẢI
+     (ổn định)   (phân kỳ!)
+
+  × λ₁ = -2 (tắt dần, không dao động)
+</div>
+
+<div class="important-note">
+    <span class="box-title">⚡ QUY TẮC VÀNG CỦA ỔN ĐỊNH:</span>
+    <p><strong>Hệ thống ổn định ⟺ TẤT CẢ trị riêng nằm ở NỬA TRÁI mặt phẳng phức</strong> (phần thực $\sigma < 0$).</p>
+    <ul>
+        <li>$\lambda = -2$: Đáp ứng $e^{-2t}$ → tắt dần nhanh ✓</li>
+        <li>$\lambda = -1 \pm 3j$: Đáp ứng $e^{-t}\sin(3t)$ → dao động tắt dần ✓</li>
+        <li>$\lambda = +5$: Đáp ứng $e^{+5t}$ → BÙ LÊN VÔ CỰC! ✗ Phân kỳ!</li>
+    </ul>
+</div>
+
+<h2 id="ch3.3">3.3 Cực (Poles) — Vị trí trị riêng trên bản đồ</h2>
+
+<p>Trong Lý thuyết Điều khiển, trị riêng của ma trận $A$ còn được gọi là <strong>Cực (Poles)</strong> của hệ thống. "Gán cực" (Pole Placement) nghĩa là thiết kế bộ điều khiển để <strong>di chuyển các cực sang nửa trái</strong> mặt phẳng phức.</p>
+
+<p><strong>LQR và Gán cực khác nhau ở đâu?</strong></p>
+<ul>
+    <li><strong>Gán cực:</strong> Kỹ sư tự chọn vị trí cực (ví dụ $\lambda = -20$). Đặt xa bên trái → hệ phản ứng nhanh, NHƯNG cần lực $u$ cực lớn. Gán cực không kiểm soát lực $u$!</li>
+    <li><strong>LQR:</strong> Thuật toán TỰ ĐỘNG tìm vị trí cực tối ưu, vừa nhanh vừa tiết kiệm lực. LQR cân bằng giữa "muốn nhanh" ($Q$) và "giới hạn lực" ($R$).</li>
+</ul>
+
+<h2 id="ch3.4">3.4 Ví dụ số: Đọc trị riêng và suy ra hành vi</h2>
+
+<div class="example-box">
+    <span class="box-title">📊 Ví dụ:</span>
+    <p>Hệ vòng kín $A_{cl} = A - BK$ từ Bài 2.1 cho ra $\lambda_1 = -1, \lambda_2 = -2$.</p>
+    <ul>
+        <li>$\lambda_1 = -1$: Mode 1 tắt dần với hằng số thời gian $\tau_1 = \frac{1}{|\lambda_1|} = 1$ giây. Sau $4\tau_1 = 4$ giây, mode này giảm còn $e^{-4} \approx 2\%$.</li>
+        <li>$\lambda_2 = -2$: Mode 2 nhanh hơn, $\tau_2 = 0.5$ giây. Sau $2$ giây, mode này gần như biến mất.</li>
+        <li>Cả hai đều có $\sigma < 0$ → <strong>Hệ ổn định tiệm cận</strong>.</li>
+        <li>Cả hai đều thực (phần ảo $\omega = 0$) → <strong>Không dao động</strong>, đáp ứng mượt mà.</li>
+    </ul>
+</div>
+
+
+<!-- ################################################################ -->
+<!-- CHƯƠNG 4: CONTROLLABILITY & OBSERVABILITY                       -->
+<!-- ################################################################ -->
+<div class="part-header-purple" id="ch4">
+    <h1>Chương 4: Controllability &amp; Observability</h1>
+    <p>"Bạn có lái được xe không?" và "Bạn có nhìn thấy đường không?"</p>
+</div>
+
+<h2 id="ch4.1">4.1 Controllability: Bạn có "lái xe đến đó" được không?</h2>
+
+<div class="analogy-box">
+    <span class="box-title">🚗 Ẩn dụ: Xe ô tô có tay lái bị kẹt</span>
+    <p>Bạn lái xe ô tô. Bàn đạp ga ($u$) giúp xe tiến/lùi theo trục $x_1$. Nhưng nếu <strong>tay lái bị kẹt</strong>, bạn không thể rẽ trái/phải (trục $x_2$). Dù nhấn ga bao nhiêu, xe chỉ đi thẳng — bạn <strong>không bao giờ đến được</strong> điểm nằm bên lề đường.</p>
+    <p>Hệ thống này <strong>không điều khiển được (Not Controllable)</strong> theo hướng $x_2$.</p>
+</div>
+
+<div class="definition">
+    <span class="box-title">📐 Định nghĩa Controllability:</span>
+    <p>Cặp $(A, B)$ được gọi là <strong>Điều khiển được hoàn toàn</strong> nếu từ bất kỳ trạng thái ban đầu $x_0$ nào, luôn tồn tại tín hiệu $u(t)$ đưa hệ về gốc tọa độ $x = 0$ trong thời gian hữu hạn.</p>
+    <p><strong>Kiểm tra bằng tay:</strong> Lập Ma trận Controllability $\mathcal{C}$:</p>
+    $$\mathcal{C} = \begin{bmatrix} B & AB & A^2 B & \cdots & A^{n-1} B \end{bmatrix}$$
+    <p>Nếu $\text{rank}(\mathcal{C}) = n$ (bậc hệ thống) → Điều khiển được hoàn toàn!</p>
+</div>
+
+<div class="example-box">
+    <span class="box-title">✏️ Ví dụ nhanh:</span>
+    <p>$A = \begin{bmatrix} 0 & 1 \\ 0 & -2 \end{bmatrix}, B = \begin{bmatrix} 0 \\ 1 \end{bmatrix}$ (Bài 2.1).</p>
+    <p>$\mathcal{C} = [B \quad AB] = \left[\begin{bmatrix} 0 \\ 1 \end{bmatrix} \quad \begin{bmatrix} 1 \\ -2 \end{bmatrix}\right] = \begin{bmatrix} 0 & 1 \\ 1 & -2 \end{bmatrix}$</p>
+    <p>$\det(\mathcal{C}) = 0 \times (-2) - 1 \times 1 = -1 \neq 0 \implies \text{rank} = 2 = n$. ✓ Điều khiển được!</p>
+</div>
+
+<h2 id="ch4.2">4.2 Stabilizability: Yêu cầu tối thiểu cho LQR</h2>
+
+<p><strong>Stabilizability</strong> (Ổn định hóa được) là điều kiện <strong>yếu hơn</strong> Controllability:</p>
+
+<div class="definition">
+    <span class="box-title">📐 Stabilizability vs Controllability:</span>
+    <ul>
+        <li><strong>Controllability:</strong> Bạn phải lái được xe đến <strong>MỌI</strong> điểm trên bản đồ.</li>
+        <li><strong>Stabilizability:</strong> Bạn chỉ cần đảm bảo xe <strong>không lao xuống vực</strong>. Các mode đã ổn định sẵn ($\lambda < 0$) thì kệ nó — nó tự tắt. Chỉ cần mode nguy hiểm ($\lambda > 0$) phải điều khiển được!</li>
+    </ul>
+    <p><strong>Điều kiện Stabilizability:</strong> Mọi mode <strong>không ổn định</strong> ($\text{Re}(\lambda) \ge 0$) phải nằm trong tầm điều khiển của $B$.</p>
+</div>
+
+<p>Quay lại Câu 1.3 trong Bài Tập: Mode không ổn định $\lambda_2 = +5$ không điều khiển được bởi $B$ → Hệ KHÔNG stabilizable → LQR không giải được (Phương trình Riccati vô nghiệm).</p>
+
+<h2 id="ch4.3">4.3 Observability: Bạn có "nhìn thấy" tình trạng xe không?</h2>
+
+<div class="analogy-box">
+    <span class="box-title">👀 Ẩn dụ: Lái xe bịt mắt</span>
+    <p>Bạn lái xe trong sương mù dày đặc, chỉ có 1 cảm biến đo <strong>khoảng cách</strong> đến vạch làn. Bạn <strong>không có cảm biến đo vận tốc</strong>. Liệu chỉ bằng cách quan sát khoảng cách theo thời gian ($y(t) = Cx(t)$), bạn có thể suy ra vận tốc hiện tại không?</p>
+    <p>Nếu CÓ → Hệ Quan sát được (Observable). Nếu KHÔNG → Hệ không Quan sát được.</p>
+</div>
+
+<div class="definition">
+    <span class="box-title">📐 Kiểm tra Observability:</span>
+    $$\mathcal{O} = \begin{bmatrix} C \\ CA \\ CA^2 \\ \vdots \\ CA^{n-1} \end{bmatrix}$$
+    <p>Nếu $\text{rank}(\mathcal{O}) = n$ → Quan sát được hoàn toàn.</p>
+</div>
+
+<h2 id="ch4.4">4.4 Detectability &amp; Điều kiện cho Phương trình Riccati</h2>
+
+<p><strong>Detectability</strong> là phiên bản "yếu" của Observability (giống Stabilizability là phiên bản yếu của Controllability):</p>
+<ul>
+    <li><strong>Observable:</strong> Nhìn thấy TẤT CẢ mode.</li>
+    <li><strong>Detectable:</strong> Nhìn thấy TẤT CẢ mode <strong>không ổn định</strong>. Mode ổn định sẵn thì kệ — nó tự tắt.</li>
+</ul>
+
+<div class="theorem">
+    <span class="box-title">⭐ Định lý Tồn tại Nghiệm Riccati (ARE):</span>
+    <p>Phương trình Riccati đại số $A^T P + PA - PBR^{-1}B^T P + Q = 0$ có nghiệm duy nhất $P > 0$ (ổn định hóa) khi và chỉ khi:</p>
+    <ol>
+        <li>$(A, B)$ <strong>Stabilizable</strong> (mọi mode không ổn định phải điều khiển được)</li>
+        <li>$(A, Q^{1/2})$ <strong>Detectable</strong> (mọi mode không ổn định phải quan sát được qua $Q$)</li>
+    </ol>
+    <p>Đây là lý do Bài 2.2 yêu cầu kiểm tra Observability của $(A, Q^{1/2})$!</p>
+</div>
+
+
+<!-- ################################################################ -->
+<!-- CHƯƠNG 5: HÀM TRUYỀN & ĐÁP ỨNG TẦN SỐ                        -->
+<!-- ################################################################ -->
+<div class="part-header-warm" id="ch5">
+    <h1>Chương 5: Hàm Truyền &amp; Đáp ứng Tần số</h1>
+    <p>Nền tảng cần thiết trước khi học Biểu đồ Bode &amp; Nyquist</p>
+</div>
+
+<h2 id="ch5.1">5.1 Biến đổi Laplace: "Phiên dịch" Vi phân thành Đại số</h2>
+
+<p>Giải phương trình vi phân rất khó. Biến đổi Laplace giúp ta chuyển bài toán vi phân thành bài toán đại số đơn giản hơn.</p>
+
+<div class="analogy-box">
+    <span class="box-title">🌐 Ẩn dụ: Google Translate cho Toán học</span>
+    <p>Phép nhân trong Tiếng Việt khó (phương trình vi phân). Nhưng nếu dịch sang Tiếng Anh (miền Laplace $s$), phép nhân trở nên dễ hơn (đại số). Sau khi giải xong, dịch ngược lại Tiếng Việt (biến đổi Laplace ngược) để lấy đáp án.</p>
+</div>
+
+<p>Quy tắc chuyển đổi cốt lõi:</p>
+<table>
+    <tr>
+        <th>Miền Thời gian $t$</th>
+        <th>Miền Tần số $s$</th>
+    </tr>
+    <tr>
+        <td>$f(t)$</td>
+        <td>$F(s) = \mathcal{L}\{f(t)\} = \int_0^\infty f(t) e^{-st} dt$</td>
+    </tr>
+    <tr>
+        <td>$\dot{x}(t)$ (đạo hàm)</td>
+        <td>$s X(s) - x(0)$</td>
+    </tr>
+    <tr>
+        <td>$\ddot{x}(t)$ (đạo hàm bậc 2)</td>
+        <td>$s^2 X(s) - sx(0) - \dot{x}(0)$</td>
+    </tr>
+    <tr>
+        <td>$e^{at}$</td>
+        <td>$\frac{1}{s - a}$</td>
+    </tr>
+</table>
+
+<h2 id="ch5.2">5.2 Hàm Truyền $G(s)$: Tỷ lệ Đầu ra / Đầu vào</h2>
+
+<p>Hàm truyền $G(s)$ cho biết: <strong>"Nếu tôi đưa vào tín hiệu $U(s)$, đầu ra $Y(s)$ sẽ bằng bao nhiêu?"</strong></p>
+$$G(s) = \frac{Y(s)}{U(s)}$$
+
+<div class="example-box">
+    <span class="box-title">💡 Ví dụ: Hệ lò xo - giảm chấn</span>
+    <p>Phương trình: $m\ddot{x} + b\dot{x} + kx = F$ (lực $F$ là đầu vào, vị trí $x$ là đầu ra).</p>
+    <p>Biến đổi Laplace (giả sử điều kiện đầu = 0):</p>
+    $$(ms^2 + bs + k) X(s) = F(s) \implies G(s) = \frac{X(s)}{F(s)} = \frac{1}{ms^2 + bs + k}$$
+    <p>Hàm truyền này chứa đầy đủ thông tin về hệ thống: khối lượng $m$, ma sát $b$, độ cứng lò xo $k$.</p>
+</div>
+
+<h2 id="ch5.3">5.3 Đáp ứng Tần số: Thay $s = j\omega$</h2>
+
+<p>Đây là bước then chốt nối đến Bode và Nyquist! Khi ta thay $s = j\omega$ (trong đó $j = \sqrt{-1}$ và $\omega$ là tần số), ta được <strong>Đáp ứng Tần số</strong>:</p>
+$$G(j\omega) = \text{số phức phụ thuộc tần số } \omega$$
+
+<div class="analogy-box">
+    <span class="box-title">🎵 Ẩn dụ: Loa và Equalizer</span>
+    <p>Hãy tưởng tượng hệ thống như một <strong>chiếc loa</strong>. Bạn phát nhạc (tín hiệu vào) ở các tần số khác nhau: bass (thấp), mid, treble (cao). Chiếc loa sẽ phản ứng khác nhau ở mỗi tần số — bass có thể rất to (Gain cao) nhưng treble lại bị yếu (Gain thấp), và âm thanh có thể bị trễ (Phase bị lệch).</p>
+    <p>$G(j\omega)$ cho bạn biết chính xác loa sẽ "to bao nhiêu" và "trễ bao nhiêu" ở mỗi tần số $\omega$.</p>
+</div>
+
+<h2 id="ch5.4">5.4 Gain (Biên độ) và Phase (Pha) — 2 thông tin cốt lõi</h2>
+
+<p>Vì $G(j\omega)$ là số phức, ta tách nó thành 2 thành phần:</p>
+$$G(j\omega) = |G(j\omega)| \cdot e^{j\angle G(j\omega)}$$
+<ul>
+    <li><strong>Gain (Biên độ) $|G(j\omega)|$:</strong> Hệ thống khuếch đại tín hiệu lên bao nhiêu lần ở tần số $\omega$.</li>
+    <li><strong>Phase (Pha) $\angle G(j\omega)$:</strong> Tín hiệu ra bị trễ (hoặc sớm) bao nhiêu độ so với tín hiệu vào ở tần số $\omega$.</li>
+</ul>
+
+<div class="example-box">
+    <span class="box-title">🔢 Ví dụ số:</span>
+    <p>Nếu $G(j\omega_0) = -0.5 + 0.5j$ tại $\omega_0 = 3$ rad/s:</p>
+    <ul>
+        <li>$|G(j\omega_0)| = \sqrt{(-0.5)^2 + (0.5)^2} = \sqrt{0.5} \approx 0.707$ → Hệ giảm biên độ xuống 70.7%</li>
+        <li>$\angle G(j\omega_0) = \arctan\left(\frac{0.5}{-0.5}\right) = 135°$ → Tín hiệu ra sớm pha 135° so với tín hiệu vào</li>
+    </ul>
+</div>
+
+
+<!-- ################################################################ -->
+<!-- CHƯƠNG 6: BIỂU ĐỒ BODE                                         -->
+<!-- ################################################################ -->
+<div class="part-header" id="ch6">
+    <h1>Chương 6: Biểu đồ Bode — "Hồ sơ Sức khỏe Tần số"</h1>
+    <p>Đọc hiểu Gain &amp; Phase của hệ thống theo từng tần số</p>
+</div>
+
+<h2 id="ch6.1">6.1 Biểu đồ Bode gồm những gì?</h2>
+
+<p>Biểu đồ Bode gồm <strong>2 đồ thị xếp chồng</strong>, cùng trục hoành là tần số $\omega$ (thang log):</p>
+<ol>
+    <li><strong>Đồ thị Biên độ (Magnitude Plot):</strong> Trục tung = $|G(j\omega)|$ tính bằng dB ($20 \log_{10} |G|$).</li>
+    <li><strong>Đồ thị Pha (Phase Plot):</strong> Trục tung = $\angle G(j\omega)$ tính bằng độ.</li>
+</ol>
+
+<div class="ascii-diagram">
+  Magnitude (dB)
+   20 |
+    0 |----------•---------  ← Gain Crossover (|G| = 1 = 0 dB)
+  -20 |                  \
+  -40 |                   \
+      |-------|-------|-------|→ ω (rad/s, log scale)
+     0.1      1      10     100
+
+  Phase (độ)
+    0 |
+  -90 |     \
+ -135 |      •  ← Phase tại Gain Crossover = Phase Margin
+ -180 |-------\--------  ← Phase Crossover (phase = -180°)
+      |-------|-------|-------|→ ω (rad/s)
+</div>
+
+<h2 id="ch6.2">6.2 Đọc Bode: Gain Crossover &amp; Phase Crossover</h2>
+
+<div class="definition">
+    <span class="box-title">📐 2 Điểm quan trọng trên Bode:</span>
+    <ol>
+        <li><strong>Gain Crossover Frequency ($\omega_{gc}$):</strong> Tần số mà $|G(j\omega)| = 1$ (tức 0 dB). Tại đây hệ thống không khuếch đại cũng không giảm — đây là "ranh giới sống chết".</li>
+        <li><strong>Phase Crossover Frequency ($\omega_{pc}$):</strong> Tần số mà $\angle G(j\omega) = -180°$. Tại đây tín hiệu ra <strong>ngược pha hoàn toàn</strong> với tín hiệu vào.</li>
+    </ol>
+</div>
+
+<p>Từ 2 điểm này, ta tính được <strong>Gain Margin</strong> và <strong>Phase Margin</strong> (sẽ giải thích chi tiết ở Chương 7).</p>
+
+<h2 id="ch6.3">6.3 Ví dụ Python vẽ Biểu đồ Bode</h2>
+
+<pre><code>import numpy as np
+import matplotlib.pyplot as plt
+from scipy import signal
+
+# Hệ thống: G(s) = 10 / (s^2 + 3s + 10)
+num = [10]
+den = [1, 3, 10]
+sys_tf = signal.TransferFunction(num, den)
+
+w = np.logspace(-1, 2, 500)  # Tần số từ 0.1 đến 100 rad/s
+w, mag, phase = signal.bode(sys_tf, w)
+
+fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(9, 6))
+
+# Đồ thị Biên độ
+ax1.semilogx(w, mag, 'b-', linewidth=2)
+ax1.axhline(0, color='r', linestyle='--', alpha=0.5, label='0 dB (Gain = 1)')
+ax1.set_ylabel('Biên độ (dB)')
+ax1.set_title('Biểu đồ Bode')
+ax1.grid(True, which='both', alpha=0.3)
+ax1.legend()
+
+# Đồ thị Pha
+ax2.semilogx(w, phase, 'g-', linewidth=2)
+ax2.axhline(-180, color='r', linestyle='--', alpha=0.5, label='-180° (Phase Crossover)')
+ax2.set_ylabel('Pha (độ)')
+ax2.set_xlabel('Tần số (rad/s)')
+ax2.grid(True, which='both', alpha=0.3)
+ax2.legend()
+
+plt.tight_layout()
+plt.show()
+</code></pre>
+
+
+<!-- ################################################################ -->
+<!-- CHƯƠNG 7: BIỂU ĐỒ NYQUIST & ĐIỂM -1                           -->
+<!-- ################################################################ -->
+<div class="part-header-green" id="ch7">
+    <h1>Chương 7: Biểu đồ Nyquist &amp; Điểm $-1$ — Trái Tim của Độ Bền Vững</h1>
+    <p>Đây là kiến thức then chốt để hiểu tại sao LQR bền vững hơn Gán cực</p>
+</div>
+
+<h2 id="ch7.1">7.1 Biểu đồ Nyquist là gì? Vẽ nó từ đâu?</h2>
+
+<p>Biểu đồ Nyquist lấy <strong>cùng dữ liệu đáp ứng tần số $G(j\omega)$</strong> như Bode, nhưng vẽ theo cách khác:</p>
+
+<ul>
+    <li><strong>Bode:</strong> 2 đồ thị riêng biệt (Gain vs $\omega$, Phase vs $\omega$).</li>
+    <li><strong>Nyquist:</strong> 1 đồ thị duy nhất trên mặt phẳng phức. Mỗi tần số $\omega$ cho 1 điểm $G(j\omega)$ = 1 số phức. Nối tất cả các điểm lại thành 1 đường cong.</li>
+</ul>
+
+<div class="visual-box">
+    <span class="box-title">🎨 Hình dung Nyquist:</span>
+    <p>Trục hoành = phần thực Re($G$), trục tung = phần ảo Im($G$). Khi $\omega$ chạy từ $0$ đến $\infty$, điểm $G(j\omega)$ "di chuyển" trên mặt phẳng phức, vẽ ra một đường cong.</p>
+</div>
+
+<div class="ascii-diagram">
+  Im (phần ảo)
+   ↑
+   |         ω tăng dần
+   |       ↙
+   |    ╱‾‾‾╲      Đường cong Nyquist
+   |   |      |     G(jω) khi ω: 0 → ∞
+   |    ╲___╱
+   |
+ ──●──────────────────→ Re (phần thực)
+  -1   0
+   ↑
+   Điểm chết người!
+</div>
+
+<h2 id="ch7.2">7.2 Tại sao điểm $-1$ lại "chết người"?</h2>
+
+<p>Đây là câu hỏi then chốt! Hãy bắt đầu bằng sơ đồ hồi tiếp (feedback loop):</p>
+
+<div class="ascii-diagram">
+      r(t) = 0     e(t)         u(t)          y(t)
+  ──────(+)──────► Bộ điều khiển K ──► Hệ thống G(s) ──┬──►
+          ↑  -                                           |
+          └───────────────────────────────────────────────┘
+                     Hồi tiếp (Feedback)
+</div>
+
+<p>Hàm truyền vòng kín (Closed-loop Transfer Function):</p>
+$$T(s) = \frac{L(s)}{1 + L(s)}$$
+<p>trong đó $L(s) = K(s) \cdot G(s)$ là <strong>Hàm truyền vòng hở (Open-loop)</strong>.</p>
+
+<div class="important-note">
+    <span class="box-title">💀 Tại sao $-1$ chết người:</span>
+    <p>Nếu tại một tần số $\omega_0$ nào đó, $L(j\omega_0) = -1$, thì mẫu số $1 + L(j\omega_0) = 1 + (-1) = 0$.</p>
+    <p>$\implies T(j\omega_0) = \frac{-1}{0} = \infty$!</p>
+    <p>Đầu ra bùng nổ vô cực → <strong>Hệ mất ổn định</strong>!</p>
+    <p>Vậy nên: <strong>Đường cong Nyquist CẤM đi qua điểm $(-1, 0)$!</strong> Đường cong càng xa điểm $-1$, hệ thống càng bền vững (robust).</p>
+</div>
+
+<h2 id="ch7.3">7.3 Gain Margin &amp; Phase Margin — 2 "Khoảng cách An toàn"</h2>
+
+<p>Bây giờ ta hiểu tại sao điểm $-1$ nguy hiểm. <strong>Gain Margin</strong> và <strong>Phase Margin</strong> đo lường "hệ thống cách điểm chết người bao xa".</p>
+
+<div class="definition">
+    <span class="box-title">📐 Gain Margin (GM) — Biên độ an toàn:</span>
+    <p><strong>Ý nghĩa trực quan:</strong> "Gain của hệ thống có thể tăng lên bao nhiêu lần nữa trước khi hệ mất ổn định?"</p>
+    <p><strong>Đo trên Nyquist:</strong> Tại tần số mà đường cong Nyquist cắt trục thực âm (pha = $-180°$), khoảng cách từ giao điểm đó đến $-1$ chính là GM.</p>
+    <p><strong>Ví dụ:</strong> Nếu đường cong Nyquist cắt trục thực tại $-0.5$, thì khoảng cách đến $-1$ là $0.5$. $GM = \frac{1}{0.5} = 2$ (tức 6 dB). Nghĩa là gain có thể tăng gấp đôi mà hệ vẫn ổn định.</p>
+</div>
+
+<div class="definition">
+    <span class="box-title">📐 Phase Margin (PM) — Pha an toàn:</span>
+    <p><strong>Ý nghĩa trực quan:</strong> "Pha của hệ thống có thể trễ thêm bao nhiêu độ nữa trước khi hệ mất ổn định?"</p>
+    <p><strong>Đo trên Nyquist:</strong> Tại tần số mà $|L(j\omega)| = 1$ (đường cong cắt đường tròn đơn vị tâm gốc), góc giữa giao điểm đó và trục thực âm là PM.</p>
+    <p><strong>Ví dụ:</strong> Nếu PM = $45°$, nghĩa là pha có thể trễ thêm $45°$ nữa (trước khi đạt $-180°$) mà hệ vẫn ổn.</p>
+</div>
+
+<div class="analogy-box">
+    <span class="box-title">🚧 Ẩn dụ: Lái xe trên đường núi</span>
+    <p>Bạn lái xe trên đường núi hẹp, bên phải là vách núi, bên trái là vực sâu. <strong>Gain Margin</strong> và <strong>Phase Margin</strong> giống như khoảng cách từ bánh xe trái đến mép vực. GM = 2 nghĩa là bạn có thể sai lệch gấp đôi mà vẫn chưa rơi. PM = $60°$ nghĩa là tay lái có thể trễ $60°$ mà xe vẫn trên đường.</p>
+    <p><strong>Gán cực:</strong> Lái xe sát mép vực (GM và PM không đảm bảo) → dễ rơi khi gió lớn (nhiễu).</p>
+    <p><strong>LQR:</strong> Luôn giữ khoảng cách an toàn (GM $\ge 2$, PM $\ge 60°$) → bền vững với gió lớn.</p>
+</div>
+
+<h2 id="ch7.4">7.4 Đường tròn đơn vị tâm $-1$ &amp; Bất đẳng thức LQR</h2>
+
+<p>Bây giờ đến khái niệm chìa khóa trong Câu 1.2 của Bài Tập LQR:</p>
+
+<div class="theorem">
+    <span class="box-title">⭐ Bất đẳng thức Hiệu Trả về (Return Difference Inequality):</span>
+    <p>Cho bộ điều khiển LQR với $K = R^{-1}B^T P$, hàm truyền vòng hở $L(s) = K(sI - A)^{-1}B$. LQR đảm bảo:</p>
+    $$|1 + L(j\omega)| \ge 1 \quad \forall \omega$$
+</div>
+
+<p><strong>Ý nghĩa hình học trên Nyquist:</strong></p>
+
+<div class="visual-box">
+    <span class="box-title">🎯 Giải thích từng chữ một:</span>
+    <p>$|1 + L(j\omega)|$ là <strong>khoảng cách từ điểm $L(j\omega)$ đến điểm $-1$</strong> trên mặt phẳng phức (vì $|1 + L| = |L - (-1)|$).</p>
+    <p>Vậy $|1 + L(j\omega)| \ge 1$ có nghĩa: <strong>Đường cong Nyquist luôn nằm BÊN NGOÀI đường tròn bán kính 1 có tâm tại $(-1, 0)$!</strong></p>
+</div>
+
+<div class="ascii-diagram">
+  Im
+   ↑
+   |        Đường tròn đơn vị
+   |        tâm (-1, 0)
+   |       ╱‾‾‾‾╲
+   |     ╱        ╲
+   |   ╱    ●       ╲    Đường Nyquist
+   |  |    -1    r=1  |   ← KHÔNG BAO GIỜ đi vào
+   |   ╲            ╱     vùng này!
+   |     ╲________╱     ~~~~~~~~~~
+   |                   ~~~~~~~~~~~~ ← Nyquist
+   |                  ~~~~~~~~~~~~~    nằm ngoài
+ ──|──────────────────→ Re
+   |
+</div>
+
+<p>Đường cong Nyquist của LQR <strong>không bao giờ lọt vào</strong> đường tròn đơn vị tâm $-1$. Điều này tự động đảm bảo:</p>
+
+<h2 id="ch7.5">7.5 Tại sao LQR được đảm bảo GM &amp; PM tốt?</h2>
+
+<div class="step-card">
+    <span class="step-number">GM</span> <strong>Gain Margin $\ge [\frac{1}{2}, \infty)$:</strong>
+    <p>Đường tròn đơn vị tâm $-1$ cắt trục thực tại hai điểm: $-2$ và $0$. Vì đường Nyquist không đi vào đường tròn, nó <strong>không bao giờ cắt trục thực tại bất kỳ điểm nào giữa $-2$ và $0$</strong>. Điều này nghĩa là:</p>
+    <ul>
+        <li>Gain có thể tăng gấp $\infty$ lần (đường cong không vòng quanh $-1$ khi gain tăng)</li>
+        <li>Gain có thể giảm xuống còn $\frac{1}{2}$ (tức 50%) mà hệ vẫn ổn</li>
+    </ul>
+</div>
+
+<div class="step-card">
+    <span class="step-number">PM</span> <strong>Phase Margin $\ge 60°$:</strong>
+    <p>Tại tần số mà $|L| = 1$ (đường cong cắt đường tròn đơn vị tâm gốc), vì $|1 + L| \ge 1$, góc giữa $L$ và điểm $-1$ ít nhất là $60°$. Nghĩa là pha có thể trễ thêm $60°$ mà hệ vẫn ổn.</p>
+</div>
+
+<div class="important-note">
+    <span class="box-title">⚡ Tóm lại:</span>
+    <p>Bộ điều khiển LQR "miễn phí" nhận được:</p>
+    <ul>
+        <li><strong>Gain Margin:</strong> Từ $\frac{1}{2}$ đến $\infty$ (tức 6 dB đến $\infty$)</li>
+        <li><strong>Phase Margin:</strong> Ít nhất $60°$</li>
+    </ul>
+    <p>Gán cực (Pole Placement) <strong>KHÔNG có bất kỳ đảm bảo nào</strong> về GM hay PM. Nó có thể cho GM = 1.01 hay PM = $2°$ — chỉ cần nhiễu nhỏ là hệ mất ổn định!</p>
+</div>
+
+<h2 id="ch7.6">7.6 Ví dụ Python vẽ Biểu đồ Nyquist</h2>
+
+<pre><code>import numpy as np
+import matplotlib.pyplot as plt
+from scipy import signal
+
+# Hệ thống: L(s) = 10 / (s * (s + 1) * (s + 5))
+num = [10]
+den = np.polymul([1, 0], np.polymul([1, 1], [1, 5]))  # s*(s+1)*(s+5)
+sys_tf = signal.TransferFunction(num, den)
+
+w = np.logspace(-2, 2, 1000)
+w, H = signal.freqresp(sys_tf, w)
+
+fig, ax = plt.subplots(figsize=(8, 8))
+
+# Vẽ đường Nyquist
+ax.plot(H.real, H.imag, 'b-', linewidth=2, label='Nyquist L(jω)')
+ax.plot(H.real, -H.imag, 'b--', alpha=0.4, label='Nyquist (ω < 0)')
+
+# Vẽ đường tròn đơn vị tâm (-1, 0) - "vùng cấm" của LQR
+theta = np.linspace(0, 2*np.pi, 100)
+ax.plot(-1 + np.cos(theta), np.sin(theta), 'r--', linewidth=1.5, 
+        label='Đường tròn đơn vị tâm -1')
+ax.fill(-1 + np.cos(theta), np.sin(theta), alpha=0.08, color='red')
+
+# Đánh dấu điểm -1
+ax.plot(-1, 0, 'rx', markersize=14, markeredgewidth=3, label='Điểm -1 (chết người!)')
+ax.plot(0, 0, 'ko', markersize=5)
+
+ax.set_xlabel('Re (Phần thực)')
+ax.set_ylabel('Im (Phần ảo)')
+ax.set_title('Biểu đồ Nyquist — Vùng đỏ = Vùng CẤM của LQR')
+ax.legend(fontsize=9)
+ax.grid(True, alpha=0.3)
+ax.set_aspect('equal')
+ax.set_xlim(-3, 2)
+ax.set_ylim(-3, 3)
+plt.tight_layout()
+plt.show()
+</code></pre>
+
+
+<!-- ################################################################ -->
+<!-- CHƯƠNG 8: ỔN ĐỊNH LYAPUNOV                                     -->
+<!-- ################################################################ -->
+<div class="part-header-purple" id="ch8">
+    <h1>Chương 8: Ổn định Lyapunov &amp; Ma trận $P$ trong LQR</h1>
+    <p>Tại sao ma trận $P$ có thể "chứng minh" hệ thống ổn định?</p>
+</div>
+
+<h2 id="ch8.1">8.1 Ý tưởng Lyapunov: "Năng lượng phải luôn giảm"</h2>
+
+<div class="analogy-box">
+    <span class="box-title">⚡ Ẩn dụ: Quả bóng trong bát</span>
+    <p>Đặt quả bóng trên thành bát tròn (có ma sát). Bạn không cần giải phương trình chuyển động để biết quả bóng sẽ dừng ở đáy bát. Chỉ cần quan sát: <strong>năng lượng (vị trí + vận tốc) của quả bóng luôn giảm theo thời gian</strong> (do ma sát tiêu hao năng lượng).</p>
+    <p>Đó chính là ý tưởng thiên tài của Lyapunov! Nếu bạn tìm được một "hàm năng lượng" $V(x)$ thỏa mãn:</p>
+    <ol>
+        <li>$V(x) > 0$ khi $x \neq 0$ (năng lượng luôn dương)</li>
+        <li>$V(0) = 0$ (năng lượng = 0 tại điểm cân bằng)</li>
+        <li>$\dot{V}(x) < 0$ (năng lượng luôn giảm theo thời gian)</li>
+    </ol>
+    <p>→ Hệ thống <strong>ổn định tiệm cận</strong> (mọi quỹ đạo đều hội tụ về gốc $x = 0$).</p>
+</div>
+
+<h2 id="ch8.2">8.2 Hàm Lyapunov $V(x) = x^T P x$ và mối liên hệ với LQR</h2>
+
+<p>Cho hệ tuyến tính $\dot{x} = Ax$. Chọn hàm Lyapunov dạng toàn phương:</p>
+$$V(x) = x^T P x$$
+<p>với $P > 0$ (xác định dương). Tính đạo hàm theo thời gian:</p>
+$$\dot{V} = \dot{x}^T P x + x^T P \dot{x} = x^T A^T P x + x^T P A x = x^T (A^T P + PA) x$$
+
+<p>Để $\dot{V} < 0$, cần $A^T P + PA < 0$ (xác định âm), tức cần tồn tại $Q > 0$ sao cho:</p>
+$$A^T P + PA = -Q$$
+
+<div class="theorem">
+    <span class="box-title">⭐ Mối liên hệ với LQR:</span>
+    <p>Trong LQR, phương trình Riccati đại số (ARE) là:</p>
+    $$A^T P + PA - PBR^{-1}B^T P + Q = 0$$
+    <p>Viết lại: $A^T P + PA = PBR^{-1}B^T P - Q$.</p>
+    <p>Khi hệ vòng kín $A_{cl} = A - BR^{-1}B^T P$:</p>
+    $$A_{cl}^T P + PA_{cl} = -(Q + PBR^{-1}B^T P) \le -Q < 0$$
+    <p>Nghĩa là <strong>$V(x) = x^T Px$ chính là hàm Lyapunov của hệ vòng kín LQR</strong>! Điều này chứng minh hệ vòng kín LQR luôn ổn định tiệm cận — "năng lượng" $V$ luôn giảm.</p>
+</div>
+
+<h2 id="ch8.3">8.3 Phương trình Lyapunov $A^T P + PA = -Q$</h2>
+
+<p>Đây là phiên bản "đơn giản" của ARE (khi không có điều khiển $u$). Nó kiểm tra: "Nếu ma trận $A$ là ổn định ($\text{Re}(\lambda_i) < 0$ với mọi $i$), thì tồn tại $P > 0$ nào thỏa mãn $A^T P + PA = -Q$ cho mọi $Q > 0$?"</p>
+
+<div class="definition">
+    <span class="box-title">📐 Định lý Lyapunov cho Hệ Tuyến tính:</span>
+    <p>Ma trận $A$ ổn định (mọi trị riêng có phần thực âm) $\iff$ Với mọi $Q > 0$, phương trình $A^T P + PA = -Q$ có nghiệm duy nhất $P > 0$.</p>
+    <p>Đây là nền tảng lý thuyết để hiểu tại sao Phương trình Riccati (ARE) có nghiệm $P > 0$ khi hệ thống stabilizable.</p>
+</div>
+
+
+<!-- ################################################################ -->
+<!-- CHƯƠNG 9: TẠI SAO LQR TỐI ƯU?                                  -->
+<!-- ################################################################ -->
+<div class="part-header-warm" id="ch9">
+    <h1>Chương 9: Tại sao LQR "Tối ưu"? — Hiểu Bản chất Sâu nhất</h1>
+    <p>Ma trận $P$ = "Bảng giá Chi phí còn lại" &amp; Phương trình Riccati xuất hiện tự nhiên</p>
+</div>
+
+<h2 id="ch9.1">9.1 "Tối ưu" nghĩa là gì trong Điều khiển?</h2>
+
+<div class="analogy-box">
+    <span class="box-title">🗺️ Ẩn dụ: Google Maps tìm đường</span>
+    <p>Bạn muốn đi từ điểm A (trạng thái hiện tại $x_0$) đến điểm B (gốc tọa độ $x = 0$). Có vô số con đường (vô số luật điều khiển $u(t)$). Mỗi đường có "chi phí" khác nhau (tổng thời gian + phí xăng + phí cầu đường).</p>
+    <p><strong>LQR tìm con đường có tổng chi phí THẤP NHẤT</strong>, với chi phí được tính bằng:</p>
+    $$J = \int_0^\infty \underbrace{x^T Q x}_{\text{"Phí thời gian ở ngoài"}} + \underbrace{u^T R u}_{\text{"Phí xăng"}} \, dt$$
+</div>
+
+<p>LQR không chỉ tìm <strong>một</strong> luật điều khiển tốt, mà tìm luật điều khiển <strong>tối ưu nhất có thể</strong> trong tất cả các luật hồi tiếp tuyến tính $u = -Kx$.</p>
+
+<h2 id="ch9.2">9.2 Ma trận $P$ = "Bảng giá Chi phí còn lại" (Cost-to-go)</h2>
+
+<div class="definition">
+    <span class="box-title">📐 Ý nghĩa Vật lý sâu sắc của $P$:</span>
+    <p>Giả sử hệ thống đang ở trạng thái $x$ tại thời điểm hiện tại. <strong>Chi phí tối ưu còn lại</strong> (Cost-to-go) — tức tổng chi phí tối thiểu từ bây giờ đến vô cực nếu dùng luật điều khiển tối ưu — chính là:</p>
+    $$J^*(x) = x^T P x$$
+    <p>Vậy $P$ không phải là một ma trận trừu tượng. Nó là <strong>"Bảng giá"</strong> cho biết: "Nếu bạn đang ở trạng thái $x$, bạn sẽ phải trả tối thiểu $x^T Px$ từ bây giờ."</p>
+</div>
+
+<div class="example-box">
+    <span class="box-title">🔢 Ví dụ cụ thể (Bài 2.1):</span>
+    <p>$P = \begin{bmatrix} 6 & 2 \\ 2 & 1 \end{bmatrix}$. Nếu trạng thái hiện tại $x = \begin{bmatrix} 1 \\ 0 \end{bmatrix}$ (lệch 1 đơn vị ở $x_1$):</p>
+    $$J^* = \begin{bmatrix} 1 & 0 \end{bmatrix} \begin{bmatrix} 6 & 2 \\ 2 & 1 \end{bmatrix} \begin{bmatrix} 1 \\ 0 \end{bmatrix} = 6$$
+    <p>Nghĩa là tổng "hóa đơn" từ bây giờ đến vô cực (tính cả phí trạng thái $Q$ lẫn phí điều khiển $R$) tối thiểu là $6$.</p>
+    <p>Nếu $x = \begin{bmatrix} 0 \\ 1 \end{bmatrix}$ (lệch 1 đơn vị ở $x_2$): $J^* = 1$. Lệch ở $x_1$ "đắt" hơn lệch ở $x_2$ (vì $Q$ phạt $x_1$ nặng hơn)!</p>
+</div>
+
+<h2 id="ch9.3">9.3 Phương trình Riccati xuất hiện Tự nhiên từ Nguyên lý Tối ưu</h2>
+
+<p>Phương trình Riccati không phải "rơi từ trên trời". Nó xuất hiện tự nhiên khi ta áp dụng <strong>Nguyên lý Tối ưu Bellman</strong> vào bài toán LQR:</p>
+
+<div class="step-card">
+    <span class="step-number">1</span> <strong>Viết Nguyên lý Bellman:</strong>
+    <p>Chi phí tối ưu $J^*(x)$ phải thỏa mãn: "Chi phí tối ưu tại $x$ = Chi phí tức thời + Chi phí tối ưu ở trạng thái tiếp theo".</p>
+    $$0 = \min_u \left[ x^T Q x + u^T R u + \frac{d}{dt} J^*(x) \right]$$
+</div>
+
+<div class="step-card">
+    <span class="step-number">2</span> <strong>Thay $J^*(x) = x^T P x$:</strong>
+    <p>$\frac{d}{dt}(x^T Px) = \dot{x}^T Px + x^T P\dot{x} = (Ax + Bu)^T Px + x^T P(Ax + Bu)$</p>
+    $$= x^T(A^T P + PA)x + 2x^T PBu$$
+</div>
+
+<div class="step-card">
+    <span class="step-number">3</span> <strong>Tối ưu hóa theo $u$ (đạo hàm = 0):</strong>
+    $$\frac{\partial}{\partial u}[\cdots] = 2Ru + 2B^T Px = 0 \implies u^* = -R^{-1}B^T Px = -Kx$$
+    <p>Đây chính là <strong>Luật điều khiển LQR tối ưu</strong>!</p>
+</div>
+
+<div class="step-card">
+    <span class="step-number">4</span> <strong>Thay $u^*$ ngược lại, thu được:</strong>
+    $$A^T P + PA - PBR^{-1}B^T P + Q = 0$$
+    <p>Đây chính là <strong>Phương trình Đại số Riccati (ARE)</strong>! Nó xuất hiện tự nhiên từ yêu cầu tối ưu, không phải bịa ra.</p>
+</div>
+
+<h2 id="ch9.4">9.4 Tổng kết: Bức tranh Toàn cảnh LQR</h2>
+
+<div style="background: linear-gradient(135deg, #0f172a, #1e293b); color: white; padding: 30px; border-radius: 10px; margin: 30px 0;">
+    <h3 style="color: #60a5fa; margin-top: 0;">🌐 Bức tranh Toàn cảnh — Mọi thứ kết nối với nhau</h3>
+    <table style="width: 100%; color: #e2e8f0; border-collapse: collapse;">
+        <tr style="border-bottom: 1px solid #334155;">
+            <td style="padding: 10px; border: none; width: 30%;"><strong style="color: #fbbf24;">Hàm chi phí $J$</strong></td>
+            <td style="padding: 10px; border: none;">Dạng toàn phương $x^TQx + u^TRu$ → "Mặt bẫy năng lượng" hình bát (Chương 1)</td>
+        </tr>
+        <tr style="border-bottom: 1px solid #334155;">
+            <td style="padding: 10px; border: none;"><strong style="color: #fbbf24;">Ma trận $Q, R$</strong></td>
+            <td style="padding: 10px; border: none;">$Q$ uốn cong mặt bẫy, $R$ kiềm chế lực. $Q \ge 0$ ok nếu detectable (Chương 2)</td>
+        </tr>
+        <tr style="border-bottom: 1px solid #334155;">
+            <td style="padding: 10px; border: none;"><strong style="color: #34d399;">Ma trận $P$</strong></td>
+            <td style="padding: 10px; border: none;">"Bảng giá chi phí còn lại" $J^* = x^TPx$, đồng thời là Hàm Lyapunov (Chương 8, 9)</td>
+        </tr>
+        <tr style="border-bottom: 1px solid #334155;">
+            <td style="padding: 10px; border: none;"><strong style="color: #34d399;">Phương trình Riccati</strong></td>
+            <td style="padding: 10px; border: none;">Xuất hiện tự nhiên từ Nguyên lý Bellman. Cần $(A,B)$ stabilizable (Chương 4, 9)</td>
+        </tr>
+        <tr style="border-bottom: 1px solid #334155;">
+            <td style="padding: 10px; border: none;"><strong style="color: #818cf8;">Gain $K$</strong></td>
+            <td style="padding: 10px; border: none;">$K = R^{-1}B^TP$ → Di chuyển cực (trị riêng) vào nửa trái mặt phẳng (Chương 3)</td>
+        </tr>
+        <tr style="border-bottom: 1px solid #334155;">
+            <td style="padding: 10px; border: none;"><strong style="color: #818cf8;">Ổn định vòng kín</strong></td>
+            <td style="padding: 10px; border: none;">Cực $A_{cl}$ nằm trái → ổn định. $V = x^TPx$ là Lyapunov → luôn giảm (Chương 3, 8)</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px; border: none;"><strong style="color: #f87171;">Bền vững (Robustness)</strong></td>
+            <td style="padding: 10px; border: none;">Nyquist không đi vào đường tròn đơn vị tâm $-1$ → GM $\ge 2$, PM $\ge 60°$ (Chương 5-7)</td>
+        </tr>
+    </table>
+</div>
+
+<!-- ===== BẢNG TRA CỨU NHANH ===== -->
+<h1>📋 Bảng Tra Cứu Nhanh: Từ khóa → Chương</h1>
+
+<p>Khi đọc Tài liệu Bài Tập LQR mà gặp khái niệm lạ, tra bảng dưới đây:</p>
+
+<table>
+    <tr>
+        <th>Thuật ngữ gặp trong Bài tập</th>
+        <th>Giải thích ở</th>
+    </tr>
+    <tr>
+        <td>"Mặt bẫy năng lượng" / Energy Potential Landscape</td>
+        <td><a href="#ch1">Chương 1 (§1.2)</a></td>
+    </tr>
+    <tr>
+        <td>Dạng toàn phương $x^T Q x$</td>
+        <td><a href="#ch1.1">Chương 1 (§1.1)</a></td>
+    </tr>
+    <tr>
+        <td>Ma trận xác định dương ($P > 0$)</td>
+        <td><a href="#ch2.1">Chương 2 (§2.1)</a></td>
+    </tr>
+    <tr>
+        <td>Ma trận bán xác định dương ($Q \ge 0$)</td>
+        <td><a href="#ch2.2">Chương 2 (§2.2)</a></td>
+    </tr>
+    <tr>
+        <td>Trị riêng / Eigenvalue / Cực (Poles)</td>
+        <td><a href="#ch3">Chương 3</a></td>
+    </tr>
+    <tr>
+        <td>Mặt phẳng phức $s$ / Nửa trái = ổn định</td>
+        <td><a href="#ch3.2">Chương 3 (§3.2)</a></td>
+    </tr>
+    <tr>
+        <td>Controllability / Điều khiển được</td>
+        <td><a href="#ch4.1">Chương 4 (§4.1)</a></td>
+    </tr>
+    <tr>
+        <td>Stabilizability / Ổn định hóa được</td>
+        <td><a href="#ch4.2">Chương 4 (§4.2)</a></td>
+    </tr>
+    <tr>
+        <td>Observability / Quan sát được</td>
+        <td><a href="#ch4.3">Chương 4 (§4.3)</a></td>
+    </tr>
+    <tr>
+        <td>Detectability</td>
+        <td><a href="#ch4.4">Chương 4 (§4.4)</a></td>
+    </tr>
+    <tr>
+        <td>Biến đổi Laplace / Hàm truyền $G(s)$</td>
+        <td><a href="#ch5">Chương 5</a></td>
+    </tr>
+    <tr>
+        <td>Đáp ứng tần số / $G(j\omega)$ / Gain / Phase</td>
+        <td><a href="#ch5.3">Chương 5 (§5.3–5.4)</a></td>
+    </tr>
+    <tr>
+        <td>Biểu đồ Bode / Gain Crossover / Phase Crossover</td>
+        <td><a href="#ch6">Chương 6</a></td>
+    </tr>
+    <tr>
+        <td>Biểu đồ Nyquist / Điểm $-1$</td>
+        <td><a href="#ch7">Chương 7 (§7.1–7.2)</a></td>
+    </tr>
+    <tr>
+        <td>Đường tròn đơn vị tâm $-1$</td>
+        <td><a href="#ch7.4">Chương 7 (§7.4)</a></td>
+    </tr>
+    <tr>
+        <td>Gain Margin / Phase Margin</td>
+        <td><a href="#ch7.3">Chương 7 (§7.3)</a></td>
+    </tr>
+    <tr>
+        <td>Bất đẳng thức Hiệu Trả về / Return Difference Inequality</td>
+        <td><a href="#ch7.4">Chương 7 (§7.4)</a></td>
+    </tr>
+    <tr>
+        <td>Ổn định Lyapunov / Hàm Lyapunov</td>
+        <td><a href="#ch8">Chương 8</a></td>
+    </tr>
+    <tr>
+        <td>Cost-to-go / $J^* = x^TPx$</td>
+        <td><a href="#ch9.2">Chương 9 (§9.2)</a></td>
+    </tr>
+    <tr>
+        <td>Nguyên lý tối ưu Bellman / Phương trình Riccati</td>
+        <td><a href="#ch9.3">Chương 9 (§9.3)</a></td>
+    </tr>
+</table>
+
+<div style="text-align: center; margin: 40px 0; color: var(--text-secondary); font-size: 0.9em;">
+    <p>— Hết tài liệu Kiến Thức Nền Tảng Bổ Sung —</p>
+    <p><em>Sau khi đọc xong tài liệu này, hãy quay lại Tài liệu Bài Tập LQR để làm bài!</em></p>
+    <p><em>Nhấn "📄 Xuất PDF" ở góc phải dưới để lưu.</em></p>
+</div>
+
+</body>
+</html>

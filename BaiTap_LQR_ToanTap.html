@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tài Liệu Bài Tập Toàn Tập &amp; Luyện Tập LQR (Linear Quadratic Regulator)</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+    window.MathJax = {
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']],
+            tags: 'ams'
+        },
+        chtml: { scale: 1 }
+    };
+    </script>
+    <style>
+        :root {
+            --primary: #0f172a;
+            --accent: #2563eb;
+            --accent-light: #3b82f6;
+            --bg: #ffffff;
+            --text: #1e293b;
+            --text-secondary: #475569;
+            --quiz-bg: #f0f9ff;
+            --quiz-border: #bae6fd;
+            --answer-bg: #f0fdf4;
+            --answer-border: #86efac;
+            --warning-bg: #fffbeb;
+            --warning-border: #fde68a;
+            --code-bg: #0f172a;
+            --border: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+            font-size: 16.5px;
+            line-height: 1.8;
+            color: var(--text);
+            background: var(--bg);
+            max-width: 920px;
+            margin: 0 auto;
+            padding: 40px 25px;
+        }
+
+        /* ===== COVER PAGE ===== */
+        .cover-page {
+            text-align: center;
+            padding: 60px 20px;
+            border-bottom: 3px solid var(--accent);
+            margin-bottom: 50px;
+            background: #f8fafc;
+            border-radius: 12px;
+        }
+        .cover-page h1 {
+            font-size: 2.3em;
+            color: var(--primary);
+            margin-bottom: 12px;
+            line-height: 1.3;
+            border: none;
+            padding: 0;
+        }
+        .cover-page .subtitle {
+            font-size: 1.35em;
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: 25px;
+        }
+        .cover-page .tagline {
+            font-size: 1.05em;
+            color: var(--text-secondary);
+            font-style: italic;
+            margin-bottom: 30px;
+        }
+        .cover-page .meta {
+            font-size: 0.95em;
+            color: var(--text-secondary);
+        }
+
+        /* ===== HEADINGS ===== */
+        h1 { font-size: 1.85em; color: var(--primary); margin: 45px 0 20px; border-bottom: 2px solid var(--accent); padding-bottom: 8px; }
+        h2 { font-size: 1.4em; color: var(--accent); margin: 35px 0 15px; }
+        h3 { font-size: 1.18em; color: var(--primary); margin: 25px 0 12px; }
+        h4 { font-size: 1.05em; color: var(--text); margin: 18px 0 8px; }
+
+        .part-header {
+            background: linear-gradient(135deg, #1e3a8a, #2563eb);
+            color: white;
+            padding: 28px 35px;
+            border-radius: 10px;
+            margin: 50px 0 30px;
+            box-shadow: var(--shadow);
+        }
+        .part-header h1 { color: white; border: none; margin: 0; font-size: 1.7em; padding: 0; }
+        .part-header p { color: #dbeafe; margin-top: 8px; font-size: 1.05em; }
+
+        .part-header-intro {
+            background: linear-gradient(135deg, #059669, #10b981);
+            color: white;
+            padding: 28px 35px;
+            border-radius: 10px;
+            margin: 40px 0 30px;
+            box-shadow: var(--shadow);
+        }
+        .part-header-intro h1 { color: white; border: none; margin: 0; font-size: 1.7em; padding: 0; }
+        .part-header-intro p { color: #ecfdf5; margin-top: 8px; font-size: 1.05em; }
+
+        /* ===== CONTENT ===== */
+        p { margin: 12px 0; text-align: justify; }
+        ul, ol { margin: 10px 0 15px 25px; }
+        li { margin: 6px 0; }
+
+        strong { color: #0f172a; font-weight: 600; }
+
+        .highlight {
+            background: #fef08a;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        blockquote {
+            border-left: 4px solid var(--accent);
+            background: #f8fafc;
+            padding: 15px 20px;
+            margin: 20px 0;
+            font-style: italic;
+            color: var(--text-secondary);
+            border-radius: 0 8px 8px 0;
+        }
+
+        /* ===== DEFINITION / THEOREM BOXES ===== */
+        .definition, .theorem, .important-note, .example-box, .analogy-box, .hint-box {
+            padding: 20px 24px;
+            border-radius: 8px;
+            margin: 22px 0;
+            border-left: 5px solid;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .definition {
+            background: #eff6ff;
+            border-color: #3b82f6;
+        }
+        .definition .box-title { color: #1d4ed8; }
+        
+        .theorem {
+            background: #faf5ff;
+            border-color: #a855f7;
+        }
+        .theorem .box-title { color: #7e22ce; }
+        
+        .important-note {
+            background: var(--warning-bg);
+            border-color: #f59e0b;
+        }
+        .important-note .box-title { color: #b45309; }
+        
+        .example-box {
+            background: #f0fdf4;
+            border-color: #22c55e;
+        }
+        .example-box .box-title { color: #15803d; }
+
+        .analogy-box {
+            background: #fff7ed;
+            border-color: #ea580c;
+        }
+        .analogy-box .box-title { color: #c2410c; }
+
+        .hint-box {
+            background: #f1f5f9;
+            border-color: #64748b;
+        }
+        .hint-box .box-title { color: #334155; }
+
+        .box-title {
+            font-weight: 700;
+            font-size: 1.05em;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        /* ===== STEP BY STEP CARDS ===== */
+        .step-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-left: 4px solid var(--accent);
+            border-radius: 6px;
+            padding: 16px 20px;
+            margin: 14px 0;
+        }
+        .step-number {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: 700;
+            margin-right: 8px;
+        }
+
+        /* ===== TABLE ===== */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.95em;
+        }
+        th, td {
+            border: 1px solid var(--border);
+            padding: 10px 14px;
+            text-align: left;
+        }
+        th {
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+        }
+        tr:nth-child(even) { background: #f8fafc; }
+        tr:hover { background: #f1f5f9; }
+
+        /* ===== CODE ===== */
+        pre {
+            background: var(--code-bg);
+            color: #f8fafc;
+            padding: 18px 22px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: "Fira Code", Consolas, Monaco, monospace;
+            font-size: 0.88em;
+            line-height: 1.6;
+            margin: 20px 0;
+        }
+        code {
+            font-family: "Fira Code", Consolas, Monaco, monospace;
+            background: #f1f5f9;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            color: #b91c1c;
+        }
+        pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+        }
+
+        /* ===== TOC ===== */
+        .toc {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 25px 30px;
+            margin: 30px 0;
+        }
+        .toc h2 { margin-top: 0; color: var(--primary); }
+        .toc ul { list-style: none; margin-left: 0; }
+        .toc > ul > li {
+            margin: 8px 0;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        .toc > ul > li > ul > li {
+            font-weight: 400;
+            color: var(--text);
+            margin: 4px 0;
+            padding-left: 20px;
+        }
+        .toc a { color: inherit; text-decoration: none; }
+        .toc a:hover { color: var(--accent); text-decoration: underline; }
+
+        /* ===== PRINT ===== */
+        .print-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 12px 22px;
+            border-radius: 30px;
+            font-size: 0.95em;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(37,99,235,0.4);
+            transition: all 0.2s;
+            z-index: 1000;
+        }
+        .print-btn:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+        }
+
+        @media print {
+            body { padding: 15px; font-size: 11pt; max-width: 100%; }
+            .print-btn { display: none; }
+            .cover-page { padding: 40px 20px; }
+            .part-header, .part-header-intro { page-break-before: always; }
+            .definition, .theorem, .example-box, .important-note, .analogy-box, .hint-box {
+                break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<button class="print-btn" onclick="window.print()">📄 Xuất PDF</button>
+
+<!-- COVER PAGE -->
+<div class="cover-page">
+    <h1>Tài Liệu Bài Tập &amp; Luyện Tập Toàn Tập</h1>
+    <div class="subtitle">BỘ ĐIỀU KHIỂN LQR (LINEAR QUADRATIC REGULATOR)</div>
+    <div class="tagline">
+        Rèn luyện Trực giác Sâu sắc — Giải tay Thuật toán Riccati — Bài toán Kinh tế &amp; Robot Tự Cân Bằng Thực tế
+    </div>
+    <hr style="width: 50%; margin: 25px auto; border: none; border-top: 1px solid #cbd5e1;">
+    <div class="meta">
+        <p><strong>Biên soạn:</strong> Giáo sư Kỹ thuật Điều khiển Tối ưu</p>
+        <p><strong>3 Trụ cột Luyện tập:</strong> Hiểu Sâu Trực Giác $\rightarrow$ Tính Toán Giải Tay $P, K$ $\rightarrow$ Mô Hình Hóa &amp; Code Mô Phỏng Thực Tế</p>
+        <p><strong>Phiên bản:</strong> 1.0 (Có hướng dẫn giải mẫu từng bước &amp; Code Python vẽ đồ thị)</p>
+    </div>
+</div>
+
+<!-- TOC -->
+<div class="toc">
+    <h2>📋 Mục Lục Bộ Bài Tập LQR</h2>
+    <ul>
+        <li><a href="#part1">PHẦN 1: BÀI TẬP "HIỂU SÂU" (TRỰC GIÁC &amp; PHÂN TÍCH LÝ THUYẾT)</a>
+            <ul>
+                <li><a href="#q1.1">1.1 Phân tích năng lượng Ma trận Trọng số Q và R</a></li>
+                <li><a href="#q1.2">1.2 LQR vs Gán cực (Pole Placement) khi có nhiễu mô hình</a></li>
+                <li><a href="#q1.3">1.3 Điều kiện Ổn định hóa (Stabilizability) &amp; Phương trình Riccati</a></li>
+                <li><a href="#q1.4">1.4 Phân tích tỷ lệ đồng dạng $Q$ và $R$</a></li>
+            </ul>
+        </li>
+        <li><a href="#part2">PHẦN 2: BÀI TẬP "TÍNH TOÁN &amp; GIẢI TAY" (NẮM CHẮC THUẬT TOÁN ARE)</a>
+            <ul>
+                <li><a href="#p2.1">2.1 Bài 1: Giải tay LQR cho Hệ bậc 2 tiêu chuẩn (Hướng dẫn 5 bước A-Z)</a></li>
+                <li><a href="#p2.2">2.2 Bài 2: Trường hợp Q Bán Xác Định Dương ($Q \geq 0$) nhưng Hệ vẫn Ổn định</a></li>
+            </ul>
+        </li>
+        <li><a href="#part3">PHẦN 3: BÀI TẬP "ỨNG DỤNG &amp; MỞ RỘNG" (KẾT NỐI THỰC TẾ &amp; PYTHON CODE)</a>
+            <ul>
+                <li><a href="#p3.1">3.1 Bài 3.1: Bài toán Kinh tế Vĩ mô — Lãi suất, Lạm phát &amp; Tăng trưởng GDP</a></li>
+                <li><a href="#p3.2">3.2 Bài 3.2 (Bài toán Khó Chuyên sâu): Robot Tự Cân Bằng (Self-Balancing Robot)</a></li>
+            </ul>
+        </li>
+    </ul>
+</div>
+
+<!-- =========================================================== -->
+<!-- PHẦN 1: BÀI TẬP HIỂU SÂU                                   -->
+<!-- =========================================================== -->
+<div class="part-header" id="part1">
+    <h1>PHẦN 1: BÀI TẬP "HIỂU SÂU" (TRỰC GIÁC &amp; PHÂN TÍCH LÝ THUYẾT)</h1>
+    <p>Rèn luyện tư duy suy luận — Không yêu cầu bấm máy tính phức tạp</p>
+</div>
+
+<div class="important-note">
+    <span class="box-title">💡 Hướng dẫn làm Phần 1:</span>
+    <p>Các câu hỏi phần này nhằm thử thách góc nhìn bản chất của bạn về LQR. Dưới mỗi câu hỏi đều có một **Gợi ý Ẩn {{ ... }}** giúp bạn tự kiểm tra tư duy trước khi xem lời giải đầy đủ.</p>
+</div>
+
+<h2 id="q1.1">Câu 1.1: Phân tích Ma trận Trọng số $Q$ và $R$ từ góc nhìn Năng lượng</h2>
+<p>
+<strong>Tình huống:</strong> Cho bộ điều khiển LQR cho xe tự lái với 2 biến trạng thái: $x_1$ (khoảng cách lệch làn đường, mét) và $x_2$ (vận tốc góc chệch hướng, rad/s). 
+Ma trận $Q = \text{diag}(q_1, q_2)$ và $R = r$.<br>
+Nếu bạn giữ nguyên $q_2$ và $r$, nhưng <strong>tăng $q_1$ lên 10 lần</strong>, hãy giải thích bằng trực giác năng lượng của hàm chi phí $J$:
+</p>
+<ol type="a">
+    <li>Hình dạng "đường cong mặt bẫy năng lượng" (Energy Potential Landscape) của hàm chi phí thay đổi thế nào?</li>
+    <li>Đáp ứng quá độ của xe (thời gian đưa xe về giữa làn) và lực đánh lái $u(t)$ sẽ thay đổi ra sao?</li>
+</ol>
+
+<div class="hint-box">
+    <span class="box-title">🔍 Gợi ý ẩn:</span>
+    <p>{{ Gợi ý: Hàm chi phí $J = \int (q_1 x_1^2 + q_2 x_2^2 + r u^2) dt$. Khi $q_1$ tăng gấp 10 lần, cái "giá" phải trả cho việc lệch làn $x_1$ trở nên đắt đỏ hơn gấp 10 lần so với trước... }}</p>
+</div>
+
+<div class="example-box">
+    <span class="box-title">✅ Lời giải &amp; Phân tích của Giáo sư:</span>
+    <p><strong>a) Về mặt hình học năng lượng:</strong> Hàm chi phí $J$ tạo ra một mặt lõm toàn phương. Khi $q_1$ tăng 10 lần, mặt bẫy chi phí theo hướng trục $x_1$ trở nên <strong>cực kỳ dốc</strong>. Trạng thái $x_1$ chỉ cần nhích nhẹ ra khỏi $0$ là chi phí $J$ sẽ bùng nổ mạnh mẽ.</p>
+    <p><strong>b) Về đáp ứng hệ thống:</strong> Bộ tối ưu LQR bắt buộc phải dồn hết "nỗ lực" để dập tắt sai lệch $x_1$. Kết quả là:</p>
+    <ul>
+        <li>Xe sẽ **trở về giữa làn đường nhanh hơn nhiều** (thời gian ổn định $t_s$ giảm xuống).</li>
+        <li>Tín hiệu đánh lái $u(t)$ ở thời điểm ban đầu sẽ **gắt hơn, lớn hơn** (do bộ điều khiển sẵn sàng chi trả thêm năng lượng $r u^2$ để cứu lấy chi phí $q_1 x_1^2$ đang quá đắt).</li>
+    </ul>
+</div>
+
+<hr style="margin: 30px 0; border: none; border-top: 1px dashed #cbd5e1;">
+
+<h2 id="q1.2">Câu 1.2: LQR vs Gán cực (Pole Placement) khi có Nhiễu Hệ thống</h2>
+<p>
+<strong>Tình huống:</strong> Một kỹ sư dùng phương pháp Gán cực để ép các cực vòng kín về vị trí rất xa bên trái mặt phẳng phức ($s = -20$) để hệ thống phản ứng siêu nhanh. Một kỹ sư khác dùng LQR để tối ưu hóa.<br>
+Khi triển khai thực tế trên vi điều khiển có nhiễu cảm biến và ma sát thay đổi:
+</p>
+<ol type="a">
+    <li>Tại sao bộ Gán cực lại dễ làm cháy động cơ hoặc gây bão hòa Actuator hơn LQR?</li>
+    <li>Tại sao LQR lại được đảm bảo tính "Tối ưu" và độ bền vững (Gain margin $\ge 60^\circ$)?</li>
+</ol>
+
+<div class="hint-box">
+    <span class="box-title">🔍 Gợi ý ẩn:</span>
+    <p>{{ Gợi ý: Gán cực chỉ quan tâm đến vị trí cực $s$ mà hoàn toàn "mù" về giới hạn lực $u$. LQR luôn có thành phần $u^T R u$ trong hàm chi phí để kiềm chế lực $u$... }}</p>
+</div>
+
+<div class="example-box">
+    <span class="box-title">✅ Lời giải &amp; Phân tích của Giáo sư:</span>
+    <p><strong>a) Gán cực bị cháy động cơ vì:</strong> Gán cực chỉ thuần túy toán học — nó ép các cực về $s = -20$ bằng mọi giá mà không hề biết giới hạn vật lý của động cơ là gì. Khi có nhiễu đo, Gain $K$ quá lớn của Gán cực sẽ khuếch đại nhiễu lên cực đại, làm tín hiệu $u(t)$ dao động liên tục giữa $+100\%$ và $-100\%$, gây bão hòa và cháy cầu H động cơ.</p>
+    <p><strong>b) LQR tối ưu và bền vững vì:</strong> LQR luôn phạt nỗ lực điều khiển $u^T R u$. Thuật toán LQR tuân theo **Bất đẳng thức Hiệu Trả về (Return Difference Inequality)** $|1 + L(j\omega)| \geq 1$, đảm bảo biểu đồ Nyquist của LQR không bao giờ đi vào đường tròn đơn vị tâm $-1$. Điều này mang lại Gain margin $[\frac{1}{2}, \infty)$ và Phase margin $\ge 60^\circ$ "miễn phí" mà Gán cực không bao giờ có được.</p>
+</div>
+
+<hr style="margin: 30px 0; border: none; border-top: 1px dashed #cbd5e1;">
+
+<h2 id="q1.3">Câu 1.3: Điều kiện Ổn định hóa (Stabilizability) &amp; Nghiệm Riccati</h2>
+<p>
+<strong>Tình huống:</strong> Giả sử hệ thống có 2 mode dao động: Mode 1 ổn định ($\lambda_1 = -2$), Mode 2 không ổn định ($\lambda_2 = +5$). Ma trận đầu vào $B$ chỉ tác động được vào Mode 1, hoàn toàn không tác động được vào Mode 2 ($B$ không điều khiển được Mode 2).
+</p>
+<ol type="a">
+    <li>Cặp $(A, B)$ này có **Ổn định hóa được (Stabilizable)** hay không?</li>
+    <li>Nếu đưa cặp $(A, B)$ này vào thuật toán giải LQR, điều gì sẽ xảy ra với ma trận nghiệm $P$ của Phương trình Riccati? Giải thích trực quan.</li>
+</ol>
+
+<div class="hint-box">
+    <span class="box-title">🔍 Gợi ý ẩn:</span>
+    <p>{{ Gợi ý: Điều kiện Stabilizable yêu cầu tất cả các mode KHÔNG ỔN ĐỊNH phải điều khiển được. Ở đây Mode không ổn định $\lambda_2 = +5$ lại không điều khiển được... }}</p>
+</div>
+
+<div class="example-box">
+    <span class="box-title">✅ Lời giải &amp; Phân tích của Giáo sư:</span>
+    <p><strong>a) Tính Stabilizable:</strong> Cặp $(A, B)$ <strong>KHÔNG ổn định hóa được</strong>. Bởi vì Mode không ổn định ($\lambda_2 = +5$) nằm ngoài tầm với của đầu vào $B$. Ta không thể dùng $u$ để kéo $\lambda_2$ về nửa trái mặt phẳng phức.</p>
+    <p><strong>b) Số phận của Phương trình Riccati:</strong> Phương trình ARE <strong>KHÔNG CÓ NGHIỆM XÁC ĐỊNH DƯƠNG $P > 0$ ỔN ĐỊNH HÓA</strong>. Trực quan: Do Mode 2 bị thả trôi phân kỳ theo hàm mũ $e^{5t}$, sai lệch trạng thái $x_2(t) \to \infty$. Hàm chi phí tích phân $J = \int_0^\infty (...) dt$ sẽ tiến đến $+\infty$. Máy tính sẽ báo lỗi không tìm được ma trận $P$ hữu hạn.</p>
+</div>
+
+<!-- =========================================================== -->
+<!-- PHẦN 2: BÀI TẬP TÍNH TOÁN & GIẢI TAY                      -->
+<!-- =========================================================== -->
+<div class="part-header" id="part2">
+    <h1>PHẦN 2: BÀI TẬP "TÍNH TOÁN &amp; GIẢI TAY" (NẮM CHẮC THUẬT TOÁN)</h1>
+    <p>Rèn luyện kỹ năng giải tay từng bước Phương trình Riccati Đại số (ARE) cho Hệ bậc 2</p>
+</div>
+
+<h2 id="p2.1">Bài 2.1: Giải tay LQR cho Hệ bậc 2 tiêu chuẩn (Bài giải Mẫu A-Z)</h2>
+
+<p><strong>Đề bài:</strong> Cho hệ thống tuyến tính bậc 2 có các ma trận:</p>
+$$A = \begin{bmatrix} 0 & 1 \\ 0 & -2 \end{bmatrix}, \quad B = \begin{bmatrix} 0 \\ 1 \end{bmatrix}$$
+<p>Chọn các ma trận trọng số: $Q = \begin{bmatrix} 4 & 0 \\ 0 & 1 \end{bmatrix}, \quad R = 1$.</p>
+<p><strong>Yêu cầu:</strong> Giải tay từng bước để tìm Ma trận nghiệm $P$, Ma trận Gain tối ưu $K$, và kiểm tra tính ổn định của hệ vòng kín $A_{cl} = A - BK$.</p>
+
+<div class="theorem">
+    <span class="box-title">📝 BẢN HƯỚNG DẪN GIẢI MẪU 5 BƯỚC CHI TIẾT</span>
+    
+    <p><strong>Bước 1: Thiết lập ma trận $P$ đối xứng với các biến $(p_1, p_2, p_3)$</strong></p>
+    <p>Do $P$ là ma trận đối xứng kích thước $2 \times 2$:</p>
+    $$P = \begin{bmatrix} p_1 & p_2 \\ p_2 & p_3 \end{bmatrix}$$
+
+    <p><strong>Bước 2: Viết Phương trình Đại số Riccati (ARE)</strong></p>
+    $$A^T P + P A - P B R^{-1} B^T P + Q = 0$$
+
+    <p>Tính từng ma trận thành phần:</p>
+    <ul>
+        <li>$A^T P = \begin{bmatrix} 0 & 0 \\ 1 & -2 \end{bmatrix} \begin{bmatrix} p_1 & p_2 \\ p_2 & p_3 \end{bmatrix} = \begin{bmatrix} 0 & 0 \\ p_1 - 2p_2 & p_2 - 2p_3 \end{bmatrix}$</li>
+        <li>$P A = (A^T P)^T = \begin{bmatrix} 0 & p_1 - 2p_2 \\ 0 & p_2 - 2p_3 \end{bmatrix}$</li>
+        <li>$P B = \begin{bmatrix} p_1 & p_2 \\ p_2 & p_3 \end{bmatrix} \begin{bmatrix} 0 \\ 1 \end{bmatrix} = \begin{bmatrix} p_2 \\ p_3 \end{bmatrix}$</li>
+        <li>$P B R^{-1} B^T P = \begin{bmatrix} p_2 \\ p_3 \end{bmatrix} \cdot 1 \cdot \begin{bmatrix} p_2 & p_3 \end{bmatrix} = \begin{bmatrix} p_2^2 & p_2 p_3 \\ p_2 p_3 & p_3^2 \end{bmatrix}$</li>
+    </ul>
+
+    <p>Thế tất cả vào ARE:</p>
+    $$\begin{bmatrix} 0 & p_1 - 2p_2 \\ p_1 - 2p_2 & 2p_2 - 4p_3 \end{bmatrix} - \begin{bmatrix} p_2^2 & p_2 p_3 \\ p_2 p_3 & p_3^2 \end{bmatrix} + \begin{bmatrix} 4 & 0 \\ 0 & 1 \end{bmatrix} = \begin{bmatrix} 0 & 0 \\ 0 & 0 \end{bmatrix}$$
+
+    <p><strong>Bước 3: Khai triển thành hệ 3 phương trình phi tuyến đại số</strong></p>
+    $$\begin{cases}
+    -p_2^2 + 4 = 0 & \text{(Phương trình 1 — phần tử (1,1))} \\[6pt]
+    p_1 - 2p_2 - p_2 p_3 = 0 & \text{(Phương trình 2 — phần tử (1,2))} \\[6pt]
+    2p_2 - 4p_3 - p_3^2 + 1 = 0 & \text{(Phương trình 3 — phần tử (2,2))}
+    \end{cases}$$
+
+    <p><strong>Bước 4: Mẹo giải hệ phương trình phi tuyến</strong></p>
+    <ul>
+        <li>Từ (pt 1): $p_2^2 = 4 \implies p_2 = \pm 2$. Vì $P$ phải là ma trận xác định dương ($P > 0$), chọn nghiệm dương $\mathbf{p_2 = 2}$.</li>
+        <li>Thay $p_2 = 2$ vào (pt 3):
+            $$2(2) - 4p_3 - p_3^2 + 1 = 0 \implies -p_3^2 - 4p_3 + 5 = 0 \implies p_3^2 + 4p_3 - 5 = 0$$
+            Giải phương trình bậc 2: $(p_3 - 1)(p_3 + 5) = 0$. Chọn nghiệm dương $\mathbf{p_3 = 1}$.
+        </li>
+        <li>Thay $p_2 = 2$ và $p_3 = 1$ vào (pt 2):
+            $$p_1 - 2(2) - (2)(1) = 0 \implies p_1 - 4 - 2 = 0 \implies \mathbf{p_1 = 6}$$.
+        </li>
+    </ul>
+    <p>Vậy Ma trận Riccati nghiệm là: $\mathbf{P = \begin{bmatrix} 6 & 2 \\ 2 & 1 \end{bmatrix}}$. (Kiểm tra: $\det(P) = 6 - 4 = 2 > 0$ và $p_1 > 0 \implies P > 0$ thỏa mãn!)</p>
+
+    <p><strong>Bước 5: Tính độ lợi $K$ và kiểm tra ổn định vòng kín</strong></p>
+    $$K = R^{-1} B^T P = 1 \cdot \begin{bmatrix} 0 & 1 \end{bmatrix} \begin{bmatrix} 6 & 2 \\ 2 & 1 \end{bmatrix} = \mathbf{\begin{bmatrix} 2 & 1 \end{bmatrix}}$$
+    <p>Ma trận vòng kín $A_{cl} = A - BK$:</p>
+    $$A_{cl} = \begin{bmatrix} 0 & 1 \\ 0 & -2 \end{bmatrix} - \begin{bmatrix} 0 \\ 1 \end{bmatrix} \begin{bmatrix} 2 & 1 \end{bmatrix} = \begin{bmatrix} 0 & 1 \\ -2 & -3 \end{bmatrix}$$
+    <p>Giá trị riêng $A_{cl}$: $\det(\lambda I - A_{cl}) = \lambda(\lambda + 3) + 2 = \lambda^2 + 3\lambda + 2 = (\lambda + 1)(\lambda + 2) = 0$.</p>
+    <p>$\implies \lambda_1 = -1, \lambda_2 = -2$. Cả hai giá trị riêng đều có phần thực âm $\rightarrow$ <strong>Hệ vòng kín ổn định tiệm cận hoàn hảo! ✓</strong></p>
+</div>
+
+<hr style="margin: 30px 0; border: none; border-top: 1px dashed #cbd5e1;">
+
+<h2 id="p2.2">Bài 2.2: Yêu cầu đặc biệt — Ma trận $Q$ Bán Xác Định Dương ($Q \ge 0$)</h2>
+
+<p><strong>Đề bài:</strong> Cho hệ thống:</p>
+$$A = \begin{bmatrix} 0 & 1 \\ -2 & -3 \end{bmatrix}, \quad B = \begin{bmatrix} 0 \\ 1 \end{bmatrix}$$
+<p>Chọn $R = 1$ và ma trận trọng số $Q = \begin{bmatrix} 1 & 0 \\ 0 & 0 \end{bmatrix}$ (chỉ phạt vị trí $x_1$, <strong>KHÔNG phạt vận tốc $x_2$</strong>, do đó $\det(Q) = 0 \implies Q \ge 0$ là Bán xác định dương).</p>
+
+<p><strong>Yêu cầu:</strong></p>
+<ol type="a">
+    <li>Kiểm tra tính quan sát được của cặp $(A, Q^{1/2})$.</li>
+    <li>Giải tay phương trình ARE để tìm $P$ và $K$. Cho biết hệ vòng kín có ổn định không dù $Q$ bị khuyết trọng số ở $x_2$?</li>
+</ol>
+
+<div class="example-box">
+    <span class="box-title">✅ Lời giải chi tiết Bài 2.2:</span>
+    
+    <p><strong>a) Kiểm tra tính Quan sát được (Observability) của $(A, Q^{1/2})$:</strong></p>
+    <p>Với $Q = \begin{bmatrix} 1 & 0 \\ 0 & 0 \end{bmatrix} \implies C_q = Q^{1/2} = \begin{bmatrix} 1 & 0 \\ 0 & 0 \end{bmatrix}$. Ta lập ma trận quan sát được $\mathcal{O}$:</p>
+    $$\mathcal{O} = \begin{bmatrix} C_q \\ C_q A \end{bmatrix} = \begin{bmatrix} 1 & 0 \\ 0 & 0 \\ 0 & 1 \\ 0 & 0 \end{bmatrix}$$
+    <p>Rõ ràng $\text{rank}(\mathcal{O}) = 2 = n \implies$ Cặp $(A, Q^{1/2})$ **Quan sát được hoàn toàn**!</p>
+
+    <p><strong>b) Giải phương trình Riccati ARE:</strong></p>
+    <p>Đặt $P = \begin{bmatrix} p_1 & p_2 \\ p_2 & p_3 \end{bmatrix}$. Thế vào $A^T P + P A - P B R^{-1} B^T P + Q = 0$:</p>
+    $$A^T P = \begin{bmatrix} 0 & -2 \\ 1 & -3 \end{bmatrix} \begin{bmatrix} p_1 & p_2 \\ p_2 & p_3 \end{bmatrix} = \begin{bmatrix} -2p_2 & -2p_3 \\ p_1 - 3p_2 & p_2 - 3p_3 \end{bmatrix}$$
+    $$A^T P + P A = \begin{bmatrix} -4p_2 & p_1 - 3p_2 - 2p_3 \\ p_1 - 3p_2 - 2p_3 & 2p_2 - 6p_3 \end{bmatrix}$$
+    $$P B R^{-1} B^T P = \begin{bmatrix} p_2^2 & p_2 p_3 \\ p_2 p_3 & p_3^2 \end{bmatrix}$$
+
+    <p>Hệ 3 phương trình đại số với $Q = \text{diag}(1, 0)$:</p>
+    $$\begin{cases}
+    -4p_2 - p_2^2 + 1 = 0 & \text{(pt 1)} \\[6pt]
+    p_1 - 3p_2 - 2p_3 - p_2 p_3 = 0 & \text{(pt 2)} \\[6pt]
+    2p_2 - 6p_3 - p_3^2 = 0 & \text{(pt 3)}
+    \end{cases}$$
+
+    <ul>
+        <li>Từ (pt 1): $p_2^2 + 4p_2 - 1 = 0 \implies p_2 = \frac{-4 + \sqrt{16 + 4}}{2} = -2 + \sqrt{5} \approx \mathbf{0.236}$ (chọn $p_2 > 0$).</li>
+        <li>Thay $p_2 \approx 0.236$ vào (pt 3):
+            $$p_3^2 + 6p_3 - 2(0.236) = 0 \implies p_3^2 + 6p_3 - 0.472 = 0$$
+            $$p_3 = \frac{-6 + \sqrt{36 + 1.888}}{2} \approx \frac{-6 + 6.155}{2} \approx \mathbf{0.078}$$
+        </li>
+        <li>Thay vào (pt 2): $p_1 = 3p_2 + 2p_3 + p_2 p_3 \approx 3(0.236) + 2(0.078) + (0.236)(0.078) \approx \mathbf{0.882}$.</li>
+    </ul>
+
+    <p>Tính Ma trận Gain $K$:</p>
+    $$K = R^{-1} B^T P = \begin{bmatrix} 0 & 1 \end{bmatrix} \begin{bmatrix} 0.882 & 0.236 \\ 0.236 & 0.078 \end{bmatrix} = \mathbf{\begin{bmatrix} 0.236 & 0.078 \end{bmatrix}}$$
+
+    <p><strong>Kết luận cốt lõi:</strong> Giá trị riêng $A_{cl} = A - BK$ là $\lambda_1 \approx -1.02, \lambda_2 \approx -2.06$ (ổn định tiệm cận). Bài tập này chứng minh một định lý quan trọng: <span class="highlight">$Q$ không cần thiết phải là xác định dương ($Q > 0$), chỉ cần $Q \ge 0$ và $(A, Q^{1/2})$ quan sát được là đủ để LQR cho hệ vòng kín ổn định!</span></p>
+</div>
+
+<!-- =========================================================== -->
+<!-- PHẦN 3: BÀI TẬP ỨNG DỤNG & MỞ RỘNG                        -->
+<!-- =========================================================== -->
+<div class="part-header" id="part3">
+    <h1>PHẦN 3: BÀI TẬP "ỨNG DỤNG &amp; MỞ RỘNG" (KẾT NỐI THỰC TẾ)</h1>
+    <p>Mô hình hóa hệ thống thực tế &amp; Lập trình Python mô phỏng đáp ứng</p>
+</div>
+
+<h2 id="p3.1">Bài 3.1: Bài toán Kinh tế Vĩ mô — Lãi suất, Lạm phát &amp; Tăng trưởng GDP</h2>
+
+<p><strong>Bối cảnh thực tế:</strong> Ngân hàng Trung ương muốn dùng công cụ <strong>Lãi suất $u(t)$</strong> để đưa Tỷ lệ Lạm phát $x_1(t)$ và Tăng trưởng GDP $x_2(t)$ về mức mục tiêu an toàn ($0$). Việc thay đổi lãi suất quá đột ngột sẽ gây sốc thị trường tài chính.</p>
+
+<p>Phương trình trạng thái đơn giản hóa của nền kinh tế:</p>
+$$\dot{x}_1 = -0.5 x_1 + 0.8 x_2 - 1.2 u \quad \text{(Lạm phát giảm khi tăng lãi suất } u \text{)}$$
+$$\dot{x}_2 = -0.2 x_1 - 0.1 x_2 - 0.5 u \quad \text{(Tăng trưởng GDP giảm nhẹ khi tăng lãi suất } u \text{)}$$
+
+<div class="example-box">
+    <span class="box-title">📋 Yêu cầu &amp; Lời giải Mô hình hóa:</span>
+    <p><strong>a) Dạng Không gian Trạng thái $\dot{x} = Ax + Bu$:</strong></p>
+    $$A = \begin{bmatrix} -0.5 & 0.8 \\ -0.2 & -0.1 \end{bmatrix}, \quad B = \begin{bmatrix} -1.2 \\ -0.5 \end{bmatrix}$$
+
+    <p><strong>b) Lựa chọn Ma trận Trọng số $Q, R$:</strong></p>
+    <ul>
+        <li>Nếu Ngân hàng coi **Lạm phát $x_1$ là mối nguy số 1** (phạt nặng lạm phát): Chọn $Q_{11} = 10.0$.</li>
+        <li>Tăng trưởng GDP $x_2$ quan trọng vừa phải: Chọn $Q_{22} = 2.0$.</li>
+        <li>Muốn tránh sốc lãi suất (thay đổi lãi suất từ từ): Chọn $R = 1.0$.</li>
+    </ul>
+    $$Q = \begin{bmatrix} 10.0 & 0 \\ 0 & 2.0 \end{bmatrix}, \quad R = 1.0$$
+</div>
+
+<h3>Mã nguồn Python Mô phỏng Bài toán Kinh tế</h3>
+
+<pre><code>import numpy as np
+from scipy.linalg import solve_continuous_are
+from scipy.integrate import solve_ivp
+import matplotlib.pyplot as plt
+
+# 1. Khai báo mô hình kinh tế
+A = np.array([[-0.5, 0.8], [-0.2, -0.1]])
+B = np.array([[-1.2], [-0.5]])
+Q = np.diag([10.0, 2.0])
+R = np.array([[1.0]])
+
+# 2. Giải LQR
+P = solve_continuous_are(A, B, Q, R)
+K = np.linalg.inv(R) @ B.T @ P
+print("Ma trận Gain Lãi suất K =", K)
+
+# 3. Mô phỏng khi Lạm phát ban đầu vọt lên 5% (x1 = 5.0)
+def econ_dynamics(t, x):
+    u = -float(K @ x)
+    dx = A @ x + B.flatten() * u
+    return dx
+
+sol = solve_ivp(econ_dynamics, (0, 10), [5.0, 0.0], t_eval=np.linspace(0, 10, 200))
+
+# 4. Vẽ đồ thị
+plt.figure(figsize=(9, 5))
+plt.plot(sol.t, sol.y[0], 'r-', label='Lạm phát x1 (%)')
+plt.plot(sol.t, sol.y[1], 'g--', label='Tăng trưởng GDP x2 (%)')
+plt.title('Điều khiển LQR Kinh tế Vĩ mô — Triệt tiêu Lạm phát')
+plt.xlabel('Thời gian (Năm)')
+plt.ylabel('Phần trăm (%)')
+plt.grid(True)
+plt.legend()
+plt.show()
+</code></pre>
+
+<hr style="margin: 30px 0; border: none; border-top: 1px dashed #cbd5e1;">
+
+<h2 id="p3.2">Bài 3.2 (Bài toán Khó Chuyên sâu): Robot Tự Cân Bằng (Self-Balancing Robot)</h2>
+
+<p><strong>Bối cảnh Thực tế:</strong> Một Robot 2 bánh tự cân bằng (tương tự xe Segway) gồm thân robot khối lượng $m$, độ dài trọng tâm $l$, gắn trên 2 bánh xe khối lượng $M$. Động cơ tạo mô-men xoắn lực $F$ tác dụng vào bánh xe.</p>
+
+<h3>1. Chứng minh Động lực học từng bước bằng Phương pháp Lagrangian</h3>
+
+<p>Chọn 2 tọa độ suy rộng: Vị trí xe $x$ và Góc nghiêng thân robot $\theta$ (so với phương thẳng đứng).</p>
+
+<div class="step-card">
+    <span class="step-number">Bước 1</span> <strong>Viết Tọa độ và Vận tốc Trọng tâm Robot</strong>
+    <p>Tọa độ trọng tâm thân robot:</p>
+    $$x_p = x + l \sin\theta, \quad y_p = l \cos\theta$$
+    <p>Vận tốc trọng tâm (lấy đạo hàm theo thời gian):</p>
+    $$\dot{x}_p = \dot{x} + l \dot{\theta} \cos\theta, \quad \dot{y}_p = -l \dot{\theta} \sin\theta$$
+</div>
+
+<div class="step-card">
+    <span class="step-number">Bước 2</span> <strong>Tính Động năng ($T$) và Thế năng ($V$)</strong>
+    <p>Động năng toàn phần $T = T_{\text{xe}} + T_{\text{thân}}$:</p>
+    $$T = \frac{1}{2} M \dot{x}^2 + \frac{1}{2} m (\dot{x}_p^2 + \dot{y}_p^2)$$
+    <p>Thay $\dot{x}_p^2 + \dot{y}_p^2 = \dot{x}^2 + 2l\dot{x}\dot{\theta}\cos\theta + l^2\dot{\theta}^2$ vào:</p>
+    $$T = \frac{1}{2}(M + m)\dot{x}^2 + m l \dot{x} \dot{\theta} \cos\theta + \frac{1}{2} m l^2 \dot{\theta}^2$$
+    <p>Thế năng thân robot: $V = m g l \cos\theta$.</p>
+    <p>Hàm Lagrangian $\mathcal{L} = T - V$:</p>
+    $$\mathcal{L} = \frac{1}{2}(M + m)\dot{x}^2 + m l \dot{x} \dot{\theta} \cos\theta + \frac{1}{2} m l^2 \dot{\theta}^2 - m g l \cos\theta$$
+</div>
+
+<div class="step-card">
+    <span class="step-number">Bước 3</span> <strong>Khai triển Phương trình Euler-Lagrange</strong>
+    <p>Cho tọa độ $x$: $\frac{d}{dt}\left(\frac{\partial \mathcal{L}}{\partial \dot{x}}\right) - \frac{\partial \mathcal{L}}{\partial x} = F \implies (M+m)\ddot{x} + ml\ddot{\theta}\cos\theta - ml\dot{\theta}^2\sin\theta = F$</p>
+    <p>Cho tọa độ $\theta$: $\frac{d}{dt}\left(\frac{\partial \mathcal{L}}{\partial \dot{\theta}}\right) - \frac{\partial \mathcal{L}}{\partial \theta} = 0 \implies m l \ddot{x} \cos\theta + m l^2 \ddot{\theta} - m g l \sin\theta = 0$</p>
+</div>
+
+<div class="step-card">
+    <span class="step-number">Bước 4</span> <strong>Tuyến tính hóa quanh điểm cân bằng đứng thẳng ($\theta \approx 0$)</strong>
+    <p>Thay $\sin\theta \approx \theta$, $\cos\theta \approx 1$, $\dot{\theta}^2 \approx 0$:</p>
+    $$\begin{cases} (M+m)\ddot{x} + ml\ddot{\theta} = F \\ ml\ddot{x} + ml^2\ddot{\theta} - mgl\theta = 0 \end{cases}$$
+    <p>Giải hệ rút ra gia tốc $\ddot{x}$ và gia tốc góc $\ddot{\theta}$:</p>
+    $$\ddot{x} = \frac{F - mg\theta}{M}, \quad \ddot{\theta} = \frac{(M+m)g\theta - F}{Ml}$$
+</div>
+
+<h3>2. Mô hình Không gian Trạng thái 4D &amp; Code Python Mô phỏng Phi tuyến</h3>
+
+<p>Chọn $x = [x, \dot{x}, \theta, \dot{\theta}]^T$, với thông số số học: $M = 1.2\text{ kg}, m = 0.2\text{ kg}, l = 0.4\text{ m}, g = 9.81\text{ m/s}^2$:</p>
+
+<pre><code>import numpy as np
+from scipy.linalg import solve_continuous_are
+from scipy.integrate import solve_ivp
+import matplotlib.pyplot as plt
+
+# ==========================================================
+# 1. THAM SỐ VẬT LÝ & MA TRẬN A, B
+# ==========================================================
+M = 1.2    # Khối lượng bánh xe + đế (kg)
+m = 0.2    # Khối lượng thân robot (kg)
+l = 0.4    # Khoảng cách trọng tâm (m)
+g = 9.81
+
+A = np.array([
+    [0, 1, 0, 0],
+    [0, 0, -m*g/M, 0],
+    [0, 0, 0, 1],
+    [0, 0, (M+m)*g/(M*l), 0]
+])
+
+B = np.array([
+    [0],
+    [1/M],
+    [0],
+    [-1/(M*l)]
+])
+
+# 2. Thiết kế LQR (Ưu tiên phạt góc nghiêng theta rất lớn = 150)
+Q = np.diag([10.0, 1.0, 150.0, 1.0])
+R = np.array([[0.02]])
+
+P = solve_continuous_are(A, B, Q, R)
+K = np.linalg.inv(R) @ B.T @ P
+print("--- LQR GAIN K CHO ROBOT TỰ CÂN BẰNG ---")
+print(np.round(K, 3))
+
+# 3. Mô phỏng Động lực học Phi tuyến thực tế
+def robot_nonlinear_dynamics(t, state):
+    x_pos, v, theta, omega = state
+    
+    # Tính lực u = -K * state
+    u = -float(K @ np.array([x_pos, v, theta, omega]))
+    u = np.clip(u, -30.0, 30.0) # Giới hạn lực động cơ 30N
+    
+    # Phương trình phi tuyến Lagrange gốc
+    Sin = np.sin(theta)
+    Cos = np.cos(theta)
+    denom = M + m - m * (Cos**2)
+    
+    x_ddot = (u + m * l * (omega**2) * Sin - m * g * Sin * Cos) / denom
+    theta_ddot = (-u * Cos - m * l * (omega**2) * Sin * Cos + (M + m) * g * Sin) / (l * denom)
+    
+    return [v, x_ddot, omega, theta_ddot]
+
+# Khởi tạo: Robot bị nghiêng 12 độ (0.209 rad)
+sol = solve_ivp(robot_nonlinear_dynamics, (0, 4), [0.0, 0.0, 0.209, 0.0], t_eval=np.linspace(0, 4, 500))
+
+# 4. Vẽ đồ thị kết quả
+plt.figure(figsize=(10, 8))
+
+plt.subplot(3, 1, 1)
+plt.plot(sol.t, sol.y[0], 'b-', linewidth=2)
+plt.ylabel('Vị trí xe x (m)')
+plt.title('Mô phỏng LQR Robot 2 Bánh Tự Cân Bằng')
+plt.grid(True)
+
+plt.subplot(3, 1, 2)
+plt.plot(sol.t, np.degrees(sol.y[2]), 'r-', linewidth=2)
+plt.ylabel('Góc nghiêng (độ)')
+plt.grid(True)
+
+plt.subplot(3, 1, 3)
+u_hist = [-float(K @ sol.y[:, i]) for i in range(len(sol.t))]
+plt.plot(sol.t, u_hist, 'g-', linewidth=2)
+plt.xlabel('Thời gian (s)')
+plt.ylabel('Lực u (N)')
+plt.grid(True)
+
+plt.tight_layout()
+plt.show()
+</code></pre>
+
+<!-- TỔNG KẾT BÀI TẬP -->
+<div style="background: linear-gradient(135deg, #0f172a, #1e293b); color: white; padding: 35px; border-radius: 10px; margin-top: 50px; text-align: center;">
+    <h2 style="color: #60a5fa; margin-top: 0;">🎯 Lời Khuyên của Giáo Sư</h2>
+    <p style="font-size: 1.05em; color: #cbd5e1; max-width: 750px; margin: 10px auto;">
+        Hãy dành thời gian tự giải tay lại Bài 2.1 và Bài 2.2 bằng giấy bút trước khi chạy code Python. Kỹ năng giải tay phương trình Riccati bậc 2 sẽ cho bạn một **trực giác sâu sắc** về cách ma trận $Q$ và $R$ nhào nặn nên luật điều khiển $K$ tối ưu!
+    </p>
+</div>
+
+<div style="text-align: center; margin: 35px 0; color: var(--text-secondary); font-size: 0.9em;">
+    <p>— Hết tài liệu Bài tập LQR —</p>
+    <p><em>Nhấn nút "📄 Xuất PDF" ở góc phải dưới để lưu tài liệu dưới dạng PDF</em></p>
+</div>
+
+</body>
+</html>

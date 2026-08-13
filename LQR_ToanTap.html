@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tài Liệu Học Tập Toàn Tập về LQR — Linear Quadratic Regulator</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+    window.MathJax = {
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']],
+            tags: 'ams'
+        },
+        chtml: { scale: 1 }
+    };
+    </script>
+    <style>
+        :root {
+            --primary: #1e3a8a;
+            --accent: #2563eb;
+            --accent-light: #3b82f6;
+            --bg: #ffffff;
+            --text: #1e293b;
+            --text-secondary: #475569;
+            --quiz-bg: #f0f9ff;
+            --quiz-border: #bae6fd;
+            --answer-bg: #f0fdf4;
+            --answer-border: #86efac;
+            --warning-bg: #fffbeb;
+            --warning-border: #fde68a;
+            --code-bg: #0f172a;
+            --border: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+            font-size: 16.5px;
+            line-height: 1.8;
+            color: var(--text);
+            background: var(--bg);
+            max-width: 920px;
+            margin: 0 auto;
+            padding: 40px 25px;
+        }
+
+        /* ===== COVER PAGE ===== */
+        .cover-page {
+            text-align: center;
+            padding: 60px 20px;
+            border-bottom: 3px solid var(--accent);
+            margin-bottom: 50px;
+            background: #f8fafc;
+            border-radius: 12px;
+        }
+        .cover-page h1 {
+            font-size: 2.5em;
+            color: var(--primary);
+            margin-bottom: 12px;
+            line-height: 1.3;
+            border: none;
+            padding: 0;
+        }
+        .cover-page .subtitle {
+            font-size: 1.4em;
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: 25px;
+        }
+        .cover-page .tagline {
+            font-size: 1.05em;
+            color: var(--text-secondary);
+            font-style: italic;
+            margin-bottom: 30px;
+        }
+        .cover-page .meta {
+            font-size: 0.95em;
+            color: var(--text-secondary);
+        }
+
+        /* ===== HEADINGS ===== */
+        h1 { font-size: 1.9em; color: var(--primary); margin: 45px 0 20px; border-bottom: 2px solid var(--accent); padding-bottom: 8px; }
+        h2 { font-size: 1.45em; color: var(--accent); margin: 35px 0 15px; }
+        h3 { font-size: 1.2em; color: var(--primary); margin: 25px 0 12px; }
+        h4 { font-size: 1.05em; color: var(--text); margin: 18px 0 8px; }
+
+        .part-header {
+            background: linear-gradient(135deg, #1e3a8a, #2563eb);
+            color: white;
+            padding: 28px 35px;
+            border-radius: 10px;
+            margin: 50px 0 30px;
+            box-shadow: var(--shadow);
+        }
+        .part-header h1 { color: white; border: none; margin: 0; font-size: 1.75em; padding: 0; }
+        .part-header p { color: #dbeafe; margin-top: 8px; font-size: 1.05em; }
+
+        .part-header-intro {
+            background: linear-gradient(135deg, #059669, #10b981);
+            color: white;
+            padding: 28px 35px;
+            border-radius: 10px;
+            margin: 40px 0 30px;
+            box-shadow: var(--shadow);
+        }
+        .part-header-intro h1 { color: white; border: none; margin: 0; font-size: 1.75em; padding: 0; }
+        .part-header-intro p { color: #ecfdf5; margin-top: 8px; font-size: 1.05em; }
+
+        /* ===== CONTENT ===== */
+        p { margin: 12px 0; text-align: justify; }
+        ul, ol { margin: 10px 0 15px 25px; }
+        li { margin: 6px 0; }
+
+        strong { color: #0f172a; font-weight: 600; }
+
+        .highlight {
+            background: #fef08a;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        blockquote {
+            border-left: 4px solid var(--accent);
+            background: #f8fafc;
+            padding: 15px 20px;
+            margin: 20px 0;
+            font-style: italic;
+            color: var(--text-secondary);
+            border-radius: 0 8px 8px 0;
+        }
+
+        /* ===== DEFINITION / THEOREM BOXES ===== */
+        .definition, .theorem, .important-note, .example-box, .analogy-box {
+            padding: 20px 24px;
+            border-radius: 8px;
+            margin: 22px 0;
+            border-left: 5px solid;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .definition {
+            background: #eff6ff;
+            border-color: #3b82f6;
+        }
+        .definition .box-title { color: #1d4ed8; }
+        
+        .theorem {
+            background: #faf5ff;
+            border-color: #a855f7;
+        }
+        .theorem .box-title { color: #7e22ce; }
+        
+        .important-note {
+            background: var(--warning-bg);
+            border-color: #f59e0b;
+        }
+        .important-note .box-title { color: #b45309; }
+        
+        .example-box {
+            background: #f0fdf4;
+            border-color: #22c55e;
+        }
+        .example-box .box-title { color: #15803d; }
+
+        .analogy-box {
+            background: #fff7ed;
+            border-color: #ea580c;
+        }
+        .analogy-box .box-title { color: #c2410c; }
+
+        .box-title {
+            font-weight: 700;
+            font-size: 1.05em;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        /* ===== STEP BY STEP CARDS ===== */
+        .step-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-left: 4px solid var(--accent);
+            border-radius: 6px;
+            padding: 16px 20px;
+            margin: 14px 0;
+        }
+        .step-number {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: 700;
+            margin-right: 8px;
+        }
+
+        /* ===== QUIZ ===== */
+        .quiz-section {
+            background: var(--quiz-bg);
+            border: 1px solid var(--quiz-border);
+            border-radius: 10px;
+            padding: 22px 26px;
+            margin: 30px 0;
+        }
+        .quiz-section h3 {
+            color: #0369a1;
+            margin-top: 0;
+            font-size: 1.15em;
+        }
+        .quiz-question {
+            margin: 15px 0 8px;
+        }
+        .quiz-question strong {
+            color: #0284c7;
+        }
+
+        .answer-section {
+            background: var(--answer-bg);
+            border: 1px solid var(--answer-border);
+            border-radius: 8px;
+            padding: 18px 22px;
+            margin: 10px 0 20px;
+        }
+        .answer-section .box-title {
+            color: #16a34a;
+        }
+
+        /* ===== TABLE ===== */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.95em;
+        }
+        th, td {
+            border: 1px solid var(--border);
+            padding: 10px 14px;
+            text-align: left;
+        }
+        th {
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+        }
+        tr:nth-child(even) { background: #f8fafc; }
+        tr:hover { background: #f1f5f9; }
+
+        /* ===== CODE ===== */
+        pre {
+            background: var(--code-bg);
+            color: #f8fafc;
+            padding: 18px 22px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: "Fira Code", Consolas, Monaco, monospace;
+            font-size: 0.88em;
+            line-height: 1.6;
+            margin: 20px 0;
+        }
+        code {
+            font-family: "Fira Code", Consolas, Monaco, monospace;
+            background: #f1f5f9;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            color: #b91c1c;
+        }
+        pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+        }
+
+        /* ===== TOC ===== */
+        .toc {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 25px 30px;
+            margin: 30px 0;
+        }
+        .toc h2 { margin-top: 0; color: var(--primary); }
+        .toc ul { list-style: none; margin-left: 0; }
+        .toc > ul > li {
+            margin: 8px 0;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        .toc > ul > li > ul > li {
+            font-weight: 400;
+            color: var(--text);
+            margin: 4px 0;
+            padding-left: 20px;
+        }
+        .toc a { color: inherit; text-decoration: none; }
+        .toc a:hover { color: var(--accent); text-decoration: underline; }
+
+        /* ===== PRINT ===== */
+        .print-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 12px 22px;
+            border-radius: 30px;
+            font-size: 0.95em;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(37,99,235,0.4);
+            transition: all 0.2s;
+            z-index: 1000;
+        }
+        .print-btn:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+        }
+
+        @media print {
+            body { padding: 15px; font-size: 11pt; max-width: 100%; }
+            .print-btn { display: none; }
+            .cover-page { padding: 40px 20px; }
+            .part-header, .part-header-intro { page-break-before: always; }
+            .quiz-section, .answer-section, .definition, .theorem, .example-box, .important-note, .analogy-box {
+                break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<button class="print-btn" onclick="window.print()">📄 Xuất PDF</button>
+
+<!-- COVER PAGE -->
+<div class="cover-page">
+    <h1>Tài Liệu Học Tập Toàn Tập</h1>
+    <div class="subtitle">LINEAR QUADRATIC REGULATOR (LQR)</div>
+    <div class="tagline">
+        Dành cho Người mới Bắt đầu: Từ Lý thuyết Vật lý Phổ thông đến Bộ điều khiển Tối ưu
+    </div>
+    <hr style="width: 50%; margin: 25px auto; border: none; border-top: 1px solid #cbd5e1;">
+    <div class="meta">
+        <p><strong>Chuyên ngành:</strong> Kỹ thuật Điều khiển &amp; Tự động hóa</p>
+        <p><strong>Lộ trình sư phạm:</strong> Nhập môn từng bước (Step-by-Step) $\rightarrow$ Nền tảng $\rightarrow$ Lý thuyết $\rightarrow$ Thực hành</p>
+        <p><strong>Phiên bản:</strong> 2.0 (Đã tinh chỉnh Font Tiếng Việt &amp; Bổ sung Nền tảng Nhập môn)</p>
+    </div>
+</div>
+
+<!-- TOC -->
+<div class="toc">
+    <h2>📋 Mục Lục Lộ Trình Học Tập</h2>
+    <ul>
+        <li><a href="#part0">PHẦN 0: NHẬP MÔN &amp; NỀN TẢNG CƠ BẢN (Nền tảng cho người mới)</a>
+            <ul>
+                <li><a href="#s0.1">0.1 Ôn tập Vật lý &amp; Phương trình Vi phân từ Con số 0</a></li>
+                <li><a href="#s0.2">0.2 Mổ xẻ từng bước: Hệ Khối lượng - Lò xo - Giảm chấn</a></li>
+                <li><a href="#s0.3">0.3 Tại sao cần "Không gian trạng thái" (State-Space)?</a></li>
+                <li><a href="#s0.4">0.4 Khái niệm "Phản hồi trạng thái" qua Ẩn dụ Lái xe</a></li>
+            </ul>
+        </li>
+        <li><a href="#part1">PHẦN 1: BẢN CHẤT VẤN ĐỀ &amp; LÝ THUYẾT NỀN TẢNG</a>
+            <ul>
+                <li><a href="#s1.1">1.1 Động lực cốt lõi — Tại sao cần LQR?</a></li>
+                <li><a href="#s1.2">1.2 Biểu diễn Không gian Trạng thái Nâng cao</a></li>
+                <li><a href="#s1.3">1.3 Tính điều khiển được (Controllability)</a></li>
+                <li><a href="#s1.4">1.4 Dạng toàn phương (Quadratic Form) &amp; Năng lượng</a></li>
+            </ul>
+        </li>
+        <li><a href="#part2">PHẦN 2: GIẢI PHÁP LQR &amp; THIẾT KẾ KỸ THUẬT</a>
+            <ul>
+                <li><a href="#s2.1">2.1 Hàm chi phí (Cost Function) &amp; Ý nghĩa Ma trận Q, R</a></li>
+                <li><a href="#s2.2">2.2 Quy trình Tối ưu hóa (Pontryagin &amp; Bellman)</a></li>
+                <li><a href="#s2.3">2.3 Phương trình Riccati Đại số (ARE) &amp; Giải tay ví dụ</a></li>
+                <li><a href="#s2.4">2.4 Quy tắc Bryson &amp; Độ bền vững (Robustness Margins)</a></li>
+            </ul>
+        </li>
+        <li><a href="#part3">PHẦN 3: ỨNG DỤNG THỰC TẾ &amp; MỞ RỘNG</a>
+            <ul>
+                <li><a href="#s3.1">3.1 Hệ Con lắc Ngược (Inverted Pendulum) + Code Python</a></li>
+                <li><a href="#s3.2">3.2 Điều khiển Robot Di động (Mobile Robot Tracking)</a></li>
+                <li><a href="#s3.3">3.3 Quy trình 10 bước Triển khai LQR Thực tế</a></li>
+                <li><a href="#s3.4">3.4 Mở rộng: LQG, MPC, H-infinity</a></li>
+            </ul>
+        </li>
+    </ul>
+</div>
+
+<!-- =========================================================== -->
+<!-- PHẦN 0: NHẬP MÔN & NỀN TẢNG CƠ BẢN                          -->
+<!-- =========================================================== -->
+<div class="part-header-intro" id="part0">
+    <h1>PHẦN 0: NHẬP MÔN &amp; NỀN TẢNG CƠ BẢN</h1>
+    <p>Kiến thức Chuẩn bị — Dành cho người chưa từng làm việc với Phương trình Vi phân hay Không gian Trạng thái</p>
+</div>
+
+<div class="analogy-box">
+    <span class="box-title">💡 Lời khuyên trước khi bắt đầu:</span>
+    <p>Nếu bạn thấy toán điều khiển có vẻ "đáng sợ" với ma trận $A, B, C, D$ hay công thức tích phân, đừng lo lắng! Phần 0 này được thiết kế để dẫn dắt bạn từ **Định luật II Newton học ở Phổ thông (lớp 10)** lên tới dạng Ma trận hiện đại một cách tự nhiên nhất.</p>
+</div>
+
+<h2 id="s0.1">0.1 Ôn tập Vật lý &amp; Phương trình Vi phân từ Con số 0</h2>
+
+<h3>1. Ký hiệu Đạo hàm theo Thời gian (Dấu chấm trên đầu)</h3>
+<p>Trong kỹ thuật điều khiển, người ta dùng dấu **chấm** ($\cdot$) trên đầu chữ cái để ký hiệu đạo hàm theo thời gian $t$:</p>
+<ul>
+    <li>Gọi $x(t)$ là **vị trí** của vật (đơn vị: mét).</li>
+    <li>**Vận tốc** $v$ chính là tốc độ thay đổi vị trí theo thời gian:
+        $$v = \frac{dx}{dt} = \dot{x}$$
+    </li>
+    <li>**Gia tốc** $a$ chính là tốc độ thay đổi vận tốc theo thời gian (hoặc đạo hàm bậc 2 của vị trí):
+        $$a = \frac{dv}{dt} = \frac{d^2x}{dt^2} = \ddot{x}$$
+    </li>
+</ul>
+
+<h3>2. Phương trình Vi phân là gì? (Giải thích bình dân)</h3>
+<p>
+Một phương trình thông thường trong đại số chứa các con số cố định như $2x + 5 = 9 \Rightarrow x = 2$.<br>
+Trong khi đó, **Phương trình Vi phân** là một phương trình mô tả chuyển động liên tục, chứa một biến chưa biết $x(t)$ cùng với các đạo hàm của nó ($\dot{x}, \ddot{x}$).
+</p>
+<p><strong>Ví dụ:</strong> Phương trình $m\ddot{x} + kx = 0$ nói rằng: <em>"Gia tốc của vật ($\ddot{x}$) nhân với khối lượng ($m$) luôn trái dấu và tỉ lệ với vị trí ($x$) của nó"</em>. Đó chính là dao động điều hòa của con lắc!</p>
+
+<hr style="margin: 30px 0; border: none; border-top: 1px dashed #cbd5e1;">
+
+<h2 id="s0.2">0.2 Mổ xẻ từng bước: Hệ Khối lượng - Lò xo - Giảm chấn</h2>
+
+<p>Hãy cùng nhau biến đổi **Hệ Khối lượng - Lò xo - Giảm chấn (Mass-Spring-Damper)** từ mô hình thực tế sang toán học qua 5 bước cực kỳ đơn giản:</p>
+
+<div class="step-card">
+    <span class="step-number">Bước 1</span> <strong>Nhận diện các lực vật lý tác dụng lên vật khối lượng $m$</strong>
+    <p style="margin-top: 8px;">Giả sử vật khối lượng $m$ nằm trên mặt sàn, nối với tường bằng một lò xo (độ cứng $k$) và một bộ giảm chấn/piston dầu (hệ số cản $c$). Bạn dùng tay đẩy vật bằng một lực $F(t)$.</p>
+    <ul>
+        <li><strong>Lực kéo từ bên ngoài:</strong> $F(t)$ (Lực đầu vào ta tác dụng).</li>
+        <li><strong>Lực đàn hồi của lò xo (Định luật Hooke):</strong> $F_{lx} = -k \cdot x$ (Luôn kéo vật về vị trí cân bằng $x=0$).</li>
+        <li><strong>Lực cản của giảm chấn (Ma sát dầu):</strong> $F_c = -c \cdot \dot{x}$ (Càng chạy nhanh $\dot{x}$ thì lực cản càng lớn, ngược chiều chuyển động).</li>
+    </ul>
+</div>
+
+<div class="step-card">
+    <span class="step-number">Bước 2</span> <strong>Viết Phương trình Định luật II Newton ($F_{tổng} = m \cdot a$)</strong>
+    <p style="margin-top: 8px;">Tổng tất cả các lực tác dụng lên vật bằng khối lượng nhân gia tốc:</p>
+    $$m \cdot a = F(t) + F_{lx} + F_c$$
+    <p>Thay $a = \ddot{x}$, $F_{lx} = -kx$, $F_c = -c\dot{x}$ vào:</p>
+    $$m \ddot{x} = F(t) - kx - c\dot{x}$$
+    <p>Chuyển tất cả biến liên quan đến $x$ sang vế trái:</p>
+    $$\boxed{m\ddot{x} + c\dot{x} + kx = F(t)} \quad \text{(Phương trình vi phân bậc 2)}$$
+</div>
+
+<div class="step-card">
+    <span class="step-number">Bước 3</span> <strong>Đặt câu hỏi: Tại sao Máy tính lại ghét Phương trình bậc 2 này?</strong>
+    <p style="margin-top: 8px;">Phương trình $m\ddot{x} + c\dot{x} + kx = F(t)$ chứa đạo hàm bậc 2 ($\ddot{x}$). Máy tính và các thuật toán điều khiển hiện đại không thể xử lý trực tiếp phương trình bậc cao một cách dễ dàng. Chúng chỉ thích các **Phương trình Vi phân bậc 1** (chỉ chứa $\dot{x}$).</p>
+    <p><strong>Mẹo giải quyết:</strong> Đặt 2 biến ẩn mới (gọi là **Trạng thái - State variables**):</p>
+    <ul>
+        <li>Biến trạng thái 1: $x_1 = x$ (Vị trí hiện tại của vật)</li>
+        <li>Biến trạng thái 2: $x_2 = \dot{x}$ (Vận tốc hiện tại của vật)</li>
+    </ul>
+</div>
+
+<div class="step-card">
+    <span class="step-number">Bước 4</span> <strong>Tách thành 2 Phương trình Vi phân Bậc 1</strong>
+    <p style="margin-top: 8px;">Hãy xem đạo hàm theo thời gian của $x_1$ và $x_2$ là gì:</p>
+    <ol>
+        <li>Đạo hàm của vị trí $x_1$ là vận tốc $x_2$:
+            $$\dot{x}_1 = x_2$$
+        </li>
+        <li>Đạo hàm của vận tốc $x_2$ chính là gia tốc $\ddot{x}$. Rút $\ddot{x}$ từ Phương trình ở Bước 2:
+            $$\ddot{x} = -\frac{k}{m}x - \frac{c}{m}\dot{x} + \frac{1}{m}F(t)$$
+            Thay $x = x_1$ và $\dot{x} = x_2$ vào:
+            $$\dot{x}_2 = -\frac{k}{m}x_1 - \frac{c}{m}x_2 + \frac{1}{m}F(t)$$
+        </li>
+    </ol>
+</div>
+
+<div class="step-card">
+    <span class="step-number">Bước 5</span> <strong>Đóng gói thành dạng Ma trận Không gian Trạng thái ($Ax + Bu$)</strong>
+    <p style="margin-top: 8px;">Gộp 2 phương trình bậc 1 ở Bước 4 lại thành dạng Ma trận:</p>
+    $$\begin{bmatrix} \dot{x}_1 \\ \dot{x}_2 \end{bmatrix} = \begin{bmatrix} 0 & 1 \\ -\frac{k}{m} & -\frac{c}{m} \end{bmatrix} \begin{bmatrix} x_1 \\ x_2 \end{bmatrix} + \begin{bmatrix} 0 \\ \frac{1}{m} \end{bmatrix} F(t)$$
+    <p>Đây chính là phương trình kinh điển: $\mathbf{\dot{x} = A x + B u}$ với:</p>
+    <ul>
+        <li>Vector trạng thái: $x = \begin{bmatrix} x_1 \\ x_2 \end{bmatrix}$ (Vị trí và Vận tốc)</li>
+        <li>Tín hiệu điều khiển: $u = F(t)$ (Lực tác dụng)</li>
+        <li>Ma trận hệ thống $A = \begin{bmatrix} 0 & 1 \\ -\frac{k}{m} & -\frac{c}{m} \end{bmatrix}$</li>
+        <li>Ma trận đầu vào $B = \begin{bmatrix} 0 \\ \frac{1}{m} \end{bmatrix}$</li>
+    </ul>
+</div>
+
+<div class="important-note">
+    <span class="box-title">🎉 Chúc mừng bạn!</span>
+    <p>Bạn vừa tự tay biến đổi một hệ vật lý cơ học thực tế thành **Mô hình Không gian Trạng thái (State-Space Representation)** — nền tảng quan trọng nhất của Lý thuyết Điều khiển Hiện đại &amp; LQR!</p>
+</div>
+
+<hr style="margin: 30px 0; border: none; border-top: 1px dashed #cbd5e1;">
+
+<h2 id="s0.3">0.3 Khái niệm "Phản hồi trạng thái" qua Ẩn dụ Lái xe</h2>
+
+<p>Trong LQR, công thức cốt lõi là tín hiệu điều khiển **$u = -Kx$**. Nó có nghĩa là gì?</p>
+
+<div class="analogy-box">
+    <span class="box-title">🚗 Ẩn dụ Lái xe ô tô giữ khoảng cách</span>
+    <p>Hãy tưởng tượng bạn đang lái xe ô tô bám theo xe phía trước:</p>
+    <ul>
+        <li>$x_1$: Khoảng cách lệch so với vị trí an toàn (ví dụ: lệch 5 mét).</li>
+        <li>$x_2$: Vận tốc tương đối (ví dụ: xe bạn đang chạy nhanh hơn xe trước 10 km/h).</li>
+        <li>$u$: Chân phanh hoặc chân ga bạn nhấn.</li>
+    </ul>
+    <p>Bộ não bạn hoạt động theo công thức phản hồi:</p>
+    $$u = -(k_1 \cdot x_1 + k_2 \cdot x_2)$$
+    <ul>
+        <li>Nếu khoảng cách lệch nhiều ($x_1$ lớn) $\rightarrow$ Bạn đạp phanh ($u$ âm).</li>
+        <li>Nếu bạn đang tiến tới quá nhanh ($x_2$ lớn) $\rightarrow$ Bạn cũng đạp phanh ($u$ âm).</li>
+    </ul>
+    <p>Hai số $k_1, k_2$ chính là **Ma trận Gain $K = [k_1, k_2]$**. Thuật toán **LQR** sẽ tự động giúp bạn tính ra 2 số $k_1, k_2$ này một cách hoàn hảo nhất!</p>
+</div>
+
+<!-- Quiz 0 -->
+<div class="quiz-section">
+    <h3>📝 Quick Quiz 0 — Kiểm tra Kiến thức Nền</h3>
+    
+    <div class="quiz-question">
+        <strong>Câu 1:</strong> Ký hiệu $\dot{x}$ và $\ddot{x}$ đại diện cho khái niệm vật lý nào nếu $x$ là vị trí của con lắc?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án Câu 1:</span>
+        <p>$\dot{x}$ là vận tốc của con lắc (đạo hàm bậc 1 của vị trí theo thời gian). $\ddot{x}$ là gia tốc của con lắc (đạo hàm bậc 2 của vị trí theo thời gian).</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>Câu 2:</strong> Tại sao ta lại phải chuyển từ phương trình vi phân bậc 2 $m\ddot{x} + c\dot{x} + kx = F$ sang dạng ma trận $\dot{x} = Ax + Bu$?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án Câu 2:</span>
+        <p>Vì dạng ma trận $\dot{x} = Ax + Bu$ đưa tất cả các phương trình vi phân phức tạp về dạng chuẩn bậc 1. Điều này giúp máy tính dễ tính toán và cho phép áp dụng các công cụ đại số tuyến tính mạnh mẽ (như tính ma trận, giá trị riêng, tối ưu hóa LQR).</p>
+    </div>
+</div>
+
+<!-- =========================================================== -->
+<!-- PHẦN 1: BẢN CHẤT VẤN ĐỀ & LÝ THUYẾT NỀN TẢNG             -->
+<!-- =========================================================== -->
+<div class="part-header" id="part1">
+    <h1>PHẦN 1: BẢN CHẤT VẤN ĐỀ &amp; LÝ THUYẾT NỀN TẢNG</h1>
+    <p>Prerequisites — So sánh Gán Cực vs LQR &amp; Các khái niệm Không gian Trạng thái Nâng cao</p>
+</div>
+
+<h2 id="s1.1">1.1 Động lực cốt lõi — Tại sao cần LQR?</h2>
+
+<h3>1.1.1 Bài toán điều khiển hệ thống</h3>
+<p>
+Như đã thấy ở Phần 0, một hệ thống dynamic có trạng thái $x(t)$. Mục tiêu của chúng ta là tạo ra lực/tín hiệu điều khiển $u(t) = -Kx(t)$ để ép trạng thái $x(t)$ về $0$ (vị trí cân bằng an toàn).
+</p>
+
+<h3>1.1.2 Phương pháp Gán cực (Pole Placement) &amp; Nhược điểm</h3>
+<p>
+Cách truyền thống để chọn ma trận $K$ là **Gán cực**: Kỹ sư tự chọn vị trí các nghiệm (cực) của hệ thống trong mặt phẳng phức để đáp ứng hệ nhanh hay chậm.
+</p>
+<p><strong>Công thức Ackermann cho hệ SISO:</strong></p>
+$$K = \begin{bmatrix} 0 & 0 & \cdots & 1 \end{bmatrix} \mathcal{C}^{-1} \alpha_d(A)$$
+
+<div class="important-note">
+    <span class="box-title">❌ Nhược điểm của Gán cực:</span>
+    <ul>
+        <li>Không biết đặt cực ở đâu là "tốt nhất". Chọn cực quá xa làm hệ phản ứng cực nhanh nhưng đòi hỏi lực điều khiển $u$ khổng lồ (bão hòa động cơ/cháy thiết bị).</li>
+        <li>Rất khó áp dụng cho hệ nhiều đầu vào nhiều đầu ra (MIMO).</li>
+    </ul>
+</div>
+
+<h3>1.1.3 LQR: Giải pháp Tối ưu hóa Tự động</h3>
+<p>LQR (Linear Quadratic Regulator) giải quyết vấn đề trên bằng cách định nghĩa một **Hàm chi phí $J$** cân bằng giữa **Chất lượng đáp ứng** và **Chi phí năng lượng**:</p>
+
+$$J = \int_0^{\infty} \left[ x^T(t) Q x(t) + u^T(t) R u(t) \right] dt$$
+
+<ul>
+    <li>$x^TQx$: Phạt sai lệch trạng thái (Muốn xe không bị lệch vị trí).</li>
+    <li>$u^TRu$: Phạt nỗ lực điều khiển (Muốn tiết kiệm nhiên liệu/lực).</li>
+</ul>
+<p>LQR sẽ tự động tìm ra ma trận $K$ tối ưu nhất thỏa mãn sự cân bằng này mà kỹ sư không cần "đoán" vị trí cực.</p>
+
+<hr style="margin: 30px 0; border: none; border-top: 1px dashed #cbd5e1;">
+
+<h2 id="s1.3">1.3 Tính điều khiển được (Controllability)</h2>
+
+<div class="definition">
+    <span class="box-title">📖 Khái niệm đơn giản:</span>
+    <p>Một hệ thống gọi là **Điều khiển được (Controllable)** nếu tín hiệu đầu vào $u(t)$ của bạn có khả năng lái TẤT CẢ các biến trạng thái từ bất kỳ vị trí ban đầu nào về $0$.</p>
+</div>
+
+<p><strong>Tiêu chuẩn Kalman:</strong> Lập ma trận điều khiển được $\mathcal{C}$:</p>
+$$\mathcal{C} = \begin{bmatrix} B & AB & A^2B & \cdots & A^{n-1}B \end{bmatrix}$$
+<p>Hệ điều khiển được hoàn toàn khi và chỉ khi **$\text{rank}(\mathcal{C}) = n$** (Hạng ma trận bằng đúng số lượng biến trạng thái).</p>
+
+<!-- Quiz 1 -->
+<div class="quiz-section">
+    <h3>📝 Quick Quiz 1 — Kiểm tra Phần 1</h3>
+    <div class="quiz-question">
+        <strong>Câu 1:</strong> Tại sao LQR lại ưu việt hơn phương pháp Gán cực thông thường?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án Câu 1:</span>
+        <p>Vì LQR tự động tính toán ma trận $K$ tối ưu dựa trên bài toán cân bằng năng lượng và chất lượng (ma trận $Q, R$), trong khi Gán cực đòi hỏi kỹ sư phải tự chọn vị trí cực dựa trên thử-sai chủ quan.</p>
+    </div>
+</div>
+
+<!-- =========================================================== -->
+<!-- PHẦN 2: GIẢI PHÁP LQR & THIẾT KẾ KỸ THUẬT                  -->
+<!-- =========================================================== -->
+<div class="part-header" id="part2">
+    <h1>PHẦN 2: GIẢI PHÁP LQR &amp; THIẾT KẾ KỸ THUẬT</h1>
+    <p>Core LQR Theory — Hàm Chi Phí, Phương trình Riccati &amp; Quy tắc Bryson</p>
+</div>
+
+<h2 id="s2.1">2.1 Hàm chi phí &amp; Ý nghĩa Ma trận $Q, R$</h2>
+
+<p>Hàm chi phí LQR có dạng:</p>
+$$J = \int_0^{\infty} \left[ x^T(t) Q x(t) + u^T(t) R u(t) \right] dt$$
+
+<div class="analogy-box">
+    <span class="box-title">🎯 Ý nghĩa trực quan của $Q$ và $R$:</span>
+    <ul>
+        <li><strong>Ma trận $Q$ (State Weighting Matrix):</strong> Cho biết trạng thái nào là **QUAN TRỌNG**. Giá trị $Q_{ii}$ càng lớn, thuật toán sẽ càng cố gắng ép trạng thái $x_i$ về $0$ thật nhanh.</li>
+        <li><strong>Ma trận $R$ (Control Weighting Matrix):</strong> Cho biết năng lượng điều khiển **ĐẮT HAY RẺ**. Giá trị $R$ càng lớn, thuật toán càng xài ít lực $u$ (chấp nhận hệ về $0$ chậm hơn để tiết kiệm).</li>
+    </ul>
+</div>
+
+<h2 id="s2.3">2.3 Phương trình Riccati Đại số (ARE)</h2>
+
+<p>Để tìm bộ điều khiển tối ưu $u = -Kx$, ta tính Gain $K$ theo công thức:</p>
+$$\boxed{K = R^{-1} B^T P}$$
+<p>Trong đó, ma trận $P$ là nghiệm của **Phương trình Riccati Đại số (ARE)**:</p>
+$$\boxed{A^T P + P A - P B R^{-1} B^T P + Q = 0}$$
+
+<div class="example-box">
+    <span class="box-title">📌 Ví dụ tính tay cho Hệ bậc 1:</span>
+    <p>Xét hệ đơn giản: $\dot{x} = 2x + u$ (với $A = 2, B = 1$). Ta muốn chọn $Q = 3, R = 1$.</p>
+    <p>Phương trình Riccati trở thành phương trình đại số bậc 2 theo $P$:</p>
+    $$A^T P + P A - P B R^{-1} B^T P + Q = 0 \implies 2P + 2P - P(1)(1)P + 3 = 0$$
+    $$-P^2 + 4P + 3 = 0 \implies P^2 - 4P - 3 = 0$$
+    <p>Giải phương trình bậc 2 lấy nghiệm dương ($P > 0$):</p>
+    $$P = 2 + \sqrt{7} \approx 4.646$$
+    <p>Tính Gain $K$:</p>
+    $$K = R^{-1} B^T P = 1 \cdot 1 \cdot 4.646 = 4.646$$
+    <p>Vậy luật điều khiển tối ưu là: $\mathbf{u = -4.646 \cdot x}$.</p>
+</div>
+
+<h2 id="s2.4">2.4 Quy tắc Bryson (Bryson's Rule) chọn $Q, R$ ban đầu</h2>
+
+<div class="theorem">
+    <span class="box-title">📐 Quy tắc Bryson:</span>
+    <p>Chọn các phần tử trên đường chéo của $Q$ và $R$ theo công thức:</p>
+    $$Q_{ii} = \frac{1}{(\text{Giá trị sai lệch tối đa chấp nhận được của } x_i)^2}$$
+    $$R_{jj} = \frac{1}{(\text{Giá trị tín hiệu điều khiển tối đa cho phép của } u_j)^2}$$
+</div>
+
+<!-- =========================================================== -->
+<!-- PHẦN 3: TẦM ẢNH HƯỞNG & ỨNG DỤNG HỆ THỐNG                 -->
+<!-- =========================================================== -->
+<div class="part-header" id="part3">
+    <h1>PHẦN 3: TẦM ẢNH HƯỞNG &amp; ỨNG DỤNG HỆ THỐNG</h1>
+    <p>Thực hành Mô phỏng — Hệ Con lắc Ngược &amp; Lập trình Python</p>
+</div>
+
+<h2 id="s3.1">3.1 Ứng dụng: Hệ Con lắc Ngược (Inverted Pendulum)</h2>
+
+<p>Hệ con lắc ngược gồm xe khối lượng $M$ chạy trên đường ray và một thanh lắc khối lượng $m$, chiều dài $2l$ dựng đứng. Mục tiêu: Dùng lực đẩy $F$ vào xe để giữ thanh luôn đứng thẳng ($\theta = 0$).</p>
+
+<h3>1. Biểu diễn Không gian Trạng thái 4D</h3>
+<p>Hệ con lắc ngược có 4 biến trạng thái:</p>
+<ul>
+    <li>$x_1 = x$: Vị trí của xe trên đường ray (mét).</li>
+    <li>$x_2 = \dot{x}$: Vận tốc của xe (m/s).</li>
+    <li>$x_3 = \theta$: Góc nghiêng của con lắc so với phương thẳng đứng (radian).</li>
+    <li>$x_4 = \dot{\theta}$: Vận tốc góc của con lắc (rad/s).</li>
+</ul>
+<p>Đầu vào điều khiển: $u = F$ (Lực đẩy xe theo phương ngang, Newton).</p>
+
+<hr style="margin: 25px 0; border: none; border-top: 1px dashed #cbd5e1;">
+
+<h3>2. Mã nguồn Python Mô phỏng &amp; Tính toán LQR Đầy đủ</h3>
+
+<pre><code>import numpy as np
+from scipy.linalg import solve_continuous_are
+from scipy.integrate import solve_ivp
+import matplotlib.pyplot as plt
+
+# ==========================================================
+# KHỐI 1: KHAI BÁO THAM SỐ VẬT LÝ
+# ==========================================================
+M = 1.0    # Khối lượng xe (kg)
+m = 0.1    # Khối lượng thanh con lắc (kg)
+l = 0.5    # Khoảng cách từ bản lề đến trọng tâm thanh (m)
+g = 9.81   # Gia tốc trọng trường (m/s^2)
+
+# ==========================================================
+# KHỐI 2: XÂY DỰNG MA TRẬN A VÀ B (MÔ HÌNH TUYẾN TÍNH HÓA)
+# ==========================================================
+A = np.array([
+    [0, 1, 0, 0],
+    [0, 0, -m*g/M, 0],
+    [0, 0, 0, 1],
+    [0, 0, (M+m)*g/(M*l), 0]
+])
+
+B = np.array([
+    [0],
+    [1/M],
+    [0],
+    [-1/(M*l)]
+])
+
+# ==========================================================
+# KHỐI 3: THIẾT KẾ MA TRẬN TRỌNG SỐ Q VÀ R (BRYSON'S RULE)
+# ==========================================================
+# Phạt sai lệch: [x, v, theta, omega]
+Q = np.diag([4.0, 1.0, 100.0, 1.0]) # Phạt góc theta rất nặng (100) để giữ con lắc đứng thẳng
+R = np.array([[0.01]])              # Phạt lực u nhẹ (0.01) để cho phép dùng lực mạnh
+
+# ==========================================================
+# KHỐI 4: GIẢI PHƯƠNG TRÌNH RICCATI & TÍNH MA TRẬN GAIN K
+# ==========================================================
+P = solve_continuous_are(A, B, Q, R) # Giải ARE: A^T P + P A - P B R^-1 B^T P + Q = 0
+K = np.linalg.inv(R) @ B.T @ P      # Tính Gain K = R^-1 * B^T * P
+
+print("--- KẾT QUẢ TÍNH TOÁN LQR ---")
+print("Ma trận P (Nghiệm Riccati):\n", np.round(P, 3))
+print("\nMa trận Gain K tối ưu:\n", np.round(K, 3))
+print("Luật điều khiển: u = -K * x")
+
+# ==========================================================
+# KHỐI 5: MÔ PHỎNG ĐỘNG HỌC THEO THỜI GIAN (ODE SIMULATION)
+# ==========================================================
+def pendulum_dynamics(t, state):
+    """Phương trình động học phi tuyến của con lắc ngược khi có LQR"""
+    x, v, theta, omega = state
+    x_vec = np.array([x, v, theta, omega])
+    
+    # Tính lực điều khiển u = -K * x
+    u = -float(K @ x_vec)
+    
+    # Phương trình vi phân phi tuyến
+    Sin = np.sin(theta)
+    Cos = np.cos(theta)
+    Temp = (u + m * l * (omega**2) * Sin) / (M + m)
+    
+    omega_dot = (g * Sin - Cos * Temp) / (l * (4.0/3.0 - (m * Cos**2) / (M + m)))
+    v_dot = Temp - (m * l * omega_dot * Cos) / (M + m)
+    
+    return [v, v_dot, omega, omega_dot]
+
+# Điều kiện ban đầu: Xe ở vị trí 0m, con lắc bị nghiêng 10 độ (0.175 rad)
+state_0 = [0.0, 0.0, 0.175, 0.0]
+t_span = (0.0, 5.0) # Mô phỏng trong 5 giây
+t_eval = np.linspace(0, 5, 500)
+
+# Giải phương trình vi phân bằng thuật toán Runge-Kutta (RK45)
+sol = solve_ivp(pendulum_dynamics, t_span, state_0, t_eval=t_eval)
+
+# ==========================================================
+# KHỐI 6: VẼ ĐỒ THỊ KẾT QUẢ MÔ PHỎNG
+# ==========================================================
+plt.figure(figsize=(10, 8))
+
+# Đồ thị 1: Vị trí xe x(t)
+plt.subplot(3, 1, 1)
+plt.plot(sol.t, sol.y[0], 'b-', linewidth=2)
+plt.ylabel('Vị trí xe x (m)')
+plt.grid(True)
+plt.title('Mô phỏng Đáp ứng Hệ Con lắc Ngược bằng LQR')
+
+# Đồ thị 2: Góc nghiêng con lắc theta(t)
+plt.subplot(3, 1, 2)
+plt.plot(sol.t, np.degrees(sol.y[2]), 'r-', linewidth=2)
+plt.ylabel('Góc nghiêng (độ)')
+plt.grid(True)
+
+# Đồ thị 3: Tín hiệu lực điều khiển u(t)
+plt.subplot(3, 1, 3)
+u_history = [-float(K @ sol.y[:, i]) for i in range(len(sol.t))]
+plt.plot(sol.t, u_history, 'g-', linewidth=2)
+plt.xlabel('Thời gian (giây)')
+plt.ylabel('Lực đẩy u (N)')
+plt.grid(True)
+
+plt.tight_layout()
+plt.show()
+</code></pre>
+
+<hr style="margin: 25px 0; border: none; border-top: 1px dashed #cbd5e1;">
+
+<h3>3. Giải thích Chi tiết Từng Đoạn Mã Python (Step-by-Step Breakdown)</h3>
+
+<div class="step-card">
+    <span class="step-number">Khối 1</span> <strong>Khai báo Thư viện &amp; Tham số Vật lý</strong>
+    <ul>
+        <li><code>solve_continuous_are</code>: Hàm giải Phương trình Riccati Đại số $A^TP + PA - PBR^{-1}B^TP + Q = 0$ cho hệ liên tục thời gian trong thư viện <code>scipy.linalg</code>.</li>
+        <li><code>solve_ivp</code>: Bộ giải Phương trình vi phân số (ODE solver) trong <code>scipy.integrate</code> dùng để tích phân chuyển động của xe và con lắc theo thời gian.</li>
+        <li>Các biến <code>M, m, l, g</code> đại diện cho khối lượng xe ($1\text{ kg}$), khối lượng con lắc ($0.1\text{ kg}$), chiều dài ($0.5\text{ m}$) và gia tốc trọng trường ($9.81\text{ m/s}^2$).</li>
+    </ul>
+</div>
+
+<div class="step-card">
+    <span class="step-number">Khối 2</span> <strong>Thiết lập Ma trận Không gian Trạng thái $A, B$</strong>
+    <p>Ma trận $A$ kích thước $4 \times 4$ và $B$ kích thước $4 \times 1$ thu được sau khi tuyến tính hóa phương trình Lagrange quanh điểm cân bằng đứng thẳng ($\theta \approx 0$):</p>
+    <ul>
+        <li>Hàng 1: $\dot{x} = v$ (đạo hàm vị trí là vận tốc).</li>
+        <li>Hàng 2: Gia tốc xe $\dot{v} = -\frac{mg}{M}\theta + \frac{1}{M}F$.</li>
+        <li>Hàng 3: $\dot{\theta} = \omega$ (đạo hàm góc là vận tốc góc).</li>
+        <li>Hàng 4: Gia tốc góc con lắc $\dot{\omega} = \frac{(M+m)g}{Ml}\theta - \frac{1}{Ml}F$.</li>
+    </ul>
+</div>
+
+<div class="step-card">
+    <span class="step-number">Khối 3</span> <strong>Lựa chọn Ma trận Trọng số $Q$ và $R$</strong>
+    <ul>
+        <li><code>Q = np.diag([4.0, 1.0, 100.0, 1.0])</code>: Đặt trọng số phạt cho 4 trạng thái $[x, v, \theta, \omega]$. Phần tử $Q_{33} = 100.0$ phạt cực nặng sai lệch góc nghiêng $\theta$. Điều này bắt buộc thuật toán LQR phải ưu tiên dựng đứng con lắc bằng mọi giá trước khi lo kéo xe về vị trí $x=0$.</li>
+        <li><code>R = np.array([[0.01]])</code>: Phạt chi phí lực đẩy $u$. Số $0.01$ rất nhỏ có nghĩa là "Lực đẩy rất rẻ, LQR cứ thoải mái dùng lực mạnh để giữ thăng bằng cho con lắc".</li>
+    </ul>
+</div>
+
+<div class="step-card">
+    <span class="step-number">Khối 4</span> <strong>Giải Riccati &amp; Tính Ma trận Gain $K$</strong>
+    <ul>
+        <li>Dòng lệnh <code>P = solve_continuous_are(A, B, Q, R)</code> tự động tìm ma trận $P$ đối xứng xác định dương thỏa mãn phương trình ARE.</li>
+        <li>Dòng <code>K = R^-1 * B^T * P</code> tính ra vector Gain gồm 4 số: $K = [k_1, k_2, k_3, k_4]$.</li>
+        <li>Luật điều khiển phản hồi hoàn chỉnh là:
+            $$u = -(k_1 \cdot x + k_2 \cdot v + k_3 \cdot \theta + k_4 \cdot \omega)$$
+        </li>
+    </ul>
+</div>
+
+<div class="step-card">
+    <span class="step-number">Khối 5 &amp; 6</span> <strong>Mô phỏng Động học Phi tuyến &amp; Vẽ Đồ thị Đáp ứng</strong>
+    <ul>
+        <li>Hàm <code>pendulum_dynamics(t, state)</code> tính toán các lực thực tế khi con lắc bị nghiêng ban đầu $10^\circ$ ($0.175\text{ rad}$). Tại mỗi bước thời gian $t$, bộ điều khiển tính lực đẩy $u = -K \cdot x$ và bơm lực này vào hệ thống.</li>
+        <li>Hàm <code>solve_ivp</code> mô phỏng hành vi của xe và con lắc trong 5 giây.</li>
+        <li>**Kết quả trên đồ thị:**
+            1. Góc nghiêng $\theta(t)$ nhanh chóng giảm từ $10^\circ$ về $0^\circ$ chỉ trong chưa đầy **1.5 giây**.
+            2. Vị trí xe $x(t)$ ban đầu nhích nhẹ để "đỡ" con lắc, sau đó từ từ di chuyển ổn định về gốc $0\text{ m}$.
+            3. Lực đẩy $u(t)$ xuất hiện đỉnh lực ban đầu rồi nhanh chóng triệt tiêu khi hệ thống đã đứng thăng bằng.
+        </li>
+    </ul>
+</div>
+
+<!-- TỔNG KẾT -->
+<div style="background: linear-gradient(135deg, #1e293b, #0f172a); color: white; padding: 35px; border-radius: 10px; margin-top: 50px; text-align: center;">
+    <h2 style="color: #60a5fa; margin-top: 0;">🎯 Tóm Tắt Lộ Trình Học</h2>
+    <p style="font-size: 1.05em; color: #cbd5e1; max-width: 750px; margin: 10px auto;">
+        1. Từ Vật lý $F=ma \rightarrow$ Phương trình vi phân $\rightarrow$ Không gian trạng thái $\dot{x} = Ax + Bu$.<br>
+        2. Chọn trọng số $Q, R$ đại diện cho mong muốn của bạn.<br>
+        3. Giải ARE để máy tính tự động tìm ra bộ hệ số phản hồi $K$ hoàn hảo nhất cho bạn.
+    </p>
+</div>
+
+<div style="text-align: center; margin: 35px 0; color: var(--text-secondary); font-size: 0.9em;">
+    <p>— Hết tài liệu —</p>
+    <p><em>Nhấn nút "📄 Xuất PDF" ở góc phải dưới để lưu tài liệu dưới dạng PDF</em></p>
+</div>
+
+</body>
+</html>

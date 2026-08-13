@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tài Liệu Học Tập Toàn Tập: Bộ Lọc Kalman Mở Rộng (Extended Kalman Filter — EKF)</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+    window.MathJax = {
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']],
+            tags: 'ams'
+        },
+        chtml: { scale: 1 }
+    };
+    </script>
+    <style>
+        :root {
+            --primary: #0f172a;
+            --accent: #2563eb;
+            --accent-light: #3b82f6;
+            --bg: #ffffff;
+            --text: #1e293b;
+            --text-secondary: #475569;
+            --quiz-bg: #f0f9ff;
+            --quiz-border: #bae6fd;
+            --answer-bg: #f0fdf4;
+            --answer-border: #86efac;
+            --warning-bg: #fffbeb;
+            --warning-border: #fde68a;
+            --code-bg: #0f172a;
+            --border: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+            font-size: 16.5px;
+            line-height: 1.8;
+            color: var(--text);
+            background: var(--bg);
+            max-width: 920px;
+            margin: 0 auto;
+            padding: 40px 25px;
+        }
+
+        /* ===== COVER PAGE ===== */
+        .cover-page {
+            text-align: center;
+            padding: 60px 20px;
+            border-bottom: 3px solid var(--accent);
+            margin-bottom: 50px;
+            background: #f8fafc;
+            border-radius: 12px;
+        }
+        .cover-page h1 {
+            font-size: 2.3em;
+            color: var(--primary);
+            margin-bottom: 12px;
+            line-height: 1.3;
+            border: none;
+            padding: 0;
+        }
+        .cover-page .subtitle {
+            font-size: 1.35em;
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: 25px;
+        }
+        .cover-page .tagline {
+            font-size: 1.05em;
+            color: var(--text-secondary);
+            font-style: italic;
+            margin-bottom: 30px;
+        }
+        .cover-page .meta {
+            font-size: 0.95em;
+            color: var(--text-secondary);
+        }
+
+        /* ===== HEADINGS ===== */
+        h1 { font-size: 1.85em; color: var(--primary); margin: 45px 0 20px; border-bottom: 2px solid var(--accent); padding-bottom: 8px; }
+        h2 { font-size: 1.4em; color: var(--accent); margin: 35px 0 15px; }
+        h3 { font-size: 1.18em; color: var(--primary); margin: 25px 0 12px; }
+        h4 { font-size: 1.05em; color: var(--text); margin: 18px 0 8px; }
+
+        .part-header {
+            background: linear-gradient(135deg, #1e3a8a, #2563eb);
+            color: white;
+            padding: 28px 35px;
+            border-radius: 10px;
+            margin: 50px 0 30px;
+            box-shadow: var(--shadow);
+        }
+        .part-header h1 { color: white; border: none; margin: 0; font-size: 1.7em; padding: 0; }
+        .part-header p { color: #dbeafe; margin-top: 8px; font-size: 1.05em; }
+
+        .part-header-intro {
+            background: linear-gradient(135deg, #059669, #10b981);
+            color: white;
+            padding: 28px 35px;
+            border-radius: 10px;
+            margin: 40px 0 30px;
+            box-shadow: var(--shadow);
+        }
+        .part-header-intro h1 { color: white; border: none; margin: 0; font-size: 1.7em; padding: 0; }
+        .part-header-intro p { color: #ecfdf5; margin-top: 8px; font-size: 1.05em; }
+
+        /* ===== CONTENT ===== */
+        p { margin: 12px 0; text-align: justify; }
+        ul, ol { margin: 10px 0 15px 25px; }
+        li { margin: 6px 0; }
+
+        strong { color: #0f172a; font-weight: 600; }
+
+        .highlight {
+            background: #fef08a;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        blockquote {
+            border-left: 4px solid var(--accent);
+            background: #f8fafc;
+            padding: 15px 20px;
+            margin: 20px 0;
+            font-style: italic;
+            color: var(--text-secondary);
+            border-radius: 0 8px 8px 0;
+        }
+
+        /* ===== DEFINITION / THEOREM BOXES ===== */
+        .definition, .theorem, .important-note, .example-box, .analogy-box {
+            padding: 20px 24px;
+            border-radius: 8px;
+            margin: 22px 0;
+            border-left: 5px solid;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .definition {
+            background: #eff6ff;
+            border-color: #3b82f6;
+        }
+        .definition .box-title { color: #1d4ed8; }
+        
+        .theorem {
+            background: #faf5ff;
+            border-color: #a855f7;
+        }
+        .theorem .box-title { color: #7e22ce; }
+        
+        .important-note {
+            background: var(--warning-bg);
+            border-color: #f59e0b;
+        }
+        .important-note .box-title { color: #b45309; }
+        
+        .example-box {
+            background: #f0fdf4;
+            border-color: #22c55e;
+        }
+        .example-box .box-title { color: #15803d; }
+
+        .analogy-box {
+            background: #fff7ed;
+            border-color: #ea580c;
+        }
+        .analogy-box .box-title { color: #c2410c; }
+
+        .box-title {
+            font-weight: 700;
+            font-size: 1.05em;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        /* ===== STEP BY STEP CARDS ===== */
+        .step-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-left: 4px solid var(--accent);
+            border-radius: 6px;
+            padding: 16px 20px;
+            margin: 14px 0;
+        }
+        .step-number {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: 700;
+            margin-right: 8px;
+        }
+
+        /* ===== QUIZ ===== */
+        .quiz-section {
+            background: var(--quiz-bg);
+            border: 1px solid var(--quiz-border);
+            border-radius: 10px;
+            padding: 22px 26px;
+            margin: 30px 0;
+        }
+        .quiz-section h3 {
+            color: #0369a1;
+            margin-top: 0;
+            font-size: 1.15em;
+        }
+        .quiz-question {
+            margin: 15px 0 8px;
+        }
+        .quiz-question strong {
+            color: #0284c7;
+        }
+
+        .answer-section {
+            background: var(--answer-bg);
+            border: 1px solid var(--answer-border);
+            border-radius: 8px;
+            padding: 18px 22px;
+            margin: 10px 0 20px;
+        }
+        .answer-section .box-title {
+            color: #16a34a;
+        }
+
+        /* ===== TABLE ===== */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.95em;
+        }
+        th, td {
+            border: 1px solid var(--border);
+            padding: 10px 14px;
+            text-align: left;
+        }
+        th {
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+        }
+        tr:nth-child(even) { background: #f8fafc; }
+        tr:hover { background: #f1f5f9; }
+
+        /* ===== CODE ===== */
+        pre {
+            background: var(--code-bg);
+            color: #f8fafc;
+            padding: 18px 22px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: "Fira Code", Consolas, Monaco, monospace;
+            font-size: 0.88em;
+            line-height: 1.6;
+            margin: 20px 0;
+        }
+        code {
+            font-family: "Fira Code", Consolas, Monaco, monospace;
+            background: #f1f5f9;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            color: #b91c1c;
+        }
+        pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+        }
+
+        /* ===== TOC ===== */
+        .toc {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 25px 30px;
+            margin: 30px 0;
+        }
+        .toc h2 { margin-top: 0; color: var(--primary); }
+        .toc ul { list-style: none; margin-left: 0; }
+        .toc > ul > li {
+            margin: 8px 0;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        .toc > ul > li > ul > li {
+            font-weight: 400;
+            color: var(--text);
+            margin: 4px 0;
+            padding-left: 20px;
+        }
+        .toc a { color: inherit; text-decoration: none; }
+        .toc a:hover { color: var(--accent); text-decoration: underline; }
+
+        /* ===== PRINT ===== */
+        .print-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 12px 22px;
+            border-radius: 30px;
+            font-size: 0.95em;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(37,99,235,0.4);
+            transition: all 0.2s;
+            z-index: 1000;
+        }
+        .print-btn:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+        }
+
+        @media print {
+            body { padding: 15px; font-size: 11pt; max-width: 100%; }
+            .print-btn { display: none; }
+            .cover-page { padding: 40px 20px; }
+            .part-header, .part-header-intro { page-break-before: always; }
+            .quiz-section, .answer-section, .definition, .theorem, .example-box, .important-note, .analogy-box {
+                break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<button class="print-btn" onclick="window.print()">📄 Xuất PDF</button>
+
+<!-- COVER PAGE -->
+<div class="cover-page">
+    <h1>Tài Liệu Học Tập Toàn Tập</h1>
+    <div class="subtitle">BỘ LỌC KALMAN MỞ RỘNG (EXTENDED KALMAN FILTER — EKF)</div>
+    <div class="tagline">
+        Giải mã Hệ thống Phi tuyến Thực tế — Từ Khai triển Chuỗi Taylor, Ma trận Jacobian đến Định vị Xe Tự Lái 2D
+    </div>
+    <hr style="width: 50%; margin: 25px auto; border: none; border-top: 1px solid #cbd5e1;">
+    <div class="meta">
+        <p><strong>Chuyên ngành:</strong> Kỹ thuật Điều khiển, Xe Tự lái &amp; Chế tạo Robot</p>
+        <p><strong>Phương pháp Sư phạm:</strong> Bổ trợ Giải tích Phi tuyến từ con số 0 $\rightarrow$ Tuyến tính hóa từng bước $\rightarrow$ Mô phỏng Python &amp; C++ Nhúng</p>
+        <p><strong>Phiên bản:</strong> 1.0 (Bổ sung Chuyên sâu Nền tảng Toán Phi tuyến)</p>
+    </div>
+</div>
+
+<!-- TOC -->
+<div class="toc">
+    <h2>📋 Mục Lục Chi Tiết EKF</h2>
+    <ul>
+        <li><a href="#part0">PHẦN 0: NỀN TẢNG GIẢI TÍCH PHI TUYẾN &amp; MA TRẬN JACOBIAN (Dễ hiểu từ con số 0)</a>
+            <ul>
+                <li><a href="#s0.1">0.1 Tại sao Bộ lọc Kalman chuẩn (Standard KF) bị THẤT BẠI ở hệ phi tuyến?</a></li>
+                <li><a href="#s0.2">0.2 Khai triển Chuỗi Taylor (Taylor Series) — Tuyến tính hóa là gì?</a></li>
+                <li><a href="#s0.3">0.3 Đạo hàm riêng &amp; Ma trận Jacobian từ con số 0</a></li>
+                <li><a href="#s0.4">0.4 Ví dụ tính tay Ma trận Jacobian từng bước số cụ thể</a></li>
+            </ul>
+        </li>
+        <li><a href="#part1">PHẦN 1: MÔ HÌNH KHÔNG GIAN TRẠNG THÁI PHI TUYẾN</a>
+            <ul>
+                <li><a href="#s1.1">1.1 Mô hình Phi tuyến Ngẫu nhiên ($f(x,u)$ và $h(x)$)</a></li>
+                <li><a href="#s1.2">1.2 Ý tưởng cốt lõi của EKF: Tuyến tính hóa động (Dynamic Linearization)</a></li>
+            </ul>
+        </li>
+        <li><a href="#part2">PHẦN 2: CHỨNG MINH &amp; MỔ XẺ 5 BƯỚC THUẬT TOÁN EKF</a>
+            <ul>
+                <li><a href="#s2.1">2.1 Bước 1: Dự báo Trạng thái Phi tuyến ($\hat{x}_{k|k-1} = f(\hat{x}, u)$)</a></li>
+                <li><a href="#s2.2">2.2 Bước 2: Tính Jacobian $F_k$ &amp; Dự báo Hiệp biến ($P_{k|k-1}$)</a></li>
+                <li><a href="#s2.3">2.3 Bước 3: Tính Jacobian $H_k$ &amp; EKF Gain ($K_k$)</a></li>
+                <li><a href="#s2.4">2.4 Bước 4: Cập nhật Trạng thái ($\hat{x}_{k|k}$) với Đo lường Phi tuyến $h$</a></li>
+                <li><a href="#s2.5">2.5 Bước 5: Cập nhật Hiệp biến Sai số ($P_{k|k}$)</a></li>
+            </ul>
+        </li>
+        <li><a href="#part3">PHẦN 3: TRIỂN KHAI LẬP TRÌNH THỰC TẾ (PYTHON &amp; C++)</a>
+            <ul>
+                <li><a href="#s3.1">3.1 Ví dụ 2D (Python): Định vị Xe tự lái với Động lực học Phi tuyến Kinematics</a></li>
+                <li><a href="#s3.2">3.2 Lập trình C++ Nhúng EKF Real-time cho Vi điều khiển (STM32/ESP32)</a></li>
+                <li><a href="#s3.3">3.3 Nhược điểm của EKF &amp; Giới thiệu Unscented Kalman Filter (UKF)</a></li>
+            </ul>
+        </li>
+    </ul>
+</div>
+
+<!-- =========================================================== -->
+<!-- PHẦN 0: NỀN TẢNG GIẢI TÍCH PHI TUYẾN                         -->
+<!-- =========================================================== -->
+<div class="part-header-intro" id="part0">
+    <h1>PHẦN 0: NỀN TẢNG GIẢI TÍCH PHI TUYẾN &amp; MA TRẬN JACOBIAN</h1>
+    <p>Kiến thức Chuẩn bị — Dành cho người chưa từng làm việc với Hệ Phi tuyến hay Đạo hàm Ma trận</p>
+</div>
+
+<div class="analogy-box">
+    <span class="box-title">💡 Tại sao Extended Kalman Filter (EKF) lại khó hiểu hơn KF chuẩn?</span>
+    <p>Trong thực tế, **hầu hết mọi hệ thống đều là PHI TUYẾN** (Robot xoay góc dùng $\sin\theta, \cos\theta$, xe chạy bẻ lái, cảm biến đo khoảng cách $d = \sqrt{x^2 + y^2}$). 
+    KF chuẩn chỉ làm việc được với các phép nhân ma trận phẳng $Ax + Bu$. EKF được sinh ra để mang sức mạnh của Kalman Filter áp dụng vào thế giới phi tuyến thực tế đó!</p>
+</div>
+
+<h2 id="s0.1">0.1 Tại sao Bộ lọc Kalman chuẩn (Standard KF) bị THẤT BẠI ở hệ phi tuyến?</h2>
+
+<p>Hãy xem điều gì xảy ra với **Phân bố Chuông Gauss** khi nó đi qua các hệ thống khác nhau:</p>
+
+<div class="step-card">
+    <span class="step-number">Hệ Tuyến tính</span> <strong>Trường hợp KF Chuẩn ($y = A x + b$)</strong>
+    <p>Nếu biến $x$ tuân theo Phân bố Gauss $\mathcal{N}(\mu, \sigma^2)$, khi biến đổi qua hàm tuyến tính $y = Ax + b$, kết quả $y$ **VẪN LÀ MỘT PHÂN BỐ GAUSS** $\mathcal{N}(A\mu + b, A^2\sigma^2)$. Do đó KF chuẩn chạy cực kỳ mượt mà!</p>
+</div>
+
+<div class="step-card">
+    <span class="step-number">Hệ Phi tuyến</span> <strong>Trường hợp Phi tuyến thực tế ($y = \sin(x)$ hay $y = x^2$)</strong>
+    <p>Khi biến ngẫu nhiên $x$ đi qua một hàm phi tuyến phức tạp, phân bố kết quả $y$ **BỊ BÓP MÉO, LỆCH LẠC (SKEWED)** và **KHÔNG CÒN LÀ HÌNH CHUÔNG GAUSS NỮA**!</p>
+    <p>Do $y$ không còn là Gauss, các phép tính kỳ vọng $E[X]$ và phương sai $P$ của KF chuẩn bị sai hoàn toàn $\rightarrow$ **Bộ lọc Kalman chuẩn bị phá sản hoàn toàn trên hệ phi tuyến!**</p>
+</div>
+
+<hr style="margin: 30px 0; border: none; border-top: 1px dashed #cbd5e1;">
+
+<h2 id="s0.2">0.2 Khai triển Chuỗi Taylor (Taylor Series) — Tuyến tính hóa là gì?</h2>
+
+<div class="definition">
+    <span class="box-title">📖 Ý tưởng cốt lõi của Tuyến tính hóa (Linearization):</span>
+    <p>Một đường cong phi tuyến phức tạp $f(x)$ bất kỳ (ví dụ $y = \sin(x)$), nếu bạn **phóng to (zoom in)** vào một điểm $\hat{x}$ đủ nhỏ, đường cong đó trông sẽ hệt như một **ĐƯỜNG THẲNG tiếp tuyến**!</p>
+</div>
+
+<p><strong>Công thức Khai triển Chuỗi Taylor 1D quanh điểm $\hat{x}$:</strong></p>
+$$f(x) = f(\hat{x}) + \left. \frac{df}{dx} \right|_{x=\hat{x}} (x - \hat{x}) + \underbrace{\frac{1}{2!} f''(\hat{x}) (x - \hat{x})^2 + \cdots}_{\text{Bỏ qua các số hạng bậc cao}}$$
+
+<p>Bằng cách bỏ qua các số hạng bậc 2, 3 trở đi, ta xấp xỉ hàm phi tuyến $f(x)$ thành một phương trình đường thẳng tuyến tính:</p>
+
+$$\boxed{f(x) \approx f(\hat{x}) + f'(\hat{x}) \cdot (x - \hat{x})}$$
+
+<hr style="margin: 30px 0; border: none; border-top: 1px dashed #cbd5e1;">
+
+<h2 id="s0.3">0.3 Đạo hàm riêng &amp; Ma trận Jacobian từ con số 0</h2>
+
+<p>Khi hệ thống có nhiều biến trạng thái (ví dụ $x = [x_1, x_2, x_3]^T$) và nhiều hàm phi tuyến $f = [f_1, f_2]^T$, hệ số góc $f'(\hat{x})$ được mở rộng thành **Ma trận Jacobian**.</p>
+
+<div class="definition">
+    <span class="box-title">📐 Định nghĩa Ma trận Jacobian:</span>
+    <p>Cho $m$ hàm phi tuyến $f_1, f_2, \dots, f_m$ phụ thuộc vào $n$ biến trạng thái $x_1, x_2, \dots, x_n$. <strong>Ma trận Jacobian $J \in \mathbb{R}^{m \times n}$</strong> là bảng chứa tất cả các đạo hàm riêng:</p>
+    $$J = \frac{\partial f}{\partial x} = \begin{bmatrix} 
+    \frac{\partial f_1}{\partial x_1} & \frac{\partial f_1}{\partial x_2} & \cdots & \frac{\partial f_1}{\partial x_n} \\[8pt]
+    \frac{\partial f_2}{\partial x_1} & \frac{\partial f_2}{\partial x_2} & \cdots & \frac{\partial f_2}{\partial x_n} \\[8pt]
+    \vdots & \vdots & \ddots & \vdots \\[8pt]
+    \frac{\partial f_m}{\partial x_1} & \frac{\partial f_m}{\partial x_2} & \cdots & \frac{\partial f_m}{\partial x_n}
+    \end{bmatrix}$$
+</div>
+
+<p><strong>Ý nghĩa vật lý:</strong> Phần tử $J_{ij} = \frac{\partial f_i}{\partial x_j}$ cho biết: <em>"Nếu biến trạng thái $x_j$ nhích nhẹ 1 chút, thì hàm $f_i$ sẽ thay đổi bao nhiêu?"</em>. Nó chính là "hệ số khuếch đại" local của hệ thống tại điểm đó.</p>
+
+<hr style="margin: 30px 0; border: none; border-top: 1px dashed #cbd5e1;">
+
+<h2 id="s0.4">0.4 Ví dụ tính tay Ma trận Jacobian từng bước số cụ thể</h2>
+
+<div class="example-box">
+    <span class="box-title">📌 Ví dụ Tính tay Jacobian 2D thực tế:</span>
+    <p>Xét một Robot đo vị trí một ngọn hải đăng (Landmark) tại gốc $(0,0)$. Robot ở tọa độ $(x_1, x_2)$. Cảm biến trên robot đo Khoảng cách $r$ và Góc $\theta$ (Hàm phi tuyến $h(x)$):</p>
+    $$h_1(x_1, x_2) = \sqrt{x_1^2 + x_2^2} \quad \text{(Khoảng cách)}$$
+    $$h_2(x_1, x_2) = \arctan\left(\frac{x_2}{x_1}\right) \quad \text{(Góc nghiêng)}$$
+
+    <p><strong>Bước 1: Tính từng Đạo hàm riêng cho Hàng 1 ($h_1$ - Khoảng cách):</strong></p>
+    $$\frac{\partial h_1}{\partial x_1} = \frac{\partial}{\partial x_1}\sqrt{x_1^2 + x_2^2} = \frac{2x_1}{2\sqrt{x_1^2 + x_2^2}} = \frac{x_1}{\sqrt{x_1^2 + x_2^2}}$$
+    $$\frac{\partial h_1}{\partial x_2} = \frac{x_2}{\sqrt{x_1^2 + x_2^2}}$$
+
+    <p><strong>Bước 2: Tính từng Đạo hàm riêng cho Hàng 2 ($h_2$ - Góc nghiêng):</strong></p>
+    $$\frac{\partial h_2}{\partial x_1} = \frac{-\frac{x_2}{x_1^2}}{1 + \left(\frac{x_2}{x_1}\right)^2} = \frac{-x_2}{x_1^2 + x_2^2}$$
+    $$\frac{\partial h_2}{\partial x_2} = \frac{\frac{1}{x_1}}{1 + \left(\frac{x_2}{x_1}\right)^2} = \frac{x_1}{x_1^2 + x_2^2}$$
+
+    <p><strong>Bước 3: Ghép thành Ma trận Jacobian $H = \frac{\partial h}{\partial x}$ hoàn chỉnh:</strong></p>
+    $$H = \begin{bmatrix} \frac{x_1}{\sqrt{x_1^2 + x_2^2}} & \frac{x_2}{\sqrt{x_1^2 + x_2^2}} \\[10pt] \frac{-x_2}{x_1^2 + x_2^2} & \frac{x_1}{x_1^2 + x_2^2} \end{bmatrix}$$
+
+    <p><strong>Bước 4: Thay số cụ thể:</strong> Nếu hiện tại Robot đang ở tọa độ $(x_1 = 3\text{m}, x_2 = 4\text{m}) \implies \sqrt{3^2+4^2} = 5$:</p>
+    $$H = \begin{bmatrix} \frac{3}{5} & \frac{4}{5} \\[6pt] \frac{-4}{25} & \frac{3}{25} \end{bmatrix} = \begin{bmatrix} 0.6 & 0.8 \\ -0.16 & 0.12 \end{bmatrix}$$
+</div>
+
+<!-- Quiz 0 -->
+<div class="quiz-section">
+    <h3>📝 Quick Quiz 0 — Kiểm tra Toán Phi tuyến Phần 0</h3>
+    
+    <div class="quiz-question">
+        <strong>Câu 1:</strong> Khai triển Chuỗi Taylor giúp ích gì cho Bộ lọc Kalman Mở rộng (EKF)?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án Câu 1:</span>
+        <p>Chuỗi Taylor giúp xấp xỉ tuyến tính các hàm phi tuyến phức tạp $f(x)$ và $h(x)$ quanh điểm ước lượng hiện tại $\hat{x}$, biến đường cong thành ma trận độ dốc (Jacobian), từ đó giúp áp dụng được bộ khung tính toán phân bố Gauss của Kalman Filter.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>Câu 2:</strong> Ma trận Jacobian khác gì so với ma trận hệ thống $A$ trong KF chuẩn?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án Câu 2:</span>
+        <p>Ma trận $A$ trong KF chuẩn là ma trận **hằng số cố định** không đổi theo thời gian. Trong khi đó, Ma trận Jacobian $F_k$ trong EKF là **ma trận biến thiên động**: tại mỗi bước thời gian $k$, nó được tính toán lại bằng cách thay số vị trí hiện tại $\hat{x}_k$ vào các công thức đạo hàm riêng.</p>
+    </div>
+</div>
+
+<!-- =========================================================== -->
+<!-- PHẦN 1: MÔ HÌNH KHÔNG GIAN TRẠNG THÁI PHI TUYẾN             -->
+<!-- =========================================================== -->
+<div class="part-header" id="part1">
+    <h1>PHẦN 1: MÔ HÌNH KHÔNG GIAN TRẠNG THÁI PHI TUYẾN</h1>
+    <p>Mô tả Hệ thống Thực tế với các Hàm Phi tuyến $f(x,u)$ và $h(x)$</p>
+</div>
+
+<h2 id="s1.1">1.1 Mô hình Phi tuyến Ngẫu nhiên</h2>
+
+<p>Một hệ thống phi tuyến thời gian rời rạc có nhiễu được mô tả bởi cặp phương trình:</p>
+
+<div class="theorem">
+    <span class="box-title">🔷 Phương trình Không gian Trạng thái Phi tuyến (Nonlinear Discrete State-Space)</span>
+    $$\mathbf{x_k = f(x_{k-1}, u_{k-1}) + w_{k-1}} \quad \text{(Hàm chuyển trạng thái phi tuyến)}$$
+    $$\mathbf{y_k = h(x_k) + v_k} \quad \text{(Hàm quan sát cảm biến phi tuyến)}$$
+    <p>trong đó:</p>
+    <ul>
+        <li>$f(\cdot)$: Hàm phi tuyến mô tả động lực học của hệ thống (ví dụ: chuyển động xe tự lái $x_{k+1} = x_k + v T_s \cos\theta$).</li>
+        <li>$h(\cdot)$: Hàm phi tuyến liên hệ giữa trạng thái và dữ liệu cảm biến đo được (ví dụ: đo khoảng cách Rada $d = \sqrt{x^2+y^2}$).</li>
+        <li>$w_{k-1} \sim \mathcal{N}(0, Q)$: Nhiễu quá trình/môi trường.</li>
+        <li>$v_k \sim \mathcal{N}(0, R)$: Nhiễu đo lường của cảm biến.</li>
+    </ul>
+</div>
+
+<h2 id="s1.2">1.2 Ý tưởng cốt lõi của EKF: Tuyến tính hóa động</h2>
+
+<p>Thuật toán EKF thực hiện tuyến tính hóa hai hàm phi tuyến $f$ và $h$ tại từng bước thời gian $k$ quanh điểm ước lượng tốt nhất hiện tại:</p>
+<ol>
+    <li>Tuyến tính hóa $f(\cdot)$ quanh $\hat{x}_{k-1|k-1} \implies$ Thu được Ma trận Jacobian **$F_k$**.</li>
+    <li>Tuyến tính hóa $h(\cdot)$ quanh $\hat{x}_{k|k-1} \implies$ Thu được Ma trận Jacobian **$H_k$**.</li>
+</ol>
+
+<!-- =========================================================== -->
+<!-- PHẦN 2: CHỨNG MINH & MỔ XẺ 5 BƯỚC THUẬT TOÁN EKF            -->
+<!-- =========================================================== -->
+<div class="part-header" id="part2">
+    <h1>PHẦN 2: CHỨNG MINH &amp; MỔ XẺ 5 BƯỚC THUẬT TOÁN EKF</h1>
+    <p>Quy trình 5 Bước Tính toán EKF — Sự Khác biệt với KF Chuẩn</p>
+</div>
+
+<h2 id="s2.1">2.1 Bước 1: Dự báo Trạng thái Phi tuyến ($\hat{x}_{k|k-1}$)</h2>
+
+<p>Dùng hàm phi tuyến gốc $f(\cdot)$ để dự báo trạng thái tiếp theo:</p>
+
+$$\boxed{\hat{x}_{k|k-1} = f(\hat{x}_{k-1|k-1}, u_{k-1})}$$
+
+<div class="important-note">
+    <span class="box-title">⚡ Lưu ý quan trọng:</span>
+    <p>Ở Bước 1 này, ta dùng **HÀM PHI TUYẾN GỐC $f(\cdot)$**, KHÔNG dùng ma trận Jacobian $F_k$! Việc này giúp giữ lại tối đa độ chính xác của mô hình chuyển động thực tế.</p>
+</div>
+
+<h2 id="s2.2">2.2 Bước 2: Tính Jacobian $F_k$ &amp; Dự báo Hiệp biến ($P_{k|k-1}$)</h2>
+
+<p>Tính Ma trận Jacobian của hàm $f$ tại trạng thái ước lượng $\hat{x}_{k-1|k-1}$:</p>
+
+$$F_k = \left. \frac{\partial f}{\partial x} \right|_{\hat{x}_{k-1|k-1}, u_{k-1}}$$
+
+<p>Sau đó dự báo Ma trận Hiệp biến Sai số $P$ (dùng $F_k$ đóng vai trò như $A$ trong KF chuẩn):</p>
+
+$$\boxed{P_{k|k-1} = F_k P_{k-1|k-1} F_k^T + Q}$$
+
+<h2 id="s2.3">2.3 Bước 3: Tính Jacobian $H_k$ &amp; EKF Gain ($K_k$)</h2>
+
+<p>Tính Ma trận Jacobian của hàm đo lường $h$ tại trạng thái dự báo $\hat{x}_{k|k-1}$:</p>
+
+$$H_k = \left. \frac{\partial h}{\partial x} \right|_{\hat{x}_{k|k-1}}$$
+
+<p>Tính ma trận **Extended Kalman Gain ($K_k$)** (dùng $H_k$ đóng vai trò như $C$ trong KF chuẩn):</p>
+
+$$\boxed{K_k = P_{k|k-1} H_k^T \left( H_k P_{k|k-1} H_k^T + R \right)^{-1}}$$
+
+<h2 id="s2.4">2.4 Bước 4: Cập nhật Trạng thái ($\hat{x}_{k|k}$)</h2>
+
+<p>Hiệu chỉnh lại trạng thái bằng dữ liệu cảm biến thực tế $y_k$:</p>
+
+$$\boxed{\hat{x}_{k|k} = \hat{x}_{k|k-1} + K_k \cdot \left( y_k - h(\hat{x}_{k|k-1}) \right)}$$
+
+<p><em>(Lưu ý: Ta lấy $y_k$ trừ cho **$h(\hat{x}_{k|k-1})$** dùng hàm phi tuyến gốc $h$, không dùng $H_k$).</em></p>
+
+<h2 id="s2.5">2.5 Bước 5: Cập nhật Hiệp biến Sai số ($P_{k|k}$)</h2>
+
+$$\boxed{P_{k|k} = (I - K_k H_k) P_{k|k-1}}$$
+
+<!-- Table Comparison -->
+<h3>Bảng so sánh 5 bước: KF Chuẩn vs. EKF Mở rộng</h3>
+
+<table>
+    <tr>
+        <th>Bước</th>
+        <th>Kalman Filter Chuẩn (Tuyến tính)</th>
+        <th>Extended Kalman Filter (Phi tuyến)</th>
+    </tr>
+    <tr>
+        <td><strong>1. Dự báo $x$</strong></td>
+        <td>$\hat{x} = A \hat{x} + B u$</td>
+        <td>$\hat{x} = \mathbf{f(\hat{x}, u)}$ (dùng hàm gốc)</td>
+    </tr>
+    <tr>
+        <td><strong>2. Dự báo $P$</strong></td>
+        <td>$P = A P A^T + Q$</td>
+        <td>$P = \mathbf{F_k} P \mathbf{F_k^T} + Q$ (dùng Jacobian $F_k$)</td>
+    </tr>
+    <tr>
+        <td><strong>3. Gain $K$</strong></td>
+        <td>$K = P C^T (C P C^T + R)^{-1}$</td>
+        <td>$K = P \mathbf{H_k^T} (\mathbf{H_k} P \mathbf{H_k^T} + R)^{-1}$ (dùng Jacobian $H_k$)</td>
+    </tr>
+    <tr>
+        <td><strong>4. Cập nhật $x$</strong></td>
+        <td>$\hat{x} = \hat{x} + K(y - C\hat{x})$</td>
+        <td>$\hat{x} = \hat{x} + K(y - \mathbf{h(\hat{x})})$ (dùng hàm gốc)</td>
+    </tr>
+    <tr>
+        <td><strong>5. Cập nhật $P$</strong></td>
+        <td>$P = (I - K C) P$</td>
+        <td>$P = (I - K \mathbf{H_k}) P$ (dùng Jacobian $H_k$)</td>
+    </tr>
+</table>
+
+<!-- Quiz 2 -->
+<div class="quiz-section">
+    <h3>📝 Quick Quiz 2 — Kiểm tra Thuật toán EKF</h3>
+    
+    <div class="quiz-question">
+        <strong>Câu 1:</strong> Trong EKF, ma trận Jacobian $F_k$ và $H_k$ được sử dụng ở những bước nào?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án Câu 1:</span>
+        <p>$F_k$ và $H_k$ chỉ được dùng để tính toán lan truyền phương sai sai số $P$ (Bước 2, Bước 5) và tính ma trận Gain $K_k$ (Bước 3). Ở Bước 1 (dự báo $x$) và Bước 4 (cập nhật $x$), EKF sử dụng trực tiếp các hàm phi tuyến gốc $f(\cdot)$ và $h(\cdot)$.</p>
+    </div>
+</div>
+
+<!-- =========================================================== -->
+<!-- PHẦN 3: TRIỂN KHAI LẬP TRÌNH PYTHON & C++                   -->
+<!-- =========================================================== -->
+<div class="part-header" id="part3">
+    <h1>PHẦN 3: TRIỂN KHAI LẬP TRÌNH PYTHON &amp; C++</h1>
+    <p>Mô phỏng Định vị Xe Tự lái 2D &amp; Code C++ Nhúng Real-time</p>
+</div>
+
+<h2 id="s3.1">3.1 Ví dụ 2D (Python): Định vị Xe tự lái với Động lực học Phi tuyến</h2>
+
+<p>Xét một Robot di động có trạng thái $x = [px, py, \theta]^T$ (Vị trí $x, y$ và Góc hướng $\theta$). Xe di chuyển với vận tốc $v$ và tốc độ quay $\omega$.</p>
+<ul>
+    <li>**Mô hình Kinematics phi tuyến gốc ($f$):**
+        $$px_{k} = px_{k-1} + v \cdot T_s \cdot \cos(\theta_{k-1})$$
+        $$py_{k} = py_{k-1} + v \cdot T_s \cdot \sin(\theta_{k-1})$$
+        $$\theta_{k} = \theta_{k-1} + \omega \cdot T_s$$
+    </li>
+    <li>**Ma trận Jacobian $F_k = \frac{\partial f}{\partial x}$:**
+        $$F_k = \begin{bmatrix} 1 & 0 & -v T_s \sin\theta \\ 0 & 1 & v T_s \cos\theta \\ 0 & 0 & 1 \end{bmatrix}$$
+    </li>
+</ul>
+
+<pre><code>import numpy as np
+import matplotlib.pyplot as plt
+
+# ==========================================================
+# 1. KHAI BÁO THAM SỐ THỜI GIAN & MÔ HÌNH
+# ==========================================================
+dt = 0.1 # Chu kỳ lấy mẫu Ts = 0.1s
+N = 100  # 100 bước mô phỏng
+
+# Ma trận Hiệp biến Nhiễu Q và R
+Q = np.diag([0.1**2, 0.1**2, np.radians(1.0)**2]) # Nhiễu xe
+R = np.diag([0.5**2, 0.5**2])                    # Nhiễu GPS
+
+# Trạng thái thực ban đầu [x, y, theta]
+x_true = np.array([0.0, 0.0, 0.0])
+x_est = np.array([0.0, 0.0, 0.0]) # Khởi tạo EKF
+P = np.eye(3) * 1.0
+
+# Điều khiển: Vận tốc v = 1 m/s, Tốc độ quay omega = 0.1 rad/s (Xe chạy đường tròn)
+v = 1.0
+omega = 0.1
+
+history_true = []
+history_est = []
+history_gps = []
+
+# ==========================================================
+# 2. VÒNG LẶP EKF MÔ PHỎNG XE TỰ LÁI 2D
+# ==========================================================
+for k in range(N):
+    # A. Cập nhật Trạng thái Thực (True State) + Nhiễu
+    x_true[0] += v * dt * np.cos(x_true[2])
+    x_true[1] += v * dt * np.sin(x_true[2])
+    x_true[2] += omega * dt
+    
+    # Giả lập Cảm biến GPS bị nhiễu (Đo x và y)
+    z_gps = x_true[0:2] + np.random.normal(0, [0.5, 0.5])
+    
+    # B. THUẬT TOÁN EKF:
+    # --- BƯỚC 1: DỰ BÁO TRẠNG THÁI (Dùng hàm phi tuyến f) ---
+    x_pred = np.zeros(3)
+    x_pred[0] = x_est[0] + v * dt * np.cos(x_est[2])
+    x_pred[1] = x_est[1] + v * dt * np.sin(x_est[2])
+    x_pred[2] = x_est[2] + omega * dt
+    
+    # --- BƯỚC 2: TÍNH JACOBIAN F_k & DỰ BÁO P ---
+    F_k = np.array([
+        [1.0, 0.0, -v * dt * np.sin(x_est[2])],
+        [0.0, 1.0,  v * dt * np.cos(x_est[2])],
+        [0.0, 0.0,  1.0]
+    ])
+    P_pred = F_k @ P @ F_k.T + Q
+    
+    # --- BƯỚC 3: TÍNH JACOBIAN H_k & KALMAN GAIN K_k ---
+    # Hàm h(x) chỉ đo [x, y], nên H_k là ma trận phẳng 2x3
+    H_k = np.array([
+        [1.0, 0.0, 0.0],
+        [0.0, 1.0, 0.0]
+    ])
+    
+    S = H_k @ P_pred @ H_k.T + R
+    K_k = P_pred @ H_k.T @ np.linalg.inv(S)
+    
+    # --- BƯỚC 4 & 5: CẬP NHẬT TRẠNG THÁI & P ---
+    y_residual = z_gps - H_k @ x_pred # Chênh lệch GPS vs Dự báo
+    x_est = x_pred + K_k @ y_residual
+    P = (np.eye(3) - K_k @ H_k) @ P_pred
+    
+    # Lưu lịch sử
+    history_true.append(x_true.copy())
+    history_est.append(x_est.copy())
+    history_gps.append(z_gps.copy())
+
+history_true = np.array(history_true)
+history_est = np.array(history_est)
+history_gps = np.array(history_gps)
+
+# ==========================================================
+# 3. VẼ ĐỒ THỊ QUĨ ĐẠO 2D
+# ==========================================================
+plt.figure(figsize=(9, 8))
+plt.plot(history_true[:, 0], history_true[:, 1], 'g-', linewidth=2.5, label='Quỹ đạo Thực tế (Ground Truth)')
+plt.plot(history_gps[:, 0], history_gps[:, 1], 'r.', alpha=0.5, label='GPS thô (Bị nhiễu)')
+plt.plot(history_est[:, 0], history_est[:, 1], 'b--', linewidth=2, label='Quỹ đạo Ước lượng EKF')
+plt.xlabel('Vị trí X (m)')
+plt.ylabel('Vị trí Y (m)')
+plt.title('Mô phỏng Định vị Xe Tự Lái 2D bằng Extended Kalman Filter (EKF)')
+plt.legend()
+plt.grid(True)
+plt.axis('equal')
+plt.show()
+</code></pre>
+
+<hr style="margin: 30px 0; border: none; border-top: 1px dashed #cbd5e1;">
+
+<h2 id="s3.2">3.2 Lập trình C++ Nhúng EKF Real-time cho Vi điều khiển</h2>
+
+<pre><code>// ==========================================================
+// THƯ VIỆN EKF NHÚNG C++ CHO XE TỰ HÀNH 2D (STM32 / ESP32)
+// ==========================================================
+
+#include &lt;math.h&gt;
+
+class ExtendedKalmanFilter2D {
+public:
+    float x, y, theta; // State vector
+    float P[3][3];     // Covariance matrix
+    float Q[3][3];     // Process noise
+    float R[2][2];     // Sensor noise
+
+    ExtendedKalmanFilter2D() {
+        x = 0.0f; y = 0.0f; theta = 0.0f;
+        // Khởi tạo ma trận P, Q, R...
+    }
+
+    /**
+     * @brief Bước Dự báo Trạng thái & Hiệp biến (Predict)
+     */
+    void predict(float v, float omega, float dt) {
+        // 1. Dự báo bằng hàm phi tuyến f gốc
+        x += v * dt * cosf(theta);
+        y += v * dt * sinf(theta);
+        theta += omega * dt;
+
+        // 2. Tính Ma trận Jacobian F_k
+        float F[3][3] = {
+            {1.0f, 0.0f, -v * dt * sinf(theta)},
+            {0.0f, 1.0f,  v * dt * cosf(theta)},
+            {0.0f, 0.0f,  1.0f}
+        };
+
+        // 3. Cập nhật P_pred = F * P * F^T + Q
+        // (Thực hiện nhân ma trận 3x3)
+    }
+
+    /**
+     * @brief Bước Cập nhật từ cảm biến GPS (Update)
+     */
+    void updateGPS(float gps_x, float gps_y) {
+        // H_k = [1 0 0; 0 1 0]
+        // Tính K_k = P * H^T * (H * P * H^T + R)^-1
+        // Cập nhật x = x + K * (z - Hx)
+        // Cập nhật P = (I - K*H) * P
+    }
+};
+</code></pre>
+
+<!-- TỔNG KẾT EKF -->
+<div style="background: linear-gradient(135deg, #0f172a, #1e293b); color: white; padding: 35px; border-radius: 10px; margin-top: 50px; text-align: center;">
+    <h2 style="color: #60a5fa; margin-top: 0;">🎯 Tóm Tắt Extended Kalman Filter (EKF)</h2>
+    <p style="font-size: 1.05em; color: #cbd5e1; max-width: 750px; margin: 10px auto;">
+        1. **Vấn đề:** Hệ thống thực tế có hàm chuyển trạng thái $f(x,u)$ và hàm quan sát $h(x)$ phi tuyến làm biến dạng phân bố Gauss.<br>
+        2. **Giải pháp:** Tuyến tính hóa $f$ và $h$ tại từng bước thời gian quanh trạng thái hiện tại bằng **Ma trận Jacobian** $F_k$ và $H_k$.<br>
+        3. **Ứng dụng:** Là linh hồn của thuật toán định vị và dẫn đường cho Xe tự lái (Tesla, Waymo), Drone và Robot di động.
+    </p>
+</div>
+
+<div style="text-align: center; margin: 35px 0; color: var(--text-secondary); font-size: 0.9em;">
+    <p>— Hết tài liệu EKF —</p>
+    <p><em>Nhấn nút "📄 Xuất PDF" ở góc phải dưới để lưu tài liệu dưới dạng PDF</em></p>
+</div>
+
+</body>
+</html>
