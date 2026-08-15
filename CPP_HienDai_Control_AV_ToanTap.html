@@ -1,0 +1,1567 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>C++ Hiện Đại Cho Control &amp; AV — Toàn Tập</title>
+<script>
+window.MathJax = {
+    tex: { inlineMath: [['$','$']], displayMath: [['$$','$$']], tags: 'ams' },
+    svg: { fontCache: 'global' }
+};
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<style>
+:root {
+    --primary: #0f172a;
+    --accent: #2563eb;
+    --accent-light: #3b82f6;
+    --success: #16a34a;
+    --warning: #d97706;
+    --danger: #dc2626;
+    --bg: #f8fafc;
+    --card-bg: #ffffff;
+    --text: #1e293b;
+    --text-secondary: #475569;
+    --code-bg: #0f172a;
+    --border: #e2e8f0;
+    --quiz-bg: #f0f9ff;
+    --answer-bg: #f0fdf4;
+    --yellow-bg: #fffbeb;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.75;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+h1, h2, h3, h4 { color: var(--primary); line-height: 1.4; }
+h2 { font-size: 1.45em; margin: 28px 0 12px; }
+h3 { font-size: 1.2em; margin: 22px 0 10px; }
+p { margin: 10px 0; }
+ul, ol { margin: 10px 0 10px 28px; }
+li { margin: 6px 0; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+strong { color: var(--primary); }
+table.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 0.95em;
+}
+.table th {
+    background: var(--primary);
+    color: #fff;
+    padding: 10px 12px;
+    text-align: left;
+    border: 1px solid var(--primary);
+}
+.table td {
+    padding: 9px 12px;
+    border: 1px solid var(--border);
+    vertical-align: top;
+}
+.table tr:nth-child(even) { background: #f1f5f9; }
+pre {
+    background: var(--code-bg);
+    color: #e2e8f0;
+    padding: 14px 16px;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 14px 0;
+    font-size: 0.88em;
+    line-height: 1.5;
+}
+code {
+    font-family: Consolas, 'Fira Code', monospace;
+    background: #e2e8f0;
+    color: var(--danger);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.92em;
+}
+pre code { background: none; color: #e2e8f0; padding: 0; }
+.cover-page {
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    color: #fff;
+    text-align: center;
+    padding: 70px 30px;
+    border-radius: 12px;
+    margin-bottom: 30px;
+}
+.cover-page h1 { color: #fff; font-size: 2.2em; margin-bottom: 10px; }
+.cover-page .subtitle { color: #94a3b8; font-size: 1.15em; margin-bottom: 18px; }
+.cover-page .tagline { color: #cbd5e1; font-size: 1.02em; max-width: 700px; margin: 0 auto 25px; }
+.cover-page .meta { color: #60a5fa; font-size: 0.95em; border-top: 1px solid #334155; padding-top: 18px; display: inline-block; }
+.toc {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px 30px;
+    margin: 20px 0;
+}
+.toc h2 { margin-top: 0; border-bottom: 2px solid var(--accent); padding-bottom: 8px; }
+.toc ol { margin-left: 20px; }
+.toc a { display: inline-block; padding: 3px 0; }
+.part-header {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    color: #fff;
+    padding: 26px 28px;
+    border-radius: 10px;
+    margin: 36px 0 20px;
+}
+.part-header h1 { color: #fff; margin: 0 0 6px; font-size: 1.5em; }
+.part-header p { color: #bfdbfe; margin: 0; }
+.part-header-intro {
+    background: linear-gradient(135deg, #16a34a, #15803d);
+    color: #fff;
+    padding: 26px 28px;
+    border-radius: 10px;
+    margin: 36px 0 20px;
+}
+.part-header-intro h1 { color: #fff; margin: 0 0 6px; font-size: 1.5em; }
+.part-header-intro p { color: #dcfce7; margin: 0; }
+.part-header-purple {
+    background: linear-gradient(135deg, #7c3aed, #6d28d9);
+    color: #fff;
+    padding: 26px 28px;
+    border-radius: 10px;
+    margin: 36px 0 20px;
+}
+.part-header-purple h1 { color: #fff; margin: 0 0 6px; font-size: 1.5em; }
+.part-header-purple p { color: #ddd6fe; margin: 0; }
+.part-header-orange {
+    background: linear-gradient(135deg, #ea580c, #c2410c);
+    color: #fff;
+    padding: 26px 28px;
+    border-radius: 10px;
+    margin: 36px 0 20px;
+}
+.part-header-orange h1 { color: #fff; margin: 0 0 6px; font-size: 1.5em; }
+.part-header-orange p { color: #fed7aa; margin: 0; }
+.part-header-danger {
+    background: linear-gradient(135deg, #dc2626, #b91c1c);
+    color: #fff;
+    padding: 26px 28px;
+    border-radius: 10px;
+    margin: 36px 0 20px;
+}
+.part-header-danger h1 { color: #fff; margin: 0 0 6px; font-size: 1.5em; }
+.part-header-danger p { color: #fecaca; margin: 0; }
+.definition, .theorem, .important-note, .example-box, .analogy-box, .warning-box, .cheat-sheet {
+    border-radius: 10px;
+    padding: 18px 22px;
+    margin: 18px 0;
+}
+.box-title {
+    display: inline-block;
+    font-weight: 700;
+    font-size: 0.95em;
+    margin-bottom: 10px;
+    padding: 4px 12px;
+    border-radius: 6px;
+}
+.definition { background: #eff6ff; border-left: 5px solid var(--accent); }
+.definition .box-title { background: var(--accent); color: #fff; }
+.theorem { background: #f5f3ff; border-left: 5px solid #7c3aed; }
+.theorem .box-title { background: #7c3aed; color: #fff; }
+.important-note { background: #fffbeb; border-left: 5px solid var(--warning); }
+.important-note .box-title { background: var(--warning); color: #fff; }
+.example-box { background: #f0fdf4; border-left: 5px solid var(--success); }
+.example-box .box-title { background: var(--success); color: #fff; }
+.analogy-box { background: #f0f9ff; border-left: 5px solid #06b6d4; }
+.analogy-box .box-title { background: #06b6d4; color: #fff; }
+.warning-box { background: #fef2f2; border-left: 5px solid var(--danger); }
+.warning-box .box-title { background: var(--danger); color: #fff; }
+.cheat-sheet { background: #f0fdfa; border: 1px dashed #14b8a6; }
+.cheat-sheet .box-title { background: #14b8a6; color: #fff; }
+.step-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 22px;
+    margin: 16px 0;
+    position: relative;
+}
+.step-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.05em;
+    margin-bottom: 10px;
+}
+.quiz-section { background: var(--quiz-bg); border-radius: 10px; padding: 22px 24px; margin: 20px 0; }
+.quiz-section > h3 { margin-top: 0; }
+.quiz-question {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 14px 0;
+}
+.answer-section {
+    background: var(--answer-bg);
+    border-left: 4px solid var(--success);
+    border-radius: 8px;
+    padding: 12px 18px;
+    margin: 10px 0 16px;
+}
+.answer-section .box-title { background: var(--success); color: #fff; }
+.level-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.82em;
+    font-weight: 600;
+    margin: 0 4px;
+}
+.level-apply { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+.level-deep { background: #dbeafe; color: #1e40af; border: 1px solid #93c5fd; }
+.level-concept { background: #ede9fe; color: #5b21b6; border: 1px solid #c4b5fd; }
+.legend-box {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 16px 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+}
+.legend-item { display: flex; align-items: center; gap: 8px; font-size: 0.92em; }
+.print-btn {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 30px;
+    font-size: 0.95em;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+    z-index: 100;
+}
+.print-btn:hover { background: var(--primary); }
+.summary-box {
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    color: #fff;
+    padding: 30px 34px;
+    border-radius: 12px;
+    margin: 30px 0;
+}
+.summary-box h2 { color: #60a5fa; margin-top: 0; }
+.summary-box ul { color: #cbd5e1; }
+@media print {
+    .print-btn { display: none; }
+    .part-header, .part-header-intro, .part-header-purple, .part-header-orange, .part-header-danger { page-break-before: always; }
+    .definition, .theorem, .important-note, .example-box, .analogy-box, .warning-box, .cheat-sheet, .quiz-section, .answer-section, .step-card, .toc { break-inside: avoid; }
+    body { background: #fff; }
+}
+</style>
+</head>
+<body>
+
+<button class="print-btn" onclick="window.print()">📄 Xuất PDF</button>
+
+<div class="cover-page">
+    <h1>💻 C++ Hiện Đại Cho Control &amp; AV</h1>
+    <div class="subtitle">Từ nền tảng đến dự án LQR chạy thật — ngôn ngữ làm việc của Autonomous Vehicles</div>
+    <div class="tagline">
+        Tài liệu theo đúng tuần 1–3 của lộ trình: class &amp; OOP, RAII &amp; smart pointer, STL, template, lambda — kết thúc bằng bài tập lớn viết lại mô phỏng LQR bằng C++ thuần, xuất CSV để so sánh với kết quả Python. Toàn bộ code chạy được trên g++/CMake.
+    </div>
+    <div class="meta">Dành cho: Huỳnh Công Danh · Định hướng Control &amp; Planning · C++11/14/17</div>
+</div>
+
+<div class="toc">
+    <h2>📑 Mục Lục</h2>
+    <ol>
+        <li><a href="#part0">Phần 0 — Vì sao C++ cho Control &amp; AV + thiết lập môi trường</a></li>
+        <li><a href="#part1">Phần 1 — Nền tảng: biến, con trỏ, tham chiếu, const</a></li>
+        <li><a href="#part2">Phần 2 — Class &amp; OOP: encapsulation, inheritance, polymorphism</a></li>
+        <li><a href="#part3">Phần 3 — RAII &amp; Smart Pointer: bảo mật bộ nhớ</a></li>
+        <li><a href="#part4">Phần 4 — STL: vector, map, algorithm, iterator</a></li>
+        <li><a href="#part5">Phần 5 — Template &amp; Lambda</a></li>
+        <li><a href="#part6">Phần 6 — Dự án lớn: LQR bằng C++ thuần + xuất CSV</a></li>
+        <li><a href="#part7">Phần 7 — Quiz &amp; Tổng kết</a></li>
+    </ol>
+</div>
+
+<div class="legend-box">
+    <div class="legend-item"><span class="level-badge level-deep">🔬 CẦN HIỂU SÂU</span> bắt buộc cho phỏng vấn</div>
+    <div class="legend-item"><span class="level-badge level-apply">🔧 CHỈ CẦN CÔNG THỨC</span> dùng được là đủ</div>
+    <div class="legend-item"><span class="level-badge level-concept">🔎 HIỂU Ý TƯỞNG</span> nắm bản chất để giải thích</div>
+</div>
+
+<div class="part-header-intro" id="part0">
+    <h1>PHẦN 0 — VÌ SAO C++ CHO CONTROL &amp; AV</h1>
+    <p>Bối cảnh ngành + thiết lập môi trường biên dịch trước khi viết code</p>
+</div>
+
+<div class="definition">
+    <span class="box-title">📌 Tại sao AV dùng C++?</span>
+    <p>Ba lý do kỹ thuật cụ thể, không phải sở thích:</p>
+    <ul>
+        <li><strong>Real-time &amp; deterministic:</strong> vòng điều khiển phải chạy đúng chu kỳ (vd 100Hz) trên phần cứng có hạn. C++ không có garbage collector chạy ngầm như Python/Java — bạn kiểm soát hoàn toàn khi nào cấp/giải phóng bộ nhớ → độ trễ ổn định.</li>
+        <li><strong>Hiệu suất:</strong> điều khiển MPC/NMPC cần giải bài toán tối ưu trong vài mili-giây. Python mất ~10–100× thời gian cho cùng thuật toán.</li>
+        <li><strong>Tiếp cận phần cứng:</strong> đọc encoder/CAN, điều khiển động cơ, cấu hình bộ đếm — tất cả qua driver cấp thấp viết bằng C/C++.</li>
+    </ul>
+</div>
+
+<div class="theorem">
+    <span class="box-title">⚖️ C vs C++: vì sao chọn C++ cho phần điều khiển cấp cao</span>
+    <p>C = "con dao gọt bút chì" — gần phần cứng nhất, dùng cho firmware thuần (bootloader, driver). C++ = "hộp công cụ" — vẫn đủ nhanh như C nhưng có thêm OOP, STL, RAII giúp viết thuật toán phức tạp (planner, MPC) sạch và an toàn hơn. Trong AV: firmware/tầng driver dùng C, tầng planning/control dùng C++.</p>
+</div>
+
+<div class="important-note">
+    <span class="box-title">⚙️ Thiết lập môi trường (làm 1 lần, trước khi đọc tiếp)</span>
+    <p>Chạy trên <strong>WSL2 (Ubuntu)</strong> nếu bạn đang dùng Windows — AV làm việc trên Linux (JD VinFast yêu cầu Linux). Kiểm tra:</p>
+    <pre><code>sudo apt update &amp;&amp; sudo apt install -y g++ cmake git build-essential
+g++ --version   # phải thấy g++ 9.x trở lên
+cmake --version # phải thấy 3.16 trở lên</code></pre>
+    <p>Biên dịch nhanh một file: <code>g++ -std=c++17 -Wall -o prog prog.cpp</code>. Toàn bộ ví dụ trong tài liệu này chạy được bằng lệnh đó.</p>
+</div>
+
+<div class="analogy-box">
+    <span class="box-title">🔎 Ẩn dụ xuyên suốt: C++ là "nhà máy sản xuất mô-đun"</span>
+    <p>Bạn không viết một chương trình khổng lồ; bạn đúc các <strong>khuôn (class/template)</strong> rồi lắp ráp chúng. Mỗi khuôn tự quản lý "kho hàng" của nó (RAII), giao tiếp qua cửa sổ rõ ràng (public interface), và có thể được kế thừa thay đổi mà không phá khối khác (polymorphism). Đây chính xác là cách ROS2, Autoware, F1TENTH tổ chức code.</p>
+</div>
+<div class="part-header" id="part1">
+    <h1>PHẦN 1 — NỀN TẢNG: BIẾN, CON TRỎ, THAM CHIẾU, CONST</h1>
+    <p>Những khác biệt gây "sốc văn hóa" khi chuyển từ Python/Matlab sang C++</p>
+</div>
+
+<div class="definition">
+    <span class="box-title">📌 Kiểu dữ liệu &amp; auto</span>
+    <p>C++ là ngôn ngữ <strong>tĩnh định kiểu (statically typed)</strong>: kiểu biến được xác định lúc biên dịch. Khác hẳn Python — nếu gán sai kiểu, compiler báo lỗi <strong>trước khi chạy</strong>, đó là tính năng bảo vệ bạn, không phải phiền phức.</p>
+    <pre><code>int    n = 5;              // số nguyên 32-bit
+double x = 1.2345;         // số thực 64-bit — DÙNG cho control
+bool   ok = true;
+float  f = 1.0f;           // 32-bit — hiếm dùng, thiếu chính xác
+
+// Từ C++11: auto — compiler tự suy kiểu từ giá trị
+auto a = 3.14;             // a: double
+auto b = 5;                // b: int
+auto v = std::vector&lt;double&gt;{1,2,3}; // v: vector&lt;double&gt;</code></pre>
+    <p><strong>Quy tắc control:</strong> mọi số trong vòng điều khiển dùng <code>double</code>. <code>float</code> dành cho lưu lượng/động cơ nơi cần tiết kiệm bộ nhớ. Vì sao? Sai số làm tròn float (~$10^{-7}$) tích lũy qua nghìn vòng lặp sẽ phá chất lượng bám.</p>
+</div>
+
+<div class="definition">
+    <span class="box-title">📌 Con trỏ (pointer) — biến "chỉ đường"</span>
+    <p>Con trỏ lưu <strong>địa chỉ bộ nhớ</strong> của một biến khác. Dùng toán tử <code>&amp;</code> để lấy địa chỉ, <code>*</code> để truy cập giá trị tại địa chỉ đó (dereference).</p>
+    <pre><code>double x = 1.5;
+double* ptr = &amp;x;   // ptr trỏ tới địa chỉ của x
+*ptr = 2.5;          // ghi 2.5 vào x qua con trỏ
+// x bây giờ là 2.5</code></pre>
+    <p><strong>Vì sao cần con trỏ trong control?</strong> Vì dữ liệu lớn (ma trận, điểm cloud, ảnh) không nên copy mỗi lần truyền hàm — copy 100.000 điểm mỗi chu kỳ = lãng phí thời gian real-time. Con trỏ cho phép hàm "nhìn vào" cùng một vùng nhớ.</p>
+</div>
+
+<div class="warning-box">
+    <span class="box-title">⚠️ Null pointer — con trỏ "không trỏ đâu cả"</span>
+    <p>Con trỏ có thể bằng <code>nullptr</code> (C++11, thay cho NULL của C). <strong>Dereference nullptr là crash tức thì.</strong> Luôn kiểm tra trước khi dùng:</p>
+    <pre><code>double* p = nullptr;
+if (p != nullptr) { *p = 0.0; }  // an toàn
+// *p = 0.0;  // CRASH — p không trỏ tới gì</code></pre>
+    <p>Trong code C++ hiện đại, bạn ít khi phải dùng con trỏ thô (raw pointer) cho sở hữu tài nguyên — đó là việc của smart pointer (Phần 3). Con trỏ thô chỉ dùng khi "mượn nhìn" dữ liệu không sở hữu.</p>
+</div>
+
+<div class="definition">
+    <span class="box-title">📌 Tham chiếu (reference) — "bí danh" của biến</span>
+    <p>Tham chiếu là một <strong>tên khác cho cùng biến</strong>. Khác con trỏ ở 2 điểm: không thể là <code>nullptr</code> (luôn trỏ tới đối tượng hợp lệ), và không cần <code>*</code> để truy cập.</p>
+    <pre><code>double x = 1.5;
+double&amp; ref = x;   // ref là bí danh của x
+ref = 2.5;          // x = 2.5
+
+void update_velocity(double&amp; v) { v += 0.1; }  // sửa TRỰC TIẾP v</code></pre>
+    <p><strong>Quy tắc vàng trong control:</strong> truyền tham số vào hàm bằng <code>const reference</code> (đọc nhanh, không copy, không sửa được), truyền tham số cần sửa bằng <code>reference</code> thường.</p>
+    <pre><code>double norm(const std::vector&lt;double&gt;&amp; v);  // đọc mà không copy
+void  saturate(double&amp; u, double u_max);      // sửa u tại chỗ</code></pre>
+</div>
+
+<div class="definition">
+    <span class="box-title">📌 const — lời hứa không sửa đổi</span>
+    <p><code>const</code> báo compiler "đây là hằng, không được sửa". Compiler sẽ báo lỗi nếu bạn vô tình gán giá trị mới — phát hiện lỗi logic từ lúc biên dịch, đặc biệt quan trọng với các hằng số vật lý.</p>
+    <pre><code>const double k = 2.0;   // hằng số điều khiển
+const double GRAVITY = 9.81;
+k = 3.0;                 // ❌ LỖI BIÊN DỊCH
+
+// Hàm chỉ đọc dữ liệu → khai báo const để ép an toàn
+void print(const std::vector&lt;double&gt;&amp; v) {
+    // v.push_back(1.0); // ❌ không biên dịch được
+}</code></pre>
+    <p>Trong môi trường code lớn (ROS2, Autoware), <code>const</code> đúng chỗ là "hợp đồng" giữa các module — đọc code người khác an tâm hơn rất nhiều.</p>
+</div>
+
+<div class="cheat-sheet">
+    <span class="box-title">📋 Cheat-sheet Phần 1</span>
+    <table class="table">
+        <tr><th>Khái niệm</th><th>Dấu hiệu</th><th>Dùng khi</th></tr>
+        <tr><td>Giá trị</td><td><code>double x</code></td><td>Biến nhỏ, không cần chia sẻ</td></tr>
+        <tr><td>Con trỏ</td><td><code>double* p</code> + <code>*p</code></td><td>Có thể "không có gì" (nullptr)</td></tr>
+        <tr><td>Tham chiếu</td><td><code>double&amp; r</code></td><td>Luôn tồn tại, cần sửa đối tượng gốc</td></tr>
+        <tr><td>const ref</td><td><code>const double&amp;</code></td><td>Đọc dữ liệu lớn, không sửa (quy tắc vàng)</td></tr>
+    </table>
+</div>
+
+<div class="quiz-section">
+    <h3>💪 Luyện tập Phần 1 (tự gõ, tự biên dịch)</h3>
+
+    <div class="quiz-question">
+        <strong>BT1.1</strong> Gõ chương trình sau, chạy, rồi sửa lại để in ra kết quả đúng như ghi chú:
+    </div>
+    <pre><code>#include &lt;iostream&gt;
+
+int main() {
+    double x = 1.5;
+    double&amp; r = x;     // r là bí danh của x
+    r = 3.0;           // x bây giờ là bao nhiêu?
+    std::cout &lt;&lt; "x = " &lt;&lt; x &lt;&lt; "\n";   // in ra ??
+    return 0;
+}</code></pre>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>In ra <code>x = 3</code>. Vì <code>r</code> là bí danh của <code>x</code>, gán <code>r = 3.0</code> đồng nghĩa gán cho <code>x</code>. Đây là cách tham chiếu "nhìn thấy" cùng biến — không có bản sao.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>BT1.2</strong> Gõ, đoán kết quả, rồi chạy:
+    </div>
+    <pre><code>#include &lt;iostream&gt;
+
+void f(double x)  { x = 10.0; }   // truyền giá trị
+void g(double&amp; x) { x = 10.0; }   // truyền tham chiếu
+void h(const double&amp; x) { /* x = 10.0; */ }  // thử bỏ comment xem lỗi gì
+
+int main() {
+    double a = 1.0, b = 1.0;
+    f(a);  g(b);
+    std::cout &lt;&lt; "a = " &lt;&lt; a &lt;&lt; ", b = " &lt;&lt; b &lt;&lt; "\n";
+    return 0;
+}</code></pre>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>In ra <code>a = 1, b = 10</code>. <code>f</code> sửa bản sao (không đổi a); <code>g</code> sửa trực tiếp (đổi b). Bỏ comment trong <code>h</code> → lỗi biên dịch vì <code>const</code> cấm sửa. Đây là lý do const reference được dùng khi chỉ muốn đọc.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>BT1.3</strong> Viết từ đầu: hàm <code>double trapezoid(double a, double b, double h)</code> tính diện tích hình thang $S = h(a+b)/2$ bằng C++. In kết quả cho a=3, b=5, h=2 (đáp án: 8).
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>Khai báo: <code>double trapezoid(double a, double b, double h) { return h * (a + b) / 2.0; }</code>. Trong main: <code>std::cout &lt;&lt; trapezoid(3,5,2) &lt;&lt; "\n";</code> → in <code>8</code>. Tập quen dấu <code>;</code> cuối lệnh và kiểu trả về đứng trước tên hàm.</p>
+    </div>
+</div>
+<div class="part-header-purple" id="part2">
+    <h1>PHẦN 2 — CLASS &amp; OOP</h1>
+    <p>Encapsulation, Inheritance, Polymorphism — 3 trụ cột tổ chức code robot</p>
+</div>
+
+<div class="definition">
+    <span class="box-title">📌 Class — khuôn mẫu "đối tượng"</span>
+    <p>Class gom dữ liệu (thành viên) + hành vi (phương thức) thành một đơn vị. Trong AV, mỗi class là một module: <code>Controller</code>, <code>KalmanFilter</code>, <code>MotorDriver</code>, <code>Planner</code>.</p>
+    <pre><code>#include &lt;iostream&gt;
+#include &lt;cmath&gt;
+
+class LQRController {
+private:                 // chỉ code bên trong class dùng được
+    double q_;            // trọng số Q
+    double r_;            // trọng số R
+    double k_;            // hệ số phản hồi K (tính từ ARE)
+public:                  // ai cũng dùng được — "cửa sổ"
+    LQRController(double q, double r) : q_(q), r_(r) {
+        // nghiệm ARE cho hệ bậc 1: k = q + sqrt(q*q + q*r) ... (bài tập)
+    }
+
+    void setK(double k) { k_ = k; }
+
+    // tính tín hiệu điều khiển từ trạng thái
+    double compute(double x) const { return -k_ * x; }
+};
+
+int main() {
+    LQRController c(3.0, 1.0);
+    double u = c.compute(0.5);   // u = -k * 0.5
+    std::cout &lt;&lt; "u = " &lt;&lt; u &lt;&lt; "\n";
+    return 0;
+}</code></pre>
+    <p><strong>Ba điều mới so với Python:</strong></p>
+    <ul>
+        <li><code>private</code>/<code>public</code>: kiểm soát truy cập (encapsulation) — chặn lỗi sửa nhầm từ ngoài.</li>
+        <li><strong>Constructor</strong> <code>LQRController(...)</code>: hàm chạy khi tạo đối tượng, thường khởi tạo thành viên qua <strong>initializer list</strong> <code>: q_(q), r_(r)</code> (đúng chuẩn C++, không gán trong thân hàm).</li>
+        <li><strong>Member initializer list</strong> dùng dấu hai chấm sau tên constructor — bắt buộc quen vì tài liệu thật đều viết thế.</li>
+    </ul>
+
+    <div class="quiz-section">
+        <h3>💪 Luyện tập Phần 2a — Class cơ bản</h3>
+
+        <div class="quiz-question">
+            <strong>BT2.1</strong> Gõ class <code>Integrator</code> — tích phân số Euler $\int u\,dt$ gần đúng bằng $y_{k+1} = y_k + u_k T_s$:
+        </div>
+        <pre><code>#include &lt;iostream&gt;
+
+class Integrator {
+private:
+    double y_;
+    double ts_;
+public:
+    Integrator(double ts) : y_(0.0), ts_(ts) {}   // initializer list
+    void reset() { y_ = 0.0; }
+    double step(double u) {
+        y_ += u * ts_;
+        return y_;
+    }
+};
+
+int main() {
+    Integrator intg(0.1);
+    std::cout &lt;&lt; intg.step(2.0) &lt;&lt; "\n";   // 0.2
+    std::cout &lt;&lt; intg.step(2.0) &lt;&lt; "\n";   // 0.4
+    return 0;
+}</code></pre>
+        <div class="answer-section">
+            <span class="box-title">✅ Đáp án</span>
+            <p>Chạy được, in <code>0.2</code> rồi <code>0.4</code>. Mỗi lần gọi <code>step</code>, y tăng thêm u×0.1. Hãy thử đổi <code>ts_</code> thành 0.05 → các giá trị in ra thành 0.1, 0.2 — đó là tích phân chậm hơn. Đây chính là khâu tích phân của PID bạn đã học trong tài liệu PID.</p>
+        </div>
+
+        <div class="quiz-question">
+            <strong>BT2.2</strong> Thêm phương thức <code>get()</code> vào <code>Integrator</code> để đọc giá trị hiện tại mà không thay đổi đối tượng (đánh dấu <code>const</code>):
+        </div>
+        <pre><code>double get() const { return y_; }   // const: hứa không sửa đổi</code></pre>
+        <div class="answer-section">
+            <span class="box-title">✅ Đáp án</span>
+            <p>Thêm vào phần <code>public</code> của class. Gọi <code>intg.get()</code> trả về y mà không cần <code>step</code>. Chữ <code>const</code> ở cuối là "hợp đồng" với compiler: phương thức này không sửa thành viên — gọi được cả trên đối tượng const. Đây là phong cách bắt buộc trong code chuyên nghiệp.</p>
+        </div>
+    </div>
+</div>
+
+<div class="important-note">
+    <span class="box-title">🎯 Tổ chức file chuẩn công nghiệp</span>
+    <p>Mỗi class một cặp file: <strong>header (.h)</strong> khai báo interface (public/private), <strong>source (.cpp)</strong> viết thân hàm. Compiler cần thấy header, linker ráp source:</p>
+    <pre><code>// lqr_controller.h
+#pragma once                 // chống include trùng lặp
+class LQRController {
+public:
+    LQRController(double q, double r);
+    double compute(double x) const;
+private:
+    double q_, r_, k_;
+};
+
+// lqr_controller.cpp
+#include "lqr_controller.h"
+LQRController::LQRController(double q, double r) : q_(q), r_(r), k_(0.0) {}
+double LQRController::compute(double x) const { return -k_ * x; }</code></pre>
+</div>
+
+<div class="definition">
+    <span class="box-title">📌 Inheritance (kế thừa) — mở rộng mà không phá code cũ</span>
+    <p>Kế thừa cho phép class mới (<code>Derived</code>) thừa hưởng và mở rộng class cũ (<code>Base</code>). Trong AV: <code>BaseController</code> → <code>PIDController</code>, <code>LQRController</code>, <code>MPCController</code>.</p>
+    <pre><code>class Controller {            // base
+public:
+    virtual ~Controller() = default;
+    virtual double compute(double x) const = 0;  // pure virtual
+};
+
+class PIDController : public Controller {
+public:
+    double compute(double x) const override { return -kp_ * x; }
+private:
+    double kp_ = 1.0;
+};
+
+class LQRController : public Controller {
+public:
+    double compute(double x) const override { return -k_ * x; }
+private:
+    double k_ = 2.0;
+};
+
+void run(Controller&amp; c, double x) { double u = c.compute(x); }</code></pre>
+</div>
+
+<div class="definition">
+    <span class="box-title">📌 Polymorphism &amp; virtual — "một hợp đồng, nhiều triển khai"</span>
+    <p>Từ khóa <code>virtual</code> + <code>override</code> tạo <strong>đa hình (polymorphism)</strong>: bạn gọi <code>compute()</code> qua con trỏ/reference của <code>Controller</code>, nhưng đúng phiên bản <code>PID</code> hay <code>LQR</code> được chạy tùy đối tượng thật. Đây là cách viết <code>Controller</code> cho bộ điều khiển mà không cần sửa code gọi.</p>
+    <ul>
+        <li><code>= 0</code> sau khai báo = <strong>pure virtual</strong> — class đó không thể tạo đối tượng trực tiếp (interface).</li>
+        <li><code>override</code> (C++11): bắt compiler kiểm tra bạn ghi đè đúng chữ ký.</li>
+        <li><code>virtual ~Controller() = default;</code> — <strong>bắt buộc</strong>: nếu không, khi hủy qua con trỏ base, destructor của Derived không chạy → rò rỉ tài nguyên.</li>
+    </ul>
+</div>
+
+<div class="warning-box">
+    <span class="box-title">⚠️ Quy tắc "hướng đối tượng thực dụng" cho người làm control</span>
+    <p>Đừng lạm dụng kế thừa sâu 5 cấp như giáo trình IT. Trong control: 1 cấp interface + vài class triển khai là đủ. Nếu cần thay đổi hành vi, ưu tiên <strong>composition</strong> (đối tượng chứa đối tượng) hơn kế thừa. Đọc code Autoware/F1TENTH để thấy sự thực dụng này.</p>
+</div>
+
+<div class="quiz-section">
+    <h3>💪 Luyện tập Phần 2b — Inheritance &amp; Polymorphism</h3>
+
+    <div class="quiz-question">
+        <strong>BT2.3</strong> Gõ lại ví dụ Controller ở trên, thêm class <code>MPCController</code> cũng kế thừa <code>Controller</code> với công thức $u = -5x$:
+    </div>
+    <pre><code>#include &lt;iostream&gt;
+
+class Controller {
+public:
+    virtual ~Controller() = default;
+    virtual double compute(double x) const = 0;
+};
+
+class PIDController : public Controller {
+public:
+    double compute(double x) const override { return -1.0 * x; }
+};
+
+class LQRController : public Controller {
+public:
+    double compute(double x) const override { return -2.0 * x; }
+};
+
+class MPCController : public Controller {
+public:
+    double compute(double x) const override { return -5.0 * x; }
+};
+
+int main() {
+    PIDController  pid;
+    LQRController  lqr;
+    MPCController  mpc;
+    Controller&amp; c1 = pid;   // đa hình: gọi qua reference base
+    Controller&amp; c2 = lqr;
+    Controller&amp; c3 = mpc;
+    std::cout &lt;&lt; c1.compute(1.0) &lt;&lt; " " &lt;&lt; c2.compute(1.0) &lt;&lt; " "
+              &lt;&lt; c3.compute(1.0) &lt;&lt; "\n";   // -1 -2 -5
+    return 0;
+}</code></pre>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>In ra <code>-1 -2 -5</code>. Cùng một lời gọi <code>compute(1.0)</code> qua kiểu <code>Controller&amp;</code> nhưng mỗi đối tượng thật chạy phiên bản riêng — đó là polymorphism. Hãy thử viết hàm <code>void run(Controller&amp; c, double x)</code> gọi chung 3 bộ điều khiển mà không cần biết loại.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>BT2.4</strong> Viết class <code>WheelEncoder</code> mô phỏng encoder: có <code>tick()</code> tăng bộ đếm, <code>getPosition()</code> trả về vị trí = bộ đếm × khoảng cách mỗi tick. Khởi tạo với <code>meters_per_tick = 0.05</code>. Gõ 10 tick → in vị trí.
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <pre><code>class WheelEncoder {
+public:
+    explicit WheelEncoder(double mpt) : mpt_(mpt), cnt_(0) {}
+    void tick() { ++cnt_; }
+    double getPosition() const { return cnt_ * mpt_; }
+private:
+    double mpt_;
+    int    cnt_;
+};
+// main: tạo enc(0.05), gọi tick() 10 lần → getPosition() = 0.5</code></pre>
+        <p>Đây là mô hình gần thật của đồ án STM32 odometry: đếm xung encoder rồi nhân hệ số. <code>explicit</code> trước constructor chặn tự động ép kiểu — thói quen tốt nên tập ngay.</p>
+    </div>
+</div>
+<div class="part-header-danger" id="part3">
+    <h1>PHẦN 3 — RAII &amp; SMART POINTER</h1>
+    <p>Chống rò rỉ bộ nhớ — kỹ năng sống còn của code real-time</p>
+</div>
+
+<div class="definition">
+    <span class="box-title">📌 Vấn đề: bộ nhớ heap phải tự giải phóng</span>
+    <p>Bạn cấp vùng nhớ động bằng <code>new</code>, và phải <code>delete</code> khi xong. Quên delete → <strong>rò rỉ bộ nhớ</strong>: sau vài giờ robot chạy, RAM cạn → crash giữa đường. Đây là lỗi kinh điển của C (và C++ cũ).</p>
+    <pre><code>double* data = new double[1000];  // cấp vùng nhớ
+// ... dùng data ...
+// Quên: delete[] data;  → RÒ RỈ 8KB mỗi chu kỳ</code></pre>
+    <p>Trong vòng điều khiển chạy 100Hz, rò 8KB/lần = 800KB/s → sau 1 giờ đã hết hàng trăm MB. Với Python bạn không lo vì có garbage collector; với C++ <strong>bạn phải lo</strong> — và giải pháp không phải "nhớ delete" mà là RAII.</p>
+</div>
+
+<div class="theorem">
+    <span class="box-title">🏛️ RAII — Resource Acquisition Is Initialization</span>
+    <p><strong>Ý tưởng:</strong> tài nguyên (bộ nhớ, file, lock, kết nối CAN) được cấp trong <strong>constructor</strong> của một đối tượng và giải phóng trong <strong>destructor</strong> của đúng đối tượng đó. Khi đối tượng ra khỏi phạm vi (scope), destructor <strong>tự động</strong> chạy — dù là thoát bình thường hay gặp exception. Không thể quên, không thể rò rỉ.</p>
+    <pre><code>{
+    std::ifstream file("log.csv");   // RAII: mở file
+    // ... đọc file ...
+}   // khi ra khỏi { }: file TỰ ĐÓNG — không cần gọi close()</code></pre>
+    <p>Nguyên tắc này không chỉ cho bộ nhớ: mọi tài nguyên đều nên bọc trong đối tượng RAII. C++ toàn tập vận hành trên nguyên lý này.</p>
+</div>
+
+<div class="definition">
+    <span class="box-title">📌 std::unique_ptr — "sở hữu duy nhất"</span>
+    <p><code>std::unique_ptr&lt;T&gt;</code> là con trỏ sở hữu duy nhất một đối tượng. <strong>Không thể copy</strong> — chỉ có đúng một chủ. Khi nó bị hủy, đối tượng bị hủy theo.</p>
+    <pre><code>#include &lt;memory&gt;
+auto c = std::make_unique&lt;LQRController&gt;(3.0, 1.0);  // C++14
+double u = c-&gt;compute(0.5);   // truy cập qua -&gt;
+// Không cần delete — khi c ra khỏi scope, tự giải phóng
+
+// std::make_unique&lt;T&gt; là cách chuẩn (không dùng new trực tiếp)
+// → tránh lỗi nếu exception xảy ra giữa cấp phát và gán</code></pre>
+</div>
+
+<div class="definition">
+    <span class="box-title">📌 std::shared_ptr — "nhiều chủ sở hữu"</span>
+    <p><code>std::shared_ptr&lt;T&gt;</code> dùng <strong>đếm tham chiếu</strong>: nhiều con trỏ chia sẻ một đối tượng; đối tượng chỉ bị hủy khi <strong>con trỏ cuối cùng</strong> bị hủy. Dùng khi nhiều module cùng dùng chung dữ liệu (vd thông tin bản đồ cho cả planner lẫn localizer).</p>
+    <pre><code>auto map = std::make_shared&lt;GridMap&gt;();
+planner.use(map);      // copy shared_ptr: đếm = 2
+localizer.use(map);    // copy shared_ptr: đếm = 3
+// khi planner và localizer hủy → đếm = 1 → map vẫn sống
+// khi biến map gốc hủy → đếm = 0 → GridMap bị hủy an toàn</code></pre>
+</div>
+
+<div class="warning-box">
+    <span class="box-title">⚠️ 2 cạm bẫy phỏng vấn thường hỏi</span>
+    <ul>
+        <li><strong>Vòng tham chiếu (circular reference):</strong> A sở hữu shared_ptr tới B, B sở hữu shared_ptr tới A → đếm không bao giờ về 0 → rò rỉ. Giải pháp: một bên dùng <code>std::weak_ptr</code> (con trỏ "quan sát", không giữ đối tượng sống).</li>
+        <li><strong>Nên dùng gì:</strong> mặc định <code>unique_ptr</code>. Chỉ dùng <code>shared_ptr</code> khi thực sự cần chia sẻ sở hữu. <code>shared_ptr</code> có chi phí (đếm tham chiếu) — trong vòng lặp real-time, ưu tiên truyền bằng reference, không tạo shared_ptr liên tục.</li>
+    </ul>
+</div>
+
+<div class="analogy-box">
+    <span class="box-title">🔎 Ẩn dụ: khóa khách sạn</span>
+    <p><code>unique_ptr</code> = chìa khóa phòng duy nhất — chỉ một người có, khi người đó rời khách sạn thì dọn phòng. <code>shared_ptr</code> = thẻ nhóm vào chung cư — nhiều người có thẻ, khi người cuối cùng rời đi mới đóng cổng. <code>weak_ptr</code> = thẻ khách — được vào khi cổng còn mở, nhưng không giữ cổng mở.</p>
+</div>
+
+<div class="quiz-section">
+    <h3>💪 Luyện tập Phần 3 — RAII &amp; Smart Pointer</h3>
+
+    <div class="quiz-question">
+        <strong>BT3.1</strong> Gõ chương trình dùng <code>unique_ptr</code> để tự động quản lý một đối tượng động, kèm 1 class nhỏ in lúc hủy để <strong>thấy</strong> destructor chạy:
+    </div>
+    <pre><code>#include &lt;iostream&gt;
+#include &lt;memory&gt;
+
+class Buffer {
+public:
+    Buffer()  { std::cout &lt;&lt; "Buffer created\n"; }
+    ~Buffer() { std::cout &lt;&lt; "Buffer DESTROYED\n"; }
+};
+
+int main() {
+    {
+        auto b = std::make_unique&lt;Buffer&gt;();   // created
+        std::cout &lt;&lt; "dang dung buffer\n";
+    }   // ra khỏi { } → DESTROYED tự động, không cần delete
+    std::cout &lt;&lt; "xong\n";
+    return 0;
+}</code></pre>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>In theo thứ tự: <code>Buffer created</code> → <code>dang dung buffer</code> → <code>Buffer DESTROYED</code> → <code>xong</code>. Quan sát: destructor tự chạy khi <code>b</code> ra khỏi phạm vi <code>{}</code>. Nếu không có <code>unique_ptr</code>, bạn phải nhớ <code>delete</code> — và khi gặp exception ở giữa, <code>delete</code> không chạy → rò rỉ. RAII đảm bảo destructor luôn chạy dù có exception.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>BT3.2</strong> Gõ chương trình dùng <code>shared_ptr</code> và <code>use_count()</code> để nhìn thấy bộ đếm tham chiếu thay đổi:
+    </div>
+    <pre><code>#include &lt;iostream&gt;
+#include &lt;memory&gt;
+
+struct Sensor {
+    int id = 0;
+    Sensor(int i) : id(i) {}
+};
+
+int main() {
+    auto s = std::make_shared&lt;Sensor&gt;(7);
+    std::cout &lt;&lt; s-&gt;id &lt;&lt; ", use_count=" &lt;&lt; s.use_count() &lt;&lt; "\n";  // 7, 1
+    auto s2 = s;                                    // chia sẻ
+    std::cout &lt;&lt; "use_count=" &lt;&lt; s.use_count() &lt;&lt; "\n";          // 2
+    s2.reset();                                     // trả quyền
+    std::cout &lt;&lt; "use_count=" &lt;&lt; s.use_count() &lt;&lt; "\n";          // 1
+    return 0;
+}</code></pre>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>In: <code>7, use_count=1</code> → <code>use_count=2</code> → <code>use_count=1</code>. Đối tượng Sensor chỉ bị hủy khi <code>use_count</code> về 0 (cả s và s2 đều reset/hết phạm vi). Trong AV: nhiều node cùng "nhìn" một bản đồ/buffer đo → mỗi node giữ một <code>shared_ptr</code>; đối tượng sống chừng nào node cuối cùng rời đi.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>BT3.3</strong> Sửa đoạn code sau — hiện tại bị rò rỉ bộ nhớ mỗi vòng lặp — để hết rò rỉ chỉ bằng đổi 1 dòng:
+    </div>
+    <pre><code>#include &lt;iostream&gt;
+
+double* bad_lowpass(double prev, double x, double alpha) {
+    double* y = new double(*prev * alpha + x * (1 - alpha));  // cấp động
+    return y;   // ai sẽ delete? KHÔNG AI → rò rỉ
+}
+
+int main() {
+    double prev = 0.0;
+    for (int i = 0; i &lt; 100000; ++i) {
+        double* out = bad_lowpass(&amp;prev, 1.0, 0.9);
+        prev = *out;
+        // thiếu: delete out;
+    }
+    return 0;
+}</code></pre>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>Không phải thêm <code>delete</code> — mà đổi kiểu trả về thành <code>std::unique_ptr&lt;double&gt;</code> (hoặc tốt hơn: trả về <code>double</code> theo giá trị, không cần con trỏ cho 1 số). Phiên bản chuẩn: <code>double lowpass(double prev, double x, double alpha) { return prev*alpha + x*(1-alpha); }</code>. Bài học: <strong>với giá trị nhỏ hãy trả về giá trị; chỉ cấp động khi thực sự cần; khi cần thì bọc trong smart pointer.</strong></p>
+    </div>
+</div>
+<div class="part-header" id="part5">
+    <h1>PHẦN 5 — TEMPLATE &amp; LAMBDA</h1>
+    <p>Hai cú pháp khiến người mới "sốc" nhất C++; phần này đi từng bước nhỏ, không bỏ qua bất cứ dấu ngoặc nào</p>
+</div>
+
+<div class="important-note">
+    <span class="box-title">🎯 Trước khi bắt đầu — bạn cần biết gì</span>
+    <p>Phần này chỉ cần bạn nắm vững 3 thứ đã học: (1) hàm thường trong C++ (kiểu trả về + tên + tham số), (2) <code>std::vector</code>, (3) con trỏ/tham chiếu. Template và lambda <strong>không phải kiến thức mới lạ hoàn toàn</strong> — chúng là "cách viết ngắn lại" của những thứ bạn đã biết. Nếu đọc tới đâu vướng, hãy dừng và làm bài nhỏ ở cuối mỗi đoạn trước khi đọc tiếp.</p>
+</div>
+
+<h2 style="color:var(--accent);">5.1 — Template là gì? Vì sao phải có nó?</h2>
+
+<div class="analogy-box">
+    <span class="box-title">🔎 Bắt đầu bằng vấn đề thực tế (đừng nhảy vào cú pháp vội)</span>
+    <p>Bạn cần một hàm tính bình phương. Viết thường:</p>
+    <pre><code>double square_d(double x) { return x * x; }
+int    square_i(int    x) { return x * x; }
+float  square_f(float  x) { return x * x; }</code></pre>
+    <p>Ba hàm làm y hệt nhau, chỉ khác kiểu dữ liệu. Trong control thực tế bạn gặp liên tục: lọc EMA, tích phân, khâu trễ — đều cần chạy cho cả <code>double</code> (đo đạc) lẫn <code>int</code> (bộ đếm). Viết 3 bản thì dài, dễ sửa sót 1 chỗ.</p>
+    <p>Template là câu trả lời: <strong>viết một lần, "đúc" ra bao nhiêu bản tùy thích</strong>. Giống cái khuôn bánh: bạn có một cái khuôn, đổ bột gì cũng ra bánh cùng hình — đổ bột đậu (double) hay bột gạo (int) đều được, nhưng bánh ra đúng loại bột bạn đổ vào.</p>
+</div>
+
+<div class="definition">
+    <span class="box-title">📌 Cú pháp template hàm — từng thành phần</span>
+    <pre><code>template &lt;typename T&gt;      // dòng 1: khai báo "có 1 kiểu tên là T"
+T square(T x) {            // dòng 2: như hàm thường, nhưng T là "kiểu bất kỳ"
+    return x * x;
+}</code></pre>
+    <p>Đọc chậm từng dòng:</p>
+    <ul>
+        <li><code>template</code> — từ khóa báo compiler "đây là khuôn, đừng biên dịch ngay".</li>
+        <li><code>&lt;typename T&gt;</code> — trong ngoặc nhọn là danh sách "kiểu chưa xác định". Ở đây chỉ có một, đặt tên là <code>T</code> (tùy ý, nhưng quy ước dùng <code>T</code> cho "Type"). <code>typename</code> giống "chỗ trống để điền tên kiểu".</li>
+        <li><code>T square(T x)</code> — chữ <code>T</code> đầu tiên là kiểu trả về, chữ <code>T x</code> là tham số. Tức là: "kiểu trả về giống kiểu của tham số, và tôi chưa nói là kiểu gì".</li>
+    </ul>
+    <p>Khi bạn <strong>gọi</strong> hàm, compiler mới "điền" T vào:</p>
+    <pre><code>double a = square(2.5);   // T = double → compiler tự tạo hàm "bản double"
+int    b = square(3);     // T = int    → compiler tự tạo hàm "bản int"</code></pre>
+    <p><strong>Điểm quan trọng nhất:</strong> <code>square</code> không hề tồn tại trong file chạy — compiler chỉ tạo ra 2 bản riêng biệt <code>square(double)</code> và <code>square(int)</code> sau khi biết bạn gọi kiểu nào. Có thể kiểm chứng bằng lệnh <code>nm square.o | grep square</code> — bạn sẽ thấy 2 ký hiệu khác nhau.</p>
+</div>
+
+<div class="quiz-section">
+    <h3>🚦 Kiểm tra nhanh 5.1 (dừng lại làm rồi mới đọc tiếp)</h3>
+    <div class="quiz-question"><strong>K1</strong> Bạn gọi <code>square(3.14f)</code>. Compiler tạo ra bản nào?</div>
+    <div class="answer-section"><span class="box-title">✅ Đáp án</span><p>Bản <code>float</code>: <code>square(float)</code>. Vì đối số <code>3.14f</code> có kiểu <code>float</code>, compiler suy T = float. Nếu bạn viết <code>3.14</code> (không có chữ f), nó là <code>double</code> → T = double.</p></div>
+    <div class="quiz-question"><strong>K2</strong> <code>square("abc")</code> biên dịch được không? Vì sao?</div>
+    <div class="answer-section"><span class="box-title">✅ Đáp án</span><p>Không. T = <code>const char*</code> (chuỗi ký tự), nhưng trong thân hàm có <code>x * x</code> — con trỏ không có phép nhân → compiler báo lỗi. Lỗi template thường dài dòng khó đọc, nhưng hãy đọc dòng cuối cùng: nó luôn nói rõ dòng nào trong hàm bạn gây lỗi.</p></div>
+</div>
+
+<h2 style="color:var(--accent);">5.2 — Class template (một bậc nữa)</h2>
+
+<div class="definition">
+    <span class="box-title">📌 Template áp dụng cho class — bộ lọc EMA</span>
+    <p>Bạn đã biết bộ lọc EMA từ tài liệu Kalman/IMU: $y_k = \alpha x_k + (1-\alpha) y_{k-1}$. Viết class thường chỉ dùng cho <code>double</code>:</p>
+    <pre><code>class EMA {
+    double alpha_;
+    double prev_;
+public:
+    EMA(double a) : alpha_(a), prev_(0.0) {}
+    double update(double x) {
+        prev_ = alpha_ * x + (1 - alpha_) * prev_;
+        return prev_;
+    }
+};</code></pre>
+    <p>Giờ muốn dùng cho <code>float</code> (để tiết kiệm bộ nhớ trên vi điều khiển)? Chỉ cần "khuôn hóa" <code>double</code> thành <code>T</code>:</p>
+    <pre><code>template &lt;typename T&gt;              // thêm dòng này lên đầu class
+class EMA {
+    T alpha_;
+    T prev_;
+public:
+    EMA(T a) : alpha_(a), prev_(T(0)) {}
+    T update(T x) {
+        prev_ = alpha_ * x + (1 - alpha_) * prev_;
+        return prev_;
+    }
+};</code></pre>
+    <p>Dùng như một class thường, nhưng phải <strong>nói rõ kiểu trong ngoặc nhọn khi tạo đối tượng</strong> (compiler không tự suy được kiểu cho class):</p>
+    <pre><code>EMA&lt;double&gt; filt1(0.9);   // bản double — cho máy tính lớn
+EMA&lt;float&gt;  filt2(0.9f);  // bản float  — cho STM32, tiết kiệm RAM
+
+double y1 = filt1.update(3.0);
+float  y2 = filt2.update(3.0f);</code></pre>
+    <p><strong>Khác biệt so với template hàm:</strong> hàm tự suy T từ đối số; class thì phải ghi <code>EMA&lt;kiểu&gt;</code> rõ ràng. Đây là lý do mọi nơi trong STL bạn thấy <code>std::vector&lt;double&gt;</code> — chính là template class, <code>double</code> là "chỗ trống T" được điền.</p>
+</div>
+
+<div class="warning-box">
+    <span class="box-title">⚠️ Quy tắc "template nằm trong header"</span>
+    <p>Template KHÔNG được tách thành file .cpp riêng như class thường. Vì sao? Compiler cần nhìn thấy <strong>toàn bộ thân hàm</strong> tại thời điểm bạn gọi (để "điền T" và tạo bản). Nếu để trong .cpp, file main chỉ include header — header chỉ có khai báo, không có thân → lỗi link.</p>
+    <p>Quy ước thực tế: ghi cả định nghĩa template ngay trong <code>.h</code>, hoặc trong file <code>.hpp</code> (header riêng cho template). Đọc code thư viện như Eigen, CasADi sẽ thấy rõ.</p>
+</div>
+
+<h2 style="color:var(--accent);">5.3 — Lambda: bắt đầu từ "nỗi đau"</h2>
+
+<div class="analogy-box">
+    <span class="box-title">🔎 Vấn đề trước khi có lambda</span>
+    <p>Bạn muốn dùng <code>std::count_if</code> (Phần 4) để đếm mẫu sai số vượt ngưỡng. <code>count_if</code> cần một hàm "điều kiện" — trả về true/false cho từng phần tử. Trước C++11 bạn phải viết hẳn một hàm có tên:</p>
+    <pre><code>bool is_outlier(double e) { return std::abs(e) &gt; 0.4; }
+
+// rồi truyền tên hàm vào:
+int n = std::count_if(err.begin(), err.end(), is_outlier);</code></pre>
+    <p>Hàm này chỉ dùng đúng 1 lần, ngay tại chỗ này. Viết hẳn một hàm + đặt tên + để ở một chỗ khác trong file thật bất tiện, nhất là khi "ngưỡng 0.4" là biến cần thay đổi.</p>
+    <p><strong>Lambda = hàm không tên, viết ngay tại chỗ dùng, "vứt đi" sau khi xong.</strong> Giống bạn cần một chiếc búa: không đi mua hẳn về cất kho, mà mượn ngay tại chỗ cái búa đặt cạnh.</p>
+</div>
+
+<div class="definition">
+    <span class="box-title">📌 Cú pháp lambda — mổ xẻ từng dấu ngoặc</span>
+    <pre><code>auto f = [](double e) -&gt; bool { return std::abs(e) &gt; 0.4; };
+         ▲            ▲       ▲
+         │            │       └── thân hàm, như mọi hàm thường
+         │            └────────── kiểu trả về (có thể bỏ nếu tự suy được)
+         └─────────────────────── "capture": ngoặc vuông, mới chỉ rỗng</code></pre>
+    <p>Chia làm 4 phần:</p>
+    <ul>
+        <li><strong><code>[]</code></strong> — ngoặc vuông gọi là <strong>capture clause</strong>. Nó khai báo "tôi muốn mượn những biến bên ngoài nào". Để trống = không mượn gì. (Xem chi tiết 5.4.)</li>
+        <li><strong><code>(double e)</code></strong> — tham số, y như hàm thường.</li>
+        <li><strong><code>-&gt; bool</code></strong> — kiểu trả về. Với lambda ngắn, compiler tự suy được, nên ghi hay không đều được. Khuyến nghị: ghi ra cho rõ, nhất là khi mới học.</li>
+        <li><strong><code>{ ... }</code></strong> — thân hàm.</li>
+    </ul>
+    <p>Toàn bộ khối đó gán cho <code>auto f</code> — tức là <code>f</code> trở thành "một thứ gọi được" như hàm:</p>
+    <pre><code>double e = 0.9;
+if (f(e)) { /* ... */ }      // gọi f như gọi hàm thường</code></pre>
+    <p><strong>Lưu ý dấu chấm phẩy:</strong> <code>auto f = ... ;</code> — lambda là một <em>giá trị</em> (đối tượng), nên gán xong phải có <code>;</code> như mọi khai báo biến.</p>
+</div>
+
+<div class="definition">
+    <span class="box-title">📌 Ví dụ tối giản nhất — từng bước dựng lên</span>
+    <p><strong>Bước 1:</strong> viết hàm thường trước cho dễ hình dung:</p>
+    <pre><code>double linear(double x) { return -2.0 * x; }</code></pre>
+    <p><strong>Bước 2:</strong> xóa tên hàm, chèn <code>[]</code> phía trước, gán cho biến:</p>
+    <pre><code>auto linear = [](double x) { return -2.0 * x; };</code></pre>
+    <p><strong>Bước 3:</strong> dùng. Cách gọi giống hệt:</p>
+    <pre><code>double u1 = linear(0.5);          // u1 = -1.0
+double u2 = linear(2.0);          // u2 = -4.0</code></pre>
+    <p>Chính là luật điều khiển $u = -kx$ viết gọn. Hãy tự gõ 3 bước này trước khi đọc tiếp — cảm giác "à thì ra là hàm bỏ tên" rất quan trọng.</p>
+</div>
+
+<div class="quiz-section">
+    <h3>🚦 Kiểm tra nhanh 5.3</h3>
+    <div class="quiz-question"><strong>K3</strong> Viết lambda tương đương hàm <code>double clamp1(double x) { if (x &gt; 5.0) return 5.0; return x; }</code></div>
+    <div class="answer-section"><span class="box-title">✅ Đáp án</span><p><code>auto clamp1 = [](double x) { if (x &gt; 5.0) return 5.0; return x; };</code>. Đọc ngược: bỏ tên <code>clamp1</code>, thay bằng <code>[]</code>, gán cho biến <code>auto clamp1</code>.</p></div>
+</div>
+
+<h2 style="color:var(--accent);">5.4 — Capture: khi lambda cần "mượn" biến bên ngoài</h2>
+
+<div class="definition">
+    <span class="box-title">📌 Vấn đề: lambda đứng một mình, không thấy biến ngoài</span>
+    <p>Lambda là một <strong>đối tượng riêng biệt</strong> — nó không tự nhìn thấy biến cục bộ bên ngoài. Muốn dùng <code>k</code>, <code>threshold</code>, <code>alpha</code>... phải xin phép qua capture <code>[]</code>:</p>
+    <pre><code>double k = 2.0;
+// ❌ SAI — k ở ngoài, lambda không thấy:
+auto bad = [](double x) { return -k * x; };   // lỗi biên dịch
+
+// ✅ ĐÚNG — "chụp" k vào lambda:
+auto good = [k](double x) { return -k * x; };  // k được "bắt" theo giá trị</code></pre>
+    <p>Capture theo <strong>giá trị</strong> (<code>[k]</code>) = chụp một <strong>bản sao</strong> của k ngay lúc tạo lambda. Cách hiểu tốt nhất: compiler tự sinh một biến thành viên bên trong đối tượng lambda và copy k vào đó lúc khởi tạo. Như vậy:</p>
+    <pre><code>double k = 2.0;
+auto f = [k](double x) { return -k * x; };   // f giữ bản sao k == 2.0
+k = 100.0;                                   // k ngoài đổi
+// f vẫn dùng 2.0 — vì f có "bản sao" riêng, không liên quan k ngoài</code></pre>
+    <p>Ngược lại, capture theo <strong>tham chiếu</strong> (<code>[&amp;k]</code>) = lambda giữ "địa chỉ" của k ngoài, <strong>luôn nhìn thấy giá trị hiện tại</strong>:</p>
+    <pre><code>double k = 2.0;
+auto f = [&amp;k](double x) { return -k * x; };  // f nhìn k qua tham chiếu
+k = 100.0;                                   // k ngoài đổi
+// f bây giờ dùng 100.0 — vì nó "nhìn" chính biến k đó</code></pre>
+    <p><strong>Cách nhớ bằng tiếng Việt:</strong> <code>[k]</code> là <strong>"chụp ảnh"</strong> (đông cứng giá trị lúc chụp), <code>[&amp;k]</code> là <strong>"nhìn qua cửa sổ"</strong> (thấy giá trị bất cứ lúc nào).</p>
+</div>
+
+<div class="definition">
+    <span class="box-title">📌 Các dạng capture — tóm tắt 1 bảng</span>
+    <table class="table">
+        <tr><th>Cú pháp</th><th>Nghĩa</th><th>Dùng khi</th></tr>
+        <tr><td><code>[]</code></td><td>Không mượn gì</td><td>Lambda độc lập, không cần biến ngoài</td></tr>
+        <tr><td><code>[k]</code></td><td>Mượn riêng k, theo giá trị (bản sao)</td><td>Chỉ đọc k, muốn "đông cứng"</td></tr>
+        <tr><td><code>[&amp;k]</code></td><td>Mượn riêng k, theo tham chiếu</td><td>Muốn đọc giá trị k hiện tại / sửa k</td></tr>
+        <tr><td><code>[=]</code></td><td>Mượn TẤT CẢ biến thấy được, theo giá trị</td><td>Nhiều biến, đều chỉ đọc (tiện nhưng nên dùng có chủ đích)</td></tr>
+        <tr><td><code>[&amp;]</code></td><td>Mượn TẤT CẢ, theo tham chiếu</td><td>Nhiều biến, cần thấy giá trị hiện tại — <strong>dễ gây bug, cẩn thận</strong></td></tr>
+    </table>
+    <p><strong>Khuyến nghị khi mới học:</strong> luôn liệt kê rõ từng biến (<code>[k, threshold]</code>) thay vì vội dùng <code>[=]</code>/<code>[&amp;]</code>. Code rõ ràng hơn, và tránh được bug "mượn quá tay" ở 5.5.</p>
+</div>
+
+<div class="warning-box">
+    <span class="box-title">⚠️ Bug kinh điển: mượn tham chiếu <code>[&amp;]</code> trong vòng lặp</span>
+    <p>Ví dụ sau in ra <strong>3 3 3</strong> thay vì 0 1 2 — hãy tự chạy:</p>
+    <pre><code>std::vector&lt;std::function&lt;int()&gt;&gt; fs;
+for (int i = 0; i &lt; 3; ++i) {
+    fs.push_back([&amp;]() { return i; });   // [&amp;] = nhìn biến i qua cửa sổ
+}
+for (auto&amp; f : fs) std::cout &lt;&lt; f() &lt;&lt; " ";   // 3 3 3</code></pre>
+    <p><strong>Giải thích từng bước:</strong> cả 3 lambda đều "nhìn" cùng một biến <code>i</code> (vì là tham chiếu). Vòng lặp kết thúc lúc <code>i == 3</code>. Khi gọi f() sau đó, cả 3 cùng nhìn thấy giá trị hiện tại của i = 3. Chúng không hề giữ giá trị 0,1,2.</p>
+    <p><strong>Sửa:</strong> đổi thành <code>[i]</code> — mỗi vòng lặp chụp một bản sao riêng tại thời điểm tạo:</p>
+    <pre><code>fs.push_back([i]() { return i; });   // 3 bản sao riêng: 0, 1, 2 → in 0 1 2</code></pre>
+    <p>Trong ROS2, bạn hay gán lambda làm callback trong vòng lặp đăng ký nhiều subscription — đây chính là lỗi "tất cả callback nhận giá trị cuối" gây đau đầu. Nhớ câu hỏi: <strong>lambda này đang "chụp ảnh" hay "nhìn cửa sổ"?</strong></p>
+</div>
+
+<div class="quiz-section">
+    <h3>🚦 Kiểm tra nhanh 5.4</h3>
+    <div class="quiz-question"><strong>K4</strong> <code>double a=1; auto f=[a](double x){return a+x;}; a=10; f(5)</code> trả về bao nhiêu? Nếu đổi <code>[&amp;a]</code>?</div>
+    <div class="answer-section"><span class="box-title">✅ Đáp án</span><p><code>[a]</code>: f chụp a=1 lúc tạo → 1+5 = 6. <code>[&amp;a]</code>: f nhìn a hiện tại = 10 → 10+5 = 15. Đây là 2 khác biệt cốt lõi cần thuộc lòng.</p></div>
+</div>
+
+<h2 style="color:var(--accent);">5.5 — Lambda + STL: con dao ghép vào thuật toán</h2>
+
+<div class="definition">
+    <span class="box-title">📌 count_if — lúc đầu không dùng lambda</span>
+    <p>Viết "thủ công" bằng vòng lặp, rồi mới thấy cách lambda ngắn gọn hơn:</p>
+    <pre><code>// Cách cũ, viết tay (hiểu đã rồi mới gọn):
+int cnt = 0;
+for (size_t i = 0; i &lt; err.size(); ++i)
+    if (std::abs(err[i]) &gt; 0.4) ++cnt;
+
+// Cách STL + lambda:
+int cnt2 = std::count_if(err.begin(), err.end(),
+                         [](double e) { return std::abs(e) &gt; 0.4; });</code></pre>
+    <p>Hai cách cho cùng kết quả. Điều thú vị: nếu "ngưỡng" là biến cần đổi, lambda capture giúp không phải viết lại:</p>
+    <pre><code>double thresh = 0.4;
+auto cnt3 = std::count_if(err.begin(), err.end(),
+                          [thresh](double e) { return std::abs(e) &gt; thresh; });
+thresh = 0.9;   // muốn đếm theo ngưỡng mới → tạo lambda mới, không sửa code</code></pre>
+</div>
+
+<div class="definition">
+    <span class="box-title">📌 "Erase-remove idiom" — lọc phần tử khỏi vector</span>
+    <p>Đây là mẹo hay dùng để loại outlier (nhiễu) khỏi dữ liệu cảm biến. Gồm 2 bước, phải đi cặp:</p>
+    <pre><code>err.erase(                                  // bước 2: xóa phần "rác" ở cuối
+    std::remove_if(err.begin(), err.end(),  // bước 1: dồn các phần tử "không bị loại"
+                   [thresh](double e){ return std::abs(e) &gt; thresh; }),
+    err.end());</code></pre>
+    <ul>
+        <li><code>remove_if</code> dồn các phần tử giữ lại lên đầu, trả về iterator trỏ tới vị trí bắt đầu "rác".</li>
+        <li><code>erase</code> xóa đoạn "rác" từ đó đến cuối.</li>
+    </ul>
+    <p>Đừng cố nhớ thuộc lòng dòng code — hãy nhớ ý: "dồn rồi cắt". Gõ lại 3 lần, mỗi lần đổi điều kiện, sẽ tự khắc nhớ.</p>
+</div>
+
+<h2 style="color:var(--accent);">5.6 — std::function: "hộp đựng" hàm gọi được</h2>
+
+<div class="definition">
+    <span class="box-title">📌 Vì sao lambda gán được vào std::function</span>
+    <p>Lambda là một đối tượng — nên nó có thể được <strong>lưu vào biến</strong>, <strong>truyền đi</strong>, <strong>gán lại</strong> như mọi giá trị. <code>std::function&lt;double(double)&gt;</code> là cái "hộp" có quy cách rõ: <em>"đựng thứ nào nhận 1 double trả về 1 double"</em>.</p>
+    <pre><code>#include &lt;functional&gt;
+
+std::function&lt;double(double)&gt; controller;      // hộp rỗng, quy cách rõ ràng
+
+controller = [](double x) { return -2.0 * x; };          // nhét lambda LQR vào
+double u1 = controller(0.5);                             // -1.0
+
+controller = [](double x) { return -5.0 * x; };          // thay bằng lambda khác
+double u2 = controller(0.5);                             // -2.5</code></pre>
+    <p>Đọc <code>std::function&lt;double(double)&gt;</code> như "biến kiểu hàm": kiểu trả về <code>double</code>, tham số <code>double</code>. Đây chính là kiểu mà ROS2 dùng cho callback: khi tạo subscription, bạn đưa một lambda hoặc hàm — nó được cất trong một <code>std::function</code> và gọi lại mỗi khi có message.</p>
+    <p><strong>Phân biệt với template (tổng kết nhỏ):</strong> <code>std::function</code> là "hộp đựng hàm", còn template là "khuôn sinh ra code theo kiểu". Chúng khác bản chất: hộp đựng = giá trị runtime; template = cơ chế biên dịch.</p>
+</div>
+
+<div class="analogy-box">
+    <span class="box-title">🔎 Ẩn dụ gói lại toàn phần</span>
+    <p>Template = khuôn bánh (một khuôn, nhiều loại bột). Lambda = mượn búa tại chỗ thay vì mua về cất kho. Capture = xin phép "chụp ảnh biến" hay "nhìn qua cửa sổ biến". <code>std::function</code> = hộp giấy ghi sẵn "đựng đồ nhận double trả double", bạn nhét lambda nào cũng vừa.</p>
+</div>
+
+<div class="warning-box">
+    <span class="box-title">⚠️ Nhầm lẫn hay gặp: capture theo giá trị là "ảnh chụp"</span>
+    <p>Lặp lại lần cuối cho chắc: <code>[k]</code> chụp giá trị của <code>k</code> <strong>tại thời điểm tạo lambda</strong>. Nếu <code>k</code> đổi sau đó, lambda vẫn dùng giá trị cũ. Muốn nhìn giá trị hiện tại → bắt theo tham chiếu <code>[&amp;k]</code>. Lỗi này gây ra những bug cổ điển "sao nó không đổi" trong vòng lặp.</p>
+</div>
+
+<div class="quiz-section">
+    <h3>💪 Luyện tập Phần 5 — Template &amp; Lambda</h3>
+
+    <div class="quiz-question">
+        <strong>BT5.1</strong> Gõ hàm template <code>clamp</code> — giới hạn giá trị trong đoạn [lo, hi] — rồi dùng với cả <code>double</code> lẫn <code>int</code>:
+    </div>
+    <pre><code>#include &lt;iostream&gt;
+
+template &lt;typename T&gt;
+T clamp(T v, T lo, T hi) {
+    if (v &lt; lo) return lo;
+    if (v &gt; hi) return hi;
+    return v;
+}
+
+int main() {
+    std::cout &lt;&lt; clamp(12.0, -5.0, 5.0) &lt;&lt; "\n";  // 5
+    std::cout &lt;&lt; clamp(-100, -10, 10)  &lt;&lt; "\n";  // -10
+    return 0;
+}</code></pre>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>In <code>5</code> và <code>-10</code>. Cùng một <code>clamp</code> chạy cho <code>double</code> lẫn <code>int</code> — compiler tự tạo 2 bản riêng. Lưu ý cả 3 tham số cùng kiểu T — <code>clamp(12.0, -5, 5.0)</code> sẽ lỗi vì trộn double/int; hãy thử để đọc thông điệp lỗi template (đọc dòng cuối cùng của lỗi).</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>BT5.2</strong> Gõ: dùng lambda + <code>std::count_if</code> đếm trong vector xem có bao nhiêu giá trị vượt ngưỡng 0.4, rồi dùng lambda khác + <code>std::remove_if</code> để loại chúng:
+    </div>
+    <pre><code>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;algorithm&gt;
+#include &lt;cmath&gt;
+
+int main() {
+    std::vector&lt;double&gt; err{0.3, -0.6, 0.5, -0.2, 0.7};
+    double thresh = 0.4;
+    auto over = std::count_if(err.begin(), err.end(),
+                              [thresh](double e) { return std::abs(e) &gt; thresh; });
+    std::cout &lt;&lt; "so mau vuot nguong: " &lt;&lt; over &lt;&lt; "\n";  // 3
+
+    err.erase(std::remove_if(err.begin(), err.end(),
+                             [thresh](double e) { return std::abs(e) &gt; thresh; }),
+              err.end());
+    std::cout &lt;&lt; "con lai: " &lt;&lt; err.size() &lt;&lt; "\n";       // 2
+    return 0;
+}</code></pre>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>In <code>so mau vuot nguong: 3</code> (0.6, 0.5, 0.7) rồi <code>con lai: 2</code> (0.3, -0.2). Chú ý lambda capture <code>[thresh]</code> — đổi ngưỡng chỉ cần sửa biến ở đầu main. Kỹ thuật <code>erase + remove_if</code> gọi là "erase-remove idiom" — nhớ cặp đôi "dồn rồi cắt" vì code thật lọc dữ liệu bẩn từ cảm biến rất hay dùng.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>BT5.3</strong> Gõ lỗi kinh điển capture: vòng lặp tạo 3 lambda bắt theo tham chiếu rồi gọi sau — đoán output, chạy, rồi sửa bằng cách bắt theo giá trị:
+    </div>
+    <pre><code>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;functional&gt;
+
+int main() {
+    std::vector&lt;std::function&lt;int()&gt;&gt; fs;
+    for (int i = 0; i &lt; 3; ++i) {
+        fs.push_back([&amp;]() { return i; });   // bắt theo THAM CHIẾU
+    }
+    for (auto&amp; f : fs) std::cout &lt;&lt; f() &lt;&lt; " ";  // đoán: 3 3 3 hay 0 1 2 ?
+    std::cout &lt;&lt; "\n";
+    return 0;
+}</code></pre>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>In <code>3 3 3</code> — cả 3 lambda "nhìn qua cửa sổ" cùng một biến <code>i</code>, vòng lặp đã kết thúc nên <code>i == 3</code>. Sửa: đổi <code>[&amp;]</code> thành <code>[i]</code> → in <code>0 1 2</code>, vì mỗi lambda chụp bản sao riêng tại thời điểm tạo. Hãy luôn tự hỏi: lambda này đang "chụp ảnh" hay "nhìn cửa sổ"?</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>BT5.4 (thử thách)</strong> Viết một class template <code>LowPass</code> (bộ lọc thông thấp: $y_k = y_{k-1} + \alpha(x_k - y_{k-1})$) — dùng <code>double</code> ở main, in ra giá trị sau vài mẫu. Gợi ý: giống hệt <code>EMA</code> ở 5.2 nhưng công thức khác 1 chút.
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <pre><code>#include &lt;iostream&gt;
+template &lt;typename T&gt;
+class LowPass {
+    T alpha_;
+    T y_{};
+public:
+    LowPass(T a) : alpha_(a) {}
+    T update(T x) { y_ += alpha_ * (x - y_); return y_; }
+};
+int main() {
+    LowPass&lt;double&gt; lp(0.2);
+    double y = 0.0;
+    for (double x = 1.0; x &lt; 6.0; x += 1.0) {
+        y = lp.update(x);
+        std::cout &lt;&lt; y &lt;&lt; " ";
+    }
+    std::cout &lt;&lt; "\n";   // 0.2 0.36 0.488 0.5904 0.67232 → tiến dần về 1
+    return 0;
+}</code></pre>
+        <p>Đây chính là bộ lọc nhiễu dùng trong cảm biến IMU/encoder. Nếu tự gõ được bài này mà không nhìn gợi ý, bạn đã nắm được class template.</p>
+    </div>
+</div>
+<div class="part-header-intro" id="part6">
+    <h1>PHẦN 6 — DỰ ÁN LỚN: LQR BẰNG C++ THUẦN + XUẤT CSV</h1>
+    <p>Bài tập tuần 3 — viết lại mô phỏng LQR bằng C++, xuất CSV, vẽ so sánh với Python</p>
+</div>
+
+<div class="important-note">
+    <span class="box-title">🎯 Mục tiêu bài tập</span>
+    <p>Viết một chương trình C++ thuần (không dùng Python/Matlab) mô phỏng hệ thống bậc nhất $\dot{x} = 2x + u$ với bộ điều khiển LQR, xuất dữ liệu ra file <code>lqr_sim.csv</code> gồm các cột <code>t, x, u, x_ref</code>. Mục tiêu kép:</p>
+    <ol>
+        <li><strong>Ôn lại toán LQR</strong> (đã học trong tài liệu Kalman/LQR): nghiệm ARE, gain K.</li>
+        <li><strong>Thực hành toàn bộ Phần 1–5:</strong> class, const, vector, algorithm, lambda, xuất file.</li>
+    </ol>
+    <p>Phần này được viết chậm và chi tiết — <strong>mỗi đoạn code đều kèm lý do "tại sao phải viết như vậy"</strong>, không chỉ "viết gì". Vì khi phỏng vấn, người ta hỏi WHY chứ không hỏi bạn thuộc code.</p>
+</div>
+
+<h2 style="color:var(--accent);">6.1 — Toán nền: tại sao lại làm đúng các bước này?</h2>
+
+<div class="theorem">
+    <span class="box-title">📐 Hệ thống &amp; bài toán LQR</span>
+    <p>Hệ động học bậc nhất: $\dot{x} = 2x + u$. Con số $A=2 > 0$ nghĩa là hệ <strong>không ổn định mở vòng</strong> (x tự phát triển theo mũ) — đây là "hệ đốt nóng": nếu không điều khiển, nhiệt độ chạy trốn. Ta phải dùng $u$ để giữ x về 0.</p>
+    <p>Chi phí: $J = \int_0^\infty (3x^2 + u^2)\,dt$, tức $Q=3$, $R=1$. <strong>Ý nghĩa của Q và R:</strong></p>
+    <ul>
+        <li>$Q$ "đắt" cho việc trạng thái x còn lớn → bộ điều khiển phải dập tắt x nhanh.</li>
+        <li>$R$ "đắt" cho việc dùng u nhiều → bộ điều khiển không được "đạp ga" mạnh.</li>
+        <li>Tỉ số $Q/R = 3$: trạng thái quan trọng gấp 3 lần năng lượng điều khiển → chọn trung dung.</li>
+    </ul>
+    <p>LQR tìm luật $u = -Kx$ tối ưu. Muốn tìm K phải giải <strong>phương trình Riccati đại số (ARE)</strong>:</p>
+    <p>$$A^T P + P A - P B R^{-1} B^T P + Q = 0$$</p>
+    <p>Với hệ vô hướng $A=2$, $B=1$: $2AP + Q - \frac{P^2B^2}{R} = 0$ → $4P + 3 - P^2 = 0$.</p>
+</div>
+
+<div class="definition">
+    <span class="box-title">📌 Tại sao lại là phương trình bậc 2? Và lấy nghiệm nào?</span>
+    <p>Vì $P$ xuất hiện cả ở bậc 1 ($4P$) lẫn bậc 2 ($P^2$). Nghiệm: $P = \frac{4 \pm \sqrt{16+12}}{2} = \frac{4 \pm \sqrt{28}}{2} = 2 \pm \sqrt{7}$.</p>
+    <ul>
+        <li>$P = 2 - \sqrt{7} \approx -0.646$ — âm, loại (P phải xác định dương, vì là "chi phí tương đương" của trạng thái).</li>
+        <li>$P = 2 + \sqrt{7} \approx 4.646$ — dương, chọn.</li>
+    </ul>
+    <p><strong>Tại sao P phải dương?</strong> Vì về bản chất $P$ là nghiệm của bài toán chi phí: $J^* = x^T P x$ là chi phí tối ưu còn lại. Chi phí không thể âm. Quy tắc chung: <strong>luôn lấy nghiệm xác định dương (P &gt; 0)</strong>.</p>
+    <p>Khi có P, gain: $K = \frac{P B}{R} = P \approx 4.646$. Luật điều khiển: $u = -Kx$. Dấu trừ là cốt lõi — feedback âm (xem BT6.3 nếu cần thử nghiệm phá hệ).</p>
+</div>
+
+<div class="definition">
+    <span class="box-title">📌 Tại sao phải rời rạc hóa bằng Euler?</span>
+    <p>Hệ gốc là liên tục $\dot{x} = 2x+u$. Máy tính không chạy liên tục — nó tính theo <strong>chu kỳ mẫu</strong> $T_s$ (10ms trong bài). Mỗi bước, nó giả định $x$ và $u$ không đổi trong 1 khoảng $T_s$ rồi cập nhật:</p>
+    <p>$$x_{k+1} = x_k + T_s(2x_k + u_k)$$</p>
+    <p><strong>Đây chính là công thức Euler tiến.</strong> Tại sao dùng nó? Vì dễ hiểu, dễ code, đủ chính xác khi $T_s$ nhỏ. Nhưng Euler là <strong>xấp xỉ</strong> — sai số tỉ lệ với $T_s$. Khi nào đủ nhỏ? Khi $T_s$ nhỏ hơn hẳn hằng số thời gian của hệ (ở đây cực vòng kín $A_{cl} = -2.646$ → hằng số thời gian ~0.38s → $T_s=0.01s$ nhỏ hơn 38 lần, chấp nhận được).</p>
+    <p><strong>Bài học để đời:</strong> trong mô phỏng real-time (F1TENTH, xe tự hành), bạn LUÔN phải quyết định $T_s$ và hiểu sai số rời rạc — đây là thứ nhà tuyển dụng hay hỏi.</p>
+</div>
+
+<h2 style="color:var(--accent);">6.2 — Cấu trúc chương trình: tại sao bố cục như vậy?</h2>
+
+<div class="analogy-box">
+    <span class="box-title">🔎 Nhìn tổng thể trước: chương trình có 4 vai</span>
+    <p>Hãy tưởng tượng dây chuyền sản xuất 4 công đoạn, mỗi công đoạn độc lập:</p>
+    <ol>
+        <li><strong>Tính toán:</strong> giải ARE → ra K (làm 1 lần, trước vòng lặp).</li>
+        <li><strong>Mô phỏng:</strong> lặp N bước Euler, tích lũy kết quả vào vector.</li>
+        <li><strong>Xuất dữ liệu:</strong> ghi toàn bộ ra CSV để Python vẽ.</li>
+        <li><strong>Báo cáo:</strong> in thống kê ra console.</li>
+    </ol>
+    <p><strong>Tại sao phải tách 4 vai?</strong> Vì nếu trộn hết vào 1 vòng lặp thì sau này: muốn đổi T_s phải sửa chỗ này, muốn đổi Q phải sửa chỗ kia, muốn xuất JSON thay CSV phải đập đi xây lại. Tách rời = mỗi thứ đổi được độc lập. Đây là nguyên tắc <strong>separation of concerns</strong> — nền tảng của code chuyên nghiệp.</p>
+</div>
+
+<div class="definition">
+    <span class="box-title">📌 Tại sao dùng <code>const</code> cho mọi hằng số?</span>
+    <p>Trong main, các giá trị A, B, Q, R, Ts, T_end đều là <strong>hằng số thiết kế</strong> — không đổi trong suốt chương trình. Khai báo <code>const</code>:</p>
+    <ul>
+        <li><strong>Chống sửa nhầm:</strong> compiler báo lỗi nếu vô tình gán lại — bắt lỗi ngay lúc biên dịch.</li>
+        <li><strong>Tự tài liệu hóa:</strong> người đọc biết ngay "đây là tham số, không phải biến tạm".</li>
+        <li><strong>Tối ưu:</strong> compiler có thể cất hằng vào thanh ghi.</li>
+    </ul>
+    <p>Thói quen đúng: <strong>biến nào không đổi thì khai const ngay từ đầu</strong>. Code thực tế (ROS2, Autoware) tuân thủ nghiêm ngặt điều này.</p>
+</div>
+
+<div class="definition">
+    <span class="box-title">📌 Tại sao dùng <code>std::vector</code> + <code>reserve</code>?</span>
+    <pre><code>std::vector&lt;double&gt; time, state, input;
+time.reserve(N); state.reserve(N); input.reserve(N);</code></pre>
+    <ul>
+        <li><strong>Tại sao vector?</strong> Vì số lượng mẫu N chưa biết lúc code (nó = T_end / Ts), và ta cần giữ hết lịch sử để xuất CSV sau. Mảng tĩnh `double t[1000]` cố định là bẫy: nếu đổi T_end/Ts sẽ tràn.</li>
+        <li><strong>Tại sao reserve?</strong> Vì <code>push_back</code> mỗi lần có thể phải cấp lại vùng nhớ (khi vector đầy, nó nhân đôi kích thước). Cấp lại = copy toàn bộ dữ liệu cũ = chậm. <code>reserve(N)</code> báo trước "tôi cần chừng này chỗ" → cấp 1 lần, không phải copy dư. Trong vòng lặp 100Hz chạy liên tục, đây là cách tránh giật (jitter).</li>
+    </ul>
+</div>
+
+<div class="definition">
+    <span class="box-title">📌 Tại sao tách <code>solve_are</code> thành hàm riêng?</span>
+    <p>Thay vì viết thẳng công thức vào main, ta gói trong hàm <code>solve_are(A, B, Q, R)</code>:</p>
+    <ul>
+        <li><strong>Tái sử dụng:</strong> sau này cần LQR cho hệ khác (khác A, B, Q, R) chỉ cần gọi lại với tham số mới — không sửa code.</li>
+        <li><strong>Kiểm thử dễ:</strong> gọi riêng hàm này để xác nhận ra P đúng trước khi ráp vào mô phỏng (chính là BT6.1).</li>
+        <li><strong>Trách nhiệm rõ:</strong> main không phải "hiểu toán", chỉ cần "dùng kết quả".</li>
+    </ul>
+    <p>Quy tắc chung: <strong>nếu một khối tính toán dài hơn 3 dòng và dùng cho một ý, hãy gói thành hàm</strong>. Code dài mà không tách hàm là dấu hiệu thiếu chuyên nghiệp.</p>
+</div>
+
+<div class="definition">
+    <span class="box-title">📌 Tại sao dùng lambda cho luật điều khiển?</span>
+    <pre><code>const auto control = [K](double x){ return -K * x; };</code></pre>
+    <p>Luật $u = -Kx$ chỉ dùng trong mô phỏng, không cần là hàm toàn cục. Lambda để ngay tại chỗ, capture <code>[K]</code>:</p>
+    <ul>
+        <li><strong>Tại sao capture [K]?</strong> K là hằng số tính từ ARE — lambda "chụp ảnh" K lúc tạo. Sau này nếu đổi K bằng biến khác, lambda vẫn dùng K cũ (vô tình đúng ở đây).</li>
+        <li><strong>Lợi ích:</strong> đổi luật điều khiển (sang phi tuyến, sang bang-bang) chỉ cần sửa 1 dòng lambda — không đụng vòng lặp. Đây là cách code thật cho phép "cắm" bộ điều khiển khác nhau.</li>
+        <li><strong>const?</strong> Lambda không sửa gì ngoài đọc K → khai const để compiler kiểm tra giúp.</li>
+    </ul>
+</div>
+
+<div class="definition">
+    <span class="box-title">📌 Tại sao xuất CSV thay vì in ra màn hình?</span>
+    <p>CSV là "chợ chung" cho mọi ngôn ngữ: Python, Matlab, Excel đều đọc được. Khi in ra console, dữ liệu mất sau khi đóng terminal; khi ghi file, bạn giữ được để vẽ lại nhiều lần, so sánh các lần chạy khác nhau. <strong>CSV = dữ liệu sống lâu dài.</strong></p>
+    <ul>
+        <li><strong>Header dòng đầu</strong> <code>t,x,u,x_ref</code>: để Python biết cột nào là gì — không đoán.</li>
+        <li><strong>Mỗi mẫu 1 dòng, tách bằng dấu phẩy:</strong> quy ước chuẩn, không bàn cãi.</li>
+        <li><strong>4 cột dù chỉ cần 3:</strong> giữ sẵn cột x_ref (giá trị đặt) để sau này vẽ so sánh với x — file "chung hơn", sẵn sàng cho việc mở rộng.</li>
+    </ul>
+</div>
+
+<h2 style="color:var(--accent);">6.3 — Toàn bộ code mẫu, kèm chú thích WHY theo từng dòng</h2>
+
+<div class="example-box">
+    <span class="box-title">✅ lqr_sim.cpp — tự gõ lại, đọc kỹ từng chú thích</span>
+    <pre><code>// ===== BƯỚC 0: THƯ VIỆN =====
+#include &lt;iostream&gt;   // cout — in ra màn hình
+#include &lt;fstream&gt;    // ofstream — ghi file (xuất CSV)
+#include &lt;cmath&gt;      // sqrt — giải ARE
+#include &lt;vector&gt;     // vector — lưu lịch sử mô phỏng
+#include &lt;algorithm&gt;  // minmax_element — thống kê (Phần 4)
+
+// ===== BƯỚC 1: GIẢI ARE =====
+// Hàm trả về nghiệm P dương của A^T P + P A - P B R^{-1} B^T P + Q = 0
+// với A, B, Q, R là SỐ THỰC (hệ bậc nhất). Vì sao viết thành hàm riêng:
+//   → tái sử dụng cho hệ khác, kiểm thử riêng được, main gọn.
+double solve_are(double A, double B, double Q, double R) {
+    // Công thức nghiệm: từ 2*A*P + Q - P^2*B^2/R = 0
+    //   → P^2*B^2 - 2*A*P*R - Q*R = 0  (nhân cả 2 vế cho -R)
+    //   → P = (2*A*R + sqrt((2*A*R)^2 + 4*Q*B^2*R)) / (2*B^2)   [nghiệm dương]
+    // Lấy DẤU CỘNG vì nghiệm dương là nghiệm xác định dương (xem 6.1).
+    const double disc = 2.0 * A * R + std::sqrt((2.0*A*R)*(2.0*A*R) + 4.0*Q*B*B*R);
+    return disc / (2.0 * B * B);
+}
+
+int main() {
+    // ===== THAM SỐ HỆ & BỘ ĐIỀU KHIỂN =====
+    // const: không đổi trong chương trình → chống sửa nhầm + tự tài liệu
+    const double A = 2.0, B = 1.0, Q = 3.0, R = 1.0;   // hệ & chi phí
+    const double P = solve_are(A, B, Q, R);            // nghiệm ARE
+    const double K = P * B / R;                        // gain LQR = PB/R
+    const double Ts = 0.01;                            // chu kỳ mẫu 10ms
+    const double T_end = 2.0;                          // mô phỏng 2 giây
+    const int    N = static_cast&lt;int&gt;(T_end / Ts);     // số bước = 200
+
+    // ===== BƯỚC 2: MÔ PHỎNG =====
+    // vector lưu lịch sử; reserve tránh cấp lại bộ nhớ lặp (tại sao? xem 6.2)
+    double x = 1.0;                    // trạng thái ban đầu
+    std::vector&lt;double&gt; time, state, input;
+    time.reserve(N + 1); state.reserve(N + 1); input.reserve(N + 1);
+
+    // Luật điều khiển dưới dạng lambda — tại sao? xem 6.2
+    const auto control = [K](double x) { return -K * x; };
+
+    for (int i = 0; i &lt;= N; ++i) {     // i từ 0..N: đủ N+1 mẫu, CÓ mẫu t=0
+        const double t = i * Ts;       // thời điểm hiện tại (giây)
+        const double u = control(x);   // tính u từ trạng thái HIỆN TẠI
+        time.push_back(t);             // lưu TRƯỚC khi cập nhật x
+        state.push_back(x);            // lưu x tại mẫu này (chưa đổi)
+        input.push_back(u);            // lưu u tại mẫu này
+        x += Ts * (A * x + B * u);     // Euler: cập nhật x cho mẫu kế tiếp
+    }
+    // Vì sao phải lưu TRƯỚC khi cập nhật? → để mẫu (t, x, u) là "ảnh chụp"
+    // tại đúng thời điểm t; nếu cập nhật x rồi mới lưu thì dòng CSV bị lệch.
+
+    // ===== BƯỚC 3: XUẤT CSV =====
+    // ofstream ghi file; header dòng đầu cho Python biết cột (6.2)
+    std::ofstream file("lqr_sim.csv");
+    file &lt;&lt; "t,x,u,x_ref\n";          // x_ref = 0.0 (giữ mục tiêu về 0)
+    for (int i = 0; i &lt;= N; ++i) {
+        file &lt;&lt; time[i] &lt;&lt; "," &lt;&lt; state[i] &lt;&lt; ","
+             &lt;&lt; input[i] &lt;&lt; ",0.0\n";
+    }
+
+    // ===== BƯỚC 4: THỐNG KÊ =====
+    // minmax_element trả về cặp iterator (Phần 4) → phải dereference bằng *
+    const auto [xmin, xmax] = std::minmax_element(state.begin(), state.end());
+    std::cout &lt;&lt; "P = " &lt;&lt; P &lt;&lt; ", K = " &lt;&lt; K &lt;&lt; "\n"
+              &lt;&lt; "x min/max: " &lt;&lt; *xmin &lt;&lt; " / " &lt;&lt; *xmax &lt;&lt; "\n"
+              &lt;&lt; "CSV saved: lqr_sim.csv\n";
+    return 0;   // trả về 0 = chạy thành công (chuẩn hệ điều hành)
+}</code></pre>
+    <p><strong>Chạy và kiểm tra:</strong></p>
+    <pre><code>g++ -std=c++17 -Wall -O2 -o lqr_sim lqr_sim.cpp
+./lqr_sim            # in ra P=4.64575, K=4.64575, x giảm dần về 0
+head -5 lqr_sim.csv  # xem 5 dòng đầu</code></pre>
+    <p><strong>Kết quả mong đợi:</strong> $P \approx 4.646$, $K \approx 4.646$, và $x$ suy giảm từ 1 về gần 0 theo hàm mũ $e^{-2.646t}$ — vì cực vòng kín $A_{cl} = A - BK = 2 - 4.646 = -2.646$.</p>
+</div>
+
+<div class="warning-box">
+    <span class="box-title">⚠️ Tại sao cực vòng kín lại là $A_{cl} = A - BK$?</span>
+    <p>Thay $u = -Kx$ vào hệ: $\dot{x} = Ax + Bu = Ax + B(-Kx) = (A - BK)x$. Hệ số mới là $A_{cl} = A - BK$. Điều kiện ổn định: $A_{cl} < 0$ (nghĩa là x suy giảm theo mũ, không bùng nổ). LQR đảm bảo điều này vì chọn $K$ từ nghiệm ARE dương — nếu dấu sai, $A_{cl} > 0$ và hệ phát nổ (thử ở BT6.3).</p>
+</div>
+
+<h2 style="color:var(--accent);">6.4 — Vẽ so sánh với Python: tại sao phải làm bước này?</h2>
+
+<div class="definition">
+    <span class="box-title">📌 Đây không phải bước phụ — đây là cách CHỨNG MINH code của bạn đúng</span>
+    <p>Một mô phỏng không ai kiểm chứng chỉ là "code chạy được". Có nghiệm lý thuyết chính xác $x(t) = x_0 e^{(A-BK)t}$ — so sánh kết quả số (Euler) với nghiệm này: nếu chúng khớp, phép rời rạc đúng, LQR đúng, CSV đúng. Kỹ năng này gọi là <strong>verification</strong> — JD VinFast nhắc đến "quantify uncertainty"; mọi kỹ sư control giỏi đều tự kiểm chứng code mình trước khi tin tưởng.</p>
+    <pre><code>import csv
+import math
+import matplotlib.pyplot as plt
+
+t, x, u = [], [], []
+with open("lqr_sim.csv") as f:                 # đọc file C++ vừa xuất
+    for row in csv.reader(f):
+        if row[0] == "t": continue             # bỏ dòng header
+        t.append(float(row[0]))
+        x.append(float(row[1]))
+        u.append(float(row[2]))
+
+K = 4.64575                                    # gain LQR (lấy từ output C++)
+xt = [math.exp((2 - K) * tt) for tt in t]      # nghiệm lý thuyết
+
+plt.plot(t, x, label="C++ Euler")              # đường mô phỏng
+plt.plot(t, xt, "--", label="analytic")        # đường lý thuyết
+plt.xlabel("t (s)"); plt.ylabel("x")
+plt.legend(); plt.grid()
+plt.show()</code></pre>
+    <p><strong>Cách đọc kết quả:</strong></p>
+    <ul>
+        <li>Hai đường trùng nhau → Euler với $T_s=0.01$ đủ chính xác.</li>
+        <li>Giảm <code>Ts</code> xuống 0.001 → hai đường càng khít (Euler chính xác hơn).</li>
+        <li>Tăng <code>Ts</code> lên 0.5 → đường C++ lệch rõ (Euler là xấp xỉ!).</li>
+    </ul>
+    <p><strong>Bài học:</strong> luôn có một "nghiệm chuẩn" để đối chiếu. Trong AV thật, nghiệm chuẩn có thể là mô hình Gazebo, dữ liệu GT (ground truth), hay nghiệm giải tích — nhưng nguyên tắc giống hệt.</p>
+</div>
+
+<h2 style="color:var(--accent);">6.5 — Lỗi thường gặp (và tại sao chúng xảy ra)</h2>
+
+<div class="warning-box">
+    <span class="box-title">⚠️ Danh sách lỗi kinh điển — nhận biết, hiểu nguồn gốc, tránh</span>
+    <ul>
+        <li><strong>Lưu dữ liệu sau khi cập nhật x</strong> → các cột lệch nhau 1 bước, đường vẽ bị "trễ" và vặn vẹo. <em>Nguồn gốc:</em> hiểu sai thứ tự "chụp ảnh trước, thay áo sau".</li>
+        <li><strong>Vòng lặp <code>for i &lt; N</code> (thiếu mẫu cuối)</strong> → file chỉ có 200 dòng thay vì 201, mất mẫu t=2.0. <em>Vì sao đúng phải là <code>i &lt;= N</code>:</em> ta muốn cả mẫu đầu (t=0) lẫn mẫu cuối (t=T_end).</li>
+        <li><strong>Dùng float thay double</strong> → sai số làm tròn tích lũy qua 200 bước, đường mô phỏng lệch dần khỏi analytic. <em>Nguồn gốc:</em> nghĩ "khác gì đâu"; thực ra $10^{-7}$ sai mỗi bước nhân 200 lần + khuếch đại của hệ.</li>
+        <li><strong>CSV thiếu header hoặc thiếu cột</strong> → Python đọc nhầm cột, vẽ ra thứ vô nghĩa. <em>Nguồn gốc:</em> tiết kiệm 1 dòng; chính dòng đó là "hợp đồng" với script vẽ.</li>
+        <li><strong>Không mở file kiểm tra nội dung</strong> → không biết CSV rỗng/vô nghĩa. <em>Quy tắc:</em> mỗi lần xuất dữ liệu, mở xem 5 dòng đầu trước khi vẽ.</li>
+        <li><strong>Biến không const</strong> → sau này vô tình gán lại A, Q... tạo ra "hệ khác" mà không nhận ra. <em>Nguồn gốc:</em> không hình thành thói quen const ngay từ đầu.</li>
+    </ul>
+</div>
+
+<h2 style="color:var(--accent);">6.6 — Mở rộng theo 4 hướng (sau khi chạy được bài gốc)</h2>
+
+<div class="cheat-sheet">
+    <span class="box-title">🚀 Các bước nâng cấp, từ dễ đến khó</span>
+    <ul>
+        <li><strong>1. Gói thành class <code>LQRSystem</code></strong> — tách các thành viên (A, B, K, Ts) và phương thức (<code>compute</code>, <code>step</code>, <code>log</code>). <em>Tại sao:</em> áp dụng đúng OOP đã học (Phần 2); đối tượng tự quản lý trạng thái nội bộ, code gọn và tái dùng được cho nhiều hệ.</li>
+        <li><strong>2. Thêm bão hòa (saturation) $u \in [-3, 3]$</strong> — cắt u sau khi tính, rồi so sánh đáp ứng có/không cắt. <em>Tại sao:</em> mọi actuator thật đều bão hòa; đây là cửa ngõ vào anti-windup (đã nói trong tài liệu PID). Dùng chính lambda <code>[K, u_max]</code> để minh họa capture nhiều biến.</li>
+        <li><strong>3. Nâng lên hệ bậc 2 (mass-spring-damper)</strong> — state thành vector $[x, v]^T$, A, B, K thành ma trận 2×2. <em>Tại sao:</em> chuẩn bị cho LQR thật nhiều biến; đây là cột mốc quan trọng khi phỏng vấn (LQR bậc 2 là câu kinh điển).</li>
+        <li><strong>4. Dùng CMake thay g++ tay</strong> — tạo <code>CMakeLists.txt</code>: <code>cmake_minimum_required(VERSION 3.16)</code> + <code>project(lqr)</code> + <code>add_executable(lqr_sim lqr_sim.cpp)</code>. <em>Tại sao:</em> dự án AV thật (ROS2, Autoware) đều build bằng CMake — học sớm để khỏi "sốc" khi vào codebase lớn.</li>
+    </ul>
+</div>
+
+<div class="quiz-section">
+    <h3>💪 Luyện tập Phần 6 — 3 bước nhỏ trước khi làm bài lớn</h3>
+
+    <div class="quiz-question">
+        <strong>BT6.1</strong> Gõ riêng 3 hàm nhỏ rồi test từng cái trước khi ghép vào chương trình LQR hoàn chỉnh. <em>Tại sao làm thế này?</em> Vì test từng mảnh riêng dễ tìm lỗi hơn là test cả khối 80 dòng — mỗi lỗi biết chắc nằm ở hàm nào.
+    </div>
+    <pre><code>#include &lt;iostream&gt;
+#include &lt;fstream&gt;
+#include &lt;cmath&gt;
+
+// 1) nghiệm ARE hệ bậc nhất: 4P + 3 - P^2 = 0  (A=2, B=1, Q=3, R=1)
+double solve_are() {
+    // nghiệm dương của P^2 - 4P - 3 = 0  =>  P = 2 + sqrt(7)
+    return 2.0 + std::sqrt(7.0);
+}
+
+// 2) một bước Euler rời rạc
+double euler_step(double x, double u, double ts) {
+    return x + ts * (2.0 * x + u);
+}
+
+// 3) ghi 1 dòng CSV
+void write_csv(const char* path, double t, double x, double u) {
+    std::ofstream f(path, std::ios::app);   // append
+    f &lt;&lt; t &lt;&lt; "," &lt;&lt; x &lt;&lt; "," &lt;&lt; u &lt;&lt; ",0.0\n";
+}
+
+int main() {
+    double P = solve_are();
+    double K = P;                     // K = PB/R = P
+    std::cout &lt;&lt; "K = " &lt;&lt; K &lt;&lt; "\n";  // ~4.64575
+
+    double x = 1.0, ts = 0.01;
+    for (int i = 0; i &lt;= 200; ++i) {
+        double u = -K * x;
+        write_csv("lqr_sim.csv", i * ts, x, u);
+        x = euler_step(x, u, ts);
+    }
+    std::cout &lt;&lt; "x cuoi = " &lt;&lt; x &lt;&lt; "\n";  // gần 0
+    return 0;
+}</code></pre>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>Chạy được: <code>K = 4.64575</code>, <code>x cuoi</code> rất nhỏ (≈$10^{-6}$), file <code>lqr_sim.csv</code> có 201 dòng. Điểm quan trọng: <strong>code trả về giá trị, không in lung tung giữa hàm tính</strong> — tách biệt "tính toán" và "ghi log". Cấu trúc này đúng chuẩn để sau này ghép vào lớp lớn.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>BT6.2</strong> Mở file CSV bằng Python vẽ, rồi sửa hệ số Q từ 3 lên 30 trong <code>solve_are</code>, chạy lại, so sánh: đáp ứng nhanh hơn hay chậm hơn? Vì sao?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>Với Q=30: $4P + 30 - P^2 = 0$ → $P = 2 + \sqrt{34} \approx 7.83$, K≈7.83, cực vòng kín $2-7.83 = -5.83$ — x suy giảm <strong>nhanh hơn</strong>. Vì Q lớn nghĩa là "đắt" nếu trạng thái x còn lớn → bộ điều khiển hành động mạnh hơn. Đổi R từ 1 lên 10 thì ngược lại (u đắt → bám chậm, u nhỏ). Đây chính là ý nghĩa trực giác của trọng số LQR — nhớ kỹ cho phỏng vấn.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>BT6.3</strong> Thử phá vòng ổn định: đổi luật điều khiển thành <code>u = +K*x</code> (sai dấu). Chạy, quan sát x tăng không kiểm soát, và nhớ vì sao dấu trừ của feedback là bắt buộc.
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>Với <code>u = +K*x</code>: x nhân thêm lượng dương mỗi bước → bùng nổ, CSV chứa số khổng lồ/nan. Đó là phản hồi dương (positive feedback) — hệ không ổn định. Bài học: dấu của luật điều khiển phản hồi quyết định ổn định hay không; LQR luôn cho $u = -Kx$ vì nghiệm ARE đảm bảo $A-BK$ có phần thực âm.</p>
+    </div>
+</div>
+<div class="part-header" id="part7">
+    <h1>PHẦN 7 — QUIZ &amp; TỔNG KẾT</h1>
+    <p>Tự kiểm tra sau 3 tuần — trả lời bằng lời trước khi xem đáp án</p>
+</div>
+
+<div class="quiz-section">
+    <h3>📝 Quiz — Trắc nghiệm cốt lõi</h3>
+
+    <div class="quiz-question">
+        <strong>Q1</strong> Vì sao C++ dùng cho tầng planning/control của AV thay vì Python? (2 lý do kỹ thuật)
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>(1) <strong>Real-time/deterministic:</strong> không có garbage collector chạy ngầm → độ trễ vòng điều khiển ổn định, có thể dự đoán. (2) <strong>Hiệu suất:</strong> MPC/NMPC phải giải tối ưu trong vài ms — Python chậm hơn 10–100×. Thêm (3) tiếp cận phần cứng trực tiếp.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>Q2</strong> Phân biệt con trỏ, tham chiếu, const reference. Khi nào dùng cái nào khi truyền hàm?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>Con trỏ <code>*</code>: lưu địa chỉ, có thể là <code>nullptr</code>, cần <code>*</code> để dereference. Tham chiếu <code>&amp;</code>: bí danh, không bao giờ null, dùng thẳng tên. const reference: đọc dữ liệu lớn không copy. Quy tắc: <strong>đọc → const&amp;; sửa → &amp;; "có thể không có" → con trỏ</strong>.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>Q3</strong> RAII là gì? Vì sao smart pointer <code>unique_ptr</code> không cần <code>delete</code>?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>RAII: tài nguyên cấp trong constructor, giải phóng trong destructor; destructor tự chạy khi đối tượng ra khỏi scope. <code>unique_ptr</code> bọc vùng nhớ đó — khi nó bị hủy (ra scope), destructor tự <code>delete</code> đối tượng được quản lý → không thể quên, chống rò rỉ. Đó là lý do không cần <code>delete</code> tay.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>Q4</strong> <code>std::vector::at()</code> khác <code>operator[]</code> thế nào, dùng cái nào trong vòng điều khiển?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p><code>at()</code> kiểm tra biên và ném exception nếu quá — an toàn nhưng chậm hơn một chút. <code>operator[]</code> không kiểm tra — nhanh, gây undefined behavior nếu quá biên. Trong vòng real-time đã kiểm soát chỉ số: dùng <code>operator[]</code>; khi đọc dữ liệu không tin cậy (ví dụ message ngoài): dùng <code>at()</code>.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>Q5</strong> Lambda <code>[x]</code> vs <code>[&amp;x]</code> khác nhau bản chất gì? Cho ví dụ lỗi thực tế.
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p><code>[x]</code> chụp <strong>bản sao</strong> giá trị x tại thời điểm tạo lambda; đổi x sau đó không ảnh hưởng. <code>[&amp;x]</code> chụp <strong>tham chiếu</strong> — luôn thấy giá trị hiện tại. Lỗi kinh điển: tạo N lambda trong vòng lặp với <code>[&amp;]</code> rồi gọi sau khi vòng lặp kết thúc → tất cả cùng trỏ về giá trị cuối. Dùng <code>[x]</code> (giá trị) hoặc capture từng biến cụ thể.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>Q6</strong> Hệ $\dot{x} = 2x + u$, $Q=3$, $R=1$. Gain LQR $K$ là bao nhiêu và cực vòng kín ở đâu?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>ARE: $4P + 3 - P^2 = 0$ → $P = 2+\sqrt{7} \approx 4.646$. $K = PB/R = 4.646$. Cực vòng kín: $A_{cl} = A - BK = 2 - 4.646 = -2.646 < 0$ → ổn định tiệm cận, x suy giảm $e^{-2.646t}$.</p>
+    </div>
+</div>
+
+<div class="summary-box">
+    <h2>🎯 Tổng Kết</h2>
+    <ul>
+        <li><strong>Vì sao C++:</strong> real-time deterministic + hiệu suất + tiếp cận phần cứng — là ngôn ngữ production của AV.</li>
+        <li><strong>Phần 1 — Nền tảng:</strong> double cho control, con trỏ (có thể null) vs tham chiếu (không null), const reference là quy tắc vàng khi truyền hàm.</li>
+        <li><strong>Phần 2 — OOP:</strong> class + encapsulation + inheritance + virtual/override; destructor virtual là bắt buộc; kế thừa 1 cấp là đủ cho control.</li>
+        <li><strong>Phần 3 — RAII:</strong> bộ nhớ tự giải phóng qua destructor; unique_ptr mặc định, shared_ptr chỉ khi chia sẻ, weak_ptr phá vòng tham chiếu.</li>
+        <li><strong>Phần 4 — STL:</strong> vector = mảng động, map = tra cứu, algorithm + iterator [begin, end).</li>
+        <li><strong>Phần 5 — Template &amp; Lambda:</strong> generic code; lambda capture theo giá trị vs tham chiếu; std::function = callback (nền ROS2).</li>
+        <li><strong>Phần 6 — Dự án:</strong> viết lại LQR bằng C++ thuần, xuất CSV, vẽ so sánh analytic — bài tập kiểm chứng rời rạc hóa.</li>
+    </ul>
+</div>
+
+<div style="text-align: center; margin: 35px 0; color: var(--text-secondary); font-size: 0.9em;">
+    <p>— Hết tài liệu C++ Hiện Đại Cho Control &amp; AV —</p>
+    <p><em>Nhấn nút "📄 Xuất PDF" ở góc phải dưới để lưu thành PDF</em></p>
+</div>
+
+</body>
+</html>

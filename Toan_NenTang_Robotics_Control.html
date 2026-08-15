@@ -1,0 +1,1348 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tài Liệu Học Tập: Toán Nền Tảng cho Robotics &amp; Control</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+    window.MathJax = {
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']],
+            tags: 'ams'
+        },
+        chtml: { scale: 1 }
+    };
+    </script>
+    <style>
+        :root {
+            --primary: #0f172a;
+            --accent: #2563eb;
+            --accent-light: #3b82f6;
+            --bg: #ffffff;
+            --text: #1e293b;
+            --text-secondary: #475569;
+            --quiz-bg: #f0f9ff;
+            --quiz-border: #bae6fd;
+            --answer-bg: #f0fdf4;
+            --answer-border: #86efac;
+            --warning-bg: #fffbeb;
+            --warning-border: #fde68a;
+            --code-bg: #0f172a;
+            --border: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+            font-size: 16.5px;
+            line-height: 1.8;
+            color: var(--text);
+            background: var(--bg);
+            max-width: 920px;
+            margin: 0 auto;
+            padding: 40px 25px;
+        }
+
+        /* ===== COVER PAGE ===== */
+        .cover-page {
+            text-align: center;
+            padding: 60px 20px;
+            border-bottom: 3px solid var(--accent);
+            margin-bottom: 50px;
+            background: #f8fafc;
+            border-radius: 12px;
+        }
+        .cover-page h1 {
+            font-size: 2.4em;
+            color: var(--primary);
+            margin-bottom: 12px;
+            line-height: 1.3;
+            border: none;
+            padding: 0;
+        }
+        .cover-page .subtitle {
+            font-size: 1.35em;
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: 25px;
+        }
+        .cover-page .tagline {
+            font-size: 1.05em;
+            color: var(--text-secondary);
+            font-style: italic;
+            margin-bottom: 30px;
+        }
+        .cover-page .meta {
+            font-size: 0.95em;
+            color: var(--text-secondary);
+        }
+
+        /* ===== HEADINGS ===== */
+        h1 { font-size: 1.85em; color: var(--primary); margin: 45px 0 20px; border-bottom: 2px solid var(--accent); padding-bottom: 8px; }
+        h2 { font-size: 1.4em; color: var(--accent); margin: 35px 0 15px; }
+        h3 { font-size: 1.18em; color: var(--primary); margin: 25px 0 12px; }
+        h4 { font-size: 1.05em; color: var(--text); margin: 18px 0 8px; }
+
+        .part-header {
+            background: linear-gradient(135deg, #1e3a8a, #2563eb);
+            color: white;
+            padding: 28px 35px;
+            border-radius: 10px;
+            margin: 50px 0 30px;
+            box-shadow: var(--shadow);
+        }
+        .part-header h1 { color: white; border: none; margin: 0; font-size: 1.7em; padding: 0; }
+        .part-header p { color: #dbeafe; margin-top: 8px; font-size: 1.05em; }
+
+        .part-header-intro {
+            background: linear-gradient(135deg, #059669, #10b981);
+            color: white;
+            padding: 28px 35px;
+            border-radius: 10px;
+            margin: 40px 0 30px;
+            box-shadow: var(--shadow);
+        }
+        .part-header-intro h1 { color: white; border: none; margin: 0; font-size: 1.7em; padding: 0; }
+        .part-header-intro p { color: #ecfdf5; margin-top: 8px; font-size: 1.05em; }
+
+        .part-header-purple {
+            background: linear-gradient(135deg, #4c1d95, #7c3aed);
+            color: white;
+            padding: 28px 35px;
+            border-radius: 10px;
+            margin: 50px 0 30px;
+            box-shadow: var(--shadow);
+        }
+        .part-header-purple h1 { color: white; border: none; margin: 0; font-size: 1.7em; padding: 0; }
+        .part-header-purple p { color: #ede9fe; margin-top: 8px; font-size: 1.05em; }
+
+        .part-header-orange {
+            background: linear-gradient(135deg, #9a3412, #ea580c);
+            color: white;
+            padding: 28px 35px;
+            border-radius: 10px;
+            margin: 50px 0 30px;
+            box-shadow: var(--shadow);
+        }
+        .part-header-orange h1 { color: white; border: none; margin: 0; font-size: 1.7em; padding: 0; }
+        .part-header-orange p { color: #ffedd5; margin-top: 8px; font-size: 1.05em; }
+
+        /* ===== LEVEL BADGES ===== */
+        .level-badge {
+            display: inline-block;
+            padding: 3px 14px;
+            border-radius: 14px;
+            font-size: 0.85em;
+            font-weight: 700;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+        .level-apply {
+            background: #ecfdf5;
+            color: #047857;
+            border: 1px solid #6ee7b7;
+        }
+        .level-deep {
+            background: #eff6ff;
+            color: #1d4ed8;
+            border: 1px solid #93c5fd;
+        }
+        .level-concept {
+            background: #f5f3ff;
+            color: #6d28d9;
+            border: 1px solid #c4b5fd;
+        }
+
+        .legend-box {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 20px 26px;
+            margin: 25px 0;
+        }
+        .legend-item { display: flex; align-items: center; gap: 12px; }
+
+        /* ===== CONTENT ===== */
+        p { margin: 12px 0; text-align: justify; }
+        ul, ol { margin: 10px 0 15px 25px; }
+        li { margin: 6px 0; }
+
+        strong { color: #0f172a; font-weight: 600; }
+
+        .highlight {
+            background: #fef08a;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        blockquote {
+            border-left: 4px solid var(--accent);
+            background: #f8fafc;
+            padding: 15px 20px;
+            margin: 20px 0;
+            font-style: italic;
+            color: var(--text-secondary);
+            border-radius: 0 8px 8px 0;
+        }
+
+        /* ===== DEFINITION / THEOREM BOXES ===== */
+        .definition, .theorem, .important-note, .example-box, .analogy-box, .warning-box, .cheat-sheet {
+            padding: 20px 24px;
+            border-radius: 8px;
+            margin: 22px 0;
+            border-left: 5px solid;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .definition {
+            background: #eff6ff;
+            border-color: #3b82f6;
+        }
+        .definition .box-title { color: #1d4ed8; }
+        
+        .theorem {
+            background: #faf5ff;
+            border-color: #a855f7;
+        }
+        .theorem .box-title { color: #7e22ce; }
+        
+        .important-note {
+            background: var(--warning-bg);
+            border-color: #f59e0b;
+        }
+        .important-note .box-title { color: #b45309; }
+        
+        .example-box {
+            background: #f0fdf4;
+            border-color: #22c55e;
+        }
+        .example-box .box-title { color: #15803d; }
+
+        .analogy-box {
+            background: #fff7ed;
+            border-color: #ea580c;
+        }
+        .analogy-box .box-title { color: #c2410c; }
+
+        .warning-box {
+            background: #fef2f2;
+            border-color: #ef4444;
+        }
+        .warning-box .box-title { color: #b91c1c; }
+
+        .cheat-sheet {
+            background: #f0fdfa;
+            border-color: #14b8a6;
+            font-size: 0.95em;
+        }
+        .cheat-sheet .box-title { color: #0f766e; }
+
+        .box-title {
+            font-weight: 700;
+            font-size: 1.05em;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        /* ===== STEP BY STEP CARDS ===== */
+        .step-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-left: 4px solid var(--accent);
+            border-radius: 6px;
+            padding: 16px 20px;
+            margin: 14px 0;
+        }
+        .step-number {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: 700;
+            margin-right: 8px;
+        }
+
+        /* ===== QUIZ ===== */
+        .quiz-section {
+            background: var(--quiz-bg);
+            border: 1px solid var(--quiz-border);
+            border-radius: 10px;
+            padding: 22px 26px;
+            margin: 30px 0;
+        }
+        .quiz-section h3 {
+            color: #0369a1;
+            margin-top: 0;
+            font-size: 1.15em;
+        }
+        .quiz-question {
+            margin: 15px 0 8px;
+        }
+        .quiz-question strong {
+            color: #0284c7;
+        }
+
+        .answer-section {
+            background: var(--answer-bg);
+            border: 1px solid var(--answer-border);
+            border-radius: 8px;
+            padding: 18px 22px;
+            margin: 10px 0 20px;
+        }
+        .answer-section .box-title {
+            color: #16a34a;
+        }
+
+        /* ===== TABLE ===== */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.95em;
+        }
+        th, td {
+            border: 1px solid var(--border);
+            padding: 10px 14px;
+            text-align: left;
+        }
+        th {
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+        }
+        tr:nth-child(even) { background: #f8fafc; }
+        tr:hover { background: #f1f5f9; }
+
+        /* ===== CODE ===== */
+        pre {
+            background: var(--code-bg);
+            color: #f8fafc;
+            padding: 18px 22px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: "Fira Code", Consolas, Monaco, monospace;
+            font-size: 0.88em;
+            line-height: 1.6;
+            margin: 20px 0;
+        }
+        code {
+            font-family: "Fira Code", Consolas, Monaco, monospace;
+            background: #f1f5f9;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            color: #b91c1c;
+        }
+        pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+        }
+
+        /* ===== TOC ===== */
+        .toc {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 25px 30px;
+            margin: 30px 0;
+        }
+        .toc h2 { margin-top: 0; color: var(--primary); }
+        .toc ul { list-style: none; margin-left: 0; }
+        .toc > ul > li {
+            margin: 8px 0;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        .toc > ul > li > ul > li {
+            font-weight: 400;
+            color: var(--text);
+            margin: 4px 0;
+            padding-left: 20px;
+        }
+        .toc a { color: inherit; text-decoration: none; }
+        .toc a:hover { color: var(--accent); text-decoration: underline; }
+
+        /* ===== PRINT ===== */
+        .print-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 12px 22px;
+            border-radius: 30px;
+            font-size: 0.95em;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(37,99,235,0.4);
+            transition: all 0.2s;
+            z-index: 1000;
+        }
+        .print-btn:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+        }
+
+        @media print {
+            body { padding: 15px; font-size: 11pt; max-width: 100%; }
+            .print-btn { display: none; }
+            .cover-page { padding: 40px 20px; }
+            .part-header, .part-header-intro, .part-header-purple, .part-header-orange { page-break-before: always; }
+            .quiz-section, .answer-section, .definition, .theorem, .example-box, .important-note, .analogy-box, .warning-box, .cheat-sheet {
+                break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<button class="print-btn" onclick="window.print()">📄 Xuất PDF</button>
+
+<!-- COVER PAGE -->
+<div class="cover-page">
+    <h1>Tài Liệu Học Tập Toàn Tập</h1>
+    <div class="subtitle">TOÁN NỀN TẢNG CHO ROBOTICS &amp; CONTROL</div>
+    <div class="tagline">
+        Đại số tuyến tính · Giải tích &amp; Biến đổi · Tối ưu hóa · Xác suất &amp; Quá trình ngẫu nhiên — Phân cấp rõ "hiểu sâu" vs "chỉ cần áp dụng công thức"
+    </div>
+    <hr style="width: 50%; margin: 25px auto; border: none; border-top: 1px solid #cbd5e1;">
+    <div class="meta">
+        <p><strong>Đối tượng:</strong> Sinh viên / Kỹ sư Robotics, Điều khiển, Xử lý tín hiệu</p>
+        <p><strong>Phương pháp:</strong> Mỗi mục được gắn huy hiệu mức độ → học đúng trọng tâm, không sa đà chứng minh không cần thiết</p>
+        <p><strong>Phiên bản:</strong> 1.0 (Hoàn chỉnh &amp; Phân cấp mức độ)</p>
+    </div>
+</div>
+
+<!-- LEGEND -->
+<div class="legend-box">
+    <div class="legend-item">
+        <span class="level-badge level-apply">🔧 CHỈ CẦN CÔNG THỨC</span>
+        <span style="color: #047857;"><strong>Áp dụng được là đủ:</strong> ghi nhớ công thức, biết khi nào dùng, hiểu ý nghĩa vật lý của kết quả. Không cần chứng minh, không cần đào gốc.</span>
+    </div>
+    <div class="legend-item">
+        <span class="level-badge level-deep">🔬 CẦN HIỂU SÂU</span>
+        <span style="color: #1d4ed8;"><strong>Phải hiểu bản chất:</strong> đây là "xương sống" — sai một khái niệm là hỏng toàn bộ phần sau (ổn định, Kalman, LQR, MPC). Nên đọc chứng minh và tự suy luận.</span>
+    </div>
+    <div class="legend-item">
+        <span class="level-badge level-concept">🔎 HIỂU Ý TƯỞNG</span>
+        <span style="color: #6d28d9;"><strong>Hiểu ý tưởng là đủ:</strong> nắm nó giải quyết vấn đề gì, đầu vào/đầu ra, khi nào dùng. Chi tiết thuật toán để khi cần tra thư viện.</span>
+    </div>
+</div>
+
+<!-- TOC -->
+<div class="toc">
+    <h2>📋 Mục Lục Chi Tiết</h2>
+    <ul>
+        <li><a href="#part0">PHẦN 0: CÁCH HỌC ĐÚNG TRỌNG TÂM</a>
+            <ul>
+                <li><a href="#s0.1">0.1 Bản đồ tri thức: Toán nào dùng ở đâu trong Robotics/Control?</a></li>
+                <li><a href="#s0.2">0.2 Thứ tự học đề xuất &amp; quy tắc phân bổ thời gian</a></li>
+            </ul>
+        </li>
+        <li><a href="#part1">PHẦN 1: ĐẠI SỐ TUYẾN TÍNH (Xương sống của Control)</a>
+            <ul>
+                <li><a href="#s1.1">1.1 Ma trận &amp; Vector — phép toán cơ bản <span class="level-badge level-apply">🔧 CÔNG THỨC</span></a></li>
+                <li><a href="#s1.2">1.2 Không gian trạng thái — mô hình hệ thống <span class="level-badge level-deep">🔬 HIỂU SÂU</span></a></li>
+                <li><a href="#s1.3">1.3 Trị riêng &amp; Vector riêng (Eigenvalue) <span class="level-badge level-deep">🔬 HIỂU SÂU</span></a></li>
+                <li><a href="#s1.4">1.4 SVD &amp; Giả nghịch đảo (Pseudoinverse) <span class="level-badge level-apply">🔧 CÔNG THỨC</span></a></li>
+                <li><a href="#s1.5">1.5 Jacobian &amp; Đạo hàm ma trận <span class="level-badge level-apply">🔧 CÔNG THỨC</span></a></li>
+            </ul>
+        </li>
+        <li><a href="#part2">PHẦN 2: GIẢI TÍCH, LAPLACE &amp; Z-TRANSFORM</a>
+            <ul>
+                <li><a href="#s2.1">2.1 ODE bậc nhất &amp; nghiệm cơ bản <span class="level-badge level-deep">🔬 HIỂU SÂU</span></a></li>
+                <li><a href="#s2.2">2.2 Biến đổi Laplace &amp; Hàm truyền <span class="level-badge level-deep">🔬 HIỂU SÂU</span></a></li>
+                <li><a href="#s2.3">2.3 Biến đổi Z &amp; Hệ rời rạc <span class="level-badge level-apply">🔧 CÔNG THỨC</span></a></li>
+                <li><a href="#s2.4">2.4 Bảng tra cứu Laplace/Z nhanh <span class="level-badge level-apply">🔧 CÔNG THỨC</span></a></li>
+            </ul>
+        </li>
+        <li><a href="#part3">PHẦN 3: TỐI ƯU HÓA</a>
+            <ul>
+                <li><a href="#s3.1">3.1 Gradient Descent <span class="level-badge level-deep">🔬 HIỂU SÂU</span></a></li>
+                <li><a href="#s3.2">3.2 Least Squares &amp; Normal Equation <span class="level-badge level-deep">🔬 HIỂU SÂU</span></a></li>
+                <li><a href="#s3.3">3.3 Tối ưu lồi (Convex Optimization) <span class="level-badge level-concept">🔎 Ý TƯỞNG</span></a></li>
+                <li><a href="#s3.4">3.4 MPC — Model Predictive Control <span class="level-badge level-concept">🔎 Ý TƯỞNG</span></a></li>
+            </ul>
+        </li>
+        <li><a href="#part4">PHẦN 4: XÁC SUẤT &amp; QUÁ TRÌNH NGẪU NHIÊN</a>
+            <ul>
+                <li><a href="#s4.1">4.1 Ôn tập nhanh nền tảng Kalman <span class="level-badge level-apply">🔧 CÔNG THỨC</span></a></li>
+                <li><a href="#s4.2">4.2 Quá trình ngẫu nhiên (Random Process) <span class="level-badge level-deep">🔬 HIỂU SÂU</span></a></li>
+                <li><a href="#s4.3">4.3 Nhiễu trắng &amp; Nhiễu Gauss <span class="level-badge level-deep">🔬 HIỂU SÂU</span></a></li>
+                <li><a href="#s4.4">4.4 Martingale (Nâng cao) <span class="level-badge level-concept">🔎 Ý TƯỞNG</span></a></li>
+            </ul>
+        </li>
+        <li><a href="#part5">PHẦN 5: BẢNG TỔNG KẾT MỨC ĐỘ &amp; LỘ TRÌNH</a>
+            <ul>
+                <li><a href="#s5.1">5.1 Bảng tổng kết toàn bộ mục theo mức độ</a></li>
+                <li><a href="#s5.2">5.2 Lộ trình học 12 tuần đề xuất</a></li>
+            </ul>
+        </li>
+    </ul>
+</div>
+
+<!-- =========================================================== -->
+<!-- PHẦN 0: CÁCH HỌC                                          -->
+<!-- =========================================================== -->
+<div class="part-header-intro" id="part0">
+    <h1>PHẦN 0: CÁCH HỌC ĐÚNG TRỌNG TÂM</h1>
+    <p>Biết cái gì cần hiểu sâu, cái gì chỉ cần áp dụng — để không đốt thời gian</p>
+</div>
+
+<h2 id="s0.1">0.1 Bản đồ tri thức: Toán nào dùng ở đâu?</h2>
+
+<table>
+    <tr>
+        <th>Kiến thức</th>
+        <th>Dùng ở đâu trong Robotics/Control</th>
+        <th>Mức độ cần</th>
+    </tr>
+    <tr>
+        <td>Ma trận, vector</td>
+        <td>Mọi thứ: trạng thái, ma trận xoay, ma trận hiệp phương sai $P$</td>
+        <td><span class="level-badge level-apply">🔧 CÔNG THỨC</span></td>
+    </tr>
+    <tr>
+        <td>Không gian trạng thái</td>
+        <td>Mô hình hóa mọi hệ điều khiển; nền của Kalman, LQR, MPC</td>
+        <td><span class="level-badge level-deep">🔬 HIỂU SÂU</span></td>
+    </tr>
+    <tr>
+        <td>Eigenvalue</td>
+        <td>Ổn định hệ thống (cực $p$), tần số tự nhiên, hội tụ Kalman</td>
+        <td><span class="level-badge level-deep">🔬 HIỂU SÂU</span></td>
+    </tr>
+    <tr>
+        <td>SVD</td>
+        <td>Giả nghịch đảo, nhận dạng mô hình, khử nhiễu</td>
+        <td><span class="level-badge level-apply">🔧 CÔNG THỨC</span></td>
+    </tr>
+    <tr>
+        <td>Jacobian</td>
+        <td>Động học robot cánh tay, mô hình hóa phi tuyến (EKF), lập quỹ đạo</td>
+        <td><span class="level-badge level-apply">🔧 CÔNG THỨC</span></td>
+    </tr>
+    <tr>
+        <td>ODE + Laplace</td>
+        <td>Hàm truyền, đáp ứng hệ thống, thiết kế bộ bù (compensator)</td>
+        <td><span class="level-badge level-deep">🔬 HIỂU SÂU</span></td>
+    </tr>
+    <tr>
+        <td>Z-transform</td>
+        <td>Bộ lọc số, bộ điều khiển số (thực tế vi điều khiển)</td>
+        <td><span class="level-badge level-apply">🔧 CÔNG THỨC</span></td>
+    </tr>
+    <tr>
+        <td>Gradient Descent</td>
+        <td>Học máy, hiệu chuẩn cảm biến, tối ưu quỹ đạo</td>
+        <td><span class="level-badge level-deep">🔬 HIỂU SÂU</span></td>
+    </tr>
+    <tr>
+        <td>Least Squares</td>
+        <td>Hiệu chuẩn IMU, nhận dạng hệ thống, SLAM (BA)</td>
+        <td><span class="level-badge level-deep">🔬 HIỂU SÂU</span></td>
+    </tr>
+    <tr>
+        <td>Convex Optimization / MPC</td>
+        <td>Điều khiển tối ưu, lập quỹ đạo an toàn, tránh vật cản</td>
+        <td><span class="level-badge level-concept">🔎 Ý TƯỞNG</span></td>
+    </tr>
+    <tr>
+        <td>Xác suất nền</td>
+        <td>Đã học qua Kalman — ôn nhanh</td>
+        <td><span class="level-badge level-apply">🔧 CÔNG THỨC</span></td>
+    </tr>
+    <tr>
+        <td>Random Process, Nhiễu trắng</td>
+        <td>Mô hình nhiễu $Q$, $R$ trong Kalman; phân tích nhiễu cảm biến</td>
+        <td><span class="level-badge level-deep">🔬 HIỂU SÂU</span></td>
+    </tr>
+    <tr>
+        <td>Martingale</td>
+        <td>Nghiên cứu nâng cao: hội tụ thuật toán, tối ưu ngẫu nhiên</td>
+        <td><span class="level-badge level-concept">🔎 Ý TƯỞNG</span></td>
+    </tr>
+</table>
+
+<h2 id="s0.2">0.2 Thứ tự học đề xuất &amp; quy tắc phân bổ thời gian</h2>
+
+<div class="step-card">
+    <span class="step-number">1</span> Đại số tuyến tính (1.1 → 1.2 → 1.3) — <strong>60% thời gian vào mục hiểu sâu</strong>.
+    <br><span class="step-number">2</span> ODE + Laplace (2.1 → 2.2) — học song song với đại số tuyến tính.
+    <br><span class="step-number">3</span> Xác suất &amp; random process (4.1 → 4.3) — kết nối thẳng với Kalman đã học.
+    <br><span class="step-number">4</span> Tối ưu hóa (3.1 → 3.2 hiểu sâu; 3.3, 3.4 chỉ ý tưởng).
+    <br><span class="step-number">5</span> Các mục "🔧 công thức" và "🔎 ý tưởng": học <strong>khi gặp</strong>, không học trước.
+</div>
+
+<div class="important-note">
+    <span class="box-title">⏱️ Quy tắc phân bổ thời gian:</span>
+    <ul>
+        <li>🔬 Hiểu sâu: <strong>70% thời gian học</strong> — đọc chứng minh, làm bài tập suy luận.</li>
+        <li>🔧 Công thức: <strong>20%</strong> — học công thức + ví dụ số, không chứng minh.</li>
+        <li>🔎 Ý tưởng: <strong>10%</strong> — đọc tổng quan, ghi nhớ đầu vào/đầu ra.</li>
+    </ul>
+</div>
+
+<!-- =========================================================== -->
+<!-- PHẦN 1: ĐẠI SỐ TUYẾN TÍNH                                 -->
+<!-- =========================================================== -->
+<div class="part-header" id="part1">
+    <h1>PHẦN 1: ĐẠI SỐ TUYẾN TÍNH</h1>
+    <p>Xương sống của toàn bộ lý thuyết điều khiển hiện đại</p>
+</div>
+
+<h2 id="s1.1">1.1 Ma trận &amp; Vector — phép toán cơ bản <span class="level-badge level-apply">🔧 CHỈ CẦN CÔNG THỨC</span></h2>
+
+<p><strong>Vì sao chỉ cần công thức:</strong> Các phép toán ma trận đã được thư viện (NumPy, Eigen, MATLAB) xử lý hoàn hảo. Bạn chỉ cần biết <strong>cú pháp và ý nghĩa</strong>, không cần nhớ cách tính tay.</p>
+
+<div class="cheat-sheet">
+    <span class="box-title">📄 Cheat Sheet — Phép toán ma trận</span>
+    <ul>
+        <li><strong>Nhân ma trận:</strong> $C_{ij} = \sum_k A_{ik}B_{kj}$ — thứ tự QUAN TRỌNG: $AB \neq BA$.</li>
+        <li><strong>Chuyển vị:</strong> $(AB)^T = B^T A^T$ (đảo thứ tự!).</li>
+        <li><strong>Nghịch đảo:</strong> $A^{-1}A = I$; tồn tại khi $\det(A) \neq 0$. $2\times 2$: $\begin{bmatrix}a&b\\c&d\end{bmatrix}^{-1} = \frac{1}{ad-bc}\begin{bmatrix}d&-b\\-c&a\end{bmatrix}$.</li>
+        <li><strong>Vết (trace):</strong> $tr(A) = \sum_i A_{ii}$; $tr(AB) = tr(BA)$.</li>
+        <li><strong>Định thức:</strong> $\det(A) = 0$ ⇔ $A$ suy biến (không nghịch đảo được).</li>
+        <li><strong>Ma trận đối xứng:</strong> $A = A^T$ — đặc biệt quan trọng: ma trận hiệp phương sai luôn đối xứng xác định dương ($P, Q, R$).</li>
+        <li><strong>Đạo hàm bậc hai dạng toàn phương:</strong> $\dfrac{\partial (x^T A x)}{\partial x} = (A + A^T)x$; nếu $A$ đối xứng: $= 2Ax$.</li>
+    </ul>
+</div>
+
+<div class="example-box">
+    <span class="box-title">📌 Ví dụ áp dụng trong Control:</span>
+    <p>Kalman Filter cập nhật $P_{k|k} = (I - K_k C)P_{k|k-1}$ và $P_{k|k-1} = AP_{k-1|k-1}A^T + Q$. Bạn chỉ cần biết cách viết bằng NumPy — không cần nhớ quy tắc nhân tay.</p>
+</div>
+
+<h2 id="s1.2">1.2 Không gian trạng thái — mô hình hệ thống <span class="level-badge level-deep">🔬 CẦN HIỂU SÂU</span></h2>
+
+<p><strong>Vì sao phải hiểu sâu:</strong> Mọi hệ điều khiển hiện đại (Kalman, LQR, MPC) đều làm việc trên mô hình trạng thái. Hiểu sai khái niệm này = không hiểu gì về control.</p>
+
+<div class="definition">
+    <span class="box-title">📖 Mô hình không gian trạng thái liên tục</span>
+    $$\dot{x}(t) = A x(t) + B u(t)$$
+    $$y(t) = C x(t) + D u(t)$$
+    <ul>
+        <li>$x$: vector <strong>trạng thái</strong> — toàn bộ thông tin cần thiết để dự đoán tương lai của hệ.</li>
+        <li>$u$: tín hiệu <strong>điều khiển</strong> (đầu vào).</li>
+        <li>$y$: <strong>đầu ra đo được</strong> (cảm biến).</li>
+        <li>$A$: ma trận động lực học (mô tả hệ tự vận hành).</li>
+        <li>$B$: ma trận đầu vào (điều khiển tác động vào trạng thái thế nào).</li>
+        <li>$C$: ma trận đầu ra (cảm biến đo được gì).</li>
+    </ul>
+</div>
+
+<div class="example-box">
+    <span class="box-title">📌 Ví dụ: Robot 1D chịu lực đẩy</span>
+    <p>Robot khối lượng $m$ chịu lực $F = u$, vị trí $p$, vận tốc $v$:</p>
+    $$\begin{bmatrix} \dot{p} \\ \dot{v} \end{bmatrix} = \begin{bmatrix} 0 & 1 \\ 0 & 0 \end{bmatrix} \begin{bmatrix} p \\ v \end{bmatrix} + \begin{bmatrix} 0 \\ 1/m \end{bmatrix} u, \qquad y = \begin{bmatrix} 1 & 0 \end{bmatrix} \begin{bmatrix} p \\ v \end{bmatrix}$$
+    <p>Bạn đã gặp dạng rời rạc của mô hình này trong tài liệu Kalman: $x_k = Ax_{k-1} + Bu_{k-1} + w_{k-1}$.</p>
+</div>
+
+<div class="important-note">
+    <span class="box-title">🔑 Ba điều PHẢI hiểu:</span>
+    <ol>
+        <li><strong>Trạng thái ≠ đầu ra:</strong> Có trạng thái không đo được trực tiếp (vận tốc), chỉ đo được thông qua $C$ — đây chính là lý do Kalman Filter tồn tại (ước lượng trạng thái từ đầu ra nhiễu).</li>
+        <li><strong>Chuyển rời rạc:</strong> Với chu kỳ lấy mẫu $T_s$, ma trận rời rạc $A_d = e^{AT_s}$ (đọc qua thư viện), $B_d$ từ công thức tích phân. Bạn dùng $A_d, B_d$ trong Kalman rời rạc.</li>
+        <li><strong>Mô hình là xấp xỉ:</strong> Mọi mô hình đều sai một phần — phần sai đó chính là nhiễu quá trình $Q$ trong Kalman.</li>
+    </ol>
+</div>
+
+<h2 id="s1.3">1.3 Trị riêng &amp; Vector riêng (Eigenvalue) <span class="level-badge level-deep">🔬 CẦN HIỂU SÂU</span></h2>
+
+<p><strong>Vì sao phải hiểu sâu:</strong> Eigenvalue quyết định <strong>hệ có ổn định hay không</strong> — câu hỏi số 1 của mọi kỹ sư điều khiển. Bạn không cần nhớ cách tính tay (máy tính làm), nhưng PHẢI hiểu ý nghĩa.</p>
+
+<div class="definition">
+    <span class="box-title">📖 Định nghĩa Eigenvalue / Eigenvector</span>
+    <p>Vector $\mathbf{v} \neq 0$ gọi là vector riêng, $\lambda$ là trị riêng của $A$ nếu:</p>
+    $$A \mathbf{v} = \lambda \mathbf{v}$$
+    <p>Nghĩa là: nhân $A$ với $v$ chỉ làm <strong>co/giãn</strong> $v$ chứ không đổi hướng. Eigenvalue $\lambda$ chính là "hệ số co giãn" đó.</p>
+    <p>Cách tìm: giải $\det(A - \lambda I) = 0$ (máy tính làm; bạn chỉ cần đọc kết quả).</p>
+</div>
+
+<div class="theorem">
+    <span class="box-title">🔷 Định lý Ổn định — Điều QUAN TRỌNG NHẤT cần ghi nhớ:</span>
+    <p>Hệ liên tục $\dot{x} = Ax$ ổn định ⇔ <strong>mọi trị riêng của $A$ có phần thực âm</strong> (nằm nửa trái mặt phẳng phức).</p>
+    <p>Hệ rời rạc $x_{k+1} = A_d x_k$ ổn định ⇔ <strong>mọi trị riêng có mô-đun &lt; 1</strong> (nằm trong đường tròn đơn vị).</p>
+    <ul>
+        <li>$\text{Re}(\lambda) &lt; 0$ (liên tục): dao động tắt dần, hội tụ về 0.</li>
+        <li>$\text{Re}(\lambda) &gt; 0$: phân kỳ — hệ nổ.</li>
+        <li>$\text{Re}(\lambda) = 0$: dao động bền (không tắt, không nổ).</li>
+    </ul>
+</div>
+
+<div class="example-box">
+    <span class="box-title">📌 Ví dụ con lắc ngược (Robot thăng bằng):</span>
+    <p>Ma trận $A = \begin{bmatrix} 0 & 1 \\ g/L & 0 \end{bmatrix}$ có trị riêng $\lambda = \pm\sqrt{g/L}$. Một trị riêng dương → <strong>hệ bất ổn định</strong> → đó là lý do robot thăng bằng KHÔNG thể đứng yên nếu không có bộ điều khiển tác động liên tục. LQR/PID chính là "dịch chuyển trị riêng" sang nửa trái.</p>
+</div>
+
+<div class="important-note">
+    <span class="box-title">🔑 Nơi khác dùng eigenvalue trong Robotics:</span>
+    <ul>
+        <li><strong>Kalman Filter:</strong> sai số hội tụ với tốc độ do trị riêng của $(I - KC)A$ quyết định.</li>
+        <li><strong>LQR:</strong> đặt trị riêng vòng kín vào vùng mong muốn thông qua ma trận $K$.</li>
+        <li><strong>Phân tích rung động robot:</strong> tần số tự nhiên $\omega_n = |\lambda|$.</li>
+        <li><strong>SVD của ma trận hiệp phương sai:</strong> eigenvalue cho biết độ không chắc chắn lớn nhất nằm ở hướng nào (uncertainty ellipsoid).</li>
+    </ul>
+</div>
+
+<h2 id="s1.4">1.4 SVD &amp; Giả nghịch đảo (Pseudoinverse) <span class="level-badge level-apply">🔧 CHỈ CẦN CÔNG THỨC</span></h2>
+
+<p><strong>Vì sao chỉ cần công thức:</strong> Bạn chỉ cần biết SVD phân rã ma trận thành 3 phần và dùng kết quả, không cần hiểu thuật toán bên trong (máy tính làm).</p>
+
+<div class="definition">
+    <span class="box-title">📖 Phân rã SVD</span>
+    <p>Mọi ma trận $A_{m\times n}$ đều phân rã được:</p>
+    $$A = U \Sigma V^T$$
+    <ul>
+        <li>$U$ ($m\times m$), $V$ ($n\times n$): ma trận trực giao (cột là vector riêng).</li>
+        <li>$\Sigma$: ma trận đường chéo chứa <strong>giá trị kỳ dị</strong> $\sigma_1 \geq \sigma_2 \geq \dots$ (luôn ≥ 0).</li>
+    </ul>
+    <p><strong>Giả nghịch đảo Moore-Penrose:</strong> $A^{+} = V \Sigma^{+} U^T$ — trong Python: <code>np.linalg.pinv(A)</code>.</p>
+</div>
+
+<div class="cheat-sheet">
+    <span class="box-title">📄 Khi nào dùng gì (áp dụng trực tiếp):</span>
+    <ul>
+        <li><strong>Hệ vuông khả nghịch:</strong> $Ax = b \Rightarrow x = A^{-1}b$.</li>
+        <li><strong>Hệ thừa phương trình (overdetermined):</strong> dùng $x = A^{+}b$ = nghiệm bình phương tối thiểu.</li>
+        <li><strong>Hệ thiếu phương trình (underdetermined):</strong> $x = A^{+}b$ cho nghiệm chuẩn tối thiểu.</li>
+        <li><strong>Ứng dụng robot:</strong> Động học nghịch cánh tay robot: $\dot{q} = J^{+} \dot{x}$ (vận tốc khớp từ vận tốc đầu công tác).</li>
+        <li><strong>Nhận dạng hệ thống:</strong> ước lượng tham số từ dữ liệu nhiễu (xem Least Squares, Phần 3).</li>
+    </ul>
+</div>
+
+<h2 id="s1.5">1.5 Jacobian &amp; Đạo hàm ma trận <span class="level-badge level-apply">🔧 CHỈ CẦN CÔNG THỨC</span></h2>
+
+<p><strong>Vì sao chỉ cần công thức:</strong> Jacobian là "ma trận đạo hàm" — bạn cần biết cách lập và cách dùng, máy tính tính số giúp.</p>
+
+<div class="definition">
+    <span class="box-title">📖 Ma trận Jacobian</span>
+    <p>Cho hàm vector $f: \mathbb{R}^n \to \mathbb{R}^m$, Jacobian là ma trận đạo hàm riêng:</p>
+    $$J_{ij} = \frac{\partial f_i}{\partial x_j}, \qquad J = \begin{bmatrix}
+    \frac{\partial f_1}{\partial x_1} & \cdots & \frac{\partial f_1}{\partial x_n} \\
+    \vdots & \ddots & \vdots \\
+    \frac{\partial f_m}{\partial x_1} & \cdots & \frac{\partial f_m}{\partial x_n}
+    \end{bmatrix}$$
+</div>
+
+<div class="cheat-sheet">
+    <span class="box-title">📄 Cách dùng Jacobian (chỉ cần 3 ứng dụng):</span>
+    <ul>
+        <li><strong>Xấp xỉ tuyến tính (Linearization):</strong> $f(x) \approx f(x_0) + J(x_0)(x - x_0)$ — dùng trong <strong>Extended Kalman Filter (EKF)</strong> cho hệ phi tuyến: mỗi bước tính $J$ của $f$ và $h$ tại trạng thái hiện tại.</li>
+        <li><strong>Động học vận tốc robot:</strong> $\dot{x}_{\text{công tác}} = J(q)\,\dot{q}$; điều khiển khớp: $\dot{q} = J^{+}\dot{x}$.</li>
+        <li><strong>Levenberg-Marquardt / Gauss-Newton:</strong> dùng Jacobian để tối ưu phi tuyến (hiệu chuẩn, SLAM bundle adjustment).</li>
+    </ul>
+</div>
+
+<!-- Quiz 1 -->
+<div class="quiz-section">
+    <h3>📝 Quick Quiz 1 — Đại số tuyến tính</h3>
+    
+    <div class="quiz-question">
+        <strong>Câu 1 (Hiểu sâu):</strong> Hệ liên tục $\dot{x} = Ax$ với trị riêng $\lambda = 2 + 3j$ của $A$. Hệ ổn định không? Vì sao?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án Câu 1:</span>
+        <p>KHÔNG ổn định. Phần thực $\text{Re}(\lambda) = 2 &gt; 0$ → đáp ứng phân kỳ (nổ) dù có dao động do phần ảo $3j$. Điều kiện ổn định: mọi trị riêng có phần thực âm.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>Câu 2 (Công thức):</strong> Hệ rời rạc $x_{k+1} = A_d x_k$ có trị riêng $\lambda = 1.05$. Ổn định không?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án Câu 2:</span>
+        <p>KHÔNG ổn định. Hệ rời rạc ổn định khi $|\lambda| &lt; 1$; $|1.05| &gt; 1$ → phân kỳ.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>Câu 3 (Công thức):</strong> Cần giải $Ax = b$ với 1000 phương trình, 3 ẩn (dữ liệu nhiễu). Dùng gì?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án Câu 3:</span>
+        <p>Giả nghịch đảo $x = A^{+}b$ (<code>np.linalg.pinv</code>) hoặc Least Squares (<code>np.linalg.lstsq</code>) — cho nghiệm tối ưu theo bình phương sai số tối thiểu.</p>
+    </div>
+</div>
+
+<!-- =========================================================== -->
+<!-- PHẦN 2: GIẢI TÍCH, LAPLACE, Z-TRANSFORM                    -->
+<!-- =========================================================== -->
+<div class="part-header-purple" id="part2">
+    <h1>PHẦN 2: GIẢI TÍCH, LAPLACE &amp; Z-TRANSFORM</h1>
+    <p>Từ ODE đến hàm truyền — ngôn ngữ phân tích hệ thống động</p>
+</div>
+
+<h2 id="s2.1">2.1 ODE bậc nhất &amp; nghiệm cơ bản <span class="level-badge level-deep">🔬 CẦN HIỂU SÂU</span></h2>
+
+<p><strong>Vì sao phải hiểu sâu:</strong> ODE bậc nhất là mô hình của mọi hệ động lực học cơ bản (RC, nhiệt, motor, tích phân con quay). Hiểu nghiệm của nó = hiểu trực giác về "thời gian hằng số" dùng khắp control.</p>
+
+<div class="theorem">
+    <span class="box-title">🔷 ODE bậc nhất &amp; nghiệm tổng quát</span>
+    $$\dot{x} = a x + b u, \qquad x(0) = x_0$$
+    <p>Nghiệm (với $u$ hằng số):</p>
+    $$x(t) = \underbrace{x_0 e^{at}}_{\text{đáp ứng tự do}} + \underbrace{\frac{b u}{a}(e^{at} - 1)}_{\text{đáp ứng cưỡng bức}}$$
+</div>
+
+<div class="important-note">
+    <span class="box-title">🔑 Ý nghĩa phải nhớ:</span>
+    <ul>
+        <li>$a &lt; 0$: $e^{at} \to 0$ — hệ hội tụ về giá trị cân bằng $\dfrac{-bu}{a}$ (với $u$ hằng).</li>
+        <li>$a &gt; 0$: $e^{at} \to \infty$ — hệ nổ.</li>
+        <li><strong>Thời gian hằng số:</strong> $\tau = \dfrac{1}{|a|}$ — sau $t = \tau$, sai số còn $e^{-1} \approx 37\%$; sau $5\tau$ coi như xong (~0.7%).</li>
+        <li>Ví dụ: tụ nạp RC, nhiệt độ phòng, vận tốc motor: $\dot{v} + \frac{b}{m}v = \frac{F}{m}$.</li>
+    </ul>
+</div>
+
+<h2 id="s2.2">2.2 Biến đổi Laplace &amp; Hàm truyền <span class="level-badge level-deep">🔬 CẦN HIỂU SÂU</span></h2>
+
+<p><strong>Vì sao phải hiểu sâu:</strong> Hàm truyền + cực/zero là ngôn ngữ của mọi kỹ sư điều khiển (Bode, Nyquist, PID design). Phải hiểu <strong>khái niệm</strong>, không cần nhớ bảng biến đổi (tra cứu).</p>
+
+<div class="definition">
+    <span class="box-title">📖 Định nghĩa biến đổi Laplace</span>
+    $$F(s) = \mathcal{L}\{f(t)\} = \int_0^{\infty} f(t) e^{-st} dt$$
+    <p>Biến đổi này biến <strong>phương trình vi phân (đạo hàm) thành phương trình đại số (nhân với $s$)</strong>:</p>
+    $$\mathcal{L}\{\dot{f}\} = sF(s) - f(0)$$
+</div>
+
+<div class="theorem">
+    <span class="box-title">🔷 Hàm truyền &amp; Cực - Zero</span>
+    <p>Từ mô hình trạng thái $\dot{x} = Ax + Bu$, $y = Cx$ (điều kiện đầu 0):</p>
+    $$G(s) = \frac{Y(s)}{U(s)} = C(sI - A)^{-1}B = K\frac{\prod(s - z_i)}{\prod(s - p_j)}$$
+    <ul>
+        <li><strong>Cực (poles) $p_j$:</strong> nghiệm mẫu số = chính là <strong>eigenvalue của $A$</strong>! Cực nằm nửa trái → ổn định.</li>
+        <li><strong>Zero $z_i$:</strong> nghiệm tử số — ảnh hưởng hình dạng đáp ứng.</li>
+        <li>Độ lợi DC: $G(0)$ = tỉ số đầu ra/đầu vào ở trạng thái ổn định.</li>
+    </ul>
+</div>
+
+<div class="example-box">
+    <span class="box-title">📌 Ví dụ Motor DC (bậc nhất):</span>
+    <p>$G(s) = \dfrac{K}{\tau s + 1}$ — cực $p = -1/\tau$ (âm nếu $\tau &gt; 0$ → ổn định). Đáp ứng với bước nhảy: tăng theo hàm mũ, đạt $63\%$ sau $\tau$ giây — đúng như phần 2.1.</p>
+</div>
+
+<div class="important-note">
+    <span class="box-title">🔑 Ba điều phải hiểu sâu:</span>
+    <ol>
+        <li><strong>Cực = eigenvalue:</strong> mối liên hệ xuyên suốt: $G(s)$ có cực $p \Leftrightarrow A$ có eigenvalue $p$.</li>
+        <li><strong>Điều khiển = đặt cực:</strong> PID/LQR chọn $K$ để cực vòng kín nằm ở vị trí mong muốn (nhanh, không vọt lố).</li>
+        <li><strong>Bode/Nyquist:</strong> đánh giá ổn định và độ dự trữ (gain/phase margin) từ $G(j\omega)$ — dùng để tinh chỉnh PID có cơ sở.</li>
+    </ol>
+</div>
+
+<h2 id="s2.3">2.3 Biến đổi Z &amp; Hệ rời rạc <span class="level-badge level-apply">🔧 CHỈ CẦN CÔNG THỨC</span></h2>
+
+<p><strong>Vì sao chỉ cần công thức:</strong> Vi điều khiển làm việc rời rạc, nhưng trong thực tế bạn hiếm khi tính tay Z-transform — bạn viết phương trình sai phân trực tiếp (như đã làm trong Kalman) hoặc dùng thư viện. Chỉ cần biết khái niệm và bảng tra.</p>
+
+<div class="definition">
+    <span class="box-title">📖 Định nghĩa biến đổi Z (chuẩn hóa $T_s = 1$)</span>
+    $$X(z) = \mathcal{Z}\{x_k\} = \sum_{k=0}^{\infty} x_k z^{-k}$$
+    <p>Biến đổi Z biến <strong>phương trình sai phân thành phương trình đại số</strong> — vai trò của nó với hệ rời rạc giống Laplace với hệ liên tục:</p>
+    $$\mathcal{Z}\{x_{k+1}\} = zX(z) - z x_0$$
+</div>
+
+<div class="cheat-sheet">
+    <span class="box-title">📄 Bảng tra nhanh Z-transform (chỉ cần nhớ 3 dòng đầu):</span>
+    <table>
+        <tr><th>$x_k$</th><th>$X(z)$</th></tr>
+        <tr><td>$\delta_k$ (xung đơn vị)</td><td>$1$</td></tr>
+        <tr><td>$u_k$ (bước nhảy)</td><td>$\dfrac{z}{z-1}$</td></tr>
+        <tr><td>$a^k$</td><td>$\dfrac{z}{z-a}$</td></tr>
+        <tr><td>$k\,a^k$</td><td>$\dfrac{az}{(z-a)^2}$</td></tr>
+        <tr><td>$\sin(\omega k)$</td><td>$\dfrac{z\sin\omega}{z^2 - 2z\cos\omega + 1}$</td></tr>
+    </table>
+    <p><strong>Ổn định hệ rời rạc:</strong> mọi cực $|p| &lt; 1$. <strong>Chuyển liên tục → rời rạc:</strong> $z = e^{sT_s}$ (đọc thư viện, không tính tay).</p>
+</div>
+
+<h2 id="s2.4">2.4 Bảng tra cứu Laplace/Z nhanh <span class="level-badge level-apply">🔧 CHỈ CẦN CÔNG THỨC</span></h2>
+
+<div class="cheat-sheet">
+    <span class="box-title">📄 Bảng Laplace cần thiết nhất (in ra và dán tường):</span>
+    <table>
+        <tr><th>$f(t)$</th><th>$F(s)$</th></tr>
+        <tr><td>$\delta(t)$</td><td>$1$</td></tr>
+        <tr><td>$1$ (bước nhảy)</td><td>$\dfrac{1}{s}$</td></tr>
+        <tr><td>$t$</td><td>$\dfrac{1}{s^2}$</td></tr>
+        <tr><td>$e^{-at}$</td><td>$\dfrac{1}{s+a}$</td></tr>
+        <tr><td>$t e^{-at}$</td><td>$\dfrac{1}{(s+a)^2}$</td></tr>
+        <tr><td>$\sin(\omega t)$</td><td>$\dfrac{\omega}{s^2+\omega^2}$</td></tr>
+        <tr><td>$\cos(\omega t)$</td><td>$\dfrac{s}{s^2+\omega^2}$</td></tr>
+        <tr><td>$e^{-at}\sin(\omega t)$</td><td>$\dfrac{\omega}{(s+a)^2+\omega^2}$</td></tr>
+    </table>
+    <p><strong>Định lý giá trị cuối (dùng nhiều nhất):</strong> $x_{\infty} = \lim_{t\to\infty} x(t) = \lim_{s\to 0} sX(s)$ (khi hệ ổn định).</p>
+</div>
+
+<!-- Quiz 2 -->
+<div class="quiz-section">
+    <h3>📝 Quick Quiz 2 — Laplace &amp; Z</h3>
+    
+    <div class="quiz-question">
+        <strong>Câu 1 (Hiểu sâu):</strong> Hàm truyền $G(s) = \dfrac{5}{(s+2)(s-1)}$. Hệ ổn định không? Cực là gì?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án Câu 1:</span>
+        <p>Cực $p_1 = -2$ (ổn định), $p_2 = +1$ (KHÔNG ổn định). Có một cực nửa phải → hệ bất ổn định, cần bộ điều khiển đặt lại cực.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>Câu 2 (Công thức):</strong> Dùng định lý giá trị cuối, hệ $G(s) = \dfrac{10}{s+2}$ chịu đầu vào bước nhảy $U(s) = 1/s$. Giá trị ổn định của $y$?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án Câu 2:</span>
+        <p>$y_\infty = \lim_{s\to0} s \cdot G(s)U(s) = \lim_{s\to0} s \cdot \dfrac{10}{s+2} \cdot \dfrac{1}{s} = \dfrac{10}{2} = 5$.</p>
+    </div>
+</div>
+
+<!-- =========================================================== -->
+<!-- PHẦN 3: TỐI ƯU HÓA                                        -->
+<!-- =========================================================== -->
+<div class="part-header-orange" id="part3">
+    <h1>PHẦN 3: TỐI ƯU HÓA</h1>
+    <p>Làm sao để hệ vừa đạt mục tiêu vừa tối ưu năng lượng, thời gian, độ an toàn</p>
+</div>
+
+<h2 id="s3.1">3.1 Gradient Descent <span class="level-badge level-deep">🔬 CẦN HIỂU SÂU</span></h2>
+
+<p><strong>Vì sao phải hiểu sâu:</strong> Gradient Descent là trái tim của học máy, hiệu chuẩn cảm biến, và nhiều thuật toán tối ưu. Ý tưởng đơn giản nhưng phải hiểu để chọn tốc độ học $\alpha$ đúng, tránh phân kỳ.</p>
+
+<div class="definition">
+    <span class="box-title">📖 Thuật toán Gradient Descent</span>
+    <p>Muốn tối thiểu hàm $J(\theta)$, lặp theo hướng <strong>ngược gradient</strong> (hướng giảm nhanh nhất):</p>
+    $$\theta_{k+1} = \theta_k - \alpha \nabla J(\theta_k)$$
+    <ul>
+        <li>$\nabla J$: gradient — vector chỉ hướng $J$ tăng nhanh nhất.</li>
+        <li>$\alpha$: <strong>tốc độ học</strong> — bước nhảy mỗi lần.</li>
+        <li>Trực giác: đứng trên đồi, luôn bước xuống chỗ dốc nhất → tới đáy thung lũng (cực tiểu).</li>
+    </ul>
+</div>
+
+<div class="important-note">
+    <span class="box-title">⚠️ Chọn $\alpha$ — lỗi kinh điển:</span>
+    <ul>
+        <li>$\alpha$ quá lớn → nhảy qua đáy, <strong>phân kỳ</strong> (hàm tăng thay vì giảm).</li>
+        <li>$\alpha$ quá nhỏ → hội tụ chậm, tốn thời gian.</li>
+        <li>Thực hành: thử $\alpha$ giảm dần 0.1 → 0.01 → 0.001; xem đường cong $J$ theo epoch.</li>
+        <li>Hàm không lồi → có thể kẹt ở <strong>cực tiểu địa phương</strong> (local minimum).</li>
+    </ul>
+</div>
+
+<div class="example-box">
+    <span class="box-title">📌 Ứng dụng trong Robotics:</span>
+    <ul>
+        <li><strong>Hiệu chuẩn IMU (Phần 6 tài liệu IMU):</strong> tìm bias/scale làm cực tiểu sai số khớp ellipsoid.</li>
+        <li><strong>Nhận dạng tham số motor:</strong> tìm $(K, \tau)$ sao cho mô hình khớp dữ liệu đo.</li>
+        <li><strong>Điều khiển học tăng cường (RL):</strong> policy gradient.</li>
+    </ul>
+</div>
+
+<h2 id="s3.2">3.2 Least Squares &amp; Normal Equation <span class="level-badge level-deep">🔬 CẦN HIỂU SÂU</span></h2>
+
+<p><strong>Vì sao phải hiểu sâu:</strong> Least Squares là bài toán tối ưu gặp ở khắp nơi (hiệu chuẩn, nhận dạng, SLAM). Nghiệm có công thức đóng — hiểu cách suy ra nó giúp bạn tin và dùng đúng.</p>
+
+<div class="theorem">
+    <span class="box-title">🔷 Bài toán &amp; nghiệm Least Squares</span>
+    <p>Cho $N$ dữ liệu $(x_i, y_i)$, mô hình tuyến tính $y = X\theta$. Tìm $\theta$ cực tiểu tổng bình phương sai số:</p>
+    $$J(\theta) = \|X\theta - y\|^2 = (X\theta - y)^T(X\theta - y)$$
+    <p>Đạo hàm theo $\theta$, cho bằng 0 → <strong>Normal Equation</strong>:</p>
+    $$\boxed{\theta^* = (X^T X)^{-1} X^T y}$$
+</div>
+
+<div class="important-note">
+    <span class="box-title">🔑 Suy luận ngắn (đáng đọc 1 lần):</span>
+    <p>$J = \theta^T X^T X \theta - 2\theta^T X^T y + y^T y$. Đạo hàm: $\nabla J = 2X^T X\theta - 2X^T y = 0 \Rightarrow X^T X \theta = X^T y$. Giải ra công thức trên. Vì $X^T X$ xác định dương → nghiệm là cực tiểu duy nhất (bài toán lồi). Điều này giải thích tại sao Least Squares luôn có nghiệm đóng và không kẹt local minimum.</p>
+    <p>⚠️ Khi $X^T X$ suy biến (dữ liệu thiếu), dùng <strong>Ridge regression</strong>: $\theta = (X^T X + \lambda I)^{-1}X^T y$ hoặc giả nghịch đảo.</p>
+</div>
+
+<div class="example-box">
+    <span class="box-title">📌 Ví dụ: Ước lượng bias con quay</span>
+    <p>Đo $N$ mẫu đứng yên: $y_i = b + \text{nhiễu}$. Mô hình $X$ là cột toàn 1, công thức cho $\theta^* = b = \dfrac{1}{N}\sum y_i$ — trung bình mẫu! Least Squares khớp với hiệu chuẩn bias bạn đã làm ở tài liệu IMU.</p>
+</div>
+
+<h2 id="s3.3">3.3 Tối ưu lồi (Convex Optimization) <span class="level-badge level-concept">🔎 HIỂU Ý TƯỞNG</span></h2>
+
+<p><strong>Chỉ cần ý tưởng:</strong> Khi gặp bài toán lồi, có <strong>thư viện giải tối ưu</strong> (CVXPY, OSQP, quadprog) — bạn chỉ cần viết bài toán đúng dạng chuẩn.</p>
+
+<div class="definition">
+    <span class="box-title">📖 Tối ưu lồi là gì?</span>
+    <p>Bài toán: $\min_x f_0(x)$ với ràng buộc $f_i(x) \leq 0$, $h_j(x) = 0$ được gọi là <strong>lồi</strong> nếu $f_0$ và mọi $f_i$ là hàm lồi (đồ thị "bát úp") và ràng buộc đẳng thức tuyến tính.</p>
+    <ul>
+        <li>Hàm lồi: $f(\lambda x + (1-\lambda)y) \leq \lambda f(x) + (1-\lambda)f(y)$.</li>
+        <li>Điều kỳ diệu: <strong>mọi cực tiểu địa phương = cực tiểu toàn cục</strong> — giải được chắc chắn, không kẹt.</li>
+        <li>Đây là lý do các bài toán điều khiển được thiết kế để "ép" về dạng lồi.</li>
+    </ul>
+</div>
+
+<div class="cheat-sheet">
+    <span class="box-title">📄 Các dạng chuẩn gặp trong Robotics (nhận diện để dùng thư viện):</span>
+    <ul>
+        <li><strong>QP (Quadratic Programming):</strong> $\min \tfrac{1}{2}x^T Qx + q^T x$ — dùng cho MPC tuyến tính.</li>
+        <li><strong>LP (Linear Programming):</strong> mục tiêu và ràng buộc đều tuyến tính — quy hoạch quỹ đạo.</li>
+        <li><strong>SOCP:</strong> ràng buộc nón — điều khiển robot an toàn (safety control).</li>
+        <li><strong>SDP:</strong> ma trận bán xác định — LMI, phân tích ổn định.</li>
+    </ul>
+</div>
+
+<h2 id="s3.4">3.4 MPC — Model Predictive Control <span class="level-badge level-concept">🔎 HIỂU Ý TƯỞNG</span></h2>
+
+<p><strong>Chỉ cần ý tưởng:</strong> MPC phức tạp ở chi tiết thuật toán, nhưng ý tưởng rất trực quan — nắm pipeline là dùng được (thư viện ACADOS/OSQP lo phần giải).</p>
+
+<div class="step-card">
+    <span class="step-number">1</span> <strong>Dự đoán:</strong> dùng mô hình để dự đoán quỹ đạo tương lai $N$ bước nếu áp chuỗi điều khiển $u$.
+    <br><span class="step-number">2</span> <strong>Tối ưu:</strong> chọn chuỗi $u$ cực tiểu hàm chi phí (lệch mục tiêu + năng lượng) và thỏa ràng buộc (giới hạn motor, tránh vật cản).
+    <br><span class="step-number">3</span> <strong>Áp bước đầu:</strong> chỉ áp $u_0$ (bước đầu tiên).
+    <br><span class="step-number">4</span> <strong>Lặp lại</strong> ở mẫu tiếp theo với đo lường mới (receding horizon).
+</div>
+
+<div class="definition">
+    <span class="box-title">📖 Bài toán MPC chuẩn</span>
+    $$\min_{u_0,\dots,u_{N-1}} \sum_{k=0}^{N-1} \left( x_k^T Q x_k + u_k^T R u_k \right) + x_N^T P x_N$$
+    $$\text{s.t. } x_{k+1} = Ax_k + Bu_k, \quad u_{\min} \leq u_k \leq u_{\max}$$
+</div>
+
+<div class="important-note">
+    <span class="box-title">💡 Vì sao MPC mạnh hơn PID:</span>
+    <ul>
+        <li>PID phản ứng theo sai số <strong>quá khứ</strong>; MPC nhìn <strong>tương lai</strong> (dự đoán) → biết trước và hành động sớm.</li>
+        <li>MPC xử lý <strong>ràng buộc</strong> (giới hạn motor, an toàn) một cách tự nhiên — PID không làm được.</li>
+        <li>Đổi lại: cần mô hình tốt + tính toán nặng → chỉ chạy trên vi xử lý đủ mạnh (dùng trong xe tự hành, drone nâng cao, cánh tay robot công nghiệp).</li>
+    </ul>
+</div>
+
+<!-- Quiz 3 -->
+<div class="quiz-section">
+    <h3>📝 Quick Quiz 3 — Tối ưu hóa</h3>
+    
+    <div class="quiz-question">
+        <strong>Câu 1 (Hiểu sâu):</strong> Gradient Descent với $\alpha$ quá lớn sẽ xảy ra chuyện gì? Làm sao biết $\alpha$ không phù hợp?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án Câu 1:</span>
+        <p>Hàm $J$ không giảm mà tăng (phân kỳ), hoặc dao động lên xuống. Dấu hiệu: vẽ đồ thị $J$ theo epoch thấy nhảy loạn/không giảm → giảm $\alpha$ (ví dụ chia 10).</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>Câu 2 (Hiểu sâu):</strong> Tại sao Least Squares không bao giờ kẹt ở cực tiểu địa phương?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án Câu 2:</span>
+        <p>Vì $J(\theta) = \|X\theta - y\|^2$ là hàm lồi (bậc hai với $X^TX$ bán xác định dương). Với hàm lồi, mọi điểm dừng đều là cực tiểu toàn cục. Nghiệm đóng $\theta^* = (X^TX)^{-1}X^Ty$ chính là điểm đó.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>Câu 3 (Ý tưởng):</strong> Nêu 2 ưu điểm của MPC so với PID và 1 nhược điểm.
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án Câu 3:</span>
+        <p>Ưu: (1) nhìn trước tương lai qua mô hình → hành động sớm; (2) xử lý ràng buộc (giới hạn actuator, an toàn). Nhược: cần mô hình chính xác và chi phí tính toán cao.</p>
+    </div>
+</div>
+
+<!-- =========================================================== -->
+<!-- PHẦN 4: XÁC SUẤT & RANDOM PROCESS                         -->
+<!-- =========================================================== -->
+<div class="part-header-purple" id="part4">
+    <h1>PHẦN 4: XÁC SUẤT &amp; QUÁ TRÌNH NGẪU NHIÊN</h1>
+    <p>Ngôn ngữ của nhiễu, độ không chắc chắn và Kalman Filter</p>
+</div>
+
+<h2 id="s4.1">4.1 Ôn tập nhanh nền tảng Kalman <span class="level-badge level-apply">🔧 CHỈ CẦN CÔNG THỨC</span></h2>
+
+<div class="cheat-sheet">
+    <span class="box-title">📄 Ôn nhanh (đã học chi tiết ở tài liệu Kalman):</span>
+    <ul>
+        <li>Kỳ vọng: $E[X] = \mu$; Phương sai: $\text{Var}(X) = E[(X-\mu)^2] = \sigma^2$.</li>
+        <li>Gauss: $p(x) = \frac{1}{\sqrt{2\pi\sigma^2}}\exp\left(-\frac{(x-\mu)^2}{2\sigma^2}\right)$.</li>
+        <li>Nhân 2 Gauss = Gauss mới (nguồn gốc Kalman Gain).</li>
+        <li>Ma trận hiệp phương sai: $\Sigma = E[(x-\mu)(x-\mu)^T]$ — đối xứng, xác định dương.</li>
+    </ul>
+    <p>→ Không cần ôn lại nữa; mục 4.2-4.3 là phần mở rộng quan trọng cho nghiên cứu.</p>
+</div>
+
+<h2 id="s4.2">4.2 Quá trình ngẫu nhiên (Random Process) <span class="level-badge level-deep">🔬 CẦN HIỂU SÂU</span></h2>
+
+<p><strong>Vì sao phải hiểu sâu:</strong> Nhiễu cảm biến là một <strong>chuỗi</strong> ngẫu nhiên theo thời gian, không phải một biến đơn lẻ. Hiểu random process = hiểu cách $Q$, $R$ trong Kalman được xây dựng và kiểm chứng.</p>
+
+<div class="definition">
+    <span class="box-title">📖 Định nghĩa Quá trình ngẫu nhiên</span>
+    <p>Quá trình ngẫu nhiên $X(t)$ (hoặc $X_k$ rời rạc) là một họ các biến ngẫu nhiên chỉ số hóa theo thời gian. Mỗi lần quan sát được một <strong>hàm mẫu</strong> (realization/sample path).</p>
+    <p>Ví dụ: tín hiệu nhiễu của cảm biến IMU ghi trong 60 giây = một hàm mẫu của quá trình nhiễu.</p>
+</div>
+
+<div class="theorem">
+    <span class="box-title">🔷 Dừng (Stationarity) &amp; Hàm tự tương quan</span>
+    <p>Quá trình <strong>dừng theo nghĩa rộng (WSS)</strong> nếu:</p>
+    <ul>
+        <li>$E[X(t)] = \mu$ (hằng số theo thời gian).</li>
+        <li>Hàm tự tương quan chỉ phụ thuộc độ trễ $\tau$: $R_X(\tau) = E[X(t)X(t+\tau)]$.</li>
+    </ul>
+    <p><strong>Mật độ phổ công suất (PSD)</strong> — chìa khóa phân tích nhiễu:</p>
+    $$S_X(f) = \mathcal{F}\{R_X(\tau)\} \quad \text{(biến đổi Fourier của tự tương quan)}$$
+    <p>PSD cho biết <strong>năng lượng nhiễu phân bố ở tần số nào</strong> — đây là công cụ chọn tham số bộ lọc ($Q$, $R$, tần số cắt Complementary Filter) dựa trên phổ nhiễu đo thực tế.</p>
+</div>
+
+<div class="important-note">
+    <span class="box-title">🔑 Ứng dụng thực tế trong IMU/Control:</span>
+    <ul>
+        <li>Ghi dữ liệu nhiễu cảm biến đứng yên → vẽ PSD → thấy nhiễu rung tập trung ở tần số cao (rung động cơ khí) → chọn $R$ và tần số cắt bộ lọc phù hợp.</li>
+        <li><strong>Bias instability / Random walk:</strong> con quay có nhiễu tích phân gây drift — mô hình hóa bằng random walk (xem mục 4.4 liên hệ Martingale).</li>
+        <li>Chuỗi Allan variance: công cụ chuẩn phân tích chất lượng con quay (cần cho nghiên cứu INS).</li>
+    </ul>
+</div>
+
+<h2 id="s4.3">4.3 Nhiễu trắng &amp; Nhiễu Gauss <span class="level-badge level-deep">🔬 CẦN HIỂU SÂU</span></h2>
+
+<p><strong>Vì sao phải hiểu sâu:</strong> Giả định <strong>nhiễu trắng Gauss</strong> là nền tảng của Kalman Filter — phải biết nó là gì, khi nào đúng, khi nào sai (để biết Kalman còn hiệu quả không).</p>
+
+<div class="definition">
+    <span class="box-title">📖 Nhiễu trắng (White Noise)</span>
+    <p>Nhiễu trắng là quá trình có:</p>
+    <ul>
+        <li>Giá trị tại các thời điểm <strong>độc lập</strong> (không tương quan): $E[w_k w_{k+1}] = 0$.</li>
+        <li>PSD phẳng trên mọi tần số: $S_w(f) = \sigma^2$ (giống "ánh sáng trắng" chứa mọi màu).</li>
+        <li>Rời rạc: $w_k \sim \mathcal{N}(0, Q)$ độc lập với mọi $k$.</li>
+    </ul>
+    <p>Nhiễu trắng <strong>Gauss</strong> = phân phối Gauss + tính chất trắng — chính là giả định của $w_{k-1}$ và $v_k$ trong Kalman Filter.</p>
+</div>
+
+<div class="important-note">
+    <span class="box-title">⚠️ Khi nào giả định nhiễu trắng SAI (rất quan trọng cho nghiên cứu):</span>
+    <ul>
+        <li>Nhiễu cảm biến thực thường <strong>không trắng</strong>: có tương quan thời gian (màu) — ví dụ nhiễu 1/f, bias thay đổi chậm.</li>
+        <li>Khi đó Kalman chuẩn cho kết quả lệch → phải <strong>mở rộng trạng thái</strong> (thêm bias vào trạng thái — chính là bộ lọc Kalman 2D Roll/Pitch bạn đã viết ở tài liệu IMU: thêm bias $b$ vào vector trạng thái!).</li>
+        <li>Hoặc dùng <strong>Shaping filter</strong> để "trắng hóa" nhiễu màu trước khi đưa vào Kalman.</li>
+    </ul>
+</div>
+
+<h2 id="s4.4">4.4 Martingale (Nâng cao) <span class="level-badge level-concept">🔎 HIỂU Ý TƯỞNG</span></h2>
+
+<p><strong>Chỉ cần ý tưởng:</strong> Martingale là công cụ của lý thuyết xác suất hiện đại dùng trong nghiên cứu (hội tụ thuật toán, tối ưu ngẫu nhiên, RL). Làm nghiên cứu thì cần, làm sản phẩm thì biết khái niệm là đủ.</p>
+
+<div class="definition">
+    <span class="box-title">📖 Định nghĩa Martingale</span>
+    <p>Quá trình $M_k$ là martingale (so với lọc thông tin $\mathcal{F}_k$) nếu:</p>
+    $$E[M_{k+1} \mid \mathcal{F}_k] = M_k$$
+    <p>Nghĩa là: <strong>kỳ vọng giá trị tương lai, biết mọi thông tin đến hiện tại, đúng bằng giá trị hiện tại</strong> — một "trò chơi công bằng": không có chiến lược nào làm giàu chắc chắn.</p>
+</div>
+
+<div class="example-box">
+    <span class="box-title">📌 Ví dụ quan trọng: Tổng nhiễu trắng (Random Walk)</span>
+    <p>Định nghĩa $M_k = \sum_{i=1}^{k} w_i$ với $w_i$ nhiễu trắng độc lập, trung bình 0:</p>
+    $$E[M_{k+1} \mid M_k] = E[M_k + w_{k+1}] = M_k + 0 = M_k$$
+    <p>→ Tổng nhiễu trắng là martingale. Đây chính là mô hình drift của con quay: <strong>random walk</strong>. Nó giải thích vì sao sai số tích phân tăng theo $\sqrt{t}$ (độ lệch chuẩn) — kiến thức chuẩn của INS research.</p>
+</div>
+
+<div class="important-note">
+    <span class="box-title">💡 Martingale dùng ở đâu trong nghiên cứu Robotics:</span>
+    <ul>
+        <li>Chứng minh <strong>hội tụ</strong> của thuật toán học (stochastic gradient descent, bandit algorithms).</li>
+        <li>Inequality Martingale (Azuma-Hoeffding): chặn sai số tích lũy của hệ ước lượng — nền tảng cho các bài báo về SLAM/bandit.</li>
+        <li>Tối ưu ngẫu nhiên, điều khiển thích nghi ngẫu nhiên.</li>
+    </ul>
+</div>
+
+<!-- Quiz 4 -->
+<div class="quiz-section">
+    <h3>📝 Quick Quiz 4 — Xác suất &amp; Random Process</h3>
+    
+    <div class="quiz-question">
+        <strong>Câu 1 (Hiểu sâu):</strong> Nhiễu trắng có PSD như thế nào và vì sao gọi là "trắng"?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án Câu 1:</span>
+        <p>PSD phẳng trên mọi tần số ($S_w(f) = \sigma^2$), giống ánh sáng trắng chứa đều mọi màu. Hệ quả: các mẫu nhiễu tại các thời điểm độc lập, không tương quan.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>Câu 2 (Hiểu sâu):</strong> Nhiễu con quay có tương quan thời gian (nhiễu màu). Áp dụng Kalman chuẩn bị sai thế nào và cách khắc phục?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án Câu 2:</span>
+        <p>Kalman chuẩn giả định nhiễu trắng → ước lượng bị chệch, $P$ không còn đúng ý nghĩa. Khắc phục: mở rộng trạng thái để ước lượng luôn bias (giống Kalman 2D $\theta$+$b$ trong tài liệu IMU) hoặc dùng shaping filter.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>Câu 3 (Ý tưởng):</strong> Martingale mô tả loại quá trình nào, và nó liên quan gì đến drift con quay?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án Câu 3:</span>
+        <p>Martingale = quá trình mà kỳ vọng tương lai bằng giá trị hiện tại (trò chơi công bằng). Tổng nhiễu trắng (random walk) là martingale — chính là mô hình tích lũy drift của con quay, sai số tăng theo $\sqrt{t}$.</p>
+    </div>
+</div>
+
+<!-- =========================================================== -->
+<!-- PHẦN 5: TỔNG KẾT & LỘ TRÌNH                              -->
+<!-- =========================================================== -->
+<div class="part-header" id="part5">
+    <h1>PHẦN 5: BẢNG TỔNG KẾT MỨC ĐỘ &amp; LỘ TRÌNH</h1>
+    <p>Nhìn lại toàn bộ để học đúng trọng tâm</p>
+</div>
+
+<h2 id="s5.1">5.1 Bảng tổng kết toàn bộ mục theo mức độ</h2>
+
+<table>
+    <tr>
+        <th>Mục</th>
+        <th>Mức độ</th>
+        <th>Cách học</th>
+    </tr>
+    <tr>
+        <td>Phép toán ma trận</td>
+        <td><span class="level-badge level-apply">🔧 CÔNG THỨC</span></td>
+        <td>Cheat sheet + NumPy/Eigen.</td>
+    </tr>
+    <tr>
+        <td>Không gian trạng thái</td>
+        <td><span class="level-badge level-deep">🔬 HIỂU SÂU</span></td>
+        <td>Lập mô hình nhiều hệ: motor, robot, con lắc, nhiệt.</td>
+    </tr>
+    <tr>
+        <td>Eigenvalue &amp; ổn định</td>
+        <td><span class="level-badge level-deep">🔬 HIỂU SÂU</span></td>
+        <td>Làm bài tập: cho $A$, xét ổn định, vẽ quỹ đạo trị riêng.</td>
+    </tr>
+    <tr>
+        <td>SVD &amp; giả nghịch đảo</td>
+        <td><span class="level-badge level-apply">🔧 CÔNG THỨC</span></td>
+        <td>Dùng <code>np.linalg.pinv</code> cho động học nghịch robot.</td>
+    </tr>
+    <tr>
+        <td>Jacobian</td>
+        <td><span class="level-badge level-apply">🔧 CÔNG THỨC</span></td>
+        <td>Lập Jacobian cho robot 2 khâu; dùng trong EKF.</td>
+    </tr>
+    <tr>
+        <td>ODE bậc nhất + Laplace</td>
+        <td><span class="level-badge level-deep">🔬 HIỂU SÂU</span></td>
+        <td>Hàm truyền, cực/zero, Bode, thiết kế PID có cơ sở.</td>
+    </tr>
+    <tr>
+        <td>Z-transform</td>
+        <td><span class="level-badge level-apply">🔧 CÔNG THỨC</span></td>
+        <td>Bảng tra + viết phương trình sai phân trực tiếp.</td>
+    </tr>
+    <tr>
+        <td>Gradient Descent</td>
+        <td><span class="level-badge level-deep">🔬 HIỂU SÂU</span></td>
+        <td>Tự code GD cho bài toán đơn giản, vẽ đường hội tụ.</td>
+    </tr>
+    <tr>
+        <td>Least Squares</td>
+        <td><span class="level-badge level-deep">🔬 HIỂU SÂU</span></td>
+        <td>Hiểu Normal Equation; áp dụng hiệu chuẩn cảm biến.</td>
+    </tr>
+    <tr>
+        <td>Convex Optimization</td>
+        <td><span class="level-badge level-concept">🔎 Ý TƯỞNG</span></td>
+        <td>Nhận dạng QP/LP/SOCP → dùng CVXPY/OSQP.</td>
+    </tr>
+    <tr>
+        <td>MPC</td>
+        <td><span class="level-badge level-concept">🔎 Ý TƯỞNG</span></td>
+        <td>Hiểu pipeline dự đoán-tối ưu-áp dụng; dùng thư viện.</td>
+    </tr>
+    <tr>
+        <td>Xác suất nền (Kalman)</td>
+        <td><span class="level-badge level-apply">🔧 CÔNG THỨC</span></td>
+        <td>Đã học ở tài liệu Kalman — ôn nhanh.</td>
+    </tr>
+    <tr>
+        <td>Random Process &amp; PSD</td>
+        <td><span class="level-badge level-deep">🔬 HIỂU SÂU</span></td>
+        <td>Phân tích phổ nhiễu IMU thật bằng Python.</td>
+    </tr>
+    <tr>
+        <td>Nhiễu trắng Gauss</td>
+        <td><span class="level-badge level-deep">🔬 HIỂU SÂU</span></td>
+        <td>Biết giả định của Kalman + khi nào cần mở rộng.</td>
+    </tr>
+    <tr>
+        <td>Martingale</td>
+        <td><span class="level-badge level-concept">🔎 Ý TƯỞNG</span></td>
+        <td>Biết khái niệm; đào sâu khi làm nghiên cứu.</td>
+    </tr>
+</table>
+
+<h2 id="s5.2">5.2 Lộ trình học 12 tuần đề xuất</h2>
+
+<table>
+    <tr>
+        <th>Tuần</th>
+        <th>Chủ đề</th>
+        <th>Bài tập thực hành</th>
+    </tr>
+    <tr>
+        <td>1-2</td>
+        <td>Ma trận + Không gian trạng thái (1.1, 1.2)</td>
+        <td>Mô hình hóa motor DC, robot 2 bánh bằng Python/NumPy.</td>
+    </tr>
+    <tr>
+        <td>3-4</td>
+        <td>Eigenvalue + Ổn định (1.3)</td>
+        <td>Phân tích ổn định con lắc ngược; mô phỏng hội tụ/phân kỳ.</td>
+    </tr>
+    <tr>
+        <td>5-6</td>
+        <td>ODE + Laplace + Hàm truyền (2.1, 2.2, 2.4)</td>
+        <td>Tính đáp ứng bước, vẽ Bode bằng <code>scipy.signal</code>.</td>
+    </tr>
+    <tr>
+        <td>7</td>
+        <td>Z-transform &amp; hệ rời rạc (2.3)</td>
+        <td>Số hóa bộ lọc; so sánh đáp ứng liên tục/rời rạc.</td>
+    </tr>
+    <tr>
+        <td>8-9</td>
+        <td>Xác suất, Random Process, Nhiễu trắng (4.1-4.3)</td>
+        <td>Phân tích PSD nhiễu MPU6050 thật; chọn $Q$, $R$ hợp lý.</td>
+    </tr>
+    <tr>
+        <td>10</td>
+        <td>Gradient Descent + Least Squares (3.1, 3.2)</td>
+        <td>Hiệu chuẩn IMU bằng Least Squares; tự code GD.</td>
+    </tr>
+    <tr>
+        <td>11-12</td>
+        <td>Convex + MPC (3.3, 3.4) + Martingale (4.4)</td>
+        <td>Giải MPC cho robot tuyến tính bằng CVXPY; mô phỏng.</td>
+    </tr>
+</table>
+
+<div class="important-note">
+    <span class="box-title">🎯 Nguyên tắc vàng khi học:</span>
+    <ol>
+        <li>Mục 🔬 hiểu sâu: học 1 lần, kỹ, làm bài tập suy luận — không học vẹt.</li>
+        <li>Mục 🔧: in cheat sheet, học khi gặp bài toán thực tế cần nó.</li>
+        <li>Mục 🔎: đọc 30 phút là đủ, quay lại khi cần.</li>
+        <li>Luôn gắn mỗi khái niệm với một hệ thực tế (robot, drone, motor) bạn đang làm.</li>
+    </ol>
+</div>
+
+<!-- TỔNG KẾT -->
+<div style="background: linear-gradient(135deg, #0f172a, #1e293b); color: white; padding: 35px; border-radius: 10px; margin-top: 50px; text-align: center;">
+    <h2 style="color: #60a5fa; margin-top: 0;">🎯 Tóm Tắt Toán Nền Tảng</h2>
+    <p style="font-size: 1.05em; color: #cbd5e1; max-width: 750px; margin: 10px auto;">
+        1. <strong>Xương sống:</strong> Không gian trạng thái + Eigenvalue = hiểu và phân tích mọi hệ điều khiển (hiểu sâu).<br>
+        2. <strong>Cầu nối:</strong> Laplace/Z-transform chuyển ODE thành đại số, cực = eigenvalue (hiểu sâu khái niệm, tra bảng khi cần).<br>
+        3. <strong>Bộ não:</strong> Least Squares + Gradient Descent là nền của hiệu chuẩn, nhận dạng, học máy (hiểu sâu). Convex/MPC chỉ cần ý tưởng + thư viện.<br>
+        4. <strong>Bản chất nhiễu:</strong> Random process + nhiễu trắng Gauss giải thích vì sao Kalman hoạt động và khi nào cần mở rộng (hiểu sâu). Martingale để dành cho nghiên cứu.<br>
+        5. <strong>Chiến lược học:</strong> 70% thời gian cho mục hiểu sâu, 20% công thức, 10% ý tưởng — học gắn với dự án thực tế.
+    </p>
+</div>
+
+<div style="text-align: center; margin: 35px 0; color: var(--text-secondary); font-size: 0.9em;">
+    <p>— Hết tài liệu Toán Nền Tảng —</p>
+    <p><em>Nhấn nút "📄 Xuất PDF" ở góc phải dưới để lưu tài liệu dưới dạng PDF</em></p>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,1193 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài Kiểm Tra Kiến Thức Toàn Tập — Lý Thuyết Điều Khiển &amp; Robotics</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+    window.MathJax = {
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']],
+            tags: 'ams'
+        },
+        chtml: { scale: 1 }
+    };
+    </script>
+    <style>
+        :root {
+            --primary: #0f172a;
+            --accent: #2563eb;
+            --accent-light: #3b82f6;
+            --bg: #ffffff;
+            --text: #1e293b;
+            --text-secondary: #475569;
+            --quiz-bg: #f0f9ff;
+            --quiz-border: #bae6fd;
+            --answer-bg: #f0fdf4;
+            --answer-border: #86efac;
+            --warning-bg: #fffbeb;
+            --warning-border: #fde68a;
+            --code-bg: #0f172a;
+            --border: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+            font-size: 16.5px;
+            line-height: 1.8;
+            color: var(--text);
+            background: var(--bg);
+            max-width: 920px;
+            margin: 0 auto;
+            padding: 40px 25px;
+        }
+
+        .cover-page {
+            text-align: center;
+            padding: 60px 20px;
+            border-bottom: 3px solid var(--accent);
+            margin-bottom: 50px;
+            background: #f8fafc;
+            border-radius: 12px;
+        }
+        .cover-page h1 {
+            font-size: 2.4em;
+            color: var(--primary);
+            margin-bottom: 12px;
+            line-height: 1.3;
+            border: none;
+            padding: 0;
+        }
+        .cover-page .subtitle {
+            font-size: 1.35em;
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: 25px;
+        }
+        .cover-page .tagline {
+            font-size: 1.05em;
+            color: var(--text-secondary);
+            font-style: italic;
+            margin-bottom: 30px;
+        }
+        .cover-page .meta {
+            font-size: 0.95em;
+            color: var(--text-secondary);
+        }
+
+        h1 { font-size: 1.85em; color: var(--primary); margin: 45px 0 20px; border-bottom: 2px solid var(--accent); padding-bottom: 8px; }
+        h2 { font-size: 1.4em; color: var(--accent); margin: 35px 0 15px; }
+        h3 { font-size: 1.18em; color: var(--primary); margin: 25px 0 12px; }
+        h4 { font-size: 1.05em; color: var(--text); margin: 18px 0 8px; }
+
+        .part-header {
+            background: linear-gradient(135deg, #1e3a8a, #2563eb);
+            color: white;
+            padding: 28px 35px;
+            border-radius: 10px;
+            margin: 50px 0 30px;
+            box-shadow: var(--shadow);
+        }
+        .part-header h1 { color: white; border: none; margin: 0; font-size: 1.7em; padding: 0; }
+        .part-header p { color: #dbeafe; margin-top: 8px; font-size: 1.05em; }
+
+        .part-header-intro {
+            background: linear-gradient(135deg, #059669, #10b981);
+            color: white;
+            padding: 28px 35px;
+            border-radius: 10px;
+            margin: 40px 0 30px;
+            box-shadow: var(--shadow);
+        }
+        .part-header-intro h1 { color: white; border: none; margin: 0; font-size: 1.7em; padding: 0; }
+        .part-header-intro p { color: #ecfdf5; margin-top: 8px; font-size: 1.05em; }
+
+        .part-header-purple {
+            background: linear-gradient(135deg, #4c1d95, #7c3aed);
+            color: white;
+            padding: 28px 35px;
+            border-radius: 10px;
+            margin: 50px 0 30px;
+            box-shadow: var(--shadow);
+        }
+        .part-header-purple h1 { color: white; border: none; margin: 0; font-size: 1.7em; padding: 0; }
+        .part-header-purple p { color: #ede9fe; margin-top: 8px; font-size: 1.05em; }
+
+        .part-header-orange {
+            background: linear-gradient(135deg, #9a3412, #ea580c);
+            color: white;
+            padding: 28px 35px;
+            border-radius: 10px;
+            margin: 50px 0 30px;
+            box-shadow: var(--shadow);
+        }
+        .part-header-orange h1 { color: white; border: none; margin: 0; font-size: 1.7em; padding: 0; }
+        .part-header-orange p { color: #ffedd5; margin-top: 8px; font-size: 1.05em; }
+
+        p { margin: 12px 0; text-align: justify; }
+        ul, ol { margin: 10px 0 15px 25px; }
+        li { margin: 6px 0; }
+
+        strong { color: #0f172a; font-weight: 600; }
+
+        .highlight {
+            background: #fef08a;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .definition, .theorem, .important-note, .example-box, .analogy-box, .warning-box, .cheat-sheet {
+            padding: 20px 24px;
+            border-radius: 8px;
+            margin: 22px 0;
+            border-left: 5px solid;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .definition { background: #eff6ff; border-color: #3b82f6; }
+        .definition .box-title { color: #1d4ed8; }
+        .theorem { background: #faf5ff; border-color: #a855f7; }
+        .theorem .box-title { color: #7e22ce; }
+        .important-note { background: var(--warning-bg); border-color: #f59e0b; }
+        .important-note .box-title { color: #b45309; }
+        .example-box { background: #f0fdf4; border-color: #22c55e; }
+        .example-box .box-title { color: #15803d; }
+        .analogy-box { background: #fff7ed; border-color: #ea580c; }
+        .analogy-box .box-title { color: #c2410c; }
+        .warning-box { background: #fef2f2; border-color: #ef4444; }
+        .warning-box .box-title { color: #b91c1c; }
+        .cheat-sheet { background: #f0fdfa; border-color: #14b8a6; font-size: 0.95em; }
+        .cheat-sheet .box-title { color: #0f766e; }
+
+        .box-title {
+            font-weight: 700;
+            font-size: 1.05em;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .level-badge {
+            display: inline-block;
+            padding: 3px 14px;
+            border-radius: 14px;
+            font-size: 0.85em;
+            font-weight: 700;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+        .level-basic { background: #ecfdf5; color: #047857; border: 1px solid #6ee7b7; }
+        .level-understand { background: #eff6ff; color: #1d4ed8; border: 1px solid #93c5fd; }
+        .level-apply { background: #f5f3ff; color: #6d28d9; border: 1px solid #c4b5fd; }
+
+        .step-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-left: 4px solid var(--accent);
+            border-radius: 6px;
+            padding: 16px 20px;
+            margin: 14px 0;
+        }
+        .step-number {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: 700;
+            margin-right: 8px;
+        }
+
+        .quiz-section {
+            background: var(--quiz-bg);
+            border: 1px solid var(--quiz-border);
+            border-radius: 10px;
+            padding: 22px 26px;
+            margin: 30px 0;
+        }
+        .quiz-section h3 { color: #0369a1; margin-top: 0; font-size: 1.15em; }
+        .quiz-question { margin: 15px 0 8px; }
+        .quiz-question strong { color: #0284c7; }
+
+        .answer-section {
+            background: var(--answer-bg);
+            border: 1px solid var(--answer-border);
+            border-radius: 8px;
+            padding: 18px 22px;
+            margin: 10px 0 20px;
+        }
+        .answer-section .box-title { color: #16a34a; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.95em;
+        }
+        th, td { border: 1px solid var(--border); padding: 10px 14px; text-align: left; }
+        th { background: var(--primary); color: white; font-weight: 600; }
+        tr:nth-child(even) { background: #f8fafc; }
+        tr:hover { background: #f1f5f9; }
+
+        pre {
+            background: var(--code-bg);
+            color: #f8fafc;
+            padding: 18px 22px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: "Fira Code", Consolas, Monaco, monospace;
+            font-size: 0.88em;
+            line-height: 1.6;
+            margin: 20px 0;
+        }
+        code {
+            font-family: "Fira Code", Consolas, Monaco, monospace;
+            background: #f1f5f9;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            color: #b91c1c;
+        }
+        pre code { background: transparent; color: inherit; padding: 0; }
+
+        .toc {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 25px 30px;
+            margin: 30px 0;
+        }
+        .toc h2 { margin-top: 0; color: var(--primary); }
+        .toc ul { list-style: none; margin-left: 0; }
+        .toc > ul > li { margin: 8px 0; font-weight: 600; color: var(--primary); }
+        .toc > ul > li > ul > li {
+            font-weight: 400;
+            color: var(--text);
+            margin: 4px 0;
+            padding-left: 20px;
+        }
+        .toc a { color: inherit; text-decoration: none; }
+        .toc a:hover { color: var(--accent); text-decoration: underline; }
+
+        .print-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 12px 22px;
+            border-radius: 30px;
+            font-size: 0.95em;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(37,99,235,0.4);
+            transition: all 0.2s;
+            z-index: 1000;
+        }
+        .print-btn:hover { background: #1d4ed8; transform: translateY(-2px); }
+
+        @media print {
+            body { padding: 15px; font-size: 11pt; max-width: 100%; }
+            .print-btn { display: none; }
+            .cover-page { padding: 40px 20px; }
+            .part-header, .part-header-intro, .part-header-purple, .part-header-orange { page-break-before: always; }
+            .quiz-section, .answer-section, .definition, .theorem, .example-box, .important-note, .analogy-box, .warning-box, .cheat-sheet {
+                break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<button class="print-btn" onclick="window.print()">📄 Xuất PDF</button>
+
+<!-- COVER PAGE -->
+<div class="cover-page">
+    <h1>Bài Kiểm Tra Kiến Thức Toàn Tập</h1>
+    <div class="subtitle">LÝ THUYẾT ĐIỀU KHIỂN &amp; ROBOTICS</div>
+    <div class="tagline">
+        Kiểm tra từng tài liệu trong bộ giáo trình: Mô hình hóa · LQR · Kalman/EKF · LQG · Bổ trợ lý thuyết · IMU · Toán nền tảng · PID/FOC — từ CƠ BẢN đến THÔNG HIỂU
+    </div>
+    <hr style="width: 50%; margin: 25px auto; border: none; border-top: 1px solid #cbd5e1;">
+    <div class="meta">
+        <p><strong>Mục tiêu:</strong> Giúp bạn TỰ KIỂM TRA mức hiểu sau mỗi tài liệu. Làm xong phải <strong>HIỂU BÀI</strong> — nên mỗi đáp án đều kèm giải thích bản chất, không chỉ đáp số.</p>
+        <p><strong>Cách dùng:</strong> Làm phần Cơ bản trước (chốt kiến thức) → làm phần Thông hiểu (kiểm tra hiểu sâu) → chấm bằng đáp án ngay dưới mỗi câu.</p>
+        <p><strong>Phiên bản:</strong> 1.0</p>
+    </div>
+</div>
+
+<!-- TOC -->
+<div class="toc">
+    <h2>📋 Mục Lục Bài Kiểm Tra</h2>
+    <ul>
+        <li><a href="#kt1">Bài 1 — Mô hình hóa (Tuần 1-2)</a></li>
+        <li><a href="#kt2">Bài 2 — LQR Toàn Tập</a></li>
+        <li><a href="#kt3">Bài 3 — Kiến thức Bổ sung LQR (P1)</a></li>
+        <li><a href="#kt4">Bài 4 — Kiến thức Bổ sung LQR (P2)</a></li>
+        <li><a href="#kt5">Bài 5 — Bài tập LQR</a></li>
+        <li><a href="#kt6">Bài 6 — Kalman Filter</a></li>
+        <li><a href="#kt7">Bài 7 — EKF (Kalman mở rộng)</a></li>
+        <li><a href="#kt8">Bài 8 — LQR nâng cao &amp; LQG</a></li>
+        <li><a href="#kt9">Bài 9 — LQR Thực chiến Robot</a></li>
+        <li><a href="#kt10">Bài 10 — Cảm biến IMU</a></li>
+        <li><a href="#kt11">Bài 11 — Toán nền tảng Robotics &amp; Control</a></li>
+        <li><a href="#kt12">Bài 12 — PID, Cascade &amp; FOC</a></li>
+        <li><a href="#ket">Thang đánh giá &amp; Lời khuyên</a></li>
+    </ul>
+</div>
+
+<div class="important-note">
+    <span class="box-title">🎯 HƯỚNG DẪN SỬ DỤNG</span>
+    <p>Mỗi bài kiểm tra có <strong>3 cấp độ</strong>:</p>
+    <ul>
+        <li><span class="level-badge level-basic">🟢 CƠ BẢN</span> — Nhớ &amp; đọc hiểu: bạn có nắm được khái niệm/công thức cốt lõi không.</li>
+        <li><span class="level-badge level-understand">🔵 THÔNG HIỂU</span> — Giải thích &amp; vận dụng: bạn hiểu VÌ SAO, suy luận và áp dụng được không.</li>
+        <li><span class="level-badge level-apply">🟣 VẬN DỤNG</span> — Phân tích/tổng hợp: bài tập số hoặc tình huống thực tế (chỉ ở các bài trọng tâm).</li>
+    </ul>
+    <p><strong>Quy tắc vàng:</strong> Nếu chưa làm được câu 🔵, hãy quay lại đọc phần tương ứng trong tài liệu gốc — đừng đọc đáp án vội. Đáp án chỉ để ĐỐI CHIẾU sau khi đã tự trả lời.</p>
+</div>
+
+<!-- ================= BÀI 1 ================= -->
+<div class="part-header" id="kt1">
+    <h1>BÀI 1 — MÔ HÌNH HÓA &amp; KHÔNG GIAN TRẠNG THÁI</h1>
+    <p>Tài liệu: Tuan1_2_MoHinhHoa_StateSpace.html</p>
+</div>
+
+<div class="quiz-section">
+    <h3>🟢 CƠ BẢN</h3>
+
+    <div class="quiz-question">
+        <strong>1.1</strong> Viết phương trình Euler-Lagrange và ý nghĩa từng đại lượng.
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>$\dfrac{d}{dt}\!\left(\dfrac{\partial L}{\partial \dot{q}_i}\right) - \dfrac{\partial L}{\partial q_i} = \tau_i$, với $L = T - V$ (Lagrangian = động năng − thế năng), $q_i$ là tọa độ suy rộng, $\tau_i$ là lực/mômen ngoài. Lực tiêu tán (ma sát) không nằm trong $L$, mà đưa vào vế phải $\tau_i$.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>1.2</strong> Nêu phương trình con lắc đơn và vì sao nó phi tuyến.
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>$\ddot{\theta} = -\dfrac{g}{l}\sin\theta$. Phi tuyến vì có $\sin\theta$. Khi góc nhỏ, xấp xỉ $\sin\theta \approx \theta$ → trở thành tuyến tính $\ddot{\theta} \approx -\frac{g}{l}\theta$.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>1.3</strong> Dạng chuẩn của mô hình không gian trạng thái liên tục là gì?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>$\dot{x} = Ax + Bu$, $y = Cx + Du$. Trong đó $x$ là vector trạng thái, $u$ đầu vào, $y$ đầu ra, $A$ ma trận động lực học, $B$ ma trận đầu vào.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>1.4</strong> Hệ con lắc ngược (xe + con lắc) có bao nhiêu trạng thái khi mô hình đầy đủ vị trí + góc?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>4 trạng thái: $x = [x,\ \dot{x},\ \theta,\ \dot{\theta}]^T$ (vị trí xe, vận tốc xe, góc nghiêng, vận tốc góc).</p>
+    </div>
+</div>
+
+<div class="quiz-section">
+    <h3>🔵 THÔNG HIỂU</h3>
+
+    <div class="quiz-question">
+        <strong>1.5</strong> Vì sao khi tuyến tính hóa quanh điểm cân bằng, ta bỏ $\dot{\theta}^2\sin\theta \approx 0$? Điều kiện nào làm xấp xỉ này đúng?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>Vì tại điểm cân bằng (θ ≈ 0), góc nhỏ: $\sin\theta\approx\theta$, $\cos\theta\approx 1$, và $\dot{\theta}^2$ là tích hai đại lượng nhỏ (bậc cao) nên bỏ qua. Xấp xỉ chỉ đúng trong dải góc nhỏ (ví dụ $|\theta| < 5^\circ$: sai số ~0.01%; ở $30^\circ$: sai số ~4.7%). Robot cân bằng hoạt động trong dải này nên chấp nhận được.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>1.6</strong> Con lắc ngược (M=1, m=0.1, l=0.3) có $A_{43} = 20.76$. Ý nghĩa vật lý của $A_{43}$? Con lắc dài hơn (l lớn hơn) sẽ có $A_{43}$ lớn hay nhỏ?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>$A_{43} = \frac{(M+m)g}{Ml}$ là hệ số khuếch đại của mômen trọng lực lên $\ddot{\theta}$. $A_{43}$ càng lớn → con lắc càng "ngã nhanh" (càng bất ổn định). Con lắc DÀI hơn có $A_{43}$ NHỎ hơn → ngã chậm hơn, dễ điều khiển hơn.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>1.7</strong> Kiểm tra tính điều khiển được của $A = \begin{bmatrix}0&1\\-2&-3\end{bmatrix}$, $B = [0\ 1]^T$.
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>$\mathcal{C} = [B\ \ AB] = \begin{bmatrix}0&1\\1&-3\end{bmatrix}$; $\det(\mathcal{C}) = -1 \neq 0$ → $\text{rank}=2=n$ → <strong>điều khiển được hoàn toàn</strong> ✓.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>1.8</strong> Vì sao dùng Lagrangian thay vì Newton cho robot nhiều khớp?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>Newton yêu cầu vẽ Free Body Diagram từng khâu và xử lý lực liên kết phức tạp. Lagrangian chỉ cần tính động năng $T$ và thế năng $V$ toàn hệ rồi áp dụng Euler-Lagrange một cách hệ thống — dễ mở rộng cho hệ nhiều khâu/liên kết.</p>
+    </div>
+</div>
+
+<!-- ================= BÀI 2 ================= -->
+<div class="part-header" id="kt2">
+    <h1>BÀI 2 — LQR TOÀN TẬP</h1>
+    <p>Tài liệu: LQR_ToanTap.html</p>
+</div>
+
+<div class="quiz-section">
+    <h3>🟢 CƠ BẢN</h3>
+
+    <div class="quiz-question">
+        <strong>2.1</strong> Viết hàm chi phí của LQR và giải thích các thành phần.
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>$J = \int_0^{\infty} (x^T Q x + u^T R u)\, dt$ — $x^TQx$ phạt độ lệch trạng thái (chất lượng đáp ứng), $u^TRu$ phạt nỗ lực điều khiển (năng lượng/lực), $Q \geq 0$ và $R > 0$.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>2.2</strong> Viết phương trình Riccati đại số (ARE) và công thức tính $K$.
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>ARE: $A^T P + PA - PBR^{-1}B^T P + Q = 0$. Luật điều khiển: $u = -Kx$ với $K = R^{-1}B^T P$.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>2.3</strong> Quy tắc Bryson chọn $Q, R$ ban đầu như thế nào?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>$Q_{ii} = \dfrac{1}{(\text{sai lệch tối đa cho phép của } x_i)^2}$, $R_{jj} = \dfrac{1}{(\text{tín hiệu điều khiển tối đa cho phép } u_j)^2}$.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>2.4</strong> Tăng $Q$ hoặc tăng $R$ ảnh hưởng hệ thế nào?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>$Q$ lớn → hệ về 0 nhanh nhưng cần lực $u$ lớn (gắt). $R$ lớn → tiết kiệm năng lượng nhưng đáp ứng chậm. Tỷ lệ $Q/R$ quyết định độ "hung" của bộ điều khiển.</p>
+    </div>
+</div>
+
+<div class="quiz-section">
+    <h3>🔵 THÔNG HIỂU</h3>
+
+    <div class="quiz-question">
+        <strong>2.5</strong> Vì sao LQR được xem là tốt hơn Gán cực (Pole Placement)?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>Gán cực chỉ cho bạn "đặt cực ở đâu" nhưng không nói vị trí nào tốt nhất — đặt cực xa bên trái để nhanh cần lực cực lớn, dễ bão hòa actuator, khó cho hệ MIMO. LQR tự TÌM vị trí cực tối ưu cân bằng giữa tốc độ và năng lượng qua $Q, R$, và được đảm bảo chỉ số ổn định (GM, PM) "miễn phí".</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>2.6</strong> Giải tay LQR cho hệ bậc 1: $\dot{x} = 2x + u$, $Q=3$, $R=1$.
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>ARE bậc 1: $4P - P^2 + 3 = 0 \Rightarrow P^2 - 4P - 3 = 0$ → $P = 2 + \sqrt{7} \approx 4.646$ (nghiệm dương để $P>0$). $K = R^{-1}B^T P = 4.646$. Luật: $u = -4.646x$. Cực vòng kín: $2 - 4.646 = -2.646 < 0$ → ổn định ✓.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>2.7</strong> Trong con lắc ngược, vì sao chọn $Q_{33}$ (góc θ) lớn hơn hẳn $Q_{11}$ (vị trí)?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>Vì θ là trạng thái BẤT ỔN ĐỊNH — con lắc ngã rất nhanh, phải ưu tiên dựng đứng trước. Phạt θ nặng (Q33 lớn) buộc bộ điều khiển hành động mạnh để giữ θ về 0; vị trí xe có thể "hy sinh" nhích tạm rồi mới về 0.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>2.8</strong> Điều kiện để ARE có nghiệm $P > 0$? Khi nào LQR thất bại?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>Điều kiện đủ cho nghiệm $P>0$ duy nhất: $(A,B)$ <strong>stabilizable</strong> và $(A, Q^{1/2})$ <strong>detectable</strong>. LQR thất bại khi có trạng thái không ổn định mà $B$ không điều khiển được — khi đó $J \to \infty$, ARE không có nghiệm hữu hạn.</p>
+    </div>
+</div>
+<!-- ================= BÀI 3 ================= -->
+<div class="part-header" id="kt3">
+    <h1>BÀI 3 — KIẾN THỨC BỔ SUNG LQR (PHẦN 1)</h1>
+    <p>Tài liệu: KienThuc_NenTang_BoSung_LQR.html</p>
+</div>
+
+<div class="quiz-section">
+    <h3>🟢 CƠ BẢN</h3>
+
+    <div class="quiz-question">
+        <strong>3.1</strong> Viết dạng toàn phương $x^T Q x$ cho $Q = \text{diag}(q_{11}, q_{22})$.
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>$x^T Q x = q_{11}x_1^2 + q_{22}x_2^2$ (với $Q$ chéo). Tổng quát: $q_{11}x_1^2 + 2q_{12}x_1x_2 + q_{22}x_2^2$. Đây là "mặt bẫy năng lượng" — mỗi số hạng bình phương phản ánh độ tệ hại của độ lệch.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>3.2</strong> Điều kiện để ma trận đối xứng $M = \begin{bmatrix}a&b\\b&d\end{bmatrix}$ xác định dương ($M>0$)?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>$a > 0$ và $\det(M) = ad - b^2 > 0$. Ví dụ $P = \begin{bmatrix}6&2\\2&1\end{bmatrix}$: $6>0$, $\det = 6-4=2>0$ → $P>0$ ✓.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>3.3</strong> Hệ liên tục ổn định khi trị riêng của $A$ nằm ở đâu trên mặt phẳng phức?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>Mọi trị riêng phải có phần thực âm ($\text{Re}(\lambda) < 0$) — NỬA TRÁI mặt phẳng phức. $\text{Re}(\lambda) > 0$ → phân kỳ; $\text{Re}(\lambda) = 0$ → biên ổn định (dao động mãi).</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>3.4</strong> Ma trận quan sát được (Observability) $\mathcal{O}$ viết thế nào?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>$\mathcal{O} = \begin{bmatrix} C \\ CA \\ CA^2 \\ \vdots \\ CA^{n-1}\end{bmatrix}$; hệ quan sát được ⟺ $\text{rank}(\mathcal{O}) = n$.</p>
+    </div>
+</div>
+
+<div class="quiz-section">
+    <h3>🔵 THÔNG HIỂU</h3>
+
+    <div class="quiz-question">
+        <strong>3.5</strong> Vì sao hệ vòng kín LQR luôn ổn định tiệm cận? Liên hệ Lyapunov?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>Đặt $A_{cl} = A - BK = A - BR^{-1}B^TP$. Viết lại ARE: $A_{cl}^T P + PA_{cl} = -(Q + PBR^{-1}B^TP) \leq -Q < 0$. Vậy $V(x) = x^TPx$ ($P>0$) là hàm Lyapunov và $\dot{V} = -x^T(Q + K^TRK)x < 0$ → ổn định tiệm cận. Đây là lý do LQR "luôn ổn định" nếu ARE giải được.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>3.6</strong> Vì sao $L(j\omega) = -1$ trên Nyquist dẫn đến mất ổn định?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>Hàm truyền vòng kín $T(s) = \dfrac{L(s)}{1+L(s)}$. Nếu $L(j\omega_0) = -1$ thì mẫu số $1 + L = 0$ → $T \to \infty$: tín hiệu tự khuếch đại vô hạn → mất ổn định. Điểm $-1$ là "trái tim" của tiêu chuẩn Nyquist.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>3.7</strong> "Bất đẳng thức hiệu trả về" của LQR là gì và đảm bảo gì "miễn phí"?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>$|1 + L(j\omega)| \geq 1$ với mọi $\omega$ — đường Nyquist của LQR luôn nằm ngoài đường tròn đơn vị tâm $(-1, 0)$. Hệ quả: Gain Margin $\in [1/2, \infty)$ (6 dB → ∞) và Phase Margin $\geq 60^\circ$. Gán cực KHÔNG có đảm bảo nào tương tự.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>3.8</strong> Ý nghĩa ma trận $P$ (nghiệm ARE)? Tính $J^*$ cho $x_0 = [1, 0]^T$ với $P = \begin{bmatrix}6&2\\2&1\end{bmatrix}$.
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>$P$ là "bảng giá chi phí còn lại" (cost-to-go): $J^*(x_0) = x_0^T P x_0$ là chi phí tối ưu từ trạng thái $x_0$. Với $x_0 = [1,0]^T$: $J^* = \begin{bmatrix}1&0\end{bmatrix}\begin{bmatrix}6&2\\2&1\end{bmatrix}\begin{bmatrix}1\\0\end{bmatrix} = 6$. Không bộ điều khiển nào cho $J < 6$.</p>
+    </div>
+</div>
+
+<!-- ================= BÀI 4 ================= -->
+<div class="part-header" id="kt4">
+    <h1>BÀI 4 — KIẾN THỨC BỔ SUNG LQR (PHẦN 2)</h1>
+    <p>Tài liệu: KienThuc_NenTang_BoSung_Phan2_LQR.html</p>
+</div>
+
+<div class="quiz-section">
+    <h3>🟢 CƠ BẢN</h3>
+
+    <div class="quiz-question">
+        <strong>4.1</strong> $y(t) = A\sin(\omega t + \phi)$: $\phi$ là gì? Phân biệt trễ pha / sớm pha.
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>$\phi$ là PHA. $\phi < 0$ → TRỄ pha (ra đạt đỉnh sau); $\phi > 0$ → SỚM pha (đạt đỉnh trước). Ví dụ $y = 0.8\sin(2t - 45^\circ)$: ra trễ 45° so với vào, biên độ còn 0.8.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>4.2</strong> Phương trình Lyapunov ma trận là gì? Ý nghĩa?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>$A^T P + PA = -Q$ với $P>0$, $Q>0$. Nếu tồn tại $P>0$ thỏa phương trình, hệ $\dot{x}=Ax$ ổn định tiệm cận, $V(x) = x^TPx$ là hàm Lyapunov với $\dot{V} = -x^TQx < 0$.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>4.3</strong> Tại sao trễ pha $-180^\circ$ kèm gain $\geq 1$ gây chết hệ thống?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>Hồi tiếp âm trễ $180^\circ$ biến thành hồi tiếp DƯƠNG: mỗi vòng lặp tín hiệu được khuếch đại thêm (gain ≥ 1) → tự khuếch đại vô hạn. Đây chính là điều kiện $L(j\omega) = -1$ (|L|=1 và ∠L = −180°) của Nyquist.</p>
+    </div>
+</div>
+
+<div class="quiz-section">
+    <h3>🔵 THÔNG HIỂU</h3>
+
+    <div class="quiz-question">
+        <strong>4.4</strong> Kiểm tra ổn định Lyapunov bằng số: $A = \begin{bmatrix}-1&0\\0&-2\end{bmatrix}$, $P = \begin{bmatrix}3&0\\0&1\end{bmatrix}$. Tính $V$ và $\dot{V}$.
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>$V = x^TPx = 3x_1^2 + x_2^2 > 0$ (P>0: 3>0, det=3>0). $\dot{V} = 6x_1\dot{x}_1 + 2x_2\dot{x}_2 = 6x_1(-x_1) + 2x_2(-2x_2) = -6x_1^2 - 4x_2^2 < 0$ ✓. Và $A^TP + PA = \begin{bmatrix}-6&0\\0&-4\end{bmatrix} = -Q$ với $Q>0$ → ổn định tiệm cận.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>4.5</strong> Trình bày 4 bước chứng minh LQR tối ưu (nguồn gốc ARE từ Bellman).
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>(1) Đoán $J^*(x) = x^TPx$ (mọi thứ bậc 2). (2) Tính $\frac{d}{dt}(x^TPx) = x^T(A^TP + PA)x + 2x^TPBu$. (3) Bellman: $0 = \min_u[x^TQx + u^TRu + \frac{d}{dt}x^TPx]$, lấy $\partial/\partial u = 2Ru + 2B^TPx = 0$ → $u^* = -R^{-1}B^TPx = -Kx$. (4) Thay ngược lại, đúng với mọi $x$ ⟺ ARE: $A^TP + PA - PBR^{-1}B^TP + Q = 0$. Riccati "xuất hiện tự nhiên", không rơi từ trời.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>4.6</strong> Với $P = \begin{bmatrix}6&2\\2&1\end{bmatrix}$, tính $J^*$ cho $x_0 = [1,1]^T$. Nhận xét $p_{11}$ vs $p_{22}$?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>$J^* = [1\ 1]\begin{bmatrix}6&2\\2&1\end{bmatrix}\begin{bmatrix}1\\1\end{bmatrix} = 6+2+2+1 = 11$. $p_{11}=6 > p_{22}=1$ phản ánh $Q = \text{diag}(4,1)$ phạt $x_1$ nặng hơn → lệch $x_1$ "đắt" hơn lệch $x_2$.</p>
+    </div>
+</div>
+
+<!-- ================= BÀI 5 ================= -->
+<div class="part-header" id="kt5">
+    <h1>BÀI 5 — BÀI TẬP LQR</h1>
+    <p>Tài liệu: BaiTap_LQR_ToanTap.html</p>
+</div>
+
+<div class="quiz-section">
+    <h3>🟢 CƠ BẢN</h3>
+
+    <div class="quiz-question">
+        <strong>5.1</strong> Khi tăng $q_{11}$ (phạt trạng thái 1) lên 10 lần, hệ thay đổi thế nào?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>Mặt bẫy năng lượng theo hướng $x_1$ dốc hơn hẳn; hệ về mục tiêu nhanh hơn; nhưng $u(t)$ ban đầu gắt/lớn hơn (dùng nhiều lực hơn).</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>5.2</strong> Stabilizability khác Controllability như thế nào?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>Controllability yêu cầu điều khiển được MỌI mode (rank $\mathcal{C}=n$). Stabilizability (yếu hơn) chỉ yêu cầu các mode KHÔNG ỔN ĐỊNH là điều khiển được — mode ổn định tự tắt. LQR chỉ cần stabilizable.</p>
+    </div>
+</div>
+
+<div class="quiz-section">
+    <h3>🔵 THÔNG HIỂU</h3>
+
+    <div class="quiz-question">
+        <strong>5.3</strong> Giải tay LQR: $A = \begin{bmatrix}0&1\\0&-2\end{bmatrix}$, $B = [0\ 1]^T$, $Q = \text{diag}(4,1)$, $R=1$. Tìm $P$ và $K$.
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>Đặt $P = \begin{bmatrix}p_1&p_2\\p_2&p_3\end{bmatrix}$. ARE cho: $-p_2^2 + 4 = 0$; $p_1 - 2p_2 - p_2p_3 = 0$; $2p_2 - 4p_3 - p_3^2 + 1 = 0$. → $p_2 = +2$, $p_3 = 1$, $p_1 = 6$. Vậy $P = \begin{bmatrix}6&2\\2&1\end{bmatrix}$ (det=2>0 ✓). $K = R^{-1}B^TP = [2\ 1]$. $A_{cl} = \begin{bmatrix}0&1\\-2&-3\end{bmatrix}$ có $\lambda = -1, -2$ → ổn định tiệm cận ✓.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>5.4</strong> Robot tự cân bằng (Bài 3.2): vì sao $Q_{33}$ (góc) = 150 lớn hơn $Q_{11}$ (vị trí) = 10?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>Vì θ là trạng thái bất ổn định — robot ngã trong tích tắc. Phạt θ nặng buộc bộ điều khiển ưu tiên dựng đứng trước; lực ±30N giới hạn đủ để kéo về từ 12° nhưng không đòi được vị trí chính xác đồng thời. Đây là nghệ thuật tuning Q/R.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>5.5</strong> $Q = \text{diag}(1, 0)$, $A = \begin{bmatrix}0&1\\-2&-3\end{bmatrix}$. Kiểm tra $(A, Q^{1/2})$ quan sát được và kết luận ổn định?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>$Q^{1/2} = \text{diag}(1,0)$; $\mathcal{O} = \begin{bmatrix}1&0\\0&1\end{bmatrix}$ → rank = 2 = n → quan sát được. ARE cho $K \approx [0.236, 0.078]$; $\lambda_1 \approx -1.02$, $\lambda_2 \approx -2.06$ → <strong>ổn định dù $Q$ không phạt $x_2$</strong> — minh họa định lý: chỉ cần $Q \geq 0$ và $(A, Q^{1/2})$ quan sát được.</p>
+    </div>
+</div>
+<!-- ================= BÀI 6 ================= -->
+<div class="part-header" id="kt6">
+    <h1>BÀI 6 — KALMAN FILTER</h1>
+    <p>Tài liệu: Kalman_Filter_ToanTap.html</p>
+</div>
+
+<div class="quiz-section">
+    <h3>🟢 CƠ BẢN</h3>
+
+    <div class="quiz-question">
+        <strong>6.1</strong> Viết 5 bước của Kalman Filter (rời rạc) và 2 giai đoạn.
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p><strong>Dự báo (Predict):</strong> (1) $\hat{x}_{k|k-1} = A\hat{x}_{k-1|k-1} + Bu_{k-1}$; (2) $P_{k|k-1} = AP_{k-1|k-1}A^T + Q$. <strong>Cập nhật (Update):</strong> (3) $K_k = P_{k|k-1}C^T(CP_{k|k-1}C^T + R)^{-1}$; (4) $\hat{x}_{k|k} = \hat{x}_{k|k-1} + K_k(y_k - C\hat{x}_{k|k-1})$; (5) $P_{k|k} = (I - K_kC)P_{k|k-1}$.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>6.2</strong> Ý nghĩa của $Q$ và $R$ trong Kalman Filter?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>$Q$: hiệp phương sai nhiễu HỆ THỐNG/quá trình (mô hình không chính xác bao nhiêu: gió, nhiễu môi trường). $R$: hiệp phương sai nhiễu ĐO LƯỜNG (cảm biến nhiễu bao nhiêu). $Q$ lớn → tin cảm biến hơn; $R$ lớn → tin mô hình hơn.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>6.3</strong> Nguồn gốc Kalman Gain từ phép nhân 2 phân bố Gauss?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>Nhân 2 Gauss $\mathcal{N}(\mu_1, \sigma_1^2)$ (dự đoán) và $\mathcal{N}(\mu_2, \sigma_2^2)$ (đo) được Gauss mới $\mu_{\text{mới}} = \mu_1 + K(\mu_2 - \mu_1)$ với $K = \frac{\sigma_1^2}{\sigma_1^2 + \sigma_2^2}$ — chính là Kalman Gain. $\sigma_{\text{mới}}^2 = \frac{\sigma_1^2\sigma_2^2}{\sigma_1^2 + \sigma_2^2}$ luôn nhỏ hơn cả hai → kết hợp 2 nguồn nhiễu luôn chính xác hơn từng nguồn.</p>
+    </div>
+</div>
+
+<div class="quiz-section">
+    <h3>🔵 THÔNG HIỂU</h3>
+
+    <div class="quiz-question">
+        <strong>6.4</strong> $K \to 0$ (R rất lớn) thì bộ lọc hành xử thế nào? Ngược lại $K \to C^{-1}$?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>$K \to 0$: $\hat{x}_{k|k} \approx \hat{x}_{k|k-1}$ — bỏ qua cảm biến, tin 100% mô hình. $K \to C^{-1}$ (R→0): $\hat{x}_{k|k} \approx C^{-1}y_k$ — tin 100% cảm biến. Gain là "cán cân" giữa mô hình và cảm biến.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>6.5</strong> Innovation là gì? Vì sao $P_{k|k}$ luôn nhỏ hơn $P_{k|k-1}$?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>Innovation: $\tilde{y}_k = y_k - C\hat{x}_{k|k-1}$ — chênh lệch giữa đo và dự báo, mang "thông tin mới" để hiệu chỉnh. $P_{k|k} = (I - K_kC)P_{k|k-1}$ luôn giảm vì đo lường thêm luôn làm giảm bất định (trừ khi $K=0$).</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>6.6</strong> Dự đoán $\sigma_1^2 = 4$, cảm biến $\sigma_2^2 = 1$. Tính $K$ và $\sigma_{\text{mới}}^2$; tin nguồn nào hơn?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>$K = \frac{4}{4+1} = 0.8$; $\sigma_{\text{mới}}^2 = \frac{4 \times 1}{4+1} = 0.8$. Vì $K=0.8$ gần 1 → tin cảm biến 80%, mô hình 20% (cảm biến chính xác hơn nên được tin hơn).</p>
+    </div>
+</div>
+
+<!-- ================= BÀI 7 ================= -->
+<div class="part-header" id="kt7">
+    <h1>BÀI 7 — EKF (KALMAN MỞ RỘNG)</h1>
+    <p>Tài liệu: EKF_ToanTap.html</p>
+</div>
+
+<div class="quiz-section">
+    <h3>🟢 CƠ BẢN</h3>
+
+    <div class="quiz-question">
+        <strong>7.1</strong> Vì sao Kalman chuẩn thất bại với hệ phi tuyến?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>Gauss qua hàm tuyến tính vẫn là Gauss; nhưng qua hàm phi tuyến (sin, x²) phân bố bị bóp méo/lệch → kỳ vọng và phương sai tính sai → KF chuẩn "phá sản". EKF khắc phục bằng tuyến tính hóa.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>7.2</strong> Jacobian $F_k$ và $H_k$ dùng ở bước nào của EKF? Bước 1 &amp; 4 dùng gì?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>$F_k$ dùng ở Bước 2 (lan truyền $P$) và Bước 3; $H_k$ dùng ở Bước 3 (tính Gain) và Bước 5 (cập nhật $P$). Bước 1 &amp; 4 dùng TRỰC TIẾP hàm phi tuyến gốc $f(\cdot)$ và $h(\cdot)$, không dùng Jacobian.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>7.3</strong> Viết khai triển Taylor bậc 1 cho $f(x)$.
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>$f(x) \approx f(\hat{x}) + f'(\hat{x})\,(x - \hat{x})$. Đạo hàm riêng tập hợp thành ma trận Jacobian $J_{ij} = \partial f_i / \partial x_j$ — "hệ số khuếch đại local" thay đổi mỗi bước k.</p>
+    </div>
+</div>
+
+<div class="quiz-section">
+    <h3>🔵 THÔNG HIỂU</h3>
+
+    <div class="quiz-question">
+        <strong>7.4</strong> Xe tự lái trạng thái $[p_x, p_y, \theta]^T$, động học $\theta_k = \theta_{k-1} + \omega T_s$, $p_x$ tăng theo $v T_s \cos\theta$. Viết $F_k$ (Jacobian theo x).
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>$F_k = \begin{bmatrix} 1 & 0 & -vT_s\sin\theta \\ 0 & 1 & vT_s\cos\theta \\ 0 & 0 & 1 \end{bmatrix}$ — cột 3 là đạo hàm của $p_x, p_y$ theo $\theta$, phản ánh vận tốc thay đổi hướng trạng thái theo $\theta$.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>7.5</strong> Robot ở (3,4)m đo khoảng cách $h_1$ và góc $h_2$ đến đèn biển tại gốc. Tính $H$ (Jacobian của $h$).
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>$h_1 = \sqrt{x_1^2+x_2^2} = 5$; $h_2 = \arctan(x_2/x_1)$. $H = \begin{bmatrix} 3/5 & 4/5 \\ -4/25 & 3/25 \end{bmatrix} = \begin{bmatrix} 0.6 & 0.8 \\ -0.16 & 0.12 \end{bmatrix}$. Hàng 1: đạo hàm khoảng cách; hàng 2: đạo hàm góc.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>7.6</strong> So sánh $F_k$ của EKF với $A$ của KF chuẩn — vì sao phải tính lại mỗi bước?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>$A$ của KF chuẩn là HẰNG SỐ cố định. $F_k$ của EKF là Jacobian tính tại trạng thái ước lượng hiện tại $\hat{x}$ — vì đường cong phi tuyến có độ dốc khác nhau tại từng điểm, nên "hệ số khuếch đại local" phải cập nhật mỗi bước để xấp xỉ tuyến tính chính xác.</p>
+    </div>
+</div>
+
+<!-- ================= BÀI 8 ================= -->
+<div class="part-header" id="kt8">
+    <h1>BÀI 8 — LQR NÂNG CAO &amp; LQG</h1>
+    <p>Tài liệu: LQR_NangCao_LQG_ToanTap.html</p>
+</div>
+
+<div class="quiz-section">
+    <h3>🟢 CƠ BẢN</h3>
+
+    <div class="quiz-question">
+        <strong>8.1</strong> Rời rạc hóa bằng xấp xỉ Euler: $A_d$, $B_d$ gần đúng thế nào?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>$A_d \approx I + AT_s$, $B_d \approx B\,T_s$ (xấp xỉ Euler). Chính xác hơn: $A_d = e^{AT_s}$, $B_d = \int_0^{T_s} e^{A\tau}B\, d\tau$.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>8.2</strong> Kiến trúc LQG gồm những gì?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>LQG = LQR (điều khiển phản hồi trạng thái tối ưu) + Kalman Filter (ước lượng trạng thái từ đo nhiễu). Luật: $u = -K\hat{x}$.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>8.3</strong> Phát biểu Nguyên lý Phân tách (Separation Principle).
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>Với hệ tuyến tính + nhiễu Gauss, thiết kế bộ quan sát (Kalman) và bộ điều khiển (LQR) ĐỘC LẬP nhau vẫn đạt tối ưu tổng thể. Nghĩa là: tính $K$ từ (A,B,Q,R), tính $L$ từ (A,C,Q_w,R_v), rồi ghép $u = -K\hat{x}$.</p>
+    </div>
+</div>
+
+<div class="quiz-section">
+    <h3>🔵 THÔNG HIỂU</h3>
+
+    <div class="quiz-question">
+        <strong>8.4</strong> Xấp xỉ Euler cho xe 1D $A = \begin{bmatrix}0&1\\0&0\end{bmatrix}$, $B = \begin{bmatrix}0\\1\end{bmatrix}$, $T_s = 0.1$. Tính $A_d, B_d$ và ý nghĩa từng phần tử.
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>$A_d = \begin{bmatrix}1&0.1\\0&1\end{bmatrix}$, $B_d = \begin{bmatrix}0\\0.1\end{bmatrix}$. Ý nghĩa: $p_{k+1} = p_k + 0.1v_k$, $v_{k+1} = v_k + 0.1F_k$ — khớp vật lý: vị trí tăng theo vận tốc × 0.1s, vận tốc tăng theo lực × 0.1s.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>8.5</strong> Anti-windup là gì và vì sao cần trong LQR thực tế? Ví dụ cụ thể.
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>Khi actuator bão hòa (ví dụ LQR tính $u=500$V nhưng động cơ chỉ nhận ±12V), nếu có khâu tích phân, sai số tích lũy vô hạn → khi hết bão hòa hệ "vọt" mạnh (windup). Anti-windup: cắt ngưỡng $u$ và ngừng/hoàn tác tích phân khi bão hòa; hoặc tăng $R$ theo Bryson để giảm $K$.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>8.6</strong> Hiện tượng Doyle (1978) cảnh báo gì về LQG?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>Doyle chỉ ra LQG có thể mất ổn định với nhiễu/mô hình sai dù đã "tối ưu" — vì LQG không đảm bảo độ dự trữ ổn định (GM/PM) như LQR phản hồi trạng thái. Cảnh báo: ĐỪNG tin mù vào LQG; phải kiểm tra margin và độ robust.</p>
+    </div>
+</div>
+<!-- ================= BÀI 9 ================= -->
+<div class="part-header" id="kt9">
+    <h1>BÀI 9 — LQR THỰC CHIẾN ROBOT</h1>
+    <p>Tài liệu: LQR_ThucChien_RobotThat.html</p>
+</div>
+
+<div class="quiz-section">
+    <h3>🟢 CƠ BẢN</h3>
+
+    <div class="quiz-question">
+        <strong>9.1</strong> Complementary Filter cho góc IMU: công thức và vai trò 2 thành phần?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>$\theta_{\text{fused}} = \alpha(\theta_{\text{prev}} + \dot{\theta}_{\text{gyro}} T_s) + (1-\alpha)\theta_{\text{acc}}$, $\alpha \approx 0.98$. 98% tin gyro (nhanh/mượt) + 2% tin accel (chống drift).</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>9.2</strong> Quy tắc chọn chu kỳ lấy mẫu $T_s$ cho robot tự cân bằng?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>Quy tắc ngón tay cái: $T_s \leq \dfrac{1}{10|\lambda_{\max}|}$. Ví dụ $\lambda \approx \pm 7$ → $T_s \leq 14$ms; chọn $T_s = 5$ms (200Hz) cho robot tự cân bằng.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>9.3</strong> Kể 3 lỗi phổ biến nhất khi triển khai LQR lên robot thật.
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>(1) Sai dấu motor (u ngược chiều); (2) Sai đơn vị (° vs rad); (3) Không xử lý dead zone/bão hòa actuator. Ngoài ra: $T_s$ không ổn định (dùng delay() thay Timer ISR), không calibrate IMU offset, $A,B$ sai.</p>
+    </div>
+</div>
+
+<div class="quiz-section">
+    <h3>🔵 THÔNG HIỂU</h3>
+
+    <div class="quiz-question">
+        <strong>9.4</strong> Bảng triệu chứng: robot ngã ngay lập tức — nguyên nhân và hướng xử lý?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>$K$ quá nhỏ hoặc SAI DẤU. Xử lý: tăng $Q_{33}$ (phạt góc), kiểm tra dấu của $u$ (so sánh với mô phỏng), xác nhận A,B đúng. Dùng Serial Plotter in $\theta, \omega, u$ để chẩn đoán.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>9.5</strong> Quy trình System Identification đo ma sát/giảm chấn bằng Free Decay như thế nào?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>Nghiêng robot một góc, thả tự do, ghi nhận 2 đỉnh dao động liên tiếp $\theta_1, \theta_2$ và chu kỳ $T$: $b = \frac{2ml}{T}\ln\!\left(\frac{\theta_1}{\theta_2}\right)$. Ngoài ra đo $M, m, l, r$ trực tiếp, hằng số motor $K_t, K_e, R_a$ từ datasheet/VOM.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>9.6</strong> Kết quả DLQR cho $K \approx [-3.16, -2.45, -38.73, -5.12]$. Vì sao hệ số cho θ (−38.73) lại lớn hơn hệ số vị trí (−3.16)?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>Vì $Q$ phạt góc θ rất nặng (Q33 = 150 so với Q11 = 10) — robot ưu tiên giữ thẳng đứng. Hệ số θ lớn nghĩa là chỉ cần nghiêng nhỏ cũng sinh lực đối kháng mạnh để chống ngã. Đây chính là biểu hiện của việc tuning Q/R theo Bryson.</p>
+    </div>
+</div>
+
+<!-- ================= BÀI 10 ================= -->
+<div class="part-header" id="kt10">
+    <h1>BÀI 10 — CẢM BIẾN IMU</h1>
+    <p>Tài liệu: IMU_CanBien_ToanTap.html</p>
+</div>
+
+<div class="quiz-section">
+    <h3>🟢 CƠ BẢN</h3>
+
+    <div class="quiz-question">
+        <strong>10.1</strong> IMU gồm 3 cảm biến nào? Mỗi cảm biến đo gì và mạnh/yếu ở điểm nào?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>Gia tốc kế (đo gia tốc, gồm trọng lực → tính Roll/Pitch tĩnh, không trôi nhưng nhiễu rung); Con quay (đo vận tốc góc → tích phân ra góc, mượt nhưng trôi); Từ kế (đo từ trường → Yaw tuyệt đối, nhưng nhiễu kim loại xung quanh).</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>10.2</strong> Công thức tính góc Roll/Pitch từ gia tốc kế?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>$\phi_{\text{acc}} = \arctan(a_y/a_z)$, $\theta_{\text{acc}} = \arctan\!\left(\frac{-a_x}{\sqrt{a_y^2+a_z^2}}\right)$ — dùng <code>atan2</code> trong code. Chú ý: không đo được Yaw vì trọng lực luôn hướng xuống.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>10.3</strong> Vì sao con quay một mình không dùng lâu dài được?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>Vì tích phân bias gây TRÔI (drift): bias $0.5^\circ/s$ sau 60s tích phân lệch $30^\circ$. Con quay tốt vẫn trôi vài độ/phút → cần fusion với gia tốc kế/từ kế.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>10.4</strong> MPU6050 ở thang đo ±250°/s (S=131), raw=13100. Vận tốc góc là bao nhiêu?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>$\omega = 13100 / 131 = 100\,^\circ/s$.</p>
+    </div>
+</div>
+
+<div class="quiz-section">
+    <h3>🔵 THÔNG HIỂU</h3>
+
+    <div class="quiz-question">
+        <strong>10.5</strong> Vì sao phải kết hợp (fusion) gia tốc kế + con quay? Complementary Filter làm gì?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>Con quay mượt nhưng trôi; gia tốc kế chính xác lâu dài nhưng nhiễu rung. Fusion "tin con quay ở tần số cao, tin gia tốc kế ở tần số thấp": $\theta = \alpha(\theta + \omega T_s) + (1-\alpha)\theta_{\text{acc}}$ → góc vừa mượt vừa không trôi.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>10.6</strong> Gimbal Lock là gì và giải pháp quaternion?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>Khi Pitch = ±90°, trục Yaw và Roll trùng nhau → mất 1 bậc tự do, góc Euler nhảy loạn. Quaternion (4 số: $q_w, q_x, q_y, q_z$) biểu diễn phép quay không có điểm kỳ dị, chỉ cần chuẩn hóa $q/\|q\|$ mỗi bước → dùng trong Madgwick/Mahony.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>10.7</strong> Phân biệt nhiễu Hard-Iron và Soft-Iron của từ kế về mặt hình học?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>Quay IMU 360°, dữ liệu từ kế lý tưởng tạo vòng tròn quanh gốc. Hard-Iron (nam châm/lõi sắt gắn cố định) → dịch tâm (vòng tròn lệch tâm). Soft-Iron (vật liệu sắt từ bị từ hóa) → bóp thành elip. Hiệu chuẩn phải bù cả dịch tâm lẫn co giãn.</p>
+    </div>
+</div>
+
+<!-- ================= BÀI 11 ================= -->
+<div class="part-header" id="kt11">
+    <h1>BÀI 11 — TOÁN NỀN TẢNG ROBOTICS &amp; CONTROL</h1>
+    <p>Tài liệu: Toan_NenTang_Robotics_Control.html</p>
+</div>
+
+<div class="quiz-section">
+    <h3>🟢 CƠ BẢN</h3>
+
+    <div class="quiz-question">
+        <strong>11.1</strong> Phân biệt mức độ cần: eigenvalue vs SVD vs Jacobian?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>Eigenvalue = HIỂU SÂU (quyết định ổn định hệ); SVD &amp; Jacobian = CHỈ CẦN CÔNG THỨC (dùng giả nghịch đảo, tuyến tính hóa EKF).</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>11.2</strong> Viết công thức Least Squares (Normal Equation) và khi nào dùng?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>$\theta^* = (X^T X)^{-1} X^T y$ — tìm tham số tối ưu cho dữ liệu nhiễu (hiệu chuẩn IMU, nhận dạng hệ thống). Khi $X^TX$ suy biến, dùng Ridge: $(X^TX + \lambda I)^{-1}X^Ty$.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>11.3</strong> Gradient Descent: công thức cập nhật và vai trò $\alpha$?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>$\theta_{k+1} = \theta_k - \alpha\nabla J(\theta_k)$. $\alpha$ = tốc độ học. Quá lớn → phân kỳ; quá nhỏ → hội tụ chậm. Thử giảm dần 0.1 → 0.01 → 0.001.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>11.4</strong> Nhiễu trắng Gauss là gì và vai trò trong Kalman?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>Nhiễu trắng: PSD phẳng mọi tần số, mẫu độc lập. Nhiễu trắng Gauss ($w_k \sim \mathcal{N}(0,Q)$, $v_k \sim \mathcal{N}(0,R)$) chính là GIẢ ĐỊNH của Kalman Filter.</p>
+    </div>
+</div>
+
+<div class="quiz-section">
+    <h3>🔵 THÔNG HIỂU</h3>
+
+    <div class="quiz-question">
+        <strong>11.5</strong> Hệ rời rạc $x_{k+1} = A_d x_k$ với trị riêng $\lambda = 1.05$. Ổn định không? So với hệ liên tục?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>KHÔNG ổn định: hệ rời rạc ổn định khi $|\lambda| < 1$, mà $|1.05| > 1$ → phân kỳ. Hệ liên tục ổn định khi $\text{Re}(\lambda) < 0$. Đây là 2 điều kiện riêng biệt — cần phân biệt rõ.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>11.6</strong> Vì sao nhiễu con quay (nhiễu màu, có tương quan) làm Kalman chuẩn kém chính xác? Khắc phục?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>Kalman chuẩn giả định nhiễu trắng; nhiễu màu vi phạm giả định → ước lượng chệch, $P$ sai. Khắc phục: mở rộng trạng thái thêm bias $b$ (như Kalman 2D $\theta$+$b$ trong tài liệu IMU) hoặc dùng shaping filter để "trắng hóa".</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>11.7</strong> MPC khác PID ở điểm cốt lõi nào? Khi nào chọn MPC?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>PID phản ứng theo sai số QUÁ KHỨ; MPC dự đoán TƯƠNG LAI bằng mô hình rồi tối ưu chuỗi $u$ trong cửa sổ dự báo, xử lý được ràng buộc (giới hạn actuator, an toàn). Chọn MPC khi có mô hình tốt, ràng buộc quan trọng, và phần cứng đủ mạnh.</p>
+    </div>
+</div>
+
+<!-- ================= BÀI 12 ================= -->
+<div class="part-header" id="kt12">
+    <h1>BÀI 12 — PID, CASCADE &amp; FOC</h1>
+    <p>Tài liệu: PID_Cascade_Control_TongQuan.md · FOC_Field_Oriented_Control.md</p>
+</div>
+
+<div class="quiz-section">
+    <h3>🟢 CƠ BẢN</h3>
+
+    <div class="quiz-question">
+        <strong>12.1</strong> Viết công thức PID và vai trò 3 thành phần P, I, D?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>$u(t) = K_p e + K_i\!\int e\,dt + K_d \frac{de}{dt}$. P: phản ứng với sai số hiện tại; I: triệt tiêu sai số dư (steady-state); D: "nhìn trước", giảm dao động nhưng nhạy nhiễu.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>12.2</strong> Kiến trúc Cascade Control gồm mấy vòng? Tần số mỗi vòng?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>3 vòng: Outer (Position/Trajectory ~100Hz) → Inner (Velocity ~200Hz, STM32) → Innermost (Current/FOC ~1kHz, trong motor driver DJI/ODrive). Vòng trong luôn nhanh hơn vòng ngoài.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>12.3</strong> FOC điều khiển dòng nào? Vì sao?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>$I_q$ (thành phần tạo moment) — điều khiển tuyến tính; $I_d$ (thành phần tạo từ thông) giữ = 0. Kết quả torque tỉ lệ tuyến tính với $I_q$, hiệu suất tối đa.</p>
+    </div>
+</div>
+
+<div class="quiz-section">
+    <h3>🔵 THÔNG HIỂU</h3>
+
+    <div class="quiz-question">
+        <strong>12.4</strong> Anti-windup Clamping khác Back-Calculation như thế nào?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>Clamping: cắt cứng tích phân ở ngưỡng (giới hạn integral/hoàn tác bước tích phân khi bão hòa). Back-Calculation: đưa sai số do bão hòa $K_b(output - output_{\text{unsat}})$ ngược vào tích phân → "nhả" tích phân nhanh hơn, êm hơn, chất lượng tốt hơn.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>12.5</strong> Ziegler-Nichols: các bước và công thức tính Kp, Ki, Kd?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>(1) Đặt Ki=Kd=0; (2) tăng Kp đến khi dao động bền vững → $K_u$ (ultimate gain) và chu kỳ $T_u$; (3) PID: $K_p = 0.6K_u$, $K_i = 1.2K_u/T_u$, $K_d = 0.075K_u T_u$.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>12.6</strong> Vì sao FOC chạy trong motor driver (1kHz) mà không chạy trên STM32 chính?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>FOC yêu cầu vòng lặp rất nhanh (1–20kHz) để đọc encoder + dòng pha, làm Clark/Park transform và 2 PID liên tục. Nếu chạy chung với vòng điều khiển chuyển động (100–200Hz) trên cùng MCU sẽ quá tải và trễ. Vì vậy driver chuyên dụng đảm nhiệm — bạn chỉ gửi "current setpoint" qua CAN.</p>
+    </div>
+</div>
+
+<!-- ================= KẾT ================= -->
+<div class="part-header-intro" id="ket">
+    <h1>THANG ĐÁNH GIÁ &amp; LỜI KHUYÊN</h1>
+    <p>Đánh giá mức hiểu bài sau khi làm kiểm tra</p>
+</div>
+
+<div class="important-note">
+    <span class="box-title">📊 Tự đánh giá sau mỗi bài</span>
+    <ul>
+        <li><strong>Làm đúng 100% câu 🟢</strong> → Đã NẮM kiến thức cơ bản, có thể làm bài tiếp theo.</li>
+        <li><strong>Làm đúng ≥ 70% câu 🔵</strong> → Đã THÔNG HIỂU — sẵn sàng vận dụng thực tế.</li>
+        <li><strong>Làm đúng &lt; 70% câu 🔵</strong> → Chưa hiểu sâu: quay lại đọc phần tương ứng, làm lại bài tập số (🟣).</li>
+        <li><strong>Chưa làm được câu nào 🔵</strong> → Học lại lý thuyết từ đầu phần đó trước khi đi tiếp.</li>
+    </ul>
+</div>
+
+<div class="example-box">
+    <span class="box-title">🎓 Lời khuyên cuối</span>
+    <ol>
+        <li><strong>Đừng đọc đáp án trước:</strong> tự trả lời bằng lời của mình, kể cả sai cũng tốt cho trí nhớ.</li>
+        <li><strong>Hiểu sâu hơn nữa:</strong> sau khi làm đúng, thử giải thích lại cho "một người bạn tưởng tượng" — nếu giải thích được là đã hiểu thật sự.</li>
+        <li><strong>Gắn với thực hành:</strong> chạy lại các code Python trong tài liệu, đổi tham số $Q, R$ và quan sát — trực giác sẽ hình thành.</li>
+        <li><strong>Trình tự đề xuất:</strong> Bài 1 → 2 → 3/4 → 5 → 6/7 → 8 → 9 → 10 → 11 → 12 (theo lộ trình đã nêu trong README).</li>
+    </ol>
+</div>
+
+<div style="background: linear-gradient(135deg, #0f172a, #1e293b); color: white; padding: 35px; border-radius: 10px; margin-top: 50px; text-align: center;">
+    <h2 style="color: #60a5fa; margin-top: 0;">🎯 Mục Tiêu Cuối</h2>
+    <p style="font-size: 1.05em; color: #cbd5e1; max-width: 750px; margin: 10px auto;">
+        Làm xong 12 bài kiểm tra, bạn phải trả lời được 3 câu lớn: <strong>Mô hình hóa hệ thống</strong> (viết được $\dot{x}=Ax+Bu$ từ vật lý), <strong>Thiết kế điều khiển</strong> (chọn $Q, R$ có lý do, hiểu vì sao LQR tối ưu), và <strong>Ước lượng trạng thái</strong> (Kalman/EKF khi nào dùng, vì sao). Nếu cả 3 đều tự tin → bạn đã thực sự HIỂU BÀI.
+    </p>
+</div>
+
+<div style="text-align: center; margin: 35px 0; color: var(--text-secondary); font-size: 0.9em;">
+    <p>— Hết Bài Kiểm Tra Kiến Thức —</p>
+    <p><em>Nhấn nút "📄 Xuất PDF" ở góc phải dưới để lưu thành PDF</em></p>
+</div>
+
+</body>
+</html>

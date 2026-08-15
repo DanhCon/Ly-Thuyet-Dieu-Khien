@@ -1,0 +1,720 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lộ Trình Học — Robotics &amp; Control (Định Hướng AV &amp; Du Học)</title>
+<script>
+window.MathJax = {
+    tex: { inlineMath: [['$','$']], displayMath: [['$$','$$']], tags: 'ams' },
+    svg: { fontCache: 'global' }
+};
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<style>
+:root {
+    --primary: #0f172a;
+    --accent: #2563eb;
+    --accent-light: #3b82f6;
+    --success: #16a34a;
+    --warning: #d97706;
+    --danger: #dc2626;
+    --bg: #f8fafc;
+    --card-bg: #ffffff;
+    --text: #1e293b;
+    --text-secondary: #475569;
+    --code-bg: #0f172a;
+    --border: #e2e8f0;
+    --quiz-bg: #f0f9ff;
+    --answer-bg: #f0fdf4;
+    --yellow-bg: #fffbeb;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.75;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+h1, h2, h3, h4 { color: var(--primary); line-height: 1.4; }
+h2 { font-size: 1.45em; margin: 28px 0 12px; }
+h3 { font-size: 1.2em; margin: 22px 0 10px; }
+p { margin: 10px 0; }
+ul, ol { margin: 10px 0 10px 28px; }
+li { margin: 6px 0; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+strong { color: var(--primary); }
+table.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 0.95em;
+}
+.table th {
+    background: var(--primary);
+    color: #fff;
+    padding: 10px 12px;
+    text-align: left;
+    border: 1px solid var(--primary);
+}
+.table td {
+    padding: 9px 12px;
+    border: 1px solid var(--border);
+    vertical-align: top;
+}
+.table tr:nth-child(even) { background: #f1f5f9; }
+pre {
+    background: var(--code-bg);
+    color: #e2e8f0;
+    padding: 14px 16px;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 14px 0;
+    font-size: 0.9em;
+}
+code {
+    font-family: Consolas, 'Fira Code', monospace;
+    background: #e2e8f0;
+    color: var(--danger);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.92em;
+}
+pre code { background: none; color: inherit; padding: 0; }
+.cover-page {
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    color: #fff;
+    text-align: center;
+    padding: 70px 30px;
+    border-radius: 12px;
+    margin-bottom: 30px;
+}
+.cover-page h1 { color: #fff; font-size: 2.2em; margin-bottom: 10px; }
+.cover-page .subtitle { color: #94a3b8; font-size: 1.15em; margin-bottom: 18px; }
+.cover-page .tagline { color: #cbd5e1; font-size: 1.02em; max-width: 700px; margin: 0 auto 25px; }
+.cover-page .meta { color: #60a5fa; font-size: 0.95em; border-top: 1px solid #334155; padding-top: 18px; display: inline-block; }
+.toc {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px 30px;
+    margin: 20px 0;
+}
+.toc h2 { margin-top: 0; border-bottom: 2px solid var(--accent); padding-bottom: 8px; }
+.toc ol { margin-left: 20px; }
+.toc a { display: inline-block; padding: 3px 0; }
+.part-header {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    color: #fff;
+    padding: 26px 28px;
+    border-radius: 10px;
+    margin: 36px 0 20px;
+}
+.part-header h1 { color: #fff; margin: 0 0 6px; font-size: 1.5em; }
+.part-header p { color: #bfdbfe; margin: 0; }
+.part-header-intro {
+    background: linear-gradient(135deg, #16a34a, #15803d);
+    color: #fff;
+    padding: 26px 28px;
+    border-radius: 10px;
+    margin: 36px 0 20px;
+}
+.part-header-intro h1 { color: #fff; margin: 0 0 6px; font-size: 1.5em; }
+.part-header-intro p { color: #dcfce7; margin: 0; }
+.part-header-purple {
+    background: linear-gradient(135deg, #7c3aed, #6d28d9);
+    color: #fff;
+    padding: 26px 28px;
+    border-radius: 10px;
+    margin: 36px 0 20px;
+}
+.part-header-purple h1 { color: #fff; margin: 0 0 6px; font-size: 1.5em; }
+.part-header-purple p { color: #ddd6fe; margin: 0; }
+.part-header-orange {
+    background: linear-gradient(135deg, #ea580c, #c2410c);
+    color: #fff;
+    padding: 26px 28px;
+    border-radius: 10px;
+    margin: 36px 0 20px;
+}
+.part-header-orange h1 { color: #fff; margin: 0 0 6px; font-size: 1.5em; }
+.part-header-orange p { color: #fed7aa; margin: 0; }
+.part-header-danger {
+    background: linear-gradient(135deg, #dc2626, #b91c1c);
+    color: #fff;
+    padding: 26px 28px;
+    border-radius: 10px;
+    margin: 36px 0 20px;
+}
+.part-header-danger h1 { color: #fff; margin: 0 0 6px; font-size: 1.5em; }
+.part-header-danger p { color: #fecaca; margin: 0; }
+.definition, .theorem, .important-note, .example-box, .analogy-box, .warning-box, .cheat-sheet {
+    border-radius: 10px;
+    padding: 18px 22px;
+    margin: 18px 0;
+}
+.box-title {
+    display: inline-block;
+    font-weight: 700;
+    font-size: 0.95em;
+    margin-bottom: 10px;
+    padding: 4px 12px;
+    border-radius: 6px;
+}
+.definition { background: #eff6ff; border-left: 5px solid var(--accent); }
+.definition .box-title { background: var(--accent); color: #fff; }
+.theorem { background: #f5f3ff; border-left: 5px solid #7c3aed; }
+.theorem .box-title { background: #7c3aed; color: #fff; }
+.important-note { background: #fffbeb; border-left: 5px solid var(--warning); }
+.important-note .box-title { background: var(--warning); color: #fff; }
+.example-box { background: #f0fdf4; border-left: 5px solid var(--success); }
+.example-box .box-title { background: var(--success); color: #fff; }
+.analogy-box { background: #f0f9ff; border-left: 5px solid #06b6d4; }
+.analogy-box .box-title { background: #06b6d4; color: #fff; }
+.warning-box { background: #fef2f2; border-left: 5px solid var(--danger); }
+.warning-box .box-title { background: var(--danger); color: #fff; }
+.cheat-sheet { background: #f0fdfa; border: 1px dashed #14b8a6; }
+.cheat-sheet .box-title { background: #14b8a6; color: #fff; }
+.step-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 22px;
+    margin: 16px 0;
+    position: relative;
+}
+.step-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.05em;
+    margin-bottom: 10px;
+}
+.quiz-section { background: var(--quiz-bg); border-radius: 10px; padding: 22px 24px; margin: 20px 0; }
+.quiz-section > h3 { margin-top: 0; }
+.quiz-question {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 14px 0;
+}
+.answer-section {
+    background: var(--answer-bg);
+    border-left: 4px solid var(--success);
+    border-radius: 8px;
+    padding: 12px 18px;
+    margin: 10px 0 16px;
+}
+.answer-section .box-title { background: var(--success); color: #fff; }
+.level-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.82em;
+    font-weight: 600;
+    margin: 0 4px;
+}
+.level-apply { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+.level-deep { background: #dbeafe; color: #1e40af; border: 1px solid #93c5fd; }
+.level-concept { background: #ede9fe; color: #5b21b6; border: 1px solid #c4b5fd; }
+.legend-box {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 16px 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+}
+.legend-item { display: flex; align-items: center; gap: 8px; font-size: 0.92em; }
+.print-btn {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 30px;
+    font-size: 0.95em;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+    z-index: 100;
+}
+.print-btn:hover { background: var(--primary); }
+.summary-box {
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    color: #fff;
+    padding: 30px 34px;
+    border-radius: 12px;
+    margin: 30px 0;
+}
+.summary-box h2 { color: #60a5fa; margin-top: 0; }
+.summary-box ul { color: #cbd5e1; }
+@media print {
+    .print-btn { display: none; }
+    .part-header, .part-header-intro, .part-header-purple, .part-header-orange, .part-header-danger { page-break-before: always; }
+    .definition, .theorem, .important-note, .example-box, .analogy-box, .warning-box, .cheat-sheet, .quiz-section, .answer-section, .step-card, .toc { break-inside: avoid; }
+    body { background: #fff; }
+}
+</style>
+</head>
+<body>
+
+<button class="print-btn" onclick="window.print()">📄 Xuất PDF</button>
+
+<div class="cover-page">
+    <h1>🎯 Lộ Trình Học Robotics &amp; Control</h1>
+    <div class="subtitle">Định hướng 2 nhánh: <strong>Đi làm AV (ra Bắc)</strong> | <strong>Du học Thạc sĩ</strong></div>
+    <div class="tagline">
+        Tổng hợp trực tiếp từ yêu cầu tuyển dụng thực tế (VinFast Motion Planning &amp; Control, các JD planning/control quốc tế) và yêu cầu tuyển sinh thạc sĩ robotics/control (ANU, Purdue, EPFL, CMU). Lộ trình chia theo tuần, kèm deadline và tiêu chí "bằng chứng thực hành" để CV có sức nặng.
+    </div>
+    <div class="meta">Dành cho: Huỳnh Công Danh · Ngành Tự động hóa · Định hướng Control &amp; Planning · 2026</div>
+</div>
+
+<div class="toc">
+    <h2>📑 Mục Lục</h2>
+    <ol>
+        <li><a href="#part0">Phần 0 — Nguyên tắc cốt lõi: thị trường trả tiền cho bằng chứng, không cho kiến thức</a></li>
+        <li><a href="#part1">Phần 1 — Nhánh AV (ra Bắc): lộ trình 3 giai đoạn theo tuần</a></li>
+        <li><a href="#part2">Phần 2 — Nhánh Du học: lộ trình học bổng thạc sĩ theo tuần</a></li>
+        <li><a href="#part3">Phần 3 — Checklist đánh giá &amp; Quiz tự kiểm tra</a></li>
+        <li><a href="#ket">Tổng kết &amp; Quyết định 2 đường</a></li>
+    </ol>
+</div>
+
+<div class="legend-box">
+    <div class="legend-item"><span class="level-badge level-deep">🔬 CẦN HIỂU SÂU</span> quyết định trúng tuyển</div>
+    <div class="legend-item"><span class="level-badge level-apply">🔧 CHỈ CẦN CÔNG THỨC</span> dùng được là đủ</div>
+    <div class="legend-item"><span class="level-badge level-concept">🔎 HIỂU Ý TƯỞNG</span> nắm bản chất để kể chuyện</div>
+</div>
+
+<div class="part-header-intro" id="part0">
+    <h1>PHẦN 0 — NGUYÊN TẮC CỐT LÕI</h1>
+    <p>Đọc trước khi làm: vì sao lộ trình này được thiết kế như vậy</p>
+</div>
+
+<div class="important-note">
+    <span class="box-title">⚡ Nguyên tắc 1: Recruiter đọc bằng chứng, không đọc tự khai</span>
+    <p>JD của VinFast ghi rõ: <em>"Fresh graduates are considered, but must be able to show substantial hands-on control work — a thesis, a student competition team, a serious personal project on real hardware or in a credible simulation — and to walk through the control design, the tuning and the measurements behind it."</em></p>
+    <p>Nghĩa là: mọi kiến thức trong tài liệu này chỉ có giá trị khi nó trở thành <strong>1 repo GitHub chạy được + 1 câu chuyện thiết kế</strong> mà bạn kể được trước hội đồng. Nếu không, học bao nhiêu cũng không thành hồ sơ.</p>
+</div>
+
+<div class="important-note">
+    <span class="box-title">⚡ Nguyên tắc 2: Kiến thức thiếu của bạn nằm ở thực hành, không phải lý thuyết</span>
+    <p>Đối chiếu JD với hồ sơ hiện tại: lý thuyết điều khiển (PID, state-space, LQR, Kalman) bạn <strong>đã có nền</strong> — tài liệu tự học đã làm rất đầy đủ. Lỗ hổng thật sự gồm 3 thứ thị trường gọi tên nhiều nhất mà bạn chưa vững:</p>
+    <ul>
+        <li><strong>ROS2 + Gazebo</strong> (framework — JD nào cũng đụng)</li>
+        <li><strong>MPC/NMPC chạy thật</strong> với CasADi/acados (khóa luận mới dừng lý thuyết)</li>
+        <li><strong>Tiếng Anh kỹ thuật 6.5+</strong> (cửa cho cả AV lẫn du học)</li>
+    </ul>
+</div>
+
+<div class="warning-box">
+    <span class="box-title">⚠️ Nguyên tắc 3: Đừng học lan man theo hứng</span>
+    <p>Nhiều thứ "hay" (DRL, legged locomotion, SLAM nâng cao) <strong>không phải điều kiện tuyển</strong> ở vị trí junior. Chúng xuất hiện trong phần "nice to have" của các JD senior. Lộ trình này ưu tiên đúng thứ JD junior thực sự hỏi; mục nâng cao để sau khi có việc.</p>
+    <p>Quy tắc: <strong>một thứ chỉ đáng học khi nó xuất hiện ≥ 2 lần trong các JD bạn nhắm.</strong> Nếu không, nó là sở thích, không phải chiến lược.</p>
+</div>
+
+<div class="analogy-box">
+    <span class="box-title">🔎 Ẩn dụ: Bạn đang xây nhà, không phải gom vật liệu</span>
+    <p>Kiến thức lý thuyết = gạch, xi măng, thép. Một người có cả kho vật liệu nhưng không có <strong>một ngôi nhà hoàn chỉnh</strong> nào thì vẫn không ai thuê thi công. Repo GitHub + khóa luận chạy được = ngôi nhà đầu tiên. Hãy dành 70% thời gian để <strong>dựng ngôi nhà</strong>, 30% để lấy thêm vật liệu cho nó.</p>
+</div>
+
+<div class="cheat-sheet">
+    <span class="box-title">📋 Tóm tắt 5 câu hỏi thị trường đang hỏi (8/2026)</span>
+    <ol>
+        <li>"Chứng minh bạn từng thiết kế và tinh chỉnh một bộ điều khiển thật?" → <strong>Đồ án STM32 + khóa luận NMPC + demo Gazebo</strong></li>
+        <li>"Bạn có biết ROS2 không?" → <strong>Chưa vững — ưu tiên số 1</strong></li>
+        <li>"Bạn có làm nổi MPC/CasADi không?" → <strong>Lý thuyết khá, cần repo chạy được</strong></li>
+        <li>"Bạn đọc hiểu tài liệu kỹ thuật tiếng Anh?" → <strong>IELTS 6.0, cần 6.5+ nếu du học</strong></li>
+        <li>"Bạn có C++/Python vững không?" → <strong>C++ nền tốt, cần bài tập phỏng vấn</strong></li>
+    </ol>
+</div>
+<div class="part-header" id="part1">
+    <h1>PHẦN 1 — NHÁNH AV (RA BẮC): LỘ TRÌNH 3 GIAI ĐOẠN</h1>
+    <p>Mục tiêu: trở thành ứng viên fresh grad mà VinFast Motion Planning &amp; Control "đọc là gọi". Tổng thời gian: 24 tuần.</p>
+</div>
+
+<div class="definition">
+    <span class="box-title">🎯 Mục tiêu đầu ra (sau 24 tuần)</span>
+    <ul>
+        <li><strong>Repo 1 — ROS2/Gazebo:</strong> robot di động (TurtleBot) chạy LQR hoặc Pure Pursuit bám quỹ đạo trong Gazebo, có launch file, có video demo.</li>
+        <li><strong>Repo 2 — NMPC F1TENTH:</strong> khóa luận CasADi/acados biến thành code chạy được trên mô phỏng, kèm README giải thích thiết kế + tuning + kết quả đo.</li>
+        <li><strong>Trả lời trôi chảy</strong> 5 chủ đề phỏng vấn: margin/stability, anti-windup, nhận dạng hệ thống, rời rạc hóa, MPC tuning.</li>
+    </ul>
+</div>
+
+<div class="part-header-purple">
+    <h1>GIAI ĐOẠN 1 — NỀN VỮNG (Tuần 1–8)</h1>
+    <p>Vun đắp các thứ JD gọi tên là điều kiện: C++, Python, math, và đào sâu câu hỏi phỏng vấn "bẫy".</p>
+</div>
+
+<div class="step-card">
+    <span class="step-number">1</span>
+    <h3>Tuần 1–3: C++ hiện đại — ngôn ngữ làm việc của AV <span class="level-badge level-deep">🔬 CẦN HIỂU SÂU</span></h3>
+    <p>Vì sao quan trọng: hầu hết JD planning/control viết code production bằng C++ (C++11/14/17). Nếu không vững, phỏng vấn kỹ thuật "chết" trước khi nói chuyện control.</p>
+    <ul>
+        <li><strong>Phải làm được:</strong> class, inheritance, RAII (smart pointer), STL (vector, map, algorithm), template cơ bản, lambda.</li>
+        <li><strong>Bài tập cuối tuần 3:</strong> viết lại thuật toán LQR/Simulation từ tài liệu Kalman bằng C++ thuần (không dùng matlab/python), output ra file CSV để vẽ so sánh.</li>
+        <li>Tài nguyên: LearnCpp.com (chương 1–20), CppCon playlist ngắn.</li>
+    </ul>
+</div>
+
+<div class="step-card">
+    <span class="step-number">2</span>
+    <h3>Tuần 4–5: Python cho phân tích dữ liệu <span class="level-badge level-apply">🔧 CHỈ CẦN CÔNG THỨC</span></h3>
+    <p>JD VinFast yêu cầu: "Python for data analysis, plotting and test automation". Đây không phải viết web — là numpy/scipy/matplotlib để phân tích log đo.</p>
+    <ul>
+        <li>numpy (mảng, ma trận), scipy.signal (lọc, bode), matplotlib (plot dữ liệu encoder/IMU).</li>
+        <li>Bài tập: lấy log từ đồ án STM32 của bạn, vẽ vận tốc theo thời gian, tính sai số bám, vẽ biểu đồ so sánh trước/sau khi chỉnh PID.</li>
+        <li><strong>Kết quả phải có:</strong> 1 script Python public trong repo phân tích dữ liệu thật.</li>
+    </ul>
+</div>
+
+<div class="step-card">
+    <span class="step-number">3</span>
+    <h3>Tuần 6–8: Đào sâu 4 câu hỏi "bẫy" phỏng vấn control <span class="level-badge level-deep">🔬 CẦN HIỂU SÂU</span></h3>
+    <p>Đây là phần chênh lệch giữa ứng viên "học qua" và ứng viên "hiểu bản chất". Mỗi chủ đề: định nghĩa + ví dụ số + tại sao nó phá hỏng hệ thống thật.</p>
+    <ol>
+        <li><strong>Ổn định &amp; margin (GM/PM):</strong> vì sao gain lớn quá → dao động; PM &lt; 45° → vọt lố. Vẽ Bode/Nyquist cho 1 hệ thật (motor DC).</li>
+        <li><strong>Anti-windup:</strong> actuator bão hòa → tích phân tích lũy → overshoot khi hết bão hòa. Demo số: PID giữ vị trí với giới hạn lực ±10N, so sánh có/không anti-windup.</li>
+        <li><strong>Nhận dạng hệ thống:</strong> lấy dữ liệu bước nhảy (step response) → ước lượng mô hình bậc nhất/bậc hai → kiểm tra mô hình sai chỗ nào. VinFast hỏi "where it stops being valid".</li>
+        <li><strong>Rời rạc hóa &amp; chu kỳ lấy mẫu:</strong> Euler vs ZOH; quy tắc $T_s \le 1/(10\omega_n)$. Vì sao $T_s$ quá lớn → mất ổn định.</li>
+    </ol>
+    <div class="answer-section">
+        <span class="box-title">✅ Tiêu chí đạt: kể lại được bằng lời</span>
+        <p>Bạn phải giải thích được từng câu bằng tiếng Việt lẫn tiếng Anh, kèm ví dụ số. Nếu chỉ nói được khái niệm chung, chưa đạt.</p>
+    </div>
+</div>
+
+<div class="part-header">
+    <h1>GIAI ĐOẠN 2 — ROBOTICS STACK (Tuần 9–16)</h1>
+    <p>Bịt lỗ hổng lớn nhất: ROS2 + Gazebo. Đây là thứ khiến CV bạn nổi bật so với sinh viên tự động hóa thông thường.</p>
+</div>
+
+<div class="step-card">
+    <span class="step-number">1</span>
+    <h3>Tuần 9–10: ROS2 nền tảng <span class="level-badge level-deep">🔬 CẦN HIỂU SÂU</span></h3>
+    <ul>
+        <li>Cài Ubuntu (hoặc Docker), ROS2 Humble, tạo workspace.</li>
+        <li>Bắt buộc hiểu: node, topic, publish/subscribe, service, action, tf2 (coordinate frames).</li>
+        <li>Bài tập: viết node C++ publish vị trí robot từ odometry giả; node Python subscribe và log.</li>
+    </ul>
+</div>
+
+<div class="step-card">
+    <span class="step-number">2</span>
+    <h3>Tuần 11–13: Gazebo + điều khiển robot <span class="level-badge level-deep">🔬 CẦN HIỂU SÂU</span></h3>
+    <ul>
+        <li>Spawn TurtleBot3 trong Gazebo (simulation), đọc /odom, /scan.</li>
+        <li>Tự viết (KHÔNG dùng package có sẵn) node <strong>Pure Pursuit</strong> bám một đường thẳng/đường cong.</li>
+        <li>Nâng cấp: cài LQR cho động học kinematic của robot (vận tốc tuyến tính + góc) và so sánh với Pure Pursuit.</li>
+        <li><strong>Kết quả phải có:</strong> video robot bám quỹ đạo ổn định trong Gazebo + đồ thị sai số bám theo thời gian.</li>
+    </ul>
+</div>
+
+<div class="step-card">
+    <span class="step-number">3</span>
+    <h3>Tuần 14–16: Planning cơ bản + hoàn thiện Repo 1 <span class="level-badge level-concept">🔎 HIỂU Ý TƯỞNG</span></h3>
+    <ul>
+        <li>Hiểu bản chất A* / D* / RRT / RRT* (dùng OMPL hoặc tự viết bản đơn giản): vì sao mỗi cái tồn tại, trade-off.</li>
+        <li>Tích hợp: robot tự tìm đường đến mục tiêu bằng A* rồi bám bằng LQR — đây là "mini autonomous stack" hoàn chỉnh.</li>
+        <li>Viết README chuẩn kỹ thuật: kiến trúc, cách chạy, kết quả đo, hạn chế. Commit toàn bộ lên GitHub.</li>
+    </ul>
+    <div class="warning-box">
+        <span class="box-title">⚠️ Quy tắc vàng</span>
+        <p>Mỗi tuần phải có <strong>thứ gì đó commit được</strong>. Không có commit trong 1 tuần = tuần đó không học đúng thứ cần.</p>
+    </div>
+</div>
+
+<div class="part-header">
+    <h1>GIAI ĐOẠN 3 — AV-SPECIFIC &amp; NMPC (Tuần 17–24)</h1>
+    <p>Biến khóa luận NMPC thành bằng chứng trúng tuyển, học planning nâng cao.</p>
+</div>
+
+<div class="step-card">
+    <span class="step-number">1</span>
+    <h3>Tuần 17–18: Động học xe + Pure Pursuit cho ô tô <span class="level-badge level-deep">🔬 CẦN HIỂU SÂU</span></h3>
+    <ul>
+        <li>Bicycle model + Ackermann steering: mô hình, giới hạn (low-speed valid, high-speed cần dynamics).</li>
+        <li>Cài đặt Pure Pursuit cho F1TENTH (tài liệu đã có) — chạy thử trên mô phỏng CARLA hoặc F1TENTH sim nếu có máy.</li>
+        <li>Đọc hiểu vì sao look-ahead distance quyết định độ ổn định (giảm → dao động, tăng → cắt góc).</li>
+    </ul>
+</div>
+
+<div class="step-card">
+    <span class="step-number">2</span>
+    <h3>Tuần 19–22: NMPC thực hành — Repo 2 <span class="level-badge level-deep">🔬 CẦN HIỂU SÂU</span></h3>
+    <ul>
+        <li>Từ khóa luận: dựng lại bài toán NMPC trong CasADi (hoặc acados) như 1 project có cấu trúc: model.py, solver.py, simulate.py, plot.py.</li>
+        <li>Bắt buộc có: constraint (giới hạn vận tốc, giới hạn steering), horizon, cost function rõ ràng.</li>
+        <li>Viết thí nghiệm tuning: thay đổi Q/R và horizon, ghi lại thời gian solve + chất lượng bám → bảng so sánh.</li>
+        <li><strong>Kết quả phải có:</strong> video/đồ thị xe bám quỹ đạo, thống kê thời gian giải (real-time capability) — đây là bằng chứng "thời gian thực" mà JD yêu cầu.</li>
+    </ul>
+</div>
+
+<div class="step-card">
+    <span class="step-number">3</span>
+    <h3>Tuần 23–24: Planning nâng cao + chuẩn bị ứng tuyển <span class="level-badge level-concept">🔎 HIỂU Ý TƯỞNG</span></h3>
+    <ul>
+        <li>Hybrid A* (đậu xe), lattice planner, MPC-based planning: đọc bản chất, đừng cài đặt hoàn chỉnh.</li>
+        <li>Mock interview: tự phỏng vấn 5 chủ đề control + trình bày 2 repo trước bạn bè/mentor.</li>
+        <li>Soạn CV 1 trang: 2 repo + giải AutoRace + đồ án STM32-CAN + khóa luận. Viết bằng tiếng Anh.</li>
+        <li>Nộp hồ sơ VinFast (Hà Nội), Viettel Digital Talent (hạn 15/3/2026), Modern System AGV/AMR, RTC.</li>
+    </ul>
+</div>
+<div class="part-header-purple" id="part2">
+    <h1>PHẦN 2 — NHÁNH DU HỌC: LỘ TRÌNH HỌC BỔNG THẠC SĨ</h1>
+    <p>Mục tiêu: đủ hồ sơ giành học bổng thạc sĩ robotics/control (Châu Âu, Nhật, Úc, Mỹ). Không phải "đủ để được nhận" mà là "đủ để được tài trợ".</p>
+</div>
+
+<div class="definition">
+    <span class="box-title">🎯 Bức tranh hồ sơ hiện tại (cân nhắc thẳng)</span>
+    <ul>
+        <li><strong>Đã đủ cổng tuyển sinh:</strong> GPA 3.8/4.0 (chuẩn Mỹ ≥3.2, ANU ≥5.0/7.0, Purdue ≥3.0) ✓ · Bằng 4 năm kỹ thuật ✓ · Calculus + Linear Algebra (trong chương trình TĐH) ✓.</li>
+        <li><strong>Còn thiếu để giành học bổng:</strong> IELTS 6.5+ (hiện 6.0 — chạm đáy yêu cầu) · chiều sâu nghiên cứu công khai được · 2–3 thư giới thiệu mạnh.</li>
+        <li><strong>Lợi thế hiếm:</strong> giải nhì FPT AutoRace + Best Paper EIUSC — đây là thứ hội đồng học bổng nhớ, đừng giấu.</li>
+    </ul>
+</div>
+
+<div class="important-note">
+    <span class="box-title">⚡ Điểm mấu chốt về chi phí</span>
+    <p><strong>Đừng đi du học tự túc.</strong> Thạc sĩ robotics 2 năm tự túc ở Mỹ/Châu Âu có thể tốn 40.000–80.000 USD. Con đường đúng là <strong>học bổng</strong>: Erasmus Mundus Joint Masters (Châu Âu, toàn phần), DAAD (Đức), MEXT (Nhật), học bổng các trường (EPFL, TU Munich, Aalto...). Tất cả đều xét theo GPA + nghiên cứu + IELTS + LoR — không phải tiền.</p>
+</div>
+
+<div class="part-header-orange">
+    <h1>GIAI ĐOẠN A — NỀN TẢNG HỒ SƠ (Tuần 1–12)</h1>
+    <p>Xử lý 2 thiếu hụt dễ sửa trước: IELTS và tài sản nghiên cứu.</p>
+</div>
+
+<div class="step-card">
+    <span class="step-number">1</span>
+    <h3>Tuần 1–10: IELTS 6.5 → 7.0 <span class="level-badge level-deep">🔬 CẦN HIỂU SÂU</span></h3>
+    <ul>
+        <li>Mục tiêu: Overall 6.5 (một số trường top cần 7.0) với tối thiểu không kỹ năng nào dưới 6.0.</li>
+        <li>Phân bổ: Writing (yếu nhất thường) 40% thời gian, Reading (dễ cải thiện nhất) 20%, Listening 20%, Speaking 20%.</li>
+        <li>Mẹo kỹ thuật: luyện đọc tài liệu IEEE/tài liệu ROS2 bằng tiếng Anh — vừa nâng Reading vừa học thuật ngữ control.</li>
+        <li>Đăng ký thi <strong>cuối tuần 10</strong>; nếu chưa đạt, đăng ký lại ngay (thi lại không đáng sợ, chỉ tốn phí).</li>
+    </ul>
+</div>
+
+<div class="step-card">
+    <span class="step-number">2</span>
+    <h3>Tuần 3–12: Tài sản nghiên cứu công khai <span class="level-badge level-deep">🔬 CẦN HIỂU SÂU</span></h3>
+    <ul>
+        <li><strong>Biến Best Paper EIU thành preprint:</strong> nâng cấp thành dạng arXiv/ResearchGate/Google Scholar hồ sơ, viết abstract tiếng Anh chuẩn. Hội đồng học bổng đọc được.</li>
+        <li><strong>Khóa luận NMPC → technical report:</strong> 10–15 trang tiếng Anh: vấn đề, mô hình, phương pháp, kết quả, so sánh. Public GitHub.</li>
+        <li><strong>Repo ROS2/Gazebo từ Phần 1</strong> cũng tính — có 1 project robotics chạy được là điểm cộng nghiên cứu.</li>
+        <li><strong>Chuẩn bị 2 thư giới thiệu:</strong> giảng viên hướng dẫn khóa luận + giảng viên đồ án STM32/PLC. Nhờ sớm, cung cấp 1 trang tóm tắt thành tựu để họ viết chi tiết.</li>
+    </ul>
+</div>
+
+<div class="part-header-orange">
+    <h1>GIAI ĐOẠN B — XÁC ĐỊNH MỤC TIÊU &amp; NỘP (Tuần 13–24)</h1>
+    <p>Làm đúng 1 bộ hồ sơ mạnh, không phải nộp tràn lan.</p>
+</div>
+
+<div class="step-card">
+    <span class="step-number">1</span>
+    <h3>Tuần 13–16: Chọn trường &amp; lập bảng so sánh</h3>
+    <p>Tiêu chí lọc 3–5 trường:</p>
+    <ul>
+        <li><strong>Học bổng toàn phần:</strong> ưu tiên Erasmus Mundus, DAAD, MEXT, học bổng nội bộ trường (EPFL, TUM, Aalto, TU Delft).</li>
+        <li><strong>Khớp ngành:</strong> chương trình có nhánh Control/Robotics/Autonomous Systems (không phải chương trình "cơ khí chung chung").</li>
+        <li><strong>Deadline:</strong> đa số nộp tháng 11–1 cho năm sau. Lập bảng: trường | học bổng | deadline | yêu cầu IELTS | ngành.</li>
+    </ul>
+    <div class="example-box">
+        <span class="box-title">✅ Ví dụ 3 lựa chọn khớp ngành</span>
+        <p>Erasmus Mundus Master on Autonomous Systems (Châu Âu, toàn phần, 1 program nhiều trường) · TU Munich Robotics (Đức, học phí thấp) · MEXT Nhật Bản Robotics (toàn phần chính phủ). Đây là hướng nghiên cứu, không phải danh sách đầy đủ — cần tự lọc theo deadline từng năm.</p>
+    </div>
+</div>
+
+<div class="step-card">
+    <span class="step-number">2</span>
+    <h3>Tuần 17–20: Statement of Purpose (SoP) + CV</h3>
+    <ul>
+        <li><strong>SoP (2 trang):</strong> cấu trúc — vì sao chọn ngành này (câu chuyện thật từ AutoRace), vì sao trường này (nghiên cứu cụ thể của trường), năng lực (khóa luận NMPC + ROS2), mục tiêu sau khi tốt nghiệp. Không liệt kê GPA, hãy kể bằng chứng.</li>
+        <li><strong>CV nghiên cứu 1–2 trang:</strong> giáo dục, giải thưởng, dự án, publication, kỹ năng (C++/Python/ROS2/CasADi/STM32/CAN).</li>
+        <li>Nhờ người biết tiếng Anh học thuật review. Viết lại ít nhất 3 bản nháp.</li>
+    </ul>
+</div>
+
+<div class="step-card">
+    <span class="step-number">3</span>
+    <h3>Tuần 21–24: Nộp hồ sơ &amp; chuẩn bị phỏng vấn</h3>
+    <ul>
+        <li>Nộp trước deadline 2 tuần (tránh lỗi hệ thống).</li>
+        <li>Để phòng: nộp song song 1–2 trường có deadline muộn hơn (backup).</li>
+        <li>Phỏng vấn học bổng: chuẩn bị trình bày 3 phút về khóa luận NMPC + vì sao robotics. Tập nói trước gương, thu âm, sửa.</li>
+    </ul>
+</div>
+
+<div class="warning-box">
+    <span class="box-title">⚠️ Tránh 3 sai lầm phổ biến</span>
+    <ol>
+        <li><strong>Nộp trường không có học bổng toàn phần</strong> → trúng tuyển nhưng không đi được. Lọc học bổng trước, trường sau.</li>
+        <li><strong>SoP viết chung chung</strong> ("I am passionate about robotics") → hội đồng đọc 300 hồ sơ như vậy. Phải trích tên nghiên cứu cụ thể của trường.</li>
+        <li><strong>Để IELTS muộn</strong> → thi không kịp deadline. Thi IELTS trước, nộp hồ sơ sau.</li>
+    </ol>
+</div>
+<div class="part-header-intro" id="part3">
+    <h1>PHẦN 3 — CHECKLIST ĐÁNH GIÁ &amp; QUIZ TỰ KIỂM TRA</h1>
+    <p>Đo lường mình đang ở đâu mỗi 4 tuần. Nếu 2 lần liên tiếp không đạt tiêu chí, dừng lại đọc lại Phần 0.</p>
+</div>
+
+<div class="cheat-sheet">
+    <span class="box-title">✅ Checklist 4 tuần (in ra, đánh dấu)</span>
+    <ul>
+        <li>☐ Đã commit ≥ 3 lần trong 4 tuần qua lên GitHub (repo học tập/ROS2/NMPC).</li>
+        <li>☐ Có 1 đoạn code chạy được mới (không phải copy nguyên xi tutorial).</li>
+        <li>☐ Viết/đọc được 1 tài liệu kỹ thuật tiếng Anh (README, datasheet, ROS2 docs).</li>
+        <li>☐ Giải thích được 1 trong 4 chủ đề bẫy (margin, anti-windup, sysid, discretization) bằng lời.</li>
+        <li>☐ Ghi lại 1 câu hỏi bản thân chưa hiểu vào sổ (không tự lừa là đã hiểu).</li>
+    </ul>
+</div>
+
+<div class="quiz-section">
+    <h3>📝 Quiz 1 — Trắc nghiệm cốt lõi (áp dụng ngay sau khi học Giai đoạn 1)</h3>
+
+    <div class="quiz-question">
+        <strong>Q1.1</strong> Hệ liên tục ổn định tiệm cận khi các cực của hàm truyền nằm ở đâu trên mặt phẳng phức?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>Nửa trái mặt phẳng phức: $\text{Re}(\lambda) < 0$. Đây là nền cho mọi câu hỏi margin/stability của VinFast.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>Q1.2</strong> Một bộ điều khiển có Phase Margin 30°. Dự đoán hành vi vòng kín khi tăng gain hệ thống lên?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>PM 30° rất thấp (chuẩn tốt ≥ 60° trong thiết kế) → vòng kín sẽ dao động mạnh, vọt lố lớn; tăng gain thêm sẽ nhanh chóng chạm điểm $(-1, j0)$ và mất ổn định. LQR đảm bảo PM ≥ 60° — nhắc lại trong phỏng vấn để gây ấn tượng.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>Q1.3</strong> Vì sao anti-windup cần thiết khi actuator bão hòa?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>Khi u chạm giới hạn, sai số vẫn lớn → khâu tích phân vẫn tích lũy (windup) dù hệ thống không tăng nữa. Khi hết bão hòa, tích phân dư đó gây overshoot lớn/mất ổn định. Anti-windup "nhả" tích phân khi u bão hòa.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>Q1.4</strong> Quy tắc chọn chu kỳ lấy mẫu $T_s$ so với tần số tự nhiên $\omega_n$ của hệ?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>Ngón tay cái: $T_s \le \dfrac{1}{10\omega_n}$ (hoặc $\le \frac{1}{10|\lambda_{max}|}$). Lấy mẫu quá thô → xấp xỉ rời rạc sai, mất ổn định vòng kín dù bộ điều khiển liên tục vốn ổn định.</p>
+    </div>
+</div>
+
+<div class="quiz-section">
+    <h3>📝 Quiz 2 — Kiến thức robotics/planning (sau Giai đoạn 2–3)</h3>
+
+    <div class="quiz-question">
+        <strong>Q2.1</strong> Pure Pursuit dùng thông tin gì và tham số nào quyết định độ ổn định bám?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>Dùng look-ahead point trên đường tham chiếu cách xe một khoảng $L_d$, tính góc lái $\delta = \arctan(2L\sin\alpha / L_d)$. $L_d$ nhỏ → bám sát nhưng dao động; $L_d$ lớn → cắt góc. Nhắc đến trade-off này khi phỏng vấn.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>Q2.2</strong> A* và RRT* khác nhau bản chất gì, khi nào dùng cái nào?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>A* = tìm kiếm trên lưới rời rạc (deterministic, optimal với heuristic admissible, phù hợp map lưới). RRT* = lấy mẫu ngẫu nhiên liên tục (phù hợp không gian chiều cao, động học phức tạp, không cần lưới). AV dùng hybrid A* cho đậu xe vì cần xét hướng xe.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>Q2.3</strong> NMPC khác MPC ở điểm gì, và vì sao cần CasADi/acados?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>MPC giải QP (hệ tuyến tính, cost bậc 2) — nghiệm nhanh, đảm bảo hội tụ. NMPC giải bài toán phi tuyến (NLP) với model/cost phi tuyến — khó hơn, cần solver tối ưu phi tuyến. CasADi tự động đạo hàm (AD) cho NLP, acados tối ưu real-time (code generation, SQP-RTI) — đúng nhu cầu F1TENTH.</p>
+    </div>
+</div>
+
+<div class="quiz-section">
+    <h3>📝 Quiz 3 — Kiến thức du học (sau Phần 2)</h3>
+
+    <div class="quiz-question">
+        <strong>Q3.1</strong> Sắp xếp thứ tự ưu tiên khi chọn chương trình thạc sĩ để được tài trợ?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>1) Học bổng toàn phần có hay không (Erasmus, DAAD, MEXT, học bổng trường) → 2) Chương trình có nhánh Control/Robotics/Autonomous không → 3) Deadline &amp; IELTS khớp với lộ trình của bạn.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>Q3.2</strong> Hồ sơ GPA 3.8 + IELTS 6.0 + giải AutoRace + Best Paper — thiếu gì để giành học bổng?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án</span>
+        <p>IELTS 6.5+ (nâng cao điểm ngưỡng) + tài sản nghiên cứu công khai được (preprint từ Best Paper + technical report khóa luận NMPC) + 2 thư giới thiệu mạnh. Điểm số đã qua cổng, nhưng học bổng cạnh tranh bằng chiều sâu nghiên cứu.</p>
+    </div>
+</div>
+
+<div class="example-box">
+    <span class="box-title">🎯 Tiêu chí đạt của toàn bộ lộ trình</span>
+    <ul>
+        <li>Đạt 100% câu hỏi Quiz 1, 2, 3 (tự trả lời bằng lời, không nhìn đáp án).</li>
+        <li>Có ≥ 2 repo công khai chạy được (ROS2/Gazebo + NMPC F1TENTH).</li>
+        <li>IELTS ≥ 6.5 (nhánh du học) HOẶC hồ sơ đã nộp 2+ công ty (nhánh AV).</li>
+    </ul>
+</div>
+
+<div class="part-header" id="ket">
+    <h1>TỔNG KẾT &amp; QUYẾT ĐỊNH 2 ĐƯỜNG</h1>
+    <p>Không có câu trả lời "đúng", có câu trả lời "khớp hoàn cảnh".</p>
+</div>
+
+<div class="important-note">
+    <span class="box-title">⚡ Điểm chung của 2 nhánh (làm cả hai vẫn được)</span>
+    <ul>
+        <li>24 tuần đầu <strong>gần như trùng nhau:</strong> C++, Python, math, 4 chủ đề bẫy, ROS2/Gazebo, NMPC repo. Đây là nền tảng chung — bạn không cần chọn ngay hôm nay.</li>
+        <li>Điểm rẽ chỉ ở: <strong>IELTS 6.5+ và preprint nghiên cứu</strong> (du học) so với <strong>CV tiếng Anh + nộp hồ sơ</strong> (AV).</li>
+    </ul>
+</div>
+
+<div class="warning-box">
+    <span class="box-title">⚠️ Lời khuyên lạnh lùng cuối cùng</span>
+    <p>Hai con đường đều cần <strong>cùng một thứ: 2 repo chạy được + tiếng Anh kỹ thuật</strong>. Vậy câu hỏi không phải "chọn AV hay du học" mà là "bắt đầu ngay hôm nay với ROS2 hay chờ quyết định?" — Nếu bạn đọc tới đây mà chưa cài Ubuntu/ROS2, bạn đang học lý thuyết để trì hoãn thực hành. Mở terminal, cài Docker, spawn con TurtleBot đầu tiên. Phần còn lại sẽ tự bật ra đường đi.</p>
+</div>
+
+<div class="summary-box">
+    <h2>🎯 Tổng Kết</h2>
+    <ul>
+        <li><strong>Thị trường trả tiền cho bằng chứng:</strong> VinFast nói rõ fresh grad cần hands-on control work — 2 repo chạy được là trọng tâm.</li>
+        <li><strong>Lỗ hổng thật:</strong> ROS2/Gazebo, MPC chạy thật (CasADi/acados), IELTS 6.5+ — không phải lý thuyết điều khiển (bạn đã vững).</li>
+        <li><strong>Nhánh AV (24 tuần):</strong> nền → robotics stack → AV-specific + NMPC. Đích: nộp VinFast/Viettel/Modern System.</li>
+        <li><strong>Nhánh Du học (24 tuần):</strong> IELTS → preprint + technical report → SoP/CV → nộp học bổng toàn phần (Erasmus/DAAD/MEXT).</li>
+        <li><strong>70/30:</strong> 70% thời gian thực hành (code, commit), 30% đọc thêm. Không commit trong 1 tuần = tuần đó không học đúng thứ cần.</li>
+        <li><strong>Không cần chọn ngay:</strong> 24 tuần đầu trùng nhau. Bắt đầu bằng 1 con TurtleBot trong Gazebo — đường sẽ tự hiện.</li>
+    </ul>
+</div>
+
+<div style="text-align: center; margin: 35px 0; color: var(--text-secondary); font-size: 0.9em;">
+    <p>— Hết tài liệu Lộ Trình Học Robotics &amp; Control —</p>
+    <p><em>Nhấn nút "📄 Xuất PDF" ở góc phải dưới để lưu thành PDF</em></p>
+</div>
+
+</body>
+</html>

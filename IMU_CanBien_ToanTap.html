@@ -1,0 +1,1681 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tài Liệu Học Tập Toàn Tập: Cảm Biến IMU</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+    window.MathJax = {
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']],
+            tags: 'ams'
+        },
+        chtml: { scale: 1 }
+    };
+    </script>
+    <style>
+        :root {
+            --primary: #0f172a;
+            --accent: #2563eb;
+            --accent-light: #3b82f6;
+            --bg: #ffffff;
+            --text: #1e293b;
+            --text-secondary: #475569;
+            --quiz-bg: #f0f9ff;
+            --quiz-border: #bae6fd;
+            --answer-bg: #f0fdf4;
+            --answer-border: #86efac;
+            --warning-bg: #fffbeb;
+            --warning-border: #fde68a;
+            --code-bg: #0f172a;
+            --border: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+            font-size: 16.5px;
+            line-height: 1.8;
+            color: var(--text);
+            background: var(--bg);
+            max-width: 920px;
+            margin: 0 auto;
+            padding: 40px 25px;
+        }
+
+        /* ===== COVER PAGE ===== */
+        .cover-page {
+            text-align: center;
+            padding: 60px 20px;
+            border-bottom: 3px solid var(--accent);
+            margin-bottom: 50px;
+            background: #f8fafc;
+            border-radius: 12px;
+        }
+        .cover-page h1 {
+            font-size: 2.4em;
+            color: var(--primary);
+            margin-bottom: 12px;
+            line-height: 1.3;
+            border: none;
+            padding: 0;
+        }
+        .cover-page .subtitle {
+            font-size: 1.35em;
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: 25px;
+        }
+        .cover-page .tagline {
+            font-size: 1.05em;
+            color: var(--text-secondary);
+            font-style: italic;
+            margin-bottom: 30px;
+        }
+        .cover-page .meta {
+            font-size: 0.95em;
+            color: var(--text-secondary);
+        }
+
+        /* ===== HEADINGS ===== */
+        h1 { font-size: 1.85em; color: var(--primary); margin: 45px 0 20px; border-bottom: 2px solid var(--accent); padding-bottom: 8px; }
+        h2 { font-size: 1.4em; color: var(--accent); margin: 35px 0 15px; }
+        h3 { font-size: 1.18em; color: var(--primary); margin: 25px 0 12px; }
+        h4 { font-size: 1.05em; color: var(--text); margin: 18px 0 8px; }
+
+        .part-header {
+            background: linear-gradient(135deg, #1e3a8a, #2563eb);
+            color: white;
+            padding: 28px 35px;
+            border-radius: 10px;
+            margin: 50px 0 30px;
+            box-shadow: var(--shadow);
+        }
+        .part-header h1 { color: white; border: none; margin: 0; font-size: 1.7em; padding: 0; }
+        .part-header p { color: #dbeafe; margin-top: 8px; font-size: 1.05em; }
+
+        .part-header-intro {
+            background: linear-gradient(135deg, #059669, #10b981);
+            color: white;
+            padding: 28px 35px;
+            border-radius: 10px;
+            margin: 40px 0 30px;
+            box-shadow: var(--shadow);
+        }
+        .part-header-intro h1 { color: white; border: none; margin: 0; font-size: 1.7em; padding: 0; }
+        .part-header-intro p { color: #ecfdf5; margin-top: 8px; font-size: 1.05em; }
+
+        .part-header-danger {
+            background: linear-gradient(135deg, #7f1d1d, #dc2626);
+            color: white;
+            padding: 28px 35px;
+            border-radius: 10px;
+            margin: 50px 0 30px;
+            box-shadow: var(--shadow);
+        }
+        .part-header-danger h1 { color: white; border: none; margin: 0; font-size: 1.7em; padding: 0; }
+        .part-header-danger p { color: #fee2e2; margin-top: 8px; font-size: 1.05em; }
+
+        .part-header-purple {
+            background: linear-gradient(135deg, #4c1d95, #7c3aed);
+            color: white;
+            padding: 28px 35px;
+            border-radius: 10px;
+            margin: 50px 0 30px;
+            box-shadow: var(--shadow);
+        }
+        .part-header-purple h1 { color: white; border: none; margin: 0; font-size: 1.7em; padding: 0; }
+        .part-header-purple p { color: #ede9fe; margin-top: 8px; font-size: 1.05em; }
+
+        .part-header-orange {
+            background: linear-gradient(135deg, #9a3412, #ea580c);
+            color: white;
+            padding: 28px 35px;
+            border-radius: 10px;
+            margin: 50px 0 30px;
+            box-shadow: var(--shadow);
+        }
+        .part-header-orange h1 { color: white; border: none; margin: 0; font-size: 1.7em; padding: 0; }
+        .part-header-orange p { color: #ffedd5; margin-top: 8px; font-size: 1.05em; }
+
+        /* ===== CONTENT ===== */
+        p { margin: 12px 0; text-align: justify; }
+        ul, ol { margin: 10px 0 15px 25px; }
+        li { margin: 6px 0; }
+
+        strong { color: #0f172a; font-weight: 600; }
+
+        .highlight {
+            background: #fef08a;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        blockquote {
+            border-left: 4px solid var(--accent);
+            background: #f8fafc;
+            padding: 15px 20px;
+            margin: 20px 0;
+            font-style: italic;
+            color: var(--text-secondary);
+            border-radius: 0 8px 8px 0;
+        }
+
+        /* ===== DEFINITION / THEOREM BOXES ===== */
+        .definition, .theorem, .important-note, .example-box, .analogy-box, .warning-box {
+            padding: 20px 24px;
+            border-radius: 8px;
+            margin: 22px 0;
+            border-left: 5px solid;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .definition {
+            background: #eff6ff;
+            border-color: #3b82f6;
+        }
+        .definition .box-title { color: #1d4ed8; }
+        
+        .theorem {
+            background: #faf5ff;
+            border-color: #a855f7;
+        }
+        .theorem .box-title { color: #7e22ce; }
+        
+        .important-note {
+            background: var(--warning-bg);
+            border-color: #f59e0b;
+        }
+        .important-note .box-title { color: #b45309; }
+        
+        .example-box {
+            background: #f0fdf4;
+            border-color: #22c55e;
+        }
+        .example-box .box-title { color: #15803d; }
+
+        .analogy-box {
+            background: #fff7ed;
+            border-color: #ea580c;
+        }
+        .analogy-box .box-title { color: #c2410c; }
+
+        .warning-box {
+            background: #fef2f2;
+            border-color: #ef4444;
+        }
+        .warning-box .box-title { color: #b91c1c; }
+
+        .box-title {
+            font-weight: 700;
+            font-size: 1.05em;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        /* ===== STEP BY STEP CARDS ===== */
+        .step-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-left: 4px solid var(--accent);
+            border-radius: 6px;
+            padding: 16px 20px;
+            margin: 14px 0;
+        }
+        .step-number {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: 700;
+            margin-right: 8px;
+        }
+
+        /* ===== QUIZ ===== */
+        .quiz-section {
+            background: var(--quiz-bg);
+            border: 1px solid var(--quiz-border);
+            border-radius: 10px;
+            padding: 22px 26px;
+            margin: 30px 0;
+        }
+        .quiz-section h3 {
+            color: #0369a1;
+            margin-top: 0;
+            font-size: 1.15em;
+        }
+        .quiz-question {
+            margin: 15px 0 8px;
+        }
+        .quiz-question strong {
+            color: #0284c7;
+        }
+
+        .answer-section {
+            background: var(--answer-bg);
+            border: 1px solid var(--answer-border);
+            border-radius: 8px;
+            padding: 18px 22px;
+            margin: 10px 0 20px;
+        }
+        .answer-section .box-title {
+            color: #16a34a;
+        }
+
+        /* ===== TABLE ===== */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.95em;
+        }
+        th, td {
+            border: 1px solid var(--border);
+            padding: 10px 14px;
+            text-align: left;
+        }
+        th {
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+        }
+        tr:nth-child(even) { background: #f8fafc; }
+        tr:hover { background: #f1f5f9; }
+
+        /* ===== CODE ===== */
+        pre {
+            background: var(--code-bg);
+            color: #f8fafc;
+            padding: 18px 22px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: "Fira Code", Consolas, Monaco, monospace;
+            font-size: 0.88em;
+            line-height: 1.6;
+            margin: 20px 0;
+        }
+        code {
+            font-family: "Fira Code", Consolas, Monaco, monospace;
+            background: #f1f5f9;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            color: #b91c1c;
+        }
+        pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+        }
+
+        /* ===== TOC ===== */
+        .toc {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 25px 30px;
+            margin: 30px 0;
+        }
+        .toc h2 { margin-top: 0; color: var(--primary); }
+        .toc ul { list-style: none; margin-left: 0; }
+        .toc > ul > li {
+            margin: 8px 0;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        .toc > ul > li > ul > li {
+            font-weight: 400;
+            color: var(--text);
+            margin: 4px 0;
+            padding-left: 20px;
+        }
+        .toc a { color: inherit; text-decoration: none; }
+        .toc a:hover { color: var(--accent); text-decoration: underline; }
+
+        /* ===== PRINT ===== */
+        .print-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 12px 22px;
+            border-radius: 30px;
+            font-size: 0.95em;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(37,99,235,0.4);
+            transition: all 0.2s;
+            z-index: 1000;
+        }
+        .print-btn:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+        }
+
+        @media print {
+            body { padding: 15px; font-size: 11pt; max-width: 100%; }
+            .print-btn { display: none; }
+            .cover-page { padding: 40px 20px; }
+            .part-header, .part-header-intro, .part-header-danger, .part-header-purple, .part-header-orange { page-break-before: always; }
+            .quiz-section, .answer-section, .definition, .theorem, .example-box, .important-note, .analogy-box, .warning-box {
+                break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<button class="print-btn" onclick="window.print()">📄 Xuất PDF</button>
+
+<!-- COVER PAGE -->
+<div class="cover-page">
+    <h1>Tài Liệu Học Tập Toàn Tập</h1>
+    <div class="subtitle">CẢM BIẾN IMU — INERTIAL MEASUREMENT UNIT</div>
+    <div class="tagline">
+        Mổ xẻ từ Nguyên lý Vật lý MEMS → Thuật toán Tính góc &amp; Lọc nhiễu → Kết hợp cảm biến (Sensor Fusion) → Lập trình C++/Python Nhúng cho Robot &amp; Drone
+    </div>
+    <hr style="width: 50%; margin: 25px auto; border: none; border-top: 1px solid #cbd5e1;">
+    <div class="meta">
+        <p><strong>Chuyên ngành:</strong> Kỹ thuật Điều khiển, Robotics, Định vị dẫn đường (Navigation)</p>
+        <p><strong>Phương pháp Sư phạm:</strong> Cuốn chiếu từng bước từ Vật lý cơ bản → Công thức Toán → Lập trình thực tế trên MPU6050/MPU9250/BMI160</p>
+        <p><strong>Phiên bản:</strong> 1.0 (Hoàn chỉnh &amp; Đầy đủ Bổ trợ Kiến thức)</p>
+    </div>
+</div>
+
+<!-- TOC -->
+<div class="toc">
+    <h2>📋 Mục Lục Chi Tiết</h2>
+    <ul>
+        <li><a href="#part0">PHẦN 0: TỔNG QUAN CẢM BIẾN IMU (Từ con số 0)</a>
+            <ul>
+                <li><a href="#s0.1">0.1 IMU là gì? Vì sao Robot/Drone cần IMU?</a></li>
+                <li><a href="#s0.2">0.2 3 "giác quan" của IMU: Gia tốc kế, Con quay hồi chuyển, Từ kế</a></li>
+                <li><a href="#s0.3">0.3 Bảng so sánh các cảm biến trong IMU</a></li>
+                <li><a href="#s0.4">0.4 Các chip IMU phổ biến (MPU6050, MPU9250, BMI160, BNO055, LSM6DS33)</a></li>
+            </ul>
+        </li>
+        <li><a href="#part1">PHẦN 1: CẢM BIẾN GIA TỐC (ACCELEROMETER)</a>
+            <ul>
+                <li><a href="#s1.1">1.1 Nguyên lý vật lý: Định luật II Newton &amp; Khối lượng thử (Proof Mass)</a></li>
+                <li><a href="#s1.2">1.2 Cấu tạo MEMS: Tụ điện vi sai (Differential Capacitor)</a></li>
+                <li><a href="#s1.3">1.3 Công thức tính góc nghiêng từ gia tốc kế</a></li>
+                <li><a href="#s1.4">1.4 Ưu - Nhược điểm của gia tốc kế</a></li>
+            </ul>
+        </li>
+        <li><a href="#part2">PHẦN 2: CẢM BIẾN VẬN TỐC GÓC (GYROSCOPE)</a>
+            <ul>
+                <li><a href="#s2.1">2.1 Nguyên lý vật lý: Hiệu ứng Coriolis</a></li>
+                <li><a href="#s2.2">2.2 Cấu tạo MEMS con quay hồi chuyển rung (Tuning Fork)</a></li>
+                <li><a href="#s2.3">2.3 Tích phân góc từ vận tốc góc &amp; hiện tượng trôi (Drift)</a></li>
+                <li><a href="#s2.4">2.4 Đơn vị đo: LSB/(°/s), độ nhạy (Sensitivity) &amp; thang đo (Full Scale)</a></li>
+            </ul>
+        </li>
+        <li><a href="#part3">PHẦN 3: CẢM BIẾN TỪ TRƯỜNG (MAGNETOMETER)</a>
+            <ul>
+                <li><a href="#s3.1">3.1 Nguyên lý: Hiệu ứng Hall &amp; Từ điện trở (MR)</a></li>
+                <li><a href="#s3.2">3.2 La bàn số: Tính góc heading từ từ trường</a></li>
+                <li><a href="#s3.3">3.3 Nhiễu sắt cứng / sắt mềm (Hard-Iron / Soft-Iron)</a></li>
+            </ul>
+        </li>
+        <li><a href="#part4">PHẦN 4: HỆ TỌA ĐỘ, GÓC EULER &amp; QUATERNION</a>
+            <ul>
+                <li><a href="#s4.1">4.1 Hệ tọa độ cơ thể (Body Frame) &amp; Hệ tọa độ thế giới (World Frame)</a></li>
+                <li><a href="#s4.2">4.2 Góc Euler Roll - Pitch - Yaw &amp; Ma trận xoay</a></li>
+                <li><a href="#s4.3">4.3 Vấn đề Gimbal Lock &amp; Quaternion giải cứu</a></li>
+                <li><a href="#s4.4">4.4 Đại số Quaternion cơ bản &amp; Chuyển đổi Euler ↔ Quaternion</a></li>
+            </ul>
+        </li>
+        <li><a href="#part5">PHẦN 5: KỸ THUẬT KẾT HỢP CẢM BIẾN (SENSOR FUSION)</a>
+            <ul>
+                <li><a href="#s5.1">5.1 Vì sao gia tốc kế + con quay một mình chưa đủ?</a></li>
+                <li><a href="#s5.2">5.2 Bộ lọc Bổ sung (Complementary Filter)</a></li>
+                <li><a href="#s5.3">5.3 Bộ lọc Mahony (Từ CF đến lọc lỗi xoay)</a></li>
+                <li><a href="#s5.4">5.4 Bộ lọc Madgwick (Gradient Descent)</a></li>
+                <li><a href="#s5.5">5.5 Bộ lọc Kalman cho IMU (Liên hệ tài liệu Kalman)</a></li>
+                <li><a href="#s5.6">5.6 Thuật toán AHRS (Attitude and Heading Reference System)</a></li>
+            </ul>
+        </li>
+        <li><a href="#part6">PHẦN 6: HIỆU CHUẨN CẢM BIẾN (CALIBRATION)</a>
+            <ul>
+                <li><a href="#s6.1">6.1 Tại sao phải hiệu chuẩn? Các loại sai số</a></li>
+                <li><a href="#s6.2">6.2 Hiệu chuẩn Bias (Zero-rate Offset) cho con quay</a></li>
+                <li><a href="#s6.3">6.3 Hiệu chuẩn 6 vị trí cho gia tốc kế (6-Position Calibration)</a></li>
+                <li><a href="#s6.4">6.4 Hiệu chuẩn Hard-Iron / Soft-Iron cho từ kế</a></li>
+                <li><a href="#s6.5">6.5 Thuật toán Least Squares tối ưu</a></li>
+            </ul>
+        </li>
+        <li><a href="#part7">PHẦN 7: LẬP TRÌNH THỰC TẾ (ARDUINO / STM32 / PYTHON)</a>
+            <ul>
+                <li><a href="#s7.1">7.1 Giao tiếp I2C/SPI &amp; Đọc dữ liệu thô MPU6050</a></li>
+                <li><a href="#s7.2">7.2 Code Arduino: Complementary Filter góc Roll/Pitch</a></li>
+                <li><a href="#s7.3">7.3 Code C++ Nhúng cho STM32 (Kalman 2D Roll/Pitch)</a></li>
+                <li><a href="#s7.4">7.4 Code Python: Phân tích dữ liệu IMU &amp; vẽ đồ thị</a></li>
+                <li><a href="#s7.5">7.5 Kiểm tra chất lượng góc sau lọc</a></li>
+            </ul>
+        </li>
+        <li><a href="#part8">PHẦN 8: ỨNG DỤNG THỰC TẾ CỦA IMU</a>
+            <ul>
+                <li><a href="#s8.1">8.1 Drone: Cân bằng &amp; giữ thăng bằng</a></li>
+                <li><a href="#s8.2">8.2 Robot thăng bằng 2 bánh (Self-balancing)</a></li>
+                <li><a href="#s8.3">8.3 Điện thoại thông minh &amp; Game</a></li>
+                <li><a href="#s8.4">8.4 Định vị quán tính (Inertial Navigation) &amp; Hạn chế</a></li>
+                <li><a href="#s8.5">8.5 Y tế &amp; Đeo đeo (Wearable)</a></li>
+            </ul>
+        </li>
+    </ul>
+</div>
+
+<!-- =========================================================== -->
+<!-- PHẦN 0: TỔNG QUAN                                           -->
+<!-- =========================================================== -->
+<div class="part-header-intro" id="part0">
+    <h1>PHẦN 0: TỔNG QUAN CẢM BIẾN IMU</h1>
+    <p>Nền tảng Bổ trợ — IMU là gì và 3 "giác quan" bên trong nó</p>
+</div>
+
+<div class="analogy-box">
+    <span class="box-title">💡 Tại sao Robot/Drone lại cần IMU?</span>
+    <p>Hãy tưởng tượng bạn nhắm mắt đứng trên một cái ván trượt đang nghiêng. Bạn KHÔNG thể giữ thăng bằng nếu không biết mình đang nghiêng về hướng nào. Một chiếc drone cũng vậy — nó cần biết <strong>chính xác mình đang nghiêng bao nhiêu độ (Roll/Pitch)</strong> và <strong>đang quay mặt về hướng nào (Yaw)</strong> để bộ điều khiển PID kịp thời đẩy cánh quạt giữ thăng bằng. IMU chính là <strong>"tai mắt trong"</strong> của hệ thống định vị.</p>
+</div>
+
+<h2 id="s0.1">0.1 IMU là gì?</h2>
+
+<div class="definition">
+    <span class="box-title">📖 Định nghĩa IMU (Inertial Measurement Unit)</span>
+    <p><strong>IMU</strong> (Đơn vị đo lường quán tính) là một thiết bị điện tử đo lực gia tốc (acceleration) và vận tốc góc (angular velocity) của vật mang nó, dựa trên <strong>nguyên lý quán tính</strong> — không cần bất kỳ tín hiệu tham chiếu bên ngoài nào (không cần GPS, không cần sóng vô tuyến).</p>
+    <p>Một IMU đầy đủ (thường gọi là 9 DOF — 9 bậc tự do) gồm 3 cảm biến:</p>
+    <ul>
+        <li><strong>Gia tốc kế (Accelerometer):</strong> 3 trục $(a_x, a_y, a_z)$ — đo gia tốc tịnh tiến.</li>
+        <li><strong>Con quay hồi chuyển (Gyroscope):</strong> 3 trục $(\omega_x, \omega_y, \omega_z)$ — đo vận tốc góc quay.</li>
+        <li><strong>Từ kế (Magnetometer):</strong> 3 trục $(m_x, m_y, m_z)$ — đo cường độ từ trường (dùng làm la bàn).</li>
+    </ul>
+</div>
+
+<h2 id="s0.2">0.2 3 "giác quan" của IMU</h2>
+
+<div class="step-card">
+    <span class="step-number">1</span> <strong>Gia tốc kế (Accelerometer)</strong> — "Cảm giác trọng lực"
+    <ul>
+        <li>Đo gia tốc tuyến tính theo 3 trục, gồm cả gia tốc trọng trường $g \approx 9.81 \,\text{m/s}^2$.</li>
+        <li>Khi vật đứng yên, nó luôn chỉ đo được vector trọng lực $[0, 0, g]$ (hoặc theo quy ước từng chip).</li>
+        <li>👉 <strong>Dùng để tính góc nghiêng tĩnh (Roll/Pitch)</strong> rất chính xác về lâu dài, nhưng bị nhiễu rung (vibration) làm rung giật tức thời.</li>
+    </ul>
+</div>
+
+<div class="step-card">
+    <span class="step-number">2</span> <strong>Con quay hồi chuyển (Gyroscope)</strong> — "Cảm giác xoay"
+    <ul>
+        <li>Đo tốc độ quay (°/s) quanh 3 trục.</li>
+        <li>👉 <strong>Tích phân theo thời gian sẽ ra góc quay</strong>: $\theta = \int \omega \, dt$. Cực kỳ mượt trong thời gian ngắn, nhưng sai số nhỏ tích lũy dần gây trôi (drift).</li>
+    </ul>
+</div>
+
+<div class="step-card">
+    <span class="step-number">3</span> <strong>Từ kế (Magnetometer)</strong> — "Cảm giác hướng Bắc"
+    <ul>
+        <li>Đo từ trường Trái Đất theo 3 trục.</li>
+        <li>👉 <strong>Dùng để tính góc hướng (Yaw/Heading)</strong> so với Bắc địa từ, bổ sung cho Yaw mà gia tốc kế không đo được.</li>
+    </ul>
+</div>
+
+<h2 id="s0.3">0.3 Bảng so sánh 3 cảm biến trong IMU</h2>
+
+<table>
+    <tr>
+        <th>Đặc điểm</th>
+        <th>Gia tốc kế</th>
+        <th>Con quay</th>
+        <th>Từ kế</th>
+    </tr>
+    <tr>
+        <td><strong>Đo đại lượng</strong></td>
+        <td>Gia tốc tịnh tiến ($\text{m/s}^2$)</td>
+        <td>Vận tốc góc ($^\circ$/s)</td>
+        <td>Từ trường ($\mu\text{T}$)</td>
+    </tr>
+    <tr>
+        <td><strong>Đo góc nào</strong></td>
+        <td>Roll &amp; Pitch (nghiêng)</td>
+        <td>Roll, Pitch, Yaw (tích phân)</td>
+        <td>Yaw / Heading (la bàn)</td>
+    </tr>
+    <tr>
+        <td><strong>Ưu điểm</strong></td>
+        <td>Không trôi theo thời gian</td>
+        <td>Mượt, phản hồi nhanh, ít nhiễu tức thời</td>
+        <td>Không trôi, cho hướng tuyệt đối</td>
+    </tr>
+    <tr>
+        <td><strong>Nhược điểm</strong></td>
+        <td>Nhiễu rung, nhạy chuyển động tịnh tiến</td>
+        <td>Trôi (drift) tích lũy theo thời gian</td>
+        <td>Nhạy nhiễu kim loại, từ trường xung quanh</td>
+    </tr>
+    <tr>
+        <td><strong>Vai trò chính</strong></td>
+        <td>Nguồn chuẩn lâu dài (long-term)</td>
+        <td>Nguồn chuẩn ngắn hạn (short-term)</td>
+        <td>Chuẩn tuyệt đối cho Yaw</td>
+    </tr>
+</table>
+
+<h2 id="s0.4">0.4 Các chip IMU phổ biến</h2>
+
+<table>
+    <tr>
+        <th>Vi mạch</th>
+        <th>DOF</th>
+        <th>Giao tiếp</th>
+        <th>Đặc điểm nổi bật</th>
+    </tr>
+    <tr>
+        <td><strong>MPU6050</strong> (InvenSense)</td>
+        <td>6 (Acc + Gyro)</td>
+        <td>I2C / SPI</td>
+        <td>Rẻ, phổ biến nhất trong dự án sinh viên, có DMP (Digital Motion Processor) tính góc trên chip.</td>
+    </tr>
+    <tr>
+        <td><strong>MPU9250</strong> (InvenSense)</td>
+        <td>9 (Acc + Gyro + Mag)</td>
+        <td>I2C / SPI</td>
+        <td>3 trục từ kế, đủ 9 DOF, dùng trong drone/robot cao cấp.</td>
+    </tr>
+    <tr>
+        <td><strong>BMI160</strong> (Bosch)</td>
+        <td>6 (Acc + Gyro)</td>
+        <td>I2C / SPI</td>
+        <td>Tiêu thụ điện cực thấp, bộ lọc tích hợp, dùng nhiều trong thiết bị đeo.</td>
+    </tr>
+    <tr>
+        <td><strong>BNO055</strong> (Bosch)</td>
+        <td>9 + Fusion</td>
+        <td>I2C / UART</td>
+        <td>Tích hợp sẵn thuật toán fusion, xuất ra góc Euler/quaternion trực tiếp — không cần viết code lọc.</td>
+    </tr>
+    <tr>
+        <td><strong>LSM6DS33</strong> (STMicro)</td>
+        <td>6 (Acc + Gyro)</td>
+        <td>I2C / SPI</td>
+        <td>Dùng trên Adafruit breakout, nhiều thang đo và ODR linh hoạt.</td>
+    </tr>
+    <tr>
+        <td><strong>ICM-20948</strong> (InvenSense)</td>
+        <td>9 (Acc + Gyro + Mag)</td>
+        <td>I2C / SPI</td>
+        <td>Thế hệ mới thay MPU9250, hiệu suất cao, tiêu thụ thấp.</td>
+    </tr>
+</table>
+
+<!-- Quiz 0 -->
+<div class="quiz-section">
+    <h3>📝 Quick Quiz 0 — Kiểm tra Kiến thức Nền Phần 0</h3>
+    
+    <div class="quiz-question">
+        <strong>Câu 1:</strong> IMU có 3 cảm biến cơ bản nào? Mỗi cảm biến đo đại lượng vật lý gì và mạnh/yếu ở khía cạnh nào?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án Câu 1:</span>
+        <p><strong>Gia tốc kế</strong> đo gia tốc tịnh tiến (gồm trọng lực) → mạnh: không trôi, dùng tính Roll/Pitch tĩnh; yếu: nhiễu rung. <strong>Con quay</strong> đo vận tốc góc → mạnh: mượt, đáp ứng nhanh; yếu: trôi tích lũy khi tích phân. <strong>Từ kế</strong> đo từ trường → mạnh: cho hướng tuyệt đối (Yaw); yếu: nhiễu kim loại xung quanh.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>Câu 2:</strong> "9 DOF" trong cụm từ IMU 9 DOF nghĩa là gì?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án Câu 2:</span>
+        <p>9 bậc tự do (Degrees of Freedom) = 3 trục gia tốc + 3 trục con quay + 3 trục từ kế. Mỗi cảm biến đóng góp 3 kênh đo trên 3 trục không gian X-Y-Z.</p>
+    </div>
+</div>
+
+<!-- =========================================================== -->
+<!-- PHẦN 1: ACCELEROMETER                                       -->
+<!-- =========================================================== -->
+<div class="part-header" id="part1">
+    <h1>PHẦN 1: CẢM BIẾN GIA TỐC (ACCELEROMETER)</h1>
+    <p>Nguyên lý Vật lý, Cấu tạo MEMS và Công thức tính góc nghiêng</p>
+</div>
+
+<h2 id="s1.1">1.1 Nguyên lý vật lý: Định luật II Newton &amp; Khối lượng thử</h2>
+
+<p>Trái tim của mọi gia tốc kế là <strong>khối lượng thử (proof mass)</strong> treo trên những "lò xo vi mô" (micro-springs). Khi IMU gia tốc, theo <strong>Định luật II Newton</strong>:</p>
+
+$$\boxed{F = m \cdot a}$$
+
+<p>Khối lượng thử có quán tính nên muốn <strong>đứng yên</strong> (giữ nguyên trạng thái), trong khi vỏ cảm biến bị kéo đi. Độ lệch $x$ của khối lượng so với vỏ tỉ lệ với lực $F$, mà lực lò xo tuân theo định luật Hooke $F = k \cdot x$. Từ đó:</p>
+
+$$F = k \cdot x = m \cdot a \implies \boxed{a = \frac{k}{m} \, x}$$
+
+<div class="important-note">
+    <span class="box-title">🔑 Ý tưởng cốt lõi:</span>
+    <p>Đo <strong>độ dịch chuyển $x$</strong> của khối lượng thử → nhân với hằng số tỉ lệ → thu được <strong>gia tốc $a$</strong>. Đây chính là nguyên lý hoạt động của 100% gia tốc kế MEMS hiện đại.</p>
+</div>
+
+<div class="warning-box">
+    <span class="box-title">⚠️ Lưu ý quan trọng về "gia tốc trọng trường":</span>
+    <p>Gia tốc kế KHÔNG phân biệt được gia tốc do trọng lực và gia tốc do chuyển động! Khi IMU đứng yên trên bàn, khối lượng thử bị Trái Đất hút xuống dưới, nên cảm biến vẫn "đọc" được $g \approx 9.81 \,\text{m/s}^2$ hướng xuống. Đây chính là nền tảng để tính góc nghiêng.</p>
+</div>
+
+<h2 id="s1.2">1.2 Cấu tạo MEMS: Tụ điện vi sai (Differential Capacitor)</h2>
+
+<p>Làm sao đo độ dịch chuyển $x$ cực nhỏ (chỉ vài nanomet) của khối lượng thử? Câu trả lời là <strong>tụ điện vi sai</strong>:</p>
+
+<ul>
+    <li>Khối lượng thử đóng vai trò <strong>bản cực động</strong> (movable plate).</li>
+    <li>Hai bản cực tĩnh cố định nằm 2 bên tạo thành 2 tụ điện $C_1$ và $C_2$.</li>
+    <li>Khi khối lượng dịch chuyển: khoảng cách tới $C_1$ giảm → $C_1$ tăng; khoảng cách tới $C_2$ tăng → $C_2$ giảm.</li>
+</ul>
+
+<p>Điện dung tụ điện phẳng: $C = \varepsilon \dfrac{A}{d}$, với $A$ là diện tích bản cực, $d$ là khoảng cách. Hiệu điện dung $\Delta C = C_1 - C_2$ tỉ lệ tuyến tính với độ dịch chuyển $x$, và do đó tỉ lệ với gia tốc $a$:</p>
+
+$$\Delta C \propto x \propto a$$
+
+<div class="step-card">
+    <span class="step-number">1</span> Khối lượng thử dịch chuyển một đoạn $x$ do lực quán tính.
+    <br><span class="step-number">2</span> Mạch điện tử đo hiệu điện dung $\Delta C = C_1 - C_2$.
+    <br><span class="step-number">3</span> Bộ chuyển đổi ADC (Analog-to-Digital) biến đổi tín hiệu thành số nguyên (LSB).
+    <br><span class="step-number">4</span> Nhân với độ nhạy (sensitivity) $S$ để ra giá trị $g$: $a[g] = \dfrac{\text{raw}}{S}$.
+</div>
+
+<h2 id="s1.3">1.3 Công thức tính góc nghiêng từ gia tốc kế</h2>
+
+<p>Giả sử IMU đặt trong hệ tọa độ body frame: $X$ hướng về trước, $Y$ hướng sang phải, $Z$ hướng lên trên. Khi đứng yên, gia tốc kế chỉ đọc vector trọng lực:</p>
+
+$$a = \begin{bmatrix} a_x \\ a_y \\ a_z \end{bmatrix} = g \cdot \begin{bmatrix} \sin\theta \\ -\sin\phi \cos\theta \\ \cos\phi \cos\theta \end{bmatrix}$$
+
+<p>Từ đó suy ra <strong>góc nghiêng Roll $\phi$ và Pitch $\theta$</strong>:</p>
+
+<div class="theorem">
+    <span class="box-title">🔷 Công thức tính góc Roll $\phi$ và Pitch $\theta$ từ gia tốc kế</span>
+    $$\boxed{\phi_{\text{acc}} = \arctan\!\left( \frac{a_y}{a_z} \right)}$$
+    $$\boxed{\theta_{\text{acc}} = \arctan\!\left( \frac{-a_x}{\sqrt{a_y^2 + a_z^2}} \right)}$$
+    <p>Chú ý dùng hàm <code>atan2(y, z)</code> trong lập trình để có góc đúng trong cả 4 góc phần tư:</p>
+    <ul>
+        <li><code>roll  = atan2(ay, az) * RAD_TO_DEG</code></li>
+        <li><code>pitch = atan2(-ax, sqrt(ay*ay + az*az)) * RAD_TO_DEG</code></li>
+    </ul>
+</div>
+
+<div class="example-box">
+    <span class="box-title">📌 Ví dụ số cụ thể:</span>
+    <p>IMU đứng yên, gia tốc kế đọc: $a_x = 0.17g$, $a_y = 0g$, $a_z = 0.985g$. Tính góc nghiêng:</p>
+    <p>$\phi = \arctan(0 / 0.985) = 0^\circ$ (không nghiêng ngang).</p>
+    <p>$\theta = \arctan(-0.17 / \sqrt{0 + 0.985^2}) = \arctan(-0.1726) \approx -9.8^\circ$.</p>
+    <p>👉 Nghĩa là IMU đang nghiêng về phía sau khoảng $9.8^\circ$.</p>
+</div>
+
+<h2 id="s1.4">1.4 Ưu - Nhược điểm của gia tốc kế</h2>
+
+<table>
+    <tr>
+        <th>Ưu điểm ✅</th>
+        <th>Nhược điểm ❌</th>
+    </tr>
+    <tr>
+        <td>Không trôi theo thời gian (tuyệt đối).</td>
+        <td>Nhiễu rung (vibration) gây rung giật tín hiệu.</td>
+    </tr>
+    <tr>
+        <td>Đứng yên cho góc Roll/Pitch chính xác.</td>
+        <td>Bị ảnh hưởng bởi gia tốc chuyển động tịnh tiến (acceleration từ chuyển động lẫn vào trọng lực).</td>
+    </tr>
+    <tr>
+        <td>Rẻ, bền, dễ sử dụng.</td>
+        <td>KHÔNG đo được góc Yaw (vì trọng lực luôn hướng xuống, bất kể quay quanh trục dọc).</td>
+    </tr>
+</table>
+
+<!-- Quiz 1 -->
+<div class="quiz-section">
+    <h3>📝 Quick Quiz 1 — Gia tốc kế</h3>
+    
+    <div class="quiz-question">
+        <strong>Câu 1:</strong> Gia tốc kế đứng yên, đọc $a_x = 0.2g$, $a_z = 0.98g$, $a_y = 0$. Tính góc Pitch $\theta$.
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án Câu 1:</span>
+        <p>$\theta = \arctan(-a_x / \sqrt{a_y^2 + a_z^2}) = \arctan(-0.2 / 0.98) \approx \arctan(-0.204) \approx -11.5^\circ$.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>Câu 2:</strong> Tại sao gia tốc kế KHÔNG thể dùng để đo góc Yaw (góc quay quanh trục thẳng đứng)?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án Câu 2:</span>
+        <p>Vì vector trọng lực luôn hướng thẳng đứng xuống dưới, quay quanh trục dọc (Yaw) không làm thay đổi hướng của vector trọng lực so với các trục body. Vì vậy gia tốc kế không có thông tin gì về Yaw — phải dùng từ kế hoặc con quay.</p>
+    </div>
+</div>
+
+<!-- =========================================================== -->
+<!-- PHẦN 2: GYROSCOPE                                           -->
+<!-- =========================================================== -->
+<div class="part-header-danger" id="part2">
+    <h1>PHẦN 2: CẢM BIẾN VẬN TỐC GÓC (GYROSCOPE)</h1>
+    <p>Hiệu ứng Coriolis, cấu tạo MEMS Tuning Fork và hiện tượng trôi (Drift)</p>
+</div>
+
+<h2 id="s2.1">2.1 Nguyên lý vật lý: Hiệu ứng Coriolis</h2>
+
+<p>Con quay hồi chuyển MEMS hiện đại KHÔNG dùng bánh đà quay như con quay cổ điển. Thay vào đó, nó dùng <strong>khối lượng rung qua lại liên tục</strong> và phát hiện <strong>lực Coriolis</strong> xuất hiện khi có sự quay.</p>
+
+<p>Khi một khối lượng chuyển động với vận tốc $\vec{v}$ trong một hệ quy chiếu quay với vận tốc góc $\vec{\omega}$, nó chịu một lực biểu kiến gọi là <strong>lực Coriolis</strong>:</p>
+
+$$\boxed{\vec{F}_c = -2m\, (\vec{\omega} \times \vec{v})}$$
+
+<div class="step-card">
+    <span class="step-number">1</span> Khối lượng thử được điều khiển rung qua-lại theo trục $X$ với vận tốc $v_x$ (do mạch drive kích thích bằng điện áp xoay chiều ở tần số cộng hưởng).
+    <br><span class="step-number">2</span> Nếu IMU quay quanh trục $Z$ với vận tốc $\omega_z$, lực Coriolis xuất hiện dọc theo trục $Y$: $F_y = -2m\,\omega_z v_x$.
+    <br><span class="step-number">3</span> Khối lượng bị lực này đẩy lệch theo trục $Y$ → cảm biến điện dung phát hiện độ lệch tỉ lệ với $\omega_z$.
+    <br><span class="step-number">4</span> Độ lệch càng lớn → $\omega_z$ càng lớn. Chuyển đổi ADC → số thô (LSB).
+</div>
+
+<div class="important-note">
+    <span class="box-title">🔑 Vì sao phải "rung" thay vì "quay"?</span>
+    <p>Rung qua lại ở tần số cộng hưởng rất cao (hàng chục kHz) giúp khối lượng có vận tốc $v$ rất lớn với biên độ dịch chuyển cực nhỏ. Điều này cho phép chế tạo con quay trên chip silicon nhỏ xíu (vài mm²) mà vẫn đo được vận tốc góc nhỏ tới $\approx 0.01^\circ$/s.</p>
+</div>
+
+<h2 id="s2.2">2.2 Cấu tạo MEMS: Con quay dạng Tuning Fork</h2>
+
+<p>Hai khối lượng được thiết kế rung <strong>ngược pha</strong> nhau (giống hai nhánh của cái nĩa chỉnh âm). Cấu trúc này triệt tiêu rung động ngoại lai (common-mode) vì:</p>
+
+<ul>
+    <li>Rung động bên ngoài tác động <strong>cùng pha</strong> lên cả 2 khối → tín hiệu vi sai triệt tiêu.</li>
+    <li>Lực Coriolis do quay tác động lên 2 khối <strong>ngược pha</strong> → tín hiệu vi sai giữ lại.</li>
+</ul>
+
+<p>Nhờ đó, con quay MEMS chỉ nhạy với chuyển động quay thực sự, không nhạy với rung lắc tịnh tiến của môi trường.</p>
+
+<h2 id="s2.3">2.3 Tích phân góc từ vận tốc góc &amp; hiện tượng trôi (Drift)</h2>
+
+<p>Vận tốc góc $\omega(t)$ chỉ cho biết <strong>tốc độ quay tại từng thời điểm</strong>. Để có góc quay tuyệt đối, ta <strong>tích phân</strong>:</p>
+
+$$\theta(t) = \theta_0 + \int_0^t \omega(\tau)\, d\tau$$
+
+<p>Trong thực tế (vi điều khiển mẫu rời rạc với chu kỳ $T_s$), ta dùng tích phân gần đúng <strong>Euler</strong>:</p>
+
+$$\boxed{\theta_k = \theta_{k-1} + \omega_k \cdot T_s}$$
+
+<div class="warning-box">
+    <span class="box-title">⚠️ Hiện tượng TRÔI (Drift / Bias Integration):</span>
+    <p>Giả sử con quay có sai số lệch 0 (bias) là $\omega_{\text{bias}} = 0.5^\circ$/s dù thực tế đứng yên. Sau 60 giây tích phân, góc sẽ lệch tới:</p>
+    $$\theta_{\text{drift}} = 0.5^\circ/s \times 60s = 30^\circ$$
+    <p>Một con quay rất tốt vẫn trôi vài độ mỗi phút. Vì vậy <strong>con quay đơn lẻ không thể dùng lâu dài</strong> — cần bộ lọc kết hợp (fusion) với gia tốc kế để kéo góc trở về đúng (xem Phần 5).</p>
+</div>
+
+<h2 id="s2.4">2.4 Đơn vị đo: LSB/(°/s), độ nhạy &amp; thang đo</h2>
+
+<p>Dữ liệu con quay đọc từ chip là <strong>số nguyên thô (raw LSB)</strong>. Để đổi ra $^\circ$/s, ta chia cho <strong>độ nhạy (sensitivity)</strong> $S$:</p>
+
+$$\omega[^\circ/s] = \frac{\text{raw}}{S}$$
+
+<p>Mỗi thang đo (Full Scale Range, FS) có độ nhạy khác nhau. Ví dụ MPU6050:</p>
+
+<table>
+    <tr>
+        <th>Thang đo FS (±)</th>
+        <th>Độ nhạy $S$ (LSB/(°/s))</th>
+        <th>Độ phân giải nhỏ nhất</th>
+    </tr>
+    <tr>
+        <td>±250 °/s</td>
+        <td>131</td>
+        <td>≈ 0.0076 °/s</td>
+    </tr>
+    <tr>
+        <td>±500 °/s</td>
+        <td>65.5</td>
+        <td>≈ 0.0153 °/s</td>
+    </tr>
+    <tr>
+        <td>±1000 °/s</td>
+        <td>32.8</td>
+        <td>≈ 0.0305 °/s</td>
+    </tr>
+    <tr>
+        <td>±2000 °/s</td>
+        <td>16.4</td>
+        <td>≈ 0.0610 °/s</td>
+    </tr>
+</table>
+
+<div class="important-note">
+    <span class="box-title">🧭 Cách chọn thang đo:</span>
+    <ul>
+        <li>Thang đo nhỏ (±250°/s) → độ phân giải cao, dùng cho ứng dụng quay chậm (giữ thăng bằng).</li>
+        <li>Thang đo lớn (±2000°/s) → tránh bão hòa (saturation) khi xoay nhanh (aerobatic drone).</li>
+        <li>Đổi thang đo càng lớn, độ nhiễu (noise) càng cao vì cùng dải ADC 16-bit phủ lên phạm vi rộng hơn.</li>
+    </ul>
+</div>
+
+<div class="example-box">
+    <span class="box-title">📌 Ví dụ chuyển đổi:</span>
+    <p>Chip MPU6050 ở thang đo ±250°/s đọc raw = 13100. Góc quay thực tế là:</p>
+    <p>$\omega = \dfrac{13100}{131} = 100\,^\circ/s$.</p>
+</div>
+
+<!-- Quiz 2 -->
+<div class="quiz-section">
+    <h3>📝 Quick Quiz 2 — Con quay hồi chuyển</h3>
+    
+    <div class="quiz-question">
+        <strong>Câu 1:</strong> Con quay đọc raw = 3275 ở thang đo ±1000°/s (S = 32.8). Vận tốc góc là bao nhiêu? Nếu chu kỳ lấy mẫu $T_s = 0.01s$, góc tăng thêm bao nhiêu sau 1 mẫu?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án Câu 1:</span>
+        <p>$\omega = 3275 / 32.8 = 100\,^\circ/s$. Góc tăng: $\Delta\theta = 100 \times 0.01 = 1^\circ$ mỗi mẫu.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>Câu 2:</strong> Một con quay có bias 0.02°/s. Sau 10 phút đứng yên, góc tính bằng tích phân lệch bao nhiêu độ?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án Câu 2:</span>
+        <p>$\theta_{\text{drift}} = 0.02 \times 600 = 12^\circ$. Điều này chứng minh con quay không thể dùng lâu dài một mình — phải có sự hiệu chỉnh từ gia tốc kế/từ kế.</p>
+    </div>
+</div>
+
+<!-- =========================================================== -->
+<!-- PHẦN 3: MAGNETOMETER                                        -->
+<!-- =========================================================== -->
+<div class="part-header-purple" id="part3">
+    <h1>PHẦN 3: CẢM BIẾN TỪ TRƯỜNG (MAGNETOMETER)</h1>
+    <p>Nguyên lý Hall / MR, La bàn số và nhiễu sắt cứng - sắt mềm</p>
+</div>
+
+<h2 id="s3.1">3.1 Nguyên lý vật lý: Hiệu ứng Hall &amp; Từ điện trở (MR)</h2>
+
+<p>Từ kế đo <strong>cường độ và hướng của từ trường</strong> (đơn vị $\mu\text{T}$ — micro Tesla). Trái Đất có từ trường khoảng $25 \div 65\,\mu\text{T}$ tùy vĩ độ. Có 2 công nghệ chính:</p>
+
+<ul>
+    <li><strong>Hiệu ứng Hall:</strong> Đặt dòng điện qua một tấm bán dẫn trong từ trường vuông góc → xuất hiện điện áp ngang (Hall voltage) tỉ lệ với từ trường $V_H = R_H \cdot \dfrac{IB}{t}$. Đơn giản nhưng độ nhạy thấp.</li>
+    <li><strong>Từ điện trở (Magnetoresistance - MR / AMR / TMR):</strong> Điện trở của vật liệu thay đổi theo hướng từ trường: $R = R_0 + \Delta R \cos^2\theta$. Độ nhạy cao, kích thước nhỏ — đây là công nghệ dùng trong các IMU 9 DOF hiện đại.</li>
+</ul>
+
+<h2 id="s3.2">3.2 La bàn số: Tính góc heading từ từ trường</h2>
+
+<p>Khi IMU nằm <strong>ngang phẳng</strong>, chỉ cần 2 thành phần từ trường ngang $m_x$ (hướng Bắc-địa-lý trên mặt phẳng ngang) và $m_y$:</p>
+
+$$\boxed{\psi_{\text{mag}} = \arctan\!\left( \frac{m_y}{m_x} \right)}$$
+
+<p>Trong thực tế IMU thường bị nghiêng, ta phải <strong>hiệu chỉnh nghiêng</strong> bằng góc Roll/Pitch từ gia tốc kế. Nếu biết ma trận xoay $R(\phi, \theta)$, ta chiếu vector từ trường body xuống mặt phẳng ngang rồi tính heading:</p>
+
+$$\mathbf{h} = R(\phi, \theta) \cdot \begin{bmatrix} m_x \\ m_y \\ m_z \end{bmatrix}, \qquad \psi = \arctan\!\left( \frac{-h_y}{h_x} \right)$$
+
+<div class="important-note">
+    <span class="box-title">🌍 Góc Bắc thật (True North) vs Bắc địa từ (Magnetic North):</span>
+    <p>Từ kế chỉ góc so với <strong>Bắc địa từ</strong>, lệch so với Bắc địa lý một góc gọi là <strong>từ thiên (magnetic declination)</strong> $\delta$. Tại Hà Nội $\delta \approx 0.5^\circ$ (rất nhỏ), nhưng ở nhiều nơi khác lên tới $10 \div 20^\circ$. Muốn có heading đúng, trừ thêm độ từ thiên: $\psi_{\text{true}} = \psi_{\text{mag}} - \delta$.</p>
+</div>
+
+<h2 id="s3.3">3.3 Nhiễu sắt cứng / sắt mềm (Hard-Iron / Soft-Iron)</h2>
+
+<div class="warning-box">
+    <span class="box-title">⚠️ Nhiễu từ trường ngoại lai:</span>
+    <p>Nam châm, motor điện, dây dẫn có dòng điện lớn trong robot làm bóp méo phép đo từ kế. Có 2 loại nhiễu chính:</p>
+    <ul>
+        <li><strong>Hard-Iron (sắt cứng):</strong> Nguồn từ trường cố định gắn với IMU (nam châm, lõi sắt). Nó cộng thêm một vector từ trường không đổi → <strong>dịch tâm</strong> của quỹ đạo đo.</li>
+        <li><strong>Soft-Iron (sắt mềm):</strong> Vật liệu sắt từ bị từ hóa theo hướng từ trường đang chiếu tới → làm <strong>bóp méo hình dạng</strong> quỹ đạo đo thành ellipse.</li>
+    </ul>
+    <p>Khi quay IMU đủ 360°, dữ liệu từ kế lý tưởng tạo thành một <strong>vòng tròn</strong> quanh tâm. Hard-iron làm vòng tròn bị <strong>lệch tâm</strong>, soft-iron làm nó thành <strong>elip</strong> — cách hiệu chuẩn sẽ trình bày ở Phần 6.</p>
+</div>
+
+<!-- Quiz 3 -->
+<div class="quiz-section">
+    <h3>📝 Quick Quiz 3 — Từ kế</h3>
+    
+    <div class="quiz-question">
+        <strong>Câu 1:</strong> Từ kế đọc $m_x = 30\mu\text{T}$, $m_y = -30\mu\text{T}$, IMU nằm ngang. Góc heading là bao nhiêu?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án Câu 1:</span>
+        <p>$\psi = \arctan(m_y/m_x) = \arctan(-30/30) = \arctan(-1) = -45^\circ$ (so với hướng Bắc). Nếu trừ từ thiên địa phương, kết quả sẽ là heading so với Bắc thật.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>Câu 2:</strong> Phân biệt nhiễu Hard-Iron và Soft-Iron về mặt hình học của dữ liệu đo khi quay IMU 360°.
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án Câu 2:</span>
+        <p><strong>Hard-Iron</strong> → vòng tròn dữ liệu bị <strong>lệch tâm</strong> (tâm không còn ở gốc tọa độ). <strong>Soft-Iron</strong> → vòng tròn bị bóp thành <strong>elip</strong> (bán kính theo các hướng khác nhau). Hiệu chuẩn phải bù cả dịch tâm lẫn co giãn ellipse.</p>
+    </div>
+</div>
+
+<!-- =========================================================== -->
+<!-- PHẦN 4: TỌA ĐỘ, EULER, QUATERNION                          -->
+<!-- =========================================================== -->
+<div class="part-header" id="part4">
+    <h1>PHẦN 4: HỆ TỌA ĐỘ, GÓC EULER &amp; QUATERNION</h1>
+    <p>Ngôn ngữ Toán học mô tả tư thế (Attitude) của vật trong không gian 3D</p>
+</div>
+
+<h2 id="s4.1">4.1 Hệ tọa độ cơ thể (Body Frame) &amp; Hệ tọa độ thế giới (World Frame)</h2>
+
+<ul>
+    <li><strong>Body frame ($b$):</strong> Gắn cứng với IMU. Quy ước phổ biến: $X_b$ hướng về mũi (forward), $Y_b$ hướng sang phải, $Z_b$ hướng xuống hoặc lên (tùy chip — MPU6050 dùng $Z$ xuống dưới).</li>
+    <li><strong>World frame ($w$):</strong> Gắn với Trái Đất: $X_w$ hướng Bắc, $Y_w$ hướng Đông, $Z_w$ hướng xuống (NED — North-East-Down) hoặc lên (ENU — East-North-Up).</li>
+</ul>
+
+<p>Vấn đề cốt lõi của mọi thuật toán AHRS: <strong>xác định ma trận xoay $R$ biến đổi giữa 2 hệ tọa độ</strong> dựa trên dữ liệu từ gia tốc kế + con quay + từ kế.</p>
+
+<h2 id="s4.2">4.2 Góc Euler Roll - Pitch - Yaw &amp; Ma trận xoay</h2>
+
+<p>Tư thế của vật thường được mô tả bằng 3 góc Euler, thực hiện theo thứ tự Yaw → Pitch → Roll:</p>
+
+<ul>
+    <li><strong>Yaw $\psi$:</strong> quay quanh trục $Z$ (hướng mũi sang trái/phải).</li>
+    <li><strong>Pitch $\theta$:</strong> quay quanh trục $Y$ (gật lên/xuống).</li>
+    <li><strong>Roll $\phi$:</strong> quay quanh trục $X$ (nghiêng trái/phải).</li>
+</ul>
+
+<p>Ma trận xoay đầy đủ (thứ tự Z-Y-X) biến đổi vector world → body:</p>
+
+$$R = R_x(\phi)\, R_y(\theta)\, R_z(\psi)$$
+
+$$R = \begin{bmatrix}
+c\theta c\psi & c\theta s\psi & -s\theta \\
+s\phi s\theta c\psi - c\phi s\psi & s\phi s\theta s\psi + c\phi c\psi & s\phi c\theta \\
+c\phi s\theta c\psi + s\phi s\psi & c\phi s\theta s\psi - s\phi c\psi & c\phi c\theta
+\end{bmatrix}$$
+
+<p>với $c\theta = \cos\theta$, $s\theta = \sin\theta$, v.v.</p>
+
+<h2 id="s4.3">4.3 Vấn đề Gimbal Lock &amp; Quaternion giải cứu</h2>
+
+<div class="warning-box">
+    <span class="box-title">⚠️ Gimbal Lock — Khi Euler "gãy":</span>
+    <p>Khi Pitch $\theta = \pm 90^\circ$, trục quay của Yaw và Roll <strong>trùng nhau</strong>, ta mất đi 1 bậc tự do và không thể phân biệt được sự kết hợp (Yaw, Roll). Kết quả là góc nhảy loạn, tích phân con quay bị sai. Đây là vấn đề nghiêm trọng với drone lật úp hoặc robot leo dốc đứng.</p>
+    <p><strong>Giải pháp:</strong> dùng <strong>Quaternion</strong> — 4 thành phần không có điểm kỳ dị, biểu diễn mọi tư thế trong không gian 3D một cách liên tục.</p>
+</div>
+
+<h2 id="s4.4">4.4 Đại số Quaternion cơ bản &amp; Chuyển đổi Euler ↔ Quaternion</h2>
+
+<div class="definition">
+    <span class="box-title">📖 Định nghĩa Quaternion</span>
+    <p>Quaternion $\mathbf{q}$ là một vector 4 chiều: $q = (q_w, q_x, q_y, q_z)$ trong đó $q_w$ là phần vô hướng, $(q_x, q_y, q_z)$ là phần vector. Nó biểu diễn phép quay một góc $\alpha$ quanh trục đơn vị $\mathbf{u} = (u_x, u_y, u_z)$:</p>
+    $$q = \left( \cos\frac{\alpha}{2},\; u_x\sin\frac{\alpha}{2},\; u_y\sin\frac{\alpha}{2},\; u_z\sin\frac{\alpha}{2} \right)$$
+</div>
+
+<p><strong>Chuyển từ góc Euler → Quaternion:</strong></p>
+
+$$\begin{aligned}
+q_w &= c\phi/2\, c\theta/2\, c\psi/2 + s\phi/2\, s\theta/2\, s\psi/2 \\
+q_x &= s\phi/2\, c\theta/2\, c\psi/2 - c\phi/2\, s\theta/2\, s\psi/2 \\
+q_y &= c\phi/2\, s\theta/2\, c\psi/2 + s\phi/2\, c\theta/2\, s\psi/2 \\
+q_z &= c\phi/2\, c\theta/2\, s\psi/2 - s\phi/2\, s\theta/2\, c\psi/2
+\end{aligned}$$
+
+<p><strong>Chuyển từ Quaternion → góc Euler (để hiển thị):</strong></p>
+
+$$\phi = \arctan\!\left( \frac{2(q_w q_x + q_y q_z)}{1 - 2(q_x^2 + q_y^2)} \right)$$
+
+$$\theta = \arcsin\!\left( 2(q_w q_y - q_z q_x) \right)$$
+
+$$\psi = \arctan\!\left( \frac{2(q_w q_z + q_x q_y)}{1 - 2(q_y^2 + q_z^2)} \right)$$
+
+<div class="important-note">
+    <span class="box-title">💡 Vì sao thuật toán fusion hiện đại dùng Quaternion?</span>
+    <ul>
+        <li>Không có Gimbal Lock.</li>
+        <li>Chỉ 4 số thay vì 9 phần tử ma trận xoay → tiết kiệm bộ nhớ và thời gian tính toán trên vi điều khiển.</li>
+        <li>Tích phân vận tốc góc trong quaternion rất gọn: $\dot{q} = \tfrac{1}{2}\, q \otimes (0, \omega)$.</li>
+        <li>Chuẩn hóa $q$ dễ: chia cho $\|q\|$ sau mỗi bước để tránh trôi số học.</li>
+    </ul>
+</div>
+
+<!-- Quiz 4 -->
+<div class="quiz-section">
+    <h3>📝 Quick Quiz 4 — Euler &amp; Quaternion</h3>
+    
+    <div class="quiz-question">
+        <strong>Câu 1:</strong> Gimbal Lock là gì và xảy ra khi nào?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án Câu 1:</span>
+        <p>Khi Pitch $\theta = \pm 90^\circ$, hai trục quay Yaw và Roll trùng nhau → mất 1 bậc tự do, biểu diễn Euler mất ý nghĩa, góc nhảy loạn. Giải pháp là dùng Quaternion.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>Câu 2:</strong> Quaternion có mấy thành phần và mỗi thành phần mang ý nghĩa gì về mặt hình học?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án Câu 2:</span>
+        <p>4 thành phần: $q_w$ (vô hướng = cos nửa góc quay) và $(q_x, q_y, q_z)$ (vector = trục quay nhân sin nửa góc quay). Phép quay góc $\alpha$ quanh trục đơn vị $\mathbf{u}$ được gói gọn trong 4 số này.</p>
+    </div>
+</div>
+
+<!-- =========================================================== -->
+<!-- PHẦN 5: SENSOR FUSION                                       -->
+<!-- =========================================================== -->
+<div class="part-header" id="part5">
+    <h1>PHẦN 5: KỸ THUẬT KẾT HỢP CẢM BIẾN (SENSOR FUSION)</h1>
+    <p>Complementary Filter, Mahony, Madgwick, Kalman &amp; AHRS</p>
+</div>
+
+<h2 id="s5.1">5.1 Vì sao gia tốc kế + con quay một mình chưa đủ?</h2>
+
+<div class="analogy-box">
+    <span class="box-title">🎯 Vấn đề cốt lõi:</span>
+    <ul>
+        <li><strong>Con quay:</strong> mượt, đáp ứng nhanh nhưng <strong>trôi</strong> theo thời gian (bias tích phân).</li>
+        <li><strong>Gia tốc kế:</strong> chính xác lâu dài (không trôi) nhưng <strong>nhiễu rung</strong> tức thời, lại bị lẫn gia tốc chuyển động.</li>
+    </ul>
+    <p>👉 Trí tuệ của <strong>Sensor Fusion</strong>: <strong>tin con quay ở tần số cao (ngắn hạn), tin gia tốc kế ở tần số thấp (dài hạn)</strong>. Kết quả là góc vừa mượt vừa không trôi.</p>
+</div>
+
+<h2 id="s5.2">5.2 Bộ lọc Bổ sung (Complementary Filter)</h2>
+
+<p>Đây là bộ lọc fusion <strong>đơn giản, nhẹ, chạy tốt trên mọi vi điều khiển</strong>. Ý tưởng: cộng 2 tín hiệu đã lọc ở hai dải tần bổ sung nhau:</p>
+
+$$\boxed{\theta_{\text{filtered}} = \alpha\,(\theta_{\text{filtered}} + \omega \cdot T_s) + (1 - \alpha)\,\theta_{\text{acc}}}$$
+
+<p>Trong đó:</p>
+<ul>
+    <li>$\alpha \in (0,1)$: hệ số tin tưởng (thường $\alpha = 0.95 \div 0.98$).</li>
+    <li>$\alpha$ càng gần 1 → tin con quay nhiều (mượt nhưng dễ trôi).</li>
+    <li>$(1-\alpha)$ càng lớn → tin gia tốc kế nhiều (hết trôi nhưng dễ rung).</li>
+    <li>Công thức tương đương dạng tần số: cắt $f_c = \dfrac{1 - \alpha}{2\pi T_s}$ (Hz).</li>
+</ul>
+
+<div class="example-box">
+    <span class="box-title">📌 Ví dụ chọn $\alpha$:</span>
+    <p>Chu kỳ lấy mẫu $T_s = 0.01s$, muốn tần số cắt $f_c = 1.6$Hz → $\alpha = 1 - 2\pi f_c T_s = 1 - 0.1 = 0.9$. Nếu muốn mượt hơn, chọn $\alpha = 0.95$ (tương đương $f_c \approx 0.8$Hz).</p>
+</div>
+
+<h2 id="s5.3">5.3 Bộ lọc Mahony (Từ CF đến lọc lỗi xoay)</h2>
+
+<p>Mahony filter nâng cấp Complementary Filter lên dạng <strong>vector/quaternion</strong> với khâu <strong>PI bù bias</strong>:</p>
+
+<div class="step-card">
+    <span class="step-number">1</span> Tính <strong>lỗi tư thế</strong> $e$ giữa hướng đo được từ gia tốc kế và hướng ước lượng hiện tại (cross product).
+    <br><span class="step-number">2</span> Đưa lỗi qua khâu PI: $\omega_{\text{correction}} = K_p \, e + K_i \int e\, dt$.
+    <br><span class="step-number">3</span> Cộng vào tín hiệu con quay: $\omega = \omega_{\text{gyro}} + \omega_{\text{correction}}$.
+    <br><span class="step-number">4</span> Tích phân quaternion: $q_{k} = q_{k-1} + \tfrac{1}{2} q_{k-1} \otimes (0,\omega) \cdot T_s$.
+    <br><span class="step-number">5</span> Chuẩn hóa $q$.
+</div>
+
+<div class="important-note">
+    <span class="box-title">🔑 Vai trò của $K_p$ và $K_i$:</span>
+    <ul>
+        <li>$K_p$ (tỉ lệ): kéo góc trở về đúng ngay lập tức — càng lớn càng bám gia tốc kế nhanh nhưng dễ nhiễu rung.</li>
+        <li>$K_i$ (tích phân): <strong>tự học bias con quay</strong> — loại bỏ drift sau vài giây hoạt động. Đây là điểm mạnh so với Complementary Filter.</li>
+    </ul>
+</div>
+
+<h2 id="s5.4">5.4 Bộ lọc Madgwick (Gradient Descent)</h2>
+
+<p>Madgwick filter (2011) tối ưu góc bằng <strong>phương pháp Gradient Descent</strong> — tìm quaternion làm cho hàm lỗi $f(q, a, m)$ nhỏ nhất:</p>
+
+$$q_{t+1} = q_t - \beta \frac{\nabla f}{\|\nabla f\|}$$
+
+<p>với $\beta$ là tốc độ học (learning rate) tương đương độ tin tưởng con quay. Điểm mạnh: chạy ở 512Hz trên vi xử lý tầm thấp, kết hợp cả gia tốc kế + từ kế, cho quaternion mượt và ổn định.</p>
+
+<table>
+    <tr>
+        <th>Bộ lọc</th>
+        <th>Độ phức tạp</th>
+        <th>Bù bias</th>
+        <th>Dùng Mag</th>
+        <th>Thích hợp cho</th>
+    </tr>
+    <tr>
+        <td><strong>Complementary</strong></td>
+        <td>Rất thấp</td>
+        <td>Không</td>
+        <td>Không</td>
+        <td>Arduino nhỏ, tự động cân bằng đơn giản</td>
+    </tr>
+    <tr>
+        <td><strong>Mahony</strong></td>
+        <td>Thấp</td>
+        <td>Có ($K_i$)</td>
+        <td>Tùy chọn</td>
+        <td>Drone, robot thời gian thực</td>
+    </tr>
+    <tr>
+        <td><strong>Madgwick</strong></td>
+        <td>Trung bình</td>
+        <td>Một phần</td>
+        <td>Có</td>
+        <td>AHRS đầy đủ 9 DOF</td>
+    </tr>
+    <tr>
+        <td><strong>Kalman</strong></td>
+        <td>Cao</td>
+        <td>Có (mở rộng)</td>
+        <td>Có</td>
+        <td>Ứng dụng yêu cầu hiệp phương sai chặt chẽ</td>
+    </tr>
+</table>
+
+<h2 id="s5.5">5.5 Bộ lọc Kalman cho IMU (Liên hệ tài liệu Kalman)</h2>
+
+<p>Bộ lọc Kalman là "chuẩn vàng" cho fusion tuyến tính. Mô hình trạng thái cho góc Roll đơn giản:</p>
+
+$$x_k = \begin{bmatrix} \theta \\ b \end{bmatrix}, \qquad A = \begin{bmatrix} 1 & -T_s \\ 0 & 1 \end{bmatrix}, \qquad H = \begin{bmatrix} 1 & 0 \end{bmatrix}$$
+
+<ul>
+    <li>Trạng thái: góc $\theta$ và bias con quay $b$.</li>
+    <li>Tín hiệu đầu vào: vận tốc góc $\omega$ (từ con quay).</li>
+    <li>Đo lường: góc từ gia tốc kế $\theta_{\text{acc}}$.</li>
+    <li>Kalman tự học bias $b$ theo thời gian và cân bằng $Q$/$R$ giống hệt triết lý đã trình bày trong tài liệu Kalman Filter.</li>
+</ul>
+
+<div class="important-note">
+    <span class="box-title">🧩 Liên hệ với 5 bước Kalman:</span>
+    <ul>
+        <li><strong>Predict:</strong> $\hat{x}_{k|k-1} = A\hat{x}_{k-1|k-1} + B\omega$, $P_{k|k-1} = A P A^T + Q$.</li>
+        <li><strong>Update:</strong> $K = P_{k|k-1}H^T(H P_{k|k-1}H^T + R)^{-1}$, cập nhật $\hat{x}$ và $P$.</li>
+        <li>Điểm khác: ở đây "innovation" là $(\theta_{\text{acc}} - \theta)$, và $K$ tự động phân bổ niềm tin giữa con quay và gia tốc kế theo $Q$/$R$.</li>
+    </ul>
+</div>
+
+<h2 id="s5.6">5.6 Thuật toán AHRS (Attitude and Heading Reference System)</h2>
+
+<div class="definition">
+    <span class="box-title">📖 AHRS là gì?</span>
+    <p><strong>AHRS</strong> (Hệ thống Tham chiếu Tư thế và Hướng) là hệ thống tổng hợp toàn bộ: đọc 9 trục, lọc fusion (Madgwick/Mahony/Kalman) và xuất ra <strong>tư thế đầy đủ (Roll, Pitch, Yaw)</strong> + <strong>Yaw tuyệt đối từ từ kế</strong>. Chip BNO055 chính là một AHRS trọn gói trong 1 vi mạch.</p>
+</div>
+
+<p>Pipeline điển hình của một AHRS:</p>
+
+<div class="step-card">
+    <span class="step-number">1</span> Đọc raw 9 trục, chuyển đơn vị (g, °/s, µT).
+    <br><span class="step-number">2</span> Trừ bias hiệu chuẩn (Phần 6).
+    <br><span class="step-number">3</span> Chuẩn hóa vector gia tốc &amp; từ trường về độ dài 1.
+    <br><span class="step-number">4</span> Chạy vòng fusion (Madgwick/Mahony/Kalman) với quaternion.
+    <br><span class="step-number">5</span> Chuyển quaternion → Euler để điều khiển/giám sát.
+</div>
+
+<!-- Quiz 5 -->
+<div class="quiz-section">
+    <h3>📝 Quick Quiz 5 — Sensor Fusion</h3>
+    
+    <div class="quiz-question">
+        <strong>Câu 1:</strong> Complementary Filter với $\alpha = 0.98$ có nghĩa là gì về mức độ tin tưởng?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án Câu 1:</span>
+        <p>98% tin con quay (mượt, đáp ứng nhanh) và 2% tin gia tốc kế (chống trôi). Kết quả: góc vừa mượt vừa không bị drift lâu dài.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>Câu 2:</strong> Điểm khác biệt chính giữa Complementary Filter và bộ lọc Mahony là gì?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án Câu 2:</span>
+        <p>Mahony hoạt động trên quaternion và có khâu tích phân ($K_i$) để <strong>tự học và bù bias con quay</strong>, trong khi Complementary Filter chỉ là tổ hợp tuyến tính hai dải tần, không tự bù drift bias.</p>
+    </div>
+</div>
+
+<!-- =========================================================== -->
+<!-- PHẦN 6: CALIBRATION                                        -->
+<!-- =========================================================== -->
+<div class="part-header-orange" id="part6">
+    <h1>PHẦN 6: HIỆU CHUẨN CẢM BIẾN (CALIBRATION)</h1>
+    <p>Bias, Scale factor, 6-Position, Hard/Soft Iron và Least Squares</p>
+</div>
+
+<h2 id="s6.1">6.1 Tại sao phải hiệu chuẩn? Các loại sai số</h2>
+
+<p>Cảm biến MEMS xuất xưởng có sai số chế tạo. Nếu không hiệu chuẩn, góc đo có thể lệch vài độ đến chục độ. Các loại sai số chính:</p>
+
+<table>
+    <tr>
+        <th>Loại sai số</th>
+        <th>Mô tả</th>
+        <th>Ảnh hưởng</th>
+    </tr>
+    <tr>
+        <td><strong>Bias (Zero-rate offset)</strong></td>
+        <td>Đầu ra khác 0 khi đứng yên.</td>
+        <td>Gây trôi tích phân ở con quay; góc sai tĩnh ở gia tốc kế.</td>
+    </tr>
+    <tr>
+        <td><strong>Scale factor (độ nhạy)</strong></td>
+        <td>Độ dốc chuyển đổi raw → đơn vị sai tỉ lệ.</td>
+        <td>Góc đo bị co/giãn tỉ lệ.</td>
+    </tr>
+    <tr>
+        <td><strong>Cross-axis (chéo trục)</strong></td>
+        <td>Trục cảm biến không vuông góc hoàn toàn.</td>
+        <td>Gia tốc trục này lẫn vào trục kia.</td>
+    </tr>
+    <tr>
+        <td><strong>Hard/Soft iron (từ kế)</strong></td>
+        <td>Nhiễu từ trường cục bộ.</td>
+        <td>Heading sai đến vài chục độ.</td>
+    </tr>
+</table>
+
+<h2 id="s6.2">6.2 Hiệu chuẩn Bias (Zero-rate Offset) cho con quay</h2>
+
+<p><strong>Phương pháp đơn giản nhất:</strong> đặt IMU đứng yên, lấy trung bình $N$ mẫu trong $1 \div 2$ giây:</p>
+
+$$\hat{b}_\omega = \frac{1}{N} \sum_{i=1}^{N} \omega_i$$
+
+<p>Sau đó trừ bias khỏi mọi mẫu đo: $\omega_{\text{corrected}} = \omega - \hat{b}_\omega$. Làm lại định kỳ khi nhiệt độ thay đổi vì bias phụ thuộc nhiệt độ.</p>
+
+<h2 id="s6.3">6.3 Hiệu chuẩn 6 vị trí cho gia tốc kế (6-Position Calibration)</h2>
+
+<p>Đặt IMU đứng yên ở 6 hướng sao cho mỗi trục lần lượt hướng lên và hướng xuống. Ở mỗi vị trí, gia tốc kế phải đọc $\pm 1g$ trên trục đó và $0g$ trên 2 trục còn lại. Giải hệ phương trình:</p>
+
+$$a_{\text{true}} = S \cdot (a_{\text{raw}} - b)$$
+
+<p>với $S$ là ma trận scale/cross-axis (3×3) và $b$ là bias (3×1). Dùng 6 phương trình để tìm 12 ẩn số bằng <strong>Least Squares</strong>.</p>
+
+<h2 id="s6.4">6.4 Hiệu chuẩn Hard-Iron / Soft-Iron cho từ kế</h2>
+
+<div class="step-card">
+    <span class="step-number">1</span> Quay IMU theo mọi hướng trong không gian 3D (hình số 8) khoảng 30-60 giây, ghi lại toàn bộ $(m_x, m_y, m_z)$.
+    <br><span class="step-number">2</span> Dữ liệu lý tưởng tạo thành mặt cầu bán kính $|B|$ quanh gốc.
+    <br><span class="step-number">3</span> <strong>Hard-iron</strong> = dịch tâm: $b = (b_x, b_y, b_z)$ — tìm bằng cách lấy trung bình cực trị mỗi trục.
+    <br><span class="step-number">4</span> <strong>Soft-iron</strong> = ma trận biến dạng $S$ — tìm bằng Least Squares khớp elipsoid.
+    <br><span class="step-number">5</span> Hiệu chỉnh: $m_{\text{corrected}} = S^{-1}(m_{\text{raw}} - b)$.
+</div>
+
+<div class="theorem">
+    <span class="box-title">🔷 Mô hình khớp Elipsoid bằng Least Squares</span>
+    <p>Phương trình mặt cầu tâm $b$ bán kính $r$ sau khi biến dạng bởi $S$ trở thành elipsoid. Ta khớp dữ liệu vào phương trình:</p>
+    $$(m - b)^T (S^{-1})^T S^{-1} (m - b) = r^2$$
+    <p>Tuyến tính hóa và giải bằng <strong>bình phương tối thiểu</strong> để tìm ma trận đối xứng 3×3 (6 ẩn) + tâm (3 ẩn) + bán kính (1 ẩn) = 10 ẩn số từ hàng nghìn mẫu đo.</p>
+</div>
+
+<h2 id="s6.5">6.5 Thuật toán Least Squares tối ưu</h2>
+
+<p>Về bản chất, hiệu chuẩn là bài toán tối ưu: tìm tham số $\mathbf{p}$ sao cho tổng bình phương sai số nhỏ nhất:</p>
+
+$$\mathbf{p}^* = \arg\min_\mathbf{p} \sum_{i=1}^{N} \left\| f(m_i, \mathbf{p}) - d_i \right\|^2$$
+
+<p>Giải bằng <strong>Normal Equation</strong> hoặc <strong>Gradient Descent</strong>. Trong thực tế các thư viện như <code>imu_calibration</code> (Python) hoặc công cụ của ArduPilot/PX4 tự động làm việc này.</p>
+
+<div class="important-note">
+    <span class="box-title">🔑 Kết luận hiệu chuẩn:</span>
+    <p>Hiệu chuẩn tốt (bias + scale + cross-axis + hard/soft iron) là <strong>điều kiện tiên quyết</strong> để bất kỳ thuật toán fusion nào cho góc chính xác. Làm xấu hiệu chuẩn, dù dùng Kalman hay Madgwick cũng cho kết quả sai.</p>
+</div>
+
+<!-- Quiz 6 -->
+<div class="quiz-section">
+    <h3>📝 Quick Quiz 6 — Hiệu chuẩn</h3>
+    
+    <div class="quiz-question">
+        <strong>Câu 1:</strong> Con quay đứng yên đọc trung bình 300 mẫu là 4.3 LSB. Sau khi chuyển đơn vị (S = 131), bias là bao nhiêu °/s?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án Câu 1:</span>
+        <p>$\hat{b}_\omega = 4.3 / 131 \approx 0.033\,^\circ/s$. Khi lọc, trừ giá trị này khỏi mỗi mẫu trước khi tích phân.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>Câu 2:</strong> Tại sao hiệu chuẩn từ kế phải xoay IMU theo mọi hướng (không chỉ nằm ngang)?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án Câu 2:</span>
+        <p>Vì cần bao phủ đủ không gian 3D để khớp elipsoid 3 chiều. Chỉ xoay ngang thì không ước lượng được tham số theo trục Z, dẫn đến heading sai khi IMU nghiêng.</p>
+    </div>
+</div>
+
+<!-- =========================================================== -->
+<!-- PHẦN 7: LẬP TRÌNH THỰC TẾ                                 -->
+<!-- =========================================================== -->
+<div class="part-header" id="part7">
+    <h1>PHẦN 7: LẬP TRÌNH THỰC TẾ (ARDUINO / STM32 / PYTHON)</h1>
+    <p>Từ đọc raw MPU6050 đến bộ lọc góc hoàn chỉnh</p>
+</div>
+
+<h2 id="s7.1">7.1 Giao tiếp I2C/SPI &amp; Đọc dữ liệu thô MPU6050</h2>
+
+<p>MPU6050 giao tiếp bằng <strong>I2C</strong> (địa chỉ mặc định <code>0x68</code>). Các thanh ghi quan trọng:</p>
+
+<table>
+    <tr>
+        <th>Địa chỉ</th>
+        <th>Thanh ghi</th>
+        <th>Chức năng</th>
+    </tr>
+    <tr>
+        <td>0x6B</td>
+        <td>PWR_MGMT_1</td>
+        <td>Thoát sleep mode (ghi 0).</td>
+    </tr>
+    <tr>
+        <td>0x1B</td>
+        <td>GYRO_CONFIG</td>
+        <td>Chọn thang đo con quay (bit FS_SEL).</td>
+    </tr>
+    <tr>
+        <td>0x1C</td>
+        <td>ACCEL_CONFIG</td>
+        <td>Chọn thang đo gia tốc (bit AFS_SEL).</td>
+    </tr>
+    <tr>
+        <td>0x3B → 0x40</td>
+        <td>ACCEL_XOUT_H …</td>
+        <td>6 thanh ghi đọc gia tốc thô.</td>
+    </tr>
+    <tr>
+        <td>0x43 → 0x48</td>
+        <td>GYRO_XOUT_H …</td>
+        <td>6 thanh ghi đọc con quay thô.</td>
+    </tr>
+    <tr>
+        <td>0x75</td>
+        <td>WHO_AM_I</td>
+        <td>Kiểm tra chip (giá trị 0x68).</td>
+    </tr>
+</table>
+
+<pre><code>#include &lt;Wire.h&gt;
+
+#define MPU6050_ADDR 0x68
+
+void mpu_write(uint8_t reg, uint8_t val) {
+    Wire.beginTransmission(MPU6050_ADDR);
+    Wire.write(reg);
+    Wire.write(val);
+    Wire.endTransmission();
+}
+
+void mpu_read_raw(int16_t &amp;ax, int16_t &amp;ay, int16_t &amp;az,
+                  int16_t &amp;gx, int16_t &amp;gy, int16_t &amp;gz) {
+    Wire.beginTransmission(MPU6050_ADDR);
+    Wire.write(0x3B); // Bắt đầu từ ACCEL_XOUT_H
+    Wire.endTransmission(false);
+    Wire.requestFrom(MPU6050_ADDR, 14);
+
+    uint8_t buf[14];
+    for (int i = 0; i &lt; 14; i++) buf[i] = Wire.read();
+
+    ax = (buf[0] &lt;&lt; 8) | buf[1];
+    ay = (buf[2] &lt;&lt; 8) | buf[3];
+    az = (buf[4] &lt;&lt; 8) | buf[5];
+    gx = (buf[8] &lt;&lt; 8) | buf[9];
+    gy = (buf[10] &lt;&lt; 8) | buf[11];
+    gz = (buf[12] &lt;&lt; 8) | buf[13];
+}
+
+void setup() {
+    Wire.begin();
+    Serial.begin(115200);
+    mpu_write(0x6B, 0x00);        // Thoát sleep
+    mpu_write(0x1B, 0x00);        // Gyro FS = ±250°/s (S = 131)
+    mpu_write(0x1C, 0x00);        // Acc FS = ±2g (S = 16384)
+}
+
+void loop() {
+    int16_t ax, ay, az, gx, gy, gz;
+    mpu_read_raw(ax, ay, az, gx, gy, gz);
+
+    float axg = ax / 16384.0f;
+    float ayg = ay / 16384.0f;
+    float azg = az / 16384.0f;
+    float wx  = gx / 131.0f;
+    float wy  = gy / 131.0f;
+    float wz  = gz / 131.0f;
+
+    Serial.print("a="); Serial.print(axg, 3); Serial.print(",");
+    Serial.print(ayg, 3); Serial.print(","); Serial.print(azg, 3);
+    Serial.print(" w="); Serial.print(wx, 2); Serial.print(",");
+    Serial.print(wy, 2); Serial.print(","); Serial.println(wz, 2);
+    delay(10); // 100Hz
+}
+</code></pre>
+
+<h2 id="s7.2">7.2 Code Arduino: Complementary Filter góc Roll/Pitch</h2>
+
+<pre><code>// ==========================================================
+// BỘ LỌC COMPLEMENTARY CHO GÓC ROLL/PITCH - MPU6050
+// ==========================================================
+float alpha = 0.96f;      // Hệ số tin con quay
+float dt    = 0.01f;      // Chu kỳ lấy mẫu (s)
+float roll  = 0, pitch = 0;
+
+// Đã có axg, ayg, azg (g), wx, wy, wz (°/s) từ vòng loop trên
+
+float acc_roll  = atan2(ayg, azg) * RAD_TO_DEG;
+float acc_pitch = atan2(-axg, sqrt(ayg*ayg + azg*azg)) * RAD_TO_DEG;
+
+// Công thức Complementary Filter (tách riêng từng trục)
+roll  = alpha * (roll  + wx * dt) + (1.0f - alpha) * acc_roll;
+pitch = alpha * (pitch + wy * dt) + (1.0f - alpha) * acc_pitch;
+
+// Xuất ra Serial Monitor
+Serial.print("Roll = "); Serial.print(roll);
+Serial.print("  Pitch = "); Serial.println(pitch);
+</code></pre>
+
+<h2 id="s7.3">7.3 Code C++ Nhúng cho STM32 (Kalman 2D Roll/Pitch)</h2>
+
+<pre><code>// ==========================================================
+// THƯ VIỆN KALMAN FILTER 2 TRẠNG THÁI CHO GÓC IMU
+// Trạng thái x = [góc, bias_gyro]
+// ==========================================================
+class KalmanAngle {
+private:
+    float Q_angle, Q_bias, R_measure;
+    float P[2][2]; // Ma trận hiệp phương sai 2x2
+    float K[2];    // Kalman gain
+    float angle, bias;
+    float rate;
+
+public:
+    KalmanAngle() {
+        Q_angle   = 0.001f;
+        Q_bias    = 0.003f;
+        R_measure = 0.03f;
+        angle = 0.0f; bias = 0.0f;
+        P[0][0] = 0; P[0][1] = 0; P[1][0] = 0; P[1][1] = 0;
+    }
+
+    float update(float newAngle, float newRate, float dt) {
+        // ===== PREDICT =====
+        rate = newRate - bias;
+        angle += dt * rate;
+
+        P[0][0] += dt * (dt * P[1][1] - P[0][1] - P[1][0] + Q_angle);
+        P[0][1] -= dt * P[1][1];
+        P[1][0] -= dt * P[1][1];
+        P[1][1] += Q_bias * dt;
+
+        // ===== UPDATE =====
+        float S = P[0][0] + R_measure;      // Innovation variance
+        K[0] = P[0][0] / S;
+        K[1] = P[1][0] / S;
+
+        float y = newAngle - angle;         // Innovation
+        angle += K[0] * y;
+        bias  += K[1] * y;
+
+        float P00 = P[0][0];
+        float P01 = P[0][1];
+        P[0][0] -= K[0] * P00;
+        P[0][1] -= K[0] * P01;
+        P[1][0] -= K[1] * P00;
+        P[1][1] -= K[1] * P01;
+
+        return angle;
+    }
+};
+
+// ==========================================================
+// VÍ DỤ SỬ DỤNG TRONG VÒNG LẶP 1kHz TRÊN STM32
+// ==========================================================
+/*
+KalmanAngle kf_roll, kf_pitch;
+
+float roll  = kf_roll.update(acc_roll,  wx, dt);
+float pitch = kf_pitch.update(acc_pitch, wy, dt);
+
+// Dùng roll/pitch cho vòng PID giữ thăng bằng
+PWM_SetOutput(pid_roll(roll));
+*/
+</code></pre>
+
+<h2 id="s7.4">7.4 Code Python: Phân tích dữ liệu IMU &amp; vẽ đồ thị</h2>
+
+<pre><code>import numpy as np
+import matplotlib.pyplot as plt
+
+# ==========================================================
+# GIẢ LẬP + PHÂN TÍCH DỮ LIỆU IMU (SO SÁNH 3 BỘ LỌC)
+# ==========================================================
+np.random.seed(7)
+fs = 100.0            # Tần số lấy mẫu (Hz)
+dt = 1.0 / fs
+N  = 1000             # Số mẫu
+t  = np.arange(N) * dt
+
+# Góc thật: dao động 5Hz nhỏ
+true_angle = 5.0 * np.sin(2*np.pi*0.5*t)
+
+# Gia tốc kế: góc thật + nhiễu trắng mạnh (nhiễu rung)
+acc_angle  = true_angle + np.random.normal(0, 1.2, N)
+
+# Con quay: vận tốc góc thật + nhiễu nhỏ + bias 0.1 °/s
+gyro_rate  = np.gradient(true_angle, dt) + 0.1 + np.random.normal(0, 0.05, N)
+
+# ---------- Bộ lọc Complementary ----------
+alpha = 0.96
+cf_angle = np.zeros(N)
+for k in range(1, N):
+    cf_angle[k] = alpha * (cf_angle[k-1] + gyro_rate[k]*dt) \
+                  + (1 - alpha) * acc_angle[k]
+
+# ---------- Tích phân con quay thuần (minh họa drift) ----------
+gyro_int = np.zeros(N)
+for k in range(1, N):
+    gyro_int[k] = gyro_int[k-1] + gyro_rate[k]*dt
+
+# ---------- Vẽ đồ thị ----------
+plt.figure(figsize=(11, 6))
+plt.plot(t, true_angle, 'g-', lw=2, label='Góc thật')
+plt.plot(t, acc_angle,  'r.', alpha=0.4, label='Gia tốc kế (nhiễu)')
+plt.plot(t, gyro_int,   'm--', lw=1.5, label='Tích phân con quay (drift!)')
+plt.plot(t, cf_angle,   'b-',  lw=2.5, label='Complementary Filter')
+plt.xlabel('Thời gian (s)')
+plt.ylabel('Góc (độ)')
+plt.title('So sánh bộ lọc IMU — Complementary vs Tích phân thuần')
+plt.legend(); plt.grid(True); plt.show()
+
+# ---------- Sai số RMS ----------
+print(f'RMS err (acc only):   {np.sqrt(np.mean((acc_angle-true_angle)**2)):.3f} deg')
+print(f'RMS err (gyro int):   {np.sqrt(np.mean((gyro_int-true_angle)**2)):.3f} deg')
+print(f'RMS err (comp filt):  {np.sqrt(np.mean((cf_angle-true_angle)**2)):.3f} deg')
+</code></pre>
+
+<h2 id="s7.5">7.5 Kiểm tra chất lượng góc sau lọc</h2>
+
+<div class="step-card">
+    <span class="step-number">1</span> <strong>Test tĩnh (Static):</strong> Đặt IMU nằm yên, quan sát góc Roll/Pitch phải hội tụ về 0 và ổn định (không trôi, biên độ nhiễu nhỏ).
+    <br><span class="step-number">2</span> <strong>Test nghiêng tay (Step):</strong> Nghiêng mạnh rồi giữ yên — góc phải bám nhanh (thời gian đáp ứng &lt; 1s) không vọt lố (overshoot).
+    <br><span class="step-number">3</span> <strong>Test xoay nhanh:</strong> Xoay 360° để kiểm tra Yaw (nếu dùng từ kế) và phát hiện Gimbal Lock nếu dùng Euler.
+    <br><span class="step-number">4</span> <strong>Test rung:</strong> Đặt lên bàn rung — góc phải giữ ổn định dù gia tốc kế rung mạnh (nhờ con quay giữ giá trị).
+    <br><span class="step-number">5</span> <strong>Test nhiệt độ:</strong> Thay đổi nhiệt độ 30°C → quan sát drift; nếu lớn, phải bù nhiệt hoặc lọc bias động.
+</div>
+
+<!-- Quiz 7 -->
+<div class="quiz-section">
+    <h3>📝 Quick Quiz 7 — Lập trình IMU</h3>
+    
+    <div class="quiz-question">
+        <strong>Câu 1:</strong> MPU6050 ở FS ±2g, raw acc = 8192. Gia tốc là bao nhiêu g?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án Câu 1:</span>
+        <p>Độ nhạy gia tốc FS ±2g là 16384 LSB/g. Vậy $a = 8192 / 16384 = 0.5g$.</p>
+    </div>
+
+    <div class="quiz-question">
+        <strong>Câu 2:</strong> Trong bộ lọc Kalman cho góc IMU, trạng thái gồm 2 biến nào và ý nghĩa của việc ước lượng bias là gì?
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Đáp án Câu 2:</span>
+        <p>Trạng thái $x = [\theta,\; b]$ gồm góc $\theta$ và bias con quay $b$. Ước lượng $b$ đồng thời giúp Kalman <strong>tự bù drift</strong> — tương đương vai trò khâu tích phân $K_i$ của bộ lọc Mahony nhưng tối ưu theo thống kê.</p>
+    </div>
+</div>
+
+<!-- =========================================================== -->
+<!-- PHẦN 8: ỨNG DỤNG THỰC TẾ                                 -->
+<!-- =========================================================== -->
+<div class="part-header" id="part8">
+    <h1>PHẦN 8: ỨNG DỤNG THỰC TẾ CỦA IMU</h1>
+    <p>Từ Drone, Robot thăng bằng đến Điện thoại và Định vị quán tính</p>
+</div>
+
+<h2 id="s8.1">8.1 Drone: Cân bằng &amp; giữ thăng bằng</h2>
+
+<p>Bộ điều khiển bay (flight controller) dùng IMU làm <strong>tín hiệu hồi tiếp</strong> cho vòng PID tốc độ góc và góc nghiêng:</p>
+
+<div class="step-card">
+    <span class="step-number">1</span> IMU đọc Roll/Pitch/Yaw ở 100Hz-1000Hz.
+    <br><span class="step-number">2</span> Vòng PID trong: giữ vận tốc góc theo lệnh (Rate mode) — con quay đóng vai trò chính.
+    <br><span class="step-number">3</span> Vòng PID ngoài: giữ góc nghiêng đúng lệnh (Angle mode) — góc từ fusion.
+    <br><span class="step-number">4</span> Khi gió thổi làm drone nghiêng, IMU phát hiện → PID đẩy cánh quạt chống lại ngay lập tức.
+</div>
+
+<h2 id="s8.2">8.2 Robot thăng bằng 2 bánh (Self-balancing)</h2>
+
+<ul>
+    <li>Robot (kiểu Segway) cần biết góc nghiêng so với phương thẳng đứng để lăn bánh xe về phía nghiêng, giữ trọng tâm trên trục bánh.</li>
+    <li>Bài toán kinh điển: <strong>con lắc ngược (inverted pendulum)</strong>. Góc IMU → bộ điều khiển LQR/PID → mômen motor.</li>
+    <li>Yêu cầu: góc mượt, độ trễ thấp (delay &lt; 5ms), không trôi — nên dùng Complementary/Kalman với ODR cao.</li>
+</ul>
+
+<h2 id="s8.3">8.3 Điện thoại thông minh &amp; Game</h2>
+
+<ul>
+    <li>Xoay màn hình tự động (portrait/landscape) nhờ gia tốc kế.</li>
+    <li>Điều khiển game nghiêng điện thoại (racing, flappy bird) — fusion 6 DOF.</li>
+    <li>Bước đếm (pedometer) — phân tích chu kỳ gia tốc.</li>
+    <li>Ổn định hình ảnh quay video (EIS — Electronic Image Stabilization) dùng con quay để bù rung.</li>
+</ul>
+
+<h2 id="s8.4">8.4 Định vị quán tính (Inertial Navigation) &amp; Hạn chế</h2>
+
+<p><strong>INS (Inertial Navigation System)</strong> tích phân 2 lần gia tốc để tính vị trí:</p>
+
+$$v(t) = v_0 + \int a\, dt, \qquad p(t) = p_0 + \int v\, dt$$
+
+<div class="warning-box">
+    <span class="box-title">⚠️ Hạn chế nghiêm trọng của INS thuần:</span>
+    <p>Tích phân 2 lần khiến sai số tăng theo <strong>lũy thừa bậc 3 của thời gian</strong> ($\propto t^3$). Chỉ sau vài chục giây, vị trí đã lệch hàng trăm mét với IMU MEMS giá rẻ. Vì vậy INS thường được <strong>kết hợp với GPS bằng Kalman Filter</strong> (GPS cho vị trí tuyệt đối, IMU cho vị trí mượt giữa các lần GPS cập nhật) — đây chính là ứng dụng kinh điển của Kalman Filter mà tài liệu trước đã trình bày!</p>
+</div>
+
+<h2 id="s8.5">8.5 Y tế &amp; Thiết bị đeo (Wearable)</h2>
+
+<ul>
+    <li>Theo dõi chuyển động bệnh nhân, phát hiện té ngã (fall detection) ở người già — dựa trên gia tốc theo phương đứng đột biến.</li>
+    <li>Đồng hồ thông minh đếm bước, nhịp tim kết hợp IMU.</li>
+    <li>Robot phẫu thuật cần tư thế chính xác cao — dùng IMU quang học (FOG) hoặc MEMS cao cấp.</li>
+</ul>
+
+<div class="analogy-box">
+    <span class="box-title">🚁 Tóm tắt trọn bộ bằng 1 câu chuyện:</span>
+    <p>IMU = <strong>3 giác quan quán tính</strong> (gia tốc kế thấy trọng lực, con quay thấy xoay, từ kế thấy Bắc). Hiệu chuẩn để loại nhiễu hệ thống (Phần 6), Sensor Fusion để kết hợp điểm mạnh của từng cảm biến (Phần 5), và kết quả là <strong>góc Roll/Pitch/Yaw mượt mà, không trôi</strong> (Phần 4) — nền tảng cho mọi hệ điều khiển drone, robot và điện thoại.</p>
+</div>
+
+<!-- TỔNG KẾT -->
+<div style="background: linear-gradient(135deg, #0f172a, #1e293b); color: white; padding: 35px; border-radius: 10px; margin-top: 50px; text-align: center;">
+    <h2 style="color: #60a5fa; margin-top: 0;">🎯 Tóm Tắt Cảm Biến IMU</h2>
+    <p style="font-size: 1.05em; color: #cbd5e1; max-width: 750px; margin: 10px auto;">
+        1. <strong>Bản chất:</strong> IMU đo gia tốc (gia tốc kế), vận tốc góc (con quay), từ trường (từ kế) — dựa hoàn toàn trên nguyên lý quán tính, không cần tín hiệu ngoài.<br>
+        2. <strong>Góc nghiêng:</strong> gia tốc kế cho Roll/Pitch tĩnh; con quay cho góc mượt nhưng trôi; từ kế cho Yaw tuyệt đối.<br>
+        3. <strong>Fusion:</strong> Complementary Filter (nhẹ), Mahony/Madgwick (quaternion, bù bias), Kalman (tối ưu thống kê) kết hợp 3 nguồn để có tư thế chính xác.<br>
+        4. <strong>Hiệu chuẩn:</strong> bù bias, scale, cross-axis, hard/soft iron là điều kiện tiên quyết cho độ chính xác.<br>
+        5. <strong>Ứng dụng:</strong> Drone, robot thăng bằng, điện thoại, định vị quán tính (kết hợp GPS + Kalman), y tế và thiết bị đeo.
+    </p>
+</div>
+
+<div style="text-align: center; margin: 35px 0; color: var(--text-secondary); font-size: 0.9em;">
+    <p>— Hết tài liệu Cảm biến IMU —</p>
+    <p><em>Nhấn nút "📄 Xuất PDF" ở góc phải dưới để lưu tài liệu dưới dạng PDF</em></p>
+</div>
+
+</body>
+</html>
