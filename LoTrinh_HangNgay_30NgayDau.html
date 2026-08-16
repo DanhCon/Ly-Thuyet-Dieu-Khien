@@ -1,0 +1,1015 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lộ Trình Hàng Ngày — 30 Ngày Đầu Tiên (Tháng 1)</title>
+<script>
+window.MathJax = {
+    tex: { inlineMath: [['$','$']], displayMath: [['$$','$$']], tags: 'ams' },
+    svg: { fontCache: 'global' }
+};
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<style>
+:root {
+    --primary: #0f172a;
+    --accent: #2563eb;
+    --accent-light: #3b82f6;
+    --success: #16a34a;
+    --warning: #d97706;
+    --danger: #dc2626;
+    --bg: #f8fafc;
+    --card-bg: #ffffff;
+    --text: #1e293b;
+    --text-secondary: #475569;
+    --code-bg: #0f172a;
+    --border: #e2e8f0;
+    --quiz-bg: #f0f9ff;
+    --answer-bg: #f0fdf4;
+    --yellow-bg: #fffbeb;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.75;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+h1, h2, h3, h4 { color: var(--primary); line-height: 1.4; }
+h2 { font-size: 1.45em; margin: 28px 0 12px; }
+h3 { font-size: 1.2em; margin: 22px 0 10px; }
+p { margin: 10px 0; }
+ul, ol { margin: 10px 0 10px 28px; }
+li { margin: 6px 0; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+strong { color: var(--primary); }
+table.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 0.95em;
+}
+.table th {
+    background: var(--primary);
+    color: #fff;
+    padding: 10px 12px;
+    text-align: left;
+    border: 1px solid var(--primary);
+}
+.table td {
+    padding: 9px 12px;
+    border: 1px solid var(--border);
+    vertical-align: top;
+}
+.table tr:nth-child(even) { background: #f1f5f9; }
+pre {
+    background: var(--code-bg);
+    color: #e2e8f0;
+    padding: 14px 16px;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 14px 0;
+    font-size: 0.9em;
+}
+code {
+    font-family: Consolas, 'Fira Code', monospace;
+    background: #e2e8f0;
+    color: var(--danger);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.92em;
+}
+pre code { background: none; color: inherit; padding: 0; }
+.cover-page {
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    color: #fff;
+    text-align: center;
+    padding: 70px 30px;
+    border-radius: 12px;
+    margin-bottom: 30px;
+}
+.cover-page h1 { color: #fff; font-size: 2.2em; margin-bottom: 10px; }
+.cover-page .subtitle { color: #94a3b8; font-size: 1.15em; margin-bottom: 18px; }
+.cover-page .tagline { color: #cbd5e1; font-size: 1.02em; max-width: 700px; margin: 0 auto 25px; }
+.cover-page .meta { color: #60a5fa; font-size: 0.95em; border-top: 1px solid #334155; padding-top: 18px; display: inline-block; }
+.toc {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px 30px;
+    margin: 20px 0;
+}
+.toc h2 { margin-top: 0; border-bottom: 2px solid var(--accent); padding-bottom: 8px; }
+.toc ol { margin-left: 20px; }
+.toc a { display: inline-block; padding: 3px 0; }
+.part-header {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    color: #fff;
+    padding: 26px 28px;
+    border-radius: 10px;
+    margin: 36px 0 20px;
+}
+.part-header h1 { color: #fff; margin: 0 0 6px; font-size: 1.5em; }
+.part-header p { color: #bfdbfe; margin: 0; }
+.part-header-intro {
+    background: linear-gradient(135deg, #16a34a, #15803d);
+    color: #fff;
+    padding: 26px 28px;
+    border-radius: 10px;
+    margin: 36px 0 20px;
+}
+.part-header-intro h1 { color: #fff; margin: 0 0 6px; font-size: 1.5em; }
+.part-header-intro p { color: #dcfce7; margin: 0; }
+.part-header-purple {
+    background: linear-gradient(135deg, #7c3aed, #6d28d9);
+    color: #fff;
+    padding: 26px 28px;
+    border-radius: 10px;
+    margin: 36px 0 20px;
+}
+.part-header-purple h1 { color: #fff; margin: 0 0 6px; font-size: 1.5em; }
+.part-header-purple p { color: #ddd6fe; margin: 0; }
+.part-header-orange {
+    background: linear-gradient(135deg, #ea580c, #c2410c);
+    color: #fff;
+    padding: 26px 28px;
+    border-radius: 10px;
+    margin: 36px 0 20px;
+}
+.part-header-orange h1 { color: #fff; margin: 0 0 6px; font-size: 1.5em; }
+.part-header-orange p { color: #fed7aa; margin: 0; }
+.part-header-danger {
+    background: linear-gradient(135deg, #dc2626, #b91c1c);
+    color: #fff;
+    padding: 26px 28px;
+    border-radius: 10px;
+    margin: 36px 0 20px;
+}
+.part-header-danger h1 { color: #fff; margin: 0 0 6px; font-size: 1.5em; }
+.part-header-danger p { color: #fecaca; margin: 0; }
+.definition, .theorem, .important-note, .example-box, .analogy-box, .warning-box, .cheat-sheet {
+    border-radius: 10px;
+    padding: 18px 22px;
+    margin: 18px 0;
+}
+.box-title {
+    display: inline-block;
+    font-weight: 700;
+    font-size: 0.95em;
+    margin-bottom: 10px;
+    padding: 4px 12px;
+    border-radius: 6px;
+}
+.definition { background: #eff6ff; border-left: 5px solid var(--accent); }
+.definition .box-title { background: var(--accent); color: #fff; }
+.theorem { background: #f5f3ff; border-left: 5px solid #7c3aed; }
+.theorem .box-title { background: #7c3aed; color: #fff; }
+.important-note { background: #fffbeb; border-left: 5px solid var(--warning); }
+.important-note .box-title { background: var(--warning); color: #fff; }
+.example-box { background: #f0fdf4; border-left: 5px solid var(--success); }
+.example-box .box-title { background: var(--success); color: #fff; }
+.analogy-box { background: #f0f9ff; border-left: 5px solid #06b6d4; }
+.analogy-box .box-title { background: #06b6d4; color: #fff; }
+.warning-box { background: #fef2f2; border-left: 5px solid var(--danger); }
+.warning-box .box-title { background: var(--danger); color: #fff; }
+.cheat-sheet { background: #f0fdfa; border: 1px dashed #14b8a6; }
+.cheat-sheet .box-title { background: #14b8a6; color: #fff; }
+.step-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 22px;
+    margin: 16px 0;
+    position: relative;
+}
+.step-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.05em;
+    margin-bottom: 10px;
+}
+.quiz-section { background: var(--quiz-bg); border-radius: 10px; padding: 22px 24px; margin: 20px 0; }
+.quiz-section > h3 { margin-top: 0; }
+.quiz-question {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 14px 0;
+}
+.answer-section {
+    background: var(--answer-bg);
+    border-left: 4px solid var(--success);
+    border-radius: 8px;
+    padding: 12px 18px;
+    margin: 10px 0 16px;
+}
+.answer-section .box-title { background: var(--success); color: #fff; }
+.goal-box {
+    background: linear-gradient(135deg, #fefce8, #fffbeb);
+    border: 1px solid #fde68a;
+    border-left: 5px solid var(--warning);
+    border-radius: 8px;
+    padding: 12px 18px;
+    margin: 10px 0 14px;
+    font-size: 0.95em;
+}
+.goal-box strong { color: #92400e; }
+.level-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.82em;
+    font-weight: 600;
+    margin: 0 4px;
+}
+.level-apply { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+.level-deep { background: #dbeafe; color: #1e40af; border: 1px solid #93c5fd; }
+.level-concept { background: #ede9fe; color: #5b21b6; border: 1px solid #c4b5fd; }
+.legend-box {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 16px 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+}
+.legend-item { display: flex; align-items: center; gap: 8px; font-size: 0.92em; }
+.print-btn {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 30px;
+    font-size: 0.95em;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+    z-index: 100;
+}
+.print-btn:hover { background: var(--primary); }
+.summary-box {
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    color: #fff;
+    padding: 30px 34px;
+    border-radius: 12px;
+    margin: 30px 0;
+}
+.summary-box h2 { color: #60a5fa; margin-top: 0; }
+.summary-box ul { color: #cbd5e1; }
+@media print {
+    .print-btn { display: none; }
+    .part-header, .part-header-intro, .part-header-purple, .part-header-orange, .part-header-danger { page-break-before: always; }
+    .definition, .theorem, .important-note, .example-box, .analogy-box, .warning-box, .cheat-sheet, .quiz-section, .answer-section, .step-card, .toc, .goal-box { break-inside: avoid; }
+    body { background: #fff; }
+}
+</style>
+</head>
+<body>
+
+<button class="print-btn" onclick="window.print()">📄 Xuất PDF</button>
+
+<div class="cover-page">
+    <h1>🗓️ Lộ Trình Hàng Ngày — 30 Ngày Đầu Tiên</h1>
+    <div class="subtitle">Tháng 1 của lộ trình 24 tuần Control &amp; Planning · Chi tiết từng ngày, kèm MỤC ĐÍCH và CHECKLIST</div>
+    <div class="tagline">
+        Mỗi ngày đều có 3 phần: <strong>🎯 Mục đích</strong> (học cái này để làm gì, mất gì nếu bỏ) · <strong>công việc chi tiết</strong> · <strong>checklist đánh dấu</strong>. Lấy JD làm la bàn, nhưng không chỉ chạy theo JD — có những kiến thức bổ trợ (Git, Docker, GDB, đọc tài liệu tiếng Anh, ghi chú kỹ thuật) không JD nào ghi nhưng thiếu là tắc nghẽn thực sự.
+    </div>
+    <div class="meta">Dành cho: Huỳnh Công Danh · Tuần 1–4 trong lộ trình 24 tuần · 2026</div>
+</div>
+
+<div class="toc">
+    <h2>📑 Mục Lục</h2>
+    <ol>
+        <li><a href="#part0">Phần 0 — Cách dùng tài liệu này &amp; bức tranh tháng 1</a></li>
+        <li><a href="#tuan1">Tuần 1 (Ngày 1–7) — Nền móng môi trường: Ubuntu, Git, Docker</a></li>
+        <li><a href="#tuan2">Tuần 2 (Ngày 8–14) — C++ hiện đại: OOP, RAII, STL, Template</a></li>
+        <li><a href="#tuan3">Tuần 3 (Ngày 15–21) — CMake + Dự án Kalman C++ thuần</a></li>
+        <li><a href="#tuan4">Tuần 4 (Ngày 22–30) — Python + phân tích dữ liệu thật</a></li>
+        <li><a href="#ket">Tổng kết tháng 1 &amp; cầu nối sang tháng 2</a></li>
+    </ol>
+</div>
+
+<div class="part-header-intro" id="part0">
+    <h1>PHẦN 0 — CÁCH DÙNG TÀI LIỆU NÀY</h1>
+    <p>Đọc 3 phút trước khi bắt đầu — đây là quy tắc sống còn của tháng đầu</p>
+</div>
+
+<div class="definition">
+    <span class="box-title">🎯 Bức tranh tháng 1 — vì sao có 4 tuần này</span>
+    <p>Tháng 1 xây <strong>nền móng</strong> cho 20 tuần còn lại: môi trường (Linux/Git/Docker) + C++ + Python. Nghe có vẻ "không phải robot", nhưng hãy nhìn theo cách này:</p>
+    <table class="table">
+        <tr>
+            <th>Tuần</th>
+            <th>Trọng tâm</th>
+            <th>Thành quả cuối tuần</th>
+        </tr>
+        <tr>
+            <td>1 (Ngày 1–7)</td>
+            <td>Ubuntu + terminal + Git + Docker</td>
+            <td>Môi trường làm việc chuẩn công ty + repo ghi chú có commit mỗi ngày</td>
+        </tr>
+        <tr>
+            <td>2 (Ngày 8–14)</td>
+            <td>C++ hiện đại (tài liệu CPP_HienDai: Phần 1–5)</td>
+            <td>Gõ lại toàn bộ bài tập BT1–BT4, hiểu OOP/RAII/STL/Template</td>
+        </tr>
+        <tr>
+            <td>3 (Ngày 15–21)</td>
+            <td>CMake + DỰ ÁN: bộ lọc Kalman C++ thuần</td>
+            <td>Repo <code>kalman_cpp</code> chạy được: CMake + CSV + README + commit</td>
+        </tr>
+        <tr>
+            <td>4 (Ngày 22–30)</td>
+            <td>Python numpy/scipy/matplotlib + log THẬT</td>
+            <td>Script phân tích log encoder STM32 + kiểm tra chéo Kalman 2 ngôn ngữ</td>
+        </tr>
+    </table>
+    <p><strong>Tại sao không học ROS2 ngay?</strong> Vì ROS2 = C++ + Linux + CMake + Git cộng lại. Không nền móng, tuần 7–8 (ROS2) sẽ biến thành 1 tháng vật lộn với lỗi build thay vì học điều khiển. Chạy nhanh trước khi chạy đúng = mất thời gian hơn.</p>
+</div>
+
+<div class="important-note">
+    <span class="box-title">⚡ Kiến thức bổ trợ — không JD nào ghi, nhưng thiếu là tắc</span>
+    <p>Người dùng tự đặt câu hỏi đúng: JD không liệt kê những thứ này, nhưng chúng là điều kiện để thực hiện yêu cầu JD. Trong tháng 1 có 6 "kiến thức bổ trợ" đan xen:</p>
+    <ol>
+        <li><strong>Git + GitHub</strong> (ngày 3–4): không JD nào ghi "Git" trừ Phenikaa-X, nhưng mọi công ty AV đều dùng. Recruiter đọc repo của bạn như đọc CV kỹ thuật. Không commit = không có bằng chứng.</li>
+        <li><strong>Terminal/Linux</strong> (ngày 1–2): 4/11 JD ghi "Ubuntu/Linux" — đây là môi trường, không phải kiến thức. Thiếu nó, mọi lệnh cài ROS2 sau này đều bị kẹt.</li>
+        <li><strong>Docker</strong> (ngày 5): Phenikaa-X ghi "sử dụng thành thạo Docker". Thêm vào: ROS2 cài trong Docker = không phá hệ thống của bạn khi thử nghiệm.</li>
+        <li><strong>Đọc tài liệu tiếng Anh 15 phút/ngày</strong>: docs.ros.org, datasheet, README. Không phải IELTS — là kỹ năng làm việc: mọi câu trả lời kỹ thuật đều nằm trong tài liệu tiếng Anh.</li>
+        <li><strong>GDB/debug cơ bản</strong> (ngày 19): mọi lỗi chương trình đều phải tự tìm được. "Biết debug" là kỹ năng recruiter không hỏi nhưng đồng nghiệp đánh giá ngay tuần đầu.</li>
+        <li><strong>Ghi chú kỹ thuật</strong> (mỗi ngày): ghi vào sổ tay Markdown 3 dòng "hôm nay học gì, lỗi gì, câu hỏi gì". Kiến thức không ghi lại = kiến thức bay hơi sau 2 tuần.</li>
+    </ol>
+</div>
+
+<div class="warning-box">
+    <span class="box-title">⚠️ Quy tắc tháng 1 (đọc kỹ)</span>
+    <ul>
+        <li><strong>3–4 giờ/ngày là đủ.</strong> Hơn nữa = kiệt sức tuần 3. Kém hơn 1 giờ/ngày 3 ngày liên tiếp = tuần đó coi như bỏ.</li>
+        <li><strong>Gõ lại code, không copy.</strong> Mọi bài tập trong tài liệu CPP_HienDai đều có code đầy đủ — gõ TAY, dự đoán kết quả TRƯỚC khi chạy. Đây là cách duy nhất để não hình thành đường mòn.</li>
+        <li><strong>Commit mỗi ngày.</strong> Không có commit trong ngày = ngày đó chưa thực sự học. Quy tắc này không thương lượng.</li>
+        <li><strong>1 ngày nghỉ/tuần (ngày 7, 14, 21, 30):</strong> nghỉ là một phần của lộ trình, không phải trốn học. Não cần ngấm.</li>
+        <li><strong>Bị kẹt 45 phút → ghi câu hỏi vào sổ, chuyển việc khác, hỏi lại vào cuối ngày.</strong> Không ngồi vật lộn 3 giờ với một lỗi typo.</li>
+    </ul>
+</div>
+
+<div class="analogy-box">
+    <span class="box-title">🔎 Ẩn dụ tháng 1: Bạn đang đổ móng + chuẩn bị công trường</span>
+    <p>30 ngày đầu của lộ trình 24 tuần giống 1 tháng đầu của một công trình: nhìn bên ngoài chưa thấy gì đẹp đẽ (toàn nền móng và cốt thép), nhưng <strong>không một tầng nào của tòa nhà đứng vững nếu móng đổ sai</strong>. C++ + Linux + Git + Python là cốt thép đó. Người học ROS2 vội sẽ có "ngôi nhà" sập ngay khi gặp dự án thật — người học móng sẽ đi xa hơn. Đừng nản vì chưa thấy robot chạy trong 30 ngày đầu: mọi con robot bạn chạy từ tháng 2 trở đi đều đứng trên 30 ngày này.</p>
+</div>
+<div class="part-header" id="tuan1">
+    <h1>TUẦN 1 — NỀN MÓNG MÔI TRƯỜNG (Ngày 1–7)</h1>
+    <p>Ubuntu · Terminal · Git/GitHub · Docker · Ghi chú kỹ thuật</p>
+</div>
+
+<div class="goal-box">
+    <strong>🎯 Mục đích của cả tuần — tại sao phải làm:</strong> Tuần này không học "điều khiển" mà học <strong>nơi điều khiển sẽ sống</strong>. Mọi công ty AV (RTC, Phenikaa-X, Avride...) làm việc trên Ubuntu với Git và Docker — đây là "bàn làm việc" của nghề. Bỏ qua tuần này để học ROS2 sớm giống như bắt đầu xây tầng 2 khi chưa có móng: tầng 2 có thể dựng lên trong 2 tuần, nhưng sẽ đổ sập ngay khi gặp lỗi thật. Những gì bạn học tuần này sẽ được dùng MỖI NGÀY trong 20 tuần còn lại và cả sự nghiệp.
+</div>
+
+<div class="step-card">
+    <span class="step-number">1</span>
+    <h3>Ngày 1 — Cài Ubuntu + làm quen terminal</h3>
+    <div class="goal-box">
+        <strong>🎯 Mục đích:</strong> ROS2 Humble chạy trên Ubuntu 22.04 — không có nó, tuần 7 không thể bắt đầu. Terminal là nơi bạn sống: mỗi lệnh cài đặt, mỗi lần xem log robot đều qua đây. Hôm nay cài xong môi trường = hết cả tháng sắp tới không mất thời gian "sửa máy".
+    </div>
+    <ul>
+        <li><strong>Cách cài (chọn 1):</strong> (a) Ubuntu 22.04 song song Windows — khuyến nghị, vì GPU/sim sau này chạy mượt; (b) WSL2 nếu máy yếu; (c) Docker Desktop + image ubuntu:22.04 nếu chưa muốn đụng ổ cứng.</li>
+        <li>Học 10 lệnh đầu đời: <code>pwd</code>, <code>ls</code>, <code>cd</code>, <code>mkdir</code>, <code>touch</code>, <code>cp</code>, <code>mv</code>, <code>rm</code>, <code>cat</code>, <code>nano</code> (hoặc vim). Tạo cây thư mục <code>~/dev/</code> cho toàn bộ dự án sau này.</li>
+        <li><strong>Thử thách:</strong> tạo file <code>hello.txt</code>, ghi dòng chữ bằng nano, xem lại bằng cat, copy sang tên khác, xóa bản gốc. Làm xong = biết 50% terminal.</li>
+    </ul>
+    <div class="answer-section">
+        <span class="box-title">✅ Checklist ngày 1</span>
+        ☐ Ubuntu/Docker chạy được, có terminal mở được · ☐ Gõ được 10 lệnh trên không nhìn tài liệu · ☐ Có <code>~/dev/</code> đúng chuẩn · ☐ Ghi 3 dòng nhật ký vào sổ tay
+    </div>
+</div>
+
+<div class="step-card">
+    <span class="step-number">2</span>
+    <h3>Ngày 2 — Hệ thống file Linux + quyền + cài phần mềm</h3>
+    <div class="goal-box">
+        <strong>🎯 Mục đích:</strong> 90% lỗi người mới gặp là "permission denied" và "command not found". Hiểu quyền (chmod), sudo, PATH = tự xử lý 80% lỗi cài đặt ROS2 sau này mà không cần hỏi ai. Cài đặt phần mềm bằng apt là kỹ năng bạn dùng 20 lần/tuần.
+    </div>
+    <ul>
+        <li>Cấu trúc thư mục Linux: <code>/home</code>, <code>/usr</code>, <code>/etc</code>, <code>/var</code>, <code>/tmp</code> — mỗi cái để làm gì (chỉ cần hiểu ý tưởng).</li>
+        <li>Quyền: <code>chmod 755/644</code> nghĩa là gì (r/w/x cho user/group/other), <code>sudo</code> khi nào cần, biến môi trường <code>export PATH=$PATH:...</code>.</li>
+        <li>Thực hành: <code>sudo apt update</code> → <code>sudo apt install git curl build-essential gdb</code>. Cài xong = bạn đã có toàn bộ công cụ của tuần này và tuần sau.</li>
+        <li><strong>Kiểm tra:</strong> <code>g++ --version</code> hiện bản 11+ — nếu chưa có, cài <code>g++</code> qua apt.</li>
+    </ul>
+    <div class="answer-section">
+        <span class="box-title">✅ Checklist ngày 2</span>
+        ☐ Giải thích được chmod 755 vs 644 bằng lời · ☐ apt update/install chạy sạch không lỗi · ☐ g++/git/gdb đã cài, phiên bản hiển thị đúng · ☐ Ghi nhật ký
+    </div>
+</div>
+
+<div class="step-card">
+    <span class="step-number">3</span>
+    <h3>Ngày 3 — Git: lệnh cơ bản + commit đầu tiên</h3>
+    <div class="goal-box">
+        <strong>🎯 Mục đích — kiến thức bổ trợ số 1:</strong> Không JD nào ghi "Git" ngoài Phenikaa-X, nhưng Git là <strong>ngôn ngữ làm việc của mọi đội kỹ thuật</strong>. Quan trọng hơn với riêng bạn: lộ trình 24 tuần đếm bằng commit — "không commit trong 1 tuần = tuần đó không học đúng thứ cần". Git cũng là cơ chế lưu trữ bằng chứng: mỗi commit là một viên gạch của CV. Hôm nay biến lịch sử học tập của bạn thành lịch sử commit.
+    </div>
+    <ul>
+        <li>Học: <code>git init</code>, <code>git add</code>, <code>git commit -m</code>, <code>git status</code>, <code>git log</code>, <code>git diff</code>. Khái niệm staging area = "bàn trung chuyển" trước khi đóng gói.</li>
+        <li>Tạo repo đầu tiên: <code>~/dev/notes/</code> — ghi chú kỹ thuật của bạn. Commit đầu tiên với 1 file <code>README.md</code>.</li>
+        <li>Viết README đầu tiên theo chuẩn: tiêu đề + 2 câu mô tả + cách dùng. Đây là mẫu cho mọi repo sau (chuẩn kỹ thuật người ta đọc đầu tiên).</li>
+    </ul>
+    <div class="answer-section">
+        <span class="box-title">✅ Checklist ngày 3</span>
+        ☐ git config user.name/email đã đặt · ☐ Repo <code>notes</code> có ≥ 2 commit · ☐ Viết được README 5 dòng · ☐ Nhật ký
+    </div>
+</div>
+
+<div class="step-card">
+    <span class="step-number">4</span>
+    <h3>Ngày 4 — GitHub: push repo + branch + merge</h3>
+    <div class="goal-box">
+        <strong>🎯 Mục đích:</strong> Repo trên máy bạn = không ai thấy. Repo trên GitHub = <strong>CV kỹ thuật sống</strong> mà recruiter mở ra đọc. Branch/merge là cách đội ngũ 10 người làm chung một codebase mà không đè lên nhau — bạn sẽ cần ngay từ đồ án nhóm hoặc dự án công ty. Học hôm nay còn dễ, học khi đang làm việc nhóm là áp lực.
+    </div>
+    <ul>
+        <li>Tạo tài khoản GitHub (nếu chưa có), push repo <code>notes</code> lên: <code>git remote add origin</code> + <code>git push -u origin main</code>.</li>
+        <li>Branch: tạo <code>git branch dev</code>, chuyển qua, sửa file, commit, merge về main bằng <code>git merge</code>. Xem <code>git log --graph</code> thấy lịch sử.</li>
+        <li>Học Markdown đủ dùng: tiêu đề, list, code block, bảng, link — ghi lại 1 trang cheat-sheet Markdown vào notes.</li>
+        <li><strong>Thử thách:</strong> sửa README trên GitHub bằng web → pull về máy → push 1 thay đổi khác từ máy → giải quyết nếu có conflict (thử tạo conflict thật để biết nó trông ra sao).</li>
+    </ul>
+    <div class="answer-section">
+        <span class="box-title">✅ Checklist ngày 4</span>
+        ☐ Repo notes có trên GitHub (public) · ☐ Tự tạo + merge 1 branch · ☐ Biết Markdown viết bảng · ☐ Trải qua 1 conflict và hiểu cách sửa
+    </div>
+</div>
+
+<div class="step-card">
+    <span class="step-number">5</span>
+    <h3>Ngày 5 — Docker căn bản</h3>
+    <div class="goal-box">
+        <strong>🎯 Mục đích:</strong> Phenikaa-X ghi thẳng "Sử dụng thành thạo Docker, Git, RViz2, Foxglove". Docker cho phép cài ROS2 mà <strong>không sợ phá hệ điều hành</strong> — bạn sẽ tận dụng ngay ở tuần 7–8. Khái niệm image/container = "bản vẽ" và "căn hộ được xây từ bản vẽ": cùng một bản vẽ, mở bao nhiêu căn hộ cũng được, phá căn hộ không ảnh hưởng bản vẽ.
+    </div>
+    <ul>
+        <li>Cài Docker Engine + Docker Desktop (Ubuntu). Chạy container đầu tiên: <code>docker run -it ubuntu:22.04 bash</code> — bạn đang ở trong một Linux sạch hoàn toàn.</li>
+        <li>Học: <code>docker pull</code>, <code>docker run</code>, <code>docker exec</code>, <code>docker ps</code>, <code>docker stop/rm</code>, <code>-v</code> (mount thư mục), <code>-it</code>.</li>
+        <li>Viết Dockerfile đơn giản: FROM ubuntu:22.04 → RUN apt update && apt install -y build-essential → COPY → CMD. Build và chạy image của chính mình.</li>
+        <li>Mẹo chống nản: mount <code>-v ~/dev:/workspace</code> để code trên máy hiện ngay trong container.</li>
+    </ul>
+    <div class="answer-section">
+        <span class="box-title">✅ Checklist ngày 5</span>
+        ☐ Chạy được container ubuntu tương tác · ☐ Tự viết + build Dockerfile đầu tiên · ☐ Hiểu image vs container (giải thích được bằng lời) · ☐ Mount thư mục hoạt động
+    </div>
+</div>
+
+<div class="step-card">
+    <span class="step-number">6</span>
+    <h3>Ngày 6 — Project nhỏ: "sổ tay kỹ thuật" + ôn tập cả tuần</h3>
+    <div class="goal-box">
+        <strong>🎯 Mục đích:</strong> Học bằng cách làm sản phẩm: hôm nay bạn dựng <strong>repo đầu tiên hoàn chỉnh</strong> — sổ tay kỹ thuật. Nó vừa là nơi ghi nhật ký (kiến thức bổ trợ số 6), vừa là bằng chứng "có khả năng tổ chức + viết tài liệu kỹ thuật" — thứ recruiter đọc được. Ôn tập cuối tuần giúp kiến thức chuyển từ trí nhớ ngắn hạn sang dài hạn (kỹ thuật spaced repetition).
+    </div>
+    <ul>
+        <li>Tổ chức lại notes: <code>linux.md</code>, <code>git.md</code>, <code>docker.md</code>, <code>markdown.md</code> — mỗi file: lệnh + ví dụ + 1 câu "dùng khi nào".</li>
+        <li>Ghi 1 trang "lỗi đã gặp tuần này" (mỗi lỗi: triệu chứng → nguyên nhân → cách sửa). Đây là kho vàng của bạn — sau này lỗi ROS2 sẽ là phiên bản lớn hơn của các lỗi này.</li>
+        <li>Ôn: chạy lại 5 lệnh terminal khó nhất, 1 vòng git push/pull, 1 container Docker từ đầu đến cuối — không nhìn tài liệu.</li>
+        <li><strong>Đọc trước:</strong> mở tài liệu <code>CPP_HienDai_Control_AV_ToanTap.html</code>, đọc Phần 0 và 1 (nền tảng) — ngày mai bắt đầu gõ code luôn.</li>
+    </ul>
+    <div class="answer-section">
+        <span class="box-title">✅ Checklist ngày 6</span>
+        ☐ Repo notes có 4 file chuyên đề + 1 trang lỗi · ☐ Ôn lại toàn bộ lệnh không nhìn tài liệu · ☐ Đã đọc Phần 0–1 tài liệu C++ · ☐ Nhật ký
+    </div>
+</div>
+
+<div class="step-card">
+    <span class="step-number">7</span>
+    <h3>Ngày 7 — Nghỉ + tổng kết tuần 1</h3>
+    <div class="goal-box">
+        <strong>🎯 Mục đích:</strong> Nghỉ ngơi có chủ đích là một phần của lộ trình: não xử lý và sắp xếp kiến thức trong lúc nghỉ. Tổng kết tuần 1 tạo cảm giác tiến bộ thật (động lực) và phát hiện lỗ hổng trước khi chúng to ra.
+    </div>
+    <ul>
+        <li>Chỉ 30 phút việc học: đánh dấu checklist tuần 1 (bảng dưới), viết 5 dòng "tuần này làm được gì, tuần sau chú ý gì".</li>
+        <li>Dọn dẹp: đảm bảo Ubuntu/Docker vẫn chạy tốt sau 1 tuần sử dụng — máy tính sạch = tuần 2 suôn sẻ.</li>
+        <li>Nghỉ thật sự cho phần còn lại của ngày. Tuần 2 cần đầu óc tươi.</li>
+    </ul>
+</div>
+
+<div class="cheat-sheet">
+    <span class="box-title">✅ CHECKLIST TUẦN 1 (đánh dấu vào cuối ngày 7)</span>
+    <ul>
+        <li>☐ Ubuntu/Docker chạy ổn định, terminal dùng thành thạo 10+ lệnh.</li>
+        <li>☐ apt + quyền + PATH hiểu và dùng được.</li>
+        <li>☐ Repo <code>notes</code> public trên GitHub, ≥ 7 commit (1/ngày), đã merge ít nhất 1 branch.</li>
+        <li>☐ Docker: chạy container, mount thư mục, tự build Dockerfile.</li>
+        <li>☐ Sổ tay có 4 file chuyên đề + 1 trang lỗi + nhật ký 7 ngày.</li>
+        <li>☐ Đã đọc trước Phần 0–1 tài liệu C++ (sẵn sàng gõ code ngày 8).</li>
+    </ul>
+</div>
+<div class="part-header" id="tuan2">
+    <h1>TUẦN 2 — C++ HIỆN ĐẠI (Ngày 8–14)</h1>
+    <p>Theo tài liệu CPP_HienDai_Control_AV_ToanTap.html · Gõ lại code, không copy · 8/11 JD gọi tên C++</p>
+</div>
+
+<div class="goal-box">
+    <strong>🎯 Mục đích của cả tuần — tại sao phải làm:</strong> C++ là ngôn ngữ mà 8/11 JD trong lộ trình gọi tên (Venti, Tycho, Avride, RTC, Phenikaa-X ×2...). Nhưng quan trọng hơn: <strong>mọi thứ bạn sẽ học từ tuần 7 trở đi đều viết bằng C++</strong> — node ROS2, controller Pure Pursuit/LQR, EKF, đọc code Nav2. Tuần này không học "ngôn ngữ", tuần này học <strong>ngôn ngữ mẹ đẻ của nghề</strong>. Quy tắc vàng: mỗi bài tập gõ TAY, dự đoán kết quả TRƯỚC khi chạy — não chỉ học khi tự dự đoán rồi đối chiếu với thực tế.
+</div>
+
+<div class="step-card">
+    <span class="step-number">8</span>
+    <h3>Ngày 8 — Phần 1: nền tảng — biến, con trỏ, tham chiếu, const</h3>
+    <div class="goal-box">
+        <strong>🎯 Mục đích:</strong> Con trỏ và tham chiếu là thứ làm C++ khác mọi ngôn ngữ khác — và là nơi 80% lỗi phỏng vấn C++ nằm. Vì sao phải hiểu sâu? Vì bạn sẽ đọc code Nav2/F1TENTH: toàn con trỏ, tham chiếu, const. Không hiểu 3 khái niệm này = đọc code người khác như đọc chữ tượng hình.
+    </div>
+    <ul>
+        <li>Đọc Phần 1 tài liệu C++: biến, kiểu dữ liệu, <code>int* p = &x</code>, <code>int& r = x</code>, <code>const int&</code> — 3 khái niệm này khác nhau thế nào, dùng khi nào.</li>
+        <li>Gõ lại các ví dụ trong tài liệu. Biên dịch: <code>g++ -std=c++17 file.cpp -o file</code> rồi chạy.</li>
+        <li><strong>Bài tập tự nghĩ:</strong> viết hàm nhận tham chiếu và sửa biến bên ngoài; viết hàm nhận con trỏ nullptr và xử lý an toàn. Đây là 2 mẫu cực phổ biến trong code robot.</li>
+        <li>Dự đoán kết quả trước khi chạy từng đoạn — sai cũng được, quan trọng là đối chiếu.</li>
+    </ul>
+    <div class="answer-section">
+        <span class="box-title">✅ Checklist ngày 8</span>
+        ☐ Giải thích được bằng lời: con trỏ vs tham chiếu vs const · ☐ Gõ + chạy ≥ 5 ví dụ · ☐ Viết được 1 hàm dùng tham chiếu đổi biến ngoài · ☐ Commit vào repo <code>cpp_learning</code> (tạo hôm nay) · ☐ Nhật ký
+    </div>
+</div>
+
+<div class="step-card">
+    <span class="step-number">9</span>
+    <h3>Ngày 9 — Bài tập Phần 1 (BT1.x) + đọc trước Phần 2</h3>
+    <div class="goal-box">
+        <strong>🎯 Mục đích:</strong> Ngày dành riêng cho luyện tập gõ lại BT1.1–BT1.3 trong tài liệu — mục tiêu là <strong>thuộc</strong>, không phải hiểu qua. Giống học nhạc: đọc bản nhạc 1 lần không đủ, phải chơi đi chơi lại. BT1 có đáp án + giải thích WHY — đọc đáp án SAU khi tự làm, so sánh cách nghĩ của bạn với cách nghĩ chuẩn.
+    </div>
+    <ul>
+        <li>Làm BT1.1 → BT1.3 trong tài liệu: đọc đề, tự viết, chạy, đối chiếu đáp án.</li>
+        <li>Mỗi bài: ghi vào sổ 1 dòng "tôi sai chỗ nào, vì sao sai".</li>
+        <li>Đọc trước Phần 2 (Class &amp; OOP) — ngày mai gõ code luôn, không đọc lại lần 2.</li>
+        <li>Kiểm tra nhanh bản thân: viết từ trí nhớ 1 đoạn dùng con trỏ + 1 đoạn dùng tham chiếu.</li>
+    </ul>
+    <div class="answer-section">
+        <span class="box-title">✅ Checklist ngày 9</span>
+        ☐ BT1.1–1.3 làm xong, đối chiếu đáp án, ghi lỗi sai · ☐ Đọc xong Phần 2 · ☐ Viết lại 2 đoạn con trỏ/tham chiếu từ trí nhớ · ☐ Commit + nhật ký
+    </div>
+</div>
+
+<div class="step-card">
+    <span class="step-number">10</span>
+    <h3>Ngày 10 — Phần 2: Class &amp; OOP</h3>
+    <div class="goal-box">
+        <strong>🎯 Mục đích:</strong> OOP là cách code robot được tổ chức: <code>class Motor</code>, <code>class Controller</code>, <code>class Robot</code> — mỗi thứ là một đối tượng có dữ liệu + hành vi. Phenikaa-X ghi thẳng "Kinh nghiệm lập trình hướng đối tượng (OOP)". Inheritance/virtual là nền để hiểu kiến trúc Nav2 (controller_base, costmap_2d...). Học OOP hôm nay = tuần 13 đọc Nav2 không lạc.
+    </div>
+    <ul>
+        <li>Đọc Phần 2: class, access modifier (public/private), constructor, inheritance, polymorphism, virtual.</li>
+        <li>Gõ lại ví dụ. Tự xây dựng: class <code>Motor</code> với speed, direction, hàm <code>set_speed()</code> — ví dụ gần với đồ án STM32 của bạn.</li>
+        <li>Viết 1 class cha + 1 class con (kế thừa), dùng virtual — dự đoán output trước khi chạy.</li>
+    </ul>
+    <div class="answer-section">
+        <span class="box-title">✅ Checklist ngày 10</span>
+        ☐ Tự viết class Motor có constructor + phương thức · ☐ Class cha/con + virtual chạy đúng như dự đoán · ☐ Giải thích được vì sao cần virtual · ☐ Commit + nhật ký
+    </div>
+</div>
+
+<div class="step-card">
+    <span class="step-number">11</span>
+    <h3>Ngày 11 — Bài tập Phần 2 (BT2.x) + đọc trước Phần 3 (RAII)</h3>
+    <div class="goal-box">
+        <strong>🎯 Mục đích:</strong> BT2.1–BT2.4 là nơi lỗi OOP kinh điển lộ ra (chép object, quên virtual, sai constructor). RAII — bài toán "ai dọn dẹp bộ nhớ khi nào" — là câu hỏi phỏng vấn C++ #1 ở mọi công ty AV, vì code AV chạy 24/7: rò rỉ bộ nhớ = crash sau 3 ngày chạy = thảm họa. Hiểu RAII = hiểu vì sao smart pointer tồn tại.
+    </div>
+    <ul>
+        <li>Làm BT2.1 → BT2.4, ghi lỗi sai vào sổ.</li>
+        <li>Đọc trước Phần 3 (RAII &amp; smart pointer): vì sao <code>new</code>/<code>delete</code> thủ công nguy hiểm.</li>
+        <li>Thử nghiệm tư duy: class Motor của bạn — nếu cấp phát bộ nhớ trong constructor, ai trả lại?</li>
+    </ul>
+    <div class="answer-section">
+        <span class="box-title">✅ Checklist ngày 11</span>
+        ☐ BT2.1–2.4 xong + ghi lỗi · ☐ Trả lời được câu hỏi "ai dọn dẹp bộ nhớ" · ☐ Đọc xong Phần 3 · ☐ Commit + nhật ký
+    </div>
+</div>
+
+<div class="step-card">
+    <span class="step-number">12</span>
+    <h3>Ngày 12 — Phần 3: RAII &amp; smart pointer + BT3.x</h3>
+    <div class="goal-box">
+        <strong>🎯 Mục đích:</strong> <code>unique_ptr</code>/<code>shared_ptr</code> là chuẩn mực code C++ hiện đại — bạn sẽ thấy chúng khắp nơi trong Nav2 và code công ty. Hiểu được "ai sở hữu đối tượng này" là tư duy phân biệt kỹ sư C++ giỏi với kỹ sư "viết C với class". Đồng thời: đây là mảnh tài liệu C++ duy nhất của bạn có dự án thật (Phần 6 LQR) — RAII là nền của nó.
+    </div>
+    <ul>
+        <li>Học: scope/lifetime, <code>std::unique_ptr</code> (1 chủ sở hữu), <code>std::shared_ptr</code> (nhiều chủ), <code>std::make_unique</code>.</li>
+        <li>Gõ lại ví dụ, làm BT3.1–3.3.</li>
+        <li>Bài tập tư duy: vì sao shared_ptr dùng atomic counter; vì sao unique_ptr không copy được nhưng move được.</li>
+    </ul>
+    <div class="answer-section">
+        <span class="box-title">✅ Checklist ngày 12</span>
+        ☐ BT3.1–3.3 xong · ☐ Giải thích được unique vs shared + vì sao move · ☐ Biết khi nào dùng cái nào · ☐ Commit + nhật ký
+    </div>
+</div>
+
+<div class="step-card">
+    <span class="step-number">13</span>
+    <h3>Ngày 13 — Phần 4: STL (vector, map, algorithm)</h3>
+    <div class="goal-box">
+        <strong>🎯 Mục đích:</strong> STL là "kho đồ nghề" có sẵn của C++: <code>vector</code> (mảng động — lưu vị trí robot), <code>map</code> (từ điển — lưu tham số), <code>std::sort</code>/<code>find</code>/<code>accumulate</code> (thuật toán). Code AV thật KHÔNG viết vòng lặp tay nhiều — nó dùng STL. Biết STL = viết code ngắn, đúng, dễ đọc — chính là thứ đồng nghiệp đánh giá. Lưu ý điểm yếu của bạn là Template/Lambda (Phần 5) — hôm nay chơi hết STL, mai vào Phần 5 chậm rãi.
+    </div>
+    <ul>
+        <li>Học: <code>std::vector</code> (push_back, size, iterator, reserve), <code>std::map</code> (insert, find, operator[]), thuật toán <code>sort</code>, <code>find_if</code>, <code>count_if</code>, <code>accumulate</code>.</li>
+        <li>Gõ lại ví dụ + làm BT4.1–4.3.</li>
+        <li>Bài tập thực tế: dùng vector lưu 1000 vị trí robot (x, y) và sort theo khoảng cách đến gốc — mẫu gần với bài toán bám quỹ đạo sau này.</li>
+    </ul>
+    <div class="answer-section">
+        <span class="box-title">✅ Checklist ngày 13</span>
+        ☐ BT4.1–4.3 xong · ☐ Viết được đoạn dùng vector + map + sort không nhìn tài liệu · ☐ Hiểu khi nào dùng vector vs map · ☐ Commit + nhật ký
+    </div>
+</div>
+
+<div class="step-card">
+    <span class="step-number">14</span>
+    <h3>Ngày 14 — Phần 5: Template &amp; Lambda (học CHẬM — điểm yếu của bạn) + ôn tập tuần</h3>
+    <div class="goal-box">
+        <strong>🎯 Mục đích:</strong> Phần 5 từng là phần bạn đọc yếu nhất (đã ghi nhận từ trước) — nên hôm nay không phải là ngày "lướt qua", mà là ngày học lại từ đầu từng bước nhỏ: 5.1 vì sao cần template, 5.2 class template, 5.3 cú pháp lambda, 5.4 capture, 5.5 lambda + STL, 5.6 std::function. Lambda xuất hiện khắp code ROS2 hiện đại (callback, filter) — bỏ qua nó, tuần 15 đọc code EKF sẽ đứng hình.
+    </div>
+    <ul>
+        <li>Đọc + gõ lại từng mục 5.1 → 5.6, làm 🚦 Kiểm tra nhanh K1–K4 giữa bài.</li>
+        <li>Làm BT5.1–5.4 (đặc biệt BT5.4 — class template LowPass: nó là bản thu nhỏ của bộ lọc bạn sẽ viết thật ở tuần 3).</li>
+        <li>Ôn tập tuần: viết lại từ trí nhớ 1 class + 1 vector + 1 lambda — 3 thứ này là DNA của mọi node ROS2.</li>
+        <li>Đánh dấu checklist tuần 2 ở bảng dưới.</li>
+    </ul>
+    <div class="answer-section">
+        <span class="box-title">✅ Checklist ngày 14</span>
+        ☐ 5.1–5.6 + K1–K4 xong · ☐ BT5.1–5.4 xong (BT5.4 LowPass chạy đúng) · ☐ Viết lại class + vector + lambda từ trí nhớ · ☐ Checklist tuần 2 hoàn tất
+    </div>
+</div>
+
+<div class="cheat-sheet">
+    <span class="box-title">✅ CHECKLIST TUẦN 2 (đánh dấu cuối ngày 14)</span>
+    <ul>
+        <li>☐ BT1.1–1.3, BT2.1–2.4, BT3.1–3.3, BT4.1–4.3, BT5.1–5.4 — TẤT CẢ đã tự làm + đối chiếu đáp án.</li>
+        <li>☐ Giải thích được bằng lời (không nhìn tài liệu): con trỏ/tham chiếu, RAII, unique vs shared_ptr, vector vs map.</li>
+        <li>☐ Phần 5 Template/Lambda không còn là "điểm yếu" — kể được 5.1→5.6 là gì.</li>
+        <li>☐ Repo <code>cpp_learning</code> trên GitHub, commit ≥ 7 lần tuần này.</li>
+        <li>☐ Nhật ký 7 ngày + trang lỗi cập nhật.</li>
+    </ul>
+</div>
+<div class="part-header" id="tuan3">
+    <h1>TUẦN 3 — CMake + DỰ ÁN KALMAN C++ THUẦN (Ngày 15–21)</h1>
+    <p>Repo đầu tiên hoàn chỉnh: CMake + Kalman rời rạc + CSV + README · Bằng chứng "C++ trên Linux"</p>
+</div>
+
+<div class="goal-box">
+    <strong>🎯 Mục đích của cả tuần — tại sao phải làm:</strong> Đây là tuần bạn có <strong>bằng chứng đầu tiên</strong> trong CV: repo <code>kalman_cpp</code> — bộ lọc Kalman rời rạc viết bằng C++ thuần, biên dịch bằng CMake, xuất output.csv. Nó trả lời đúng 3 yêu cầu của JD quốc tế: C++ hiện đại (Venti/Avride), Linux + công cụ build chuẩn (mọi công ty), và kỹ năng xử lý ma trận/số liệu (nền của Kalman mà Venti/Quest gọi tên). Quan trọng hơn: đây là lần đầu bạn trải nghiệm <strong>toàn bộ vòng đời một dự án kỹ thuật</strong> — viết code → build → chạy → đo → vẽ → tài liệu → commit — vòng đời bạn sẽ lặp lại hàng trăm lần trong sự nghiệp. Bộ lọc Kalman được chọn vì bạn ĐÃ hiểu nó (tài liệu Kalman_Filter_ToanTap có sẵn): tuần này chỉ tập trung vào code, không phải toán.
+</div>
+
+<div class="step-card">
+    <span class="step-number">15</span>
+    <h3>Ngày 15 — CMake: build system chuẩn của C++</h3>
+    <div class="goal-box">
+        <strong>🎯 Mục đích:</strong> <code>g++ file.cpp</code> chỉ đủ cho bài tập 1 file. Dự án thật có 20 file → cần CMake: cách khai báo "biên dịch những file nào, liên kết thư viện nào". ROS2 và mọi code AV đều build bằng CMake (Phenikaa: "biên dịch được = làm việc được"). Học hôm nay = tuần 8 bạn không mất 3 ngày vì lỗi CMakeLists.
+    </div>
+    <ul>
+        <li>CMakeLists.txt tối thiểu: <code>cmake_minimum_required</code>, <code>project</code>, <code>add_executable</code>, <code>set(CMAKE_CXX_STANDARD 17)</code>.</li>
+        <li>Quy trình: <code>cmake -B build</code> → <code>cmake --build build</code> → chạy executable trong <code>build/</code>. Vì sao build ở thư mục riêng (không lẫn file rác vào source).</li>
+        <li>Thực hành: chuyển 1 bài tập tuần 2 (class Motor) thành project CMake 3 file: main.cpp + motor.cpp + motor.h.</li>
+        <li>Đọc Phần 6 tài liệu C++ (Dự án LQR) để xem cấu trúc project chuẩn họ dùng.</li>
+    </ul>
+    <div class="answer-section">
+        <span class="box-title">✅ Checklist ngày 15</span>
+        ☐ Project CMake 3 file build chạy được từ <code>build/</code> · ☐ Hiểu add_executable vs add_library · ☐ Biết vì sao tách .h/.cpp · ☐ Commit + nhật ký
+    </div>
+</div>
+
+<div class="step-card">
+    <span class="step-number">16</span>
+    <h3>Ngày 16 — Phần 6: Dự án LQR (đọc + hiểu kiến trúc) + Phần 7 quiz tổng</h3>
+    <div class="goal-box">
+        <strong>🎯 Mục đích:</strong> Phần 6 của tài liệu C++ là dự án LQR hoàn chỉnh với giải thích WHY từng dòng — đây là mẫu chuẩn của một "bài toán điều khiển được code hóa": tách mô hình, controller, simulation, output. Đọc nó hôm nay với tư cách "kiến trúc sư" (không gõ hết) để mai bắt đầu dự án Kalman của RIÊNG bạn theo đúng cấu trúc đó. Quiz Phần 7 kiểm tra bạn còn lỗ hổng gì trước khi bước vào dự án.
+    </div>
+    <ul>
+        <li>Đọc Phần 6: kiến trúc (4 vai trò), vì sao const, vì sao vector+reserve, vì sao solve_are tách riêng, vì sao lambda [K], vì sao xuất CSV thay vì in màn hình.</li>
+        <li>Làm quiz Phần 7 (Q1–Q6) — đáp án hiện ngay, tự chấm.</li>
+        <li>Vẽ ra giấy sơ đồ dự án Kalman sắp làm: input gì → khối nào → output gì. Mai chỉ việc điền code.</li>
+    </ul>
+    <div class="answer-section">
+        <span class="box-title">✅ Checklist ngày 16</span>
+        ☐ Hiểu kiến trúc Phần 6, kể lại được 4 vai trò · ☐ Quiz Phần 7 chấm xong, ghi câu sai · ☐ Có sơ đồ dự án Kalman trên giấy · ☐ Nhật ký
+    </div>
+</div>
+
+<div class="step-card">
+    <span class="step-number">17</span>
+    <h3>Ngày 17 — KHỞI ĐỘNG DỰ ÁN: kalman_cpp (structure + data)</h3>
+    <div class="goal-box">
+        <strong>🎯 Mục đích — ngày quan trọng nhất tháng:</strong> Hôm nay bạn chuyển từ "người học bài tập" sang "người làm dự án". Dự án đúng cấu trúc (thư mục rõ, file tách, README) là điều recruiter NHÌN THẤY đầu tiên khi mở repo — dự án cấu trúc bừa bộn = ấn tượng xấu dù code giỏi. Dữ liệu giả (object chuyển động với nhiễu đo) là nền để mai thấy Kalman "lọc" — bạn cần dữ liệu trước khi có bộ lọc.
+    </div>
+    <ul>
+        <li>Tạo repo <code>kalman_cpp</code>: <code>src/main.cpp</code>, <code>include/kalman.h</code>, <code>src/kalman.cpp</code>, <code>CMakeLists.txt</code>, <code>README.md</code>, <code>.gitignore</code> (bỏ build/).</li>
+        <li>Mô hình bài toán: vật chuyển động 1D với gia tốc nhiễu (process noise), cảm biến đo vị trí với nhiễu (measurement noise). Viết <code>simulate_data</code> xuất <code>input.csv</code>: cột thời gian + vị trí thật + vị trí đo.</li>
+        <li>Viết khung: struct State (x, P), hàm <code>predict</code>, <code>update</code> — CHƯA điền công thức, để sẵn TODO. Biên dịch được ngay.</li>
+        <li>Tham khảo tài liệu <code>Kalman_Filter_ToanTap.html</code> (Phần thuật toán 5 bước) — bạn đã học, giờ là lúc dùng.</li>
+    </ul>
+    <div class="answer-section">
+        <span class="box-title">✅ Checklist ngày 17</span>
+        ☐ Repo khởi tạo đúng cấu trúc, build không lỗi · ☐ input.csv sinh được với nhiễu thật · ☐ Khung predict/update có TODO rõ ràng · ☐ Commit đầu tiên "scaffold + data gen" + nhật ký
+    </div>
+</div>
+
+<div class="step-card">
+    <span class="step-number">18</span>
+    <h3>Ngày 18 — Điền công thức Kalman: predict + update</h3>
+    <div class="goal-box">
+        <strong>🎯 Mục đích:</strong> Ngày "công thức gặp code". Bạn đã học 5 bước Kalman trong tài liệu — hôm nay viết chúng thành hàm C++: dự đoán trạng thái + phương sai, tính Kalman Gain $K = P H^T (H P H^T + R)^{-1}$, cập nhật. Mỗi dòng bạn viết hôm nay là nền của node EKF thật ở tuần 15–16 — nhưng tuần đó bạn sẽ bận học ROS2, nên công thức phải thuộc NGAY BÂY GIỜ.
+    </div>
+    <ul>
+        <li>Viết đầy đủ <code>predict()</code> và <code>update()</code> theo tài liệu: F, H, Q, R, P, K.</li>
+        <li>Kiểm tra số: chạy 1 bước với Q=0 (không process noise) → P phải giảm đúng theo công thức; R rất nhỏ → K tiến về 1 (tin cảm biến).</li>
+        <li>Viết vòng lặp chính: đọc input.csv từng dòng → predict → update → ghi (t, x_thật, x_đo, x_lọc) vào <code>output.csv</code>.</li>
+        <li>Thêm <code>-Wall -Wextra</code> vào CMake — không có cảnh báo nào khi build.</li>
+    </ul>
+    <div class="answer-section">
+        <span class="box-title">✅ Checklist ngày 18</span>
+        ☐ predict/update chạy đúng với 2 kiểm tra số (Q=0, R nhỏ) · ☐ output.csv sinh ra, 4 cột đầy đủ · ☐ Build sạch cảnh báo · ☐ Commit + nhật ký
+    </div>
+</div>
+
+<div class="step-card">
+    <span class="step-number">19</span>
+    <h3>Ngày 19 — Debug (GDB) + vẽ kết quả bằng Python</h3>
+    <div class="goal-box">
+        <strong>🎯 Mục đích:</strong> 2 kỹ năng bổ trợ quan trọng trong 1 ngày: (1) <strong>GDB</strong> — khi code chạy sai, bạn phải TỰ tìm lỗi, không hỏi ChatGPT từng dòng: breakpoint, step, print biến. Đây là kỹ năng đồng nghiệp đánh giá ngay tuần đầu đi làm. (2) <strong>Vẽ dữ liệu</strong> — bạn cần NHÌN thấy đường lọc nằm giữa đường đo và đường thật: 10 giây nhìn đồ thị nói nhiều hơn 10 trang số. Đồ thị này sẽ là hình đầu tiên trong README repo của bạn.
+    </div>
+    <ul>
+        <li>Học GDB tối thiểu: <code>gdb ./app</code>, <code>break</code>, <code>run</code>, <code>next</code>, <code>step</code>, <code>print x</code>, <code>bt</code> (backtrace). Cài <code>-g</code> vào CMake (debug build).</li>
+        <li>Cố tình tạo 1 lỗi (vd sai chỉ số mảng), tìm nó bằng GDB, sửa lại. Cảm giác tự tìm ra lỗi = tự tin vĩnh viễn.</li>
+        <li>Viết <code>plot_results.py</code>: đọc output.csv, vẽ 3 đường (thật/đo/lọc) bằng matplotlib. Chạy được = thấy Kalman hoạt động bằng mắt.</li>
+    </ul>
+    <div class="answer-section">
+        <span class="box-title">✅ Checklist ngày 19</span>
+        ☐ Tìm được 1 lỗi tự tạo bằng GDB (break + print) · ☐ plot_results.py vẽ được 3 đường rõ ràng · ☐ Đường lọc mượt hơn đường đo — chứng minh Kalman hoạt động · ☐ Commit + nhật ký
+    </div>
+</div>
+
+<div class="step-card">
+    <span class="step-number">20</span>
+    <h3>Ngày 20 — README chuẩn kỹ thuật + hoàn thiện repo</h3>
+    <div class="goal-box">
+        <strong>🎯 Mục đích:</strong> README là "mặt tiền" của repo — VinFast nói "walk through the control design, the tuning and the measurements": README của bạn phải chứa đúng 3 thứ đó: thiết kế (mô hình + công thức), tuning (chọn Q, R thế nào, vì sao), measurements (đồ thị + con số). Người đọc repo phải hiểu dự án trong 2 phút. Đây là kỹ năng viết kỹ thuật — thứ mọi kỹ sư cần nhưng ít ai chịu học.
+    </div>
+    <ul>
+        <li>README gồm: mô tả 2 câu · cách build (2 lệnh) · cách chạy · mô hình bài toán + công thức 5 bước · bảng so sánh sai số (RMSE trước/sau lọc — tính bằng Python) · đồ thị · hạn chế (vd: mô hình 1D, chưa có IMU).</li>
+        <li>Thí nghiệm tuning mini: chạy 3 lần với R = 0.1 / 1 / 10, ghi RMSE mỗi lần vào bảng. Đây là mẫu "bảng tuning" mà phỏng vấn MPC (tuần 19–22) sẽ hỏi lại — làm quen ngay từ tháng 1.</li>
+        <li>Kiểm tra repo từ "mắt người lạ": clone vào thư mục khác, build theo README từ đầu — nếu lệnh trong README sai, sửa.</li>
+    </ul>
+    <div class="answer-section">
+        <span class="box-title">✅ Checklist ngày 20</span>
+        ☐ README đủ 7 phần, build theo README từ bản clone sạch · ☐ Bảng RMSE 3 mức R hoàn thành · ☐ Repo công khai trên GitHub · ☐ Commit cuối + nhật ký
+    </div>
+</div>
+
+<div class="step-card">
+    <span class="step-number">21</span>
+    <h3>Ngày 21 — Tổng kết tuần 3 + đọc trước numpy</h3>
+    <div class="goal-box">
+        <strong>🎯 Mục đích:</strong> Tuần này bạn đã làm điều mà 90% sinh viên TĐH không làm: hoàn thành một dự án kỹ thuật đóng gói sạch sẽ. Tổng kết để nhớ: đọc lại README của chính mình, tự hỏi "nếu tôi là recruiter, tôi có ấn tượng không". Đọc trước numpy để tuần 4 không bỡ ngỡ.
+    </div>
+    <ul>
+        <li>Đánh dấu checklist tuần 3.</li>
+        <li>Viết 1 đoạn "giới thiệu dự án 30 giây" (tiếng Việt) — đây là bản nháp đầu tiên của câu chuyện phỏng vấn: "Tôi viết bộ lọc Kalman bằng C++ thuần, build bằng CMake, tối ưu R cho RMSE giảm X%, đồ thị nằm trong README".</li>
+        <li>Đọc trước numpy: array, slicing, matmul (30 phút).</li>
+        <li>Nghỉ nửa ngày còn lại — tuần 4 là tuần kết thúc tháng.</li>
+    </ul>
+    <div class="answer-section">
+        <span class="box-title">✅ Checklist ngày 21</span>
+        ☐ Checklist tuần 3 đầy đủ · ☐ Kể được câu chuyện dự án trong 30 giây · ☐ Đọc xong numpy cơ bản
+    </div>
+</div>
+
+<div class="cheat-sheet">
+    <span class="box-title">✅ CHECKLIST TUẦN 3 (đánh dấu cuối ngày 21)</span>
+    <ul>
+        <li>☐ Repo <code>kalman_cpp</code> public: cấu trúc chuẩn, build 2 lệnh, README 7 phần, đồ thị + bảng RMSE.</li>
+        <li>☐ Kalman C++ thuần chạy đúng: đường lọc mượt hơn đường đo, RMSE giảm rõ rệt.</li>
+        <li>☐ Biết dùng GDB cơ bản (breakpoint, print, backtrace).</li>
+        <li>☐ Commit ≥ 6 lần tuần này, mỗi commit một ý nghĩa (không phải "update").</li>
+        <li>☐ Kể được câu chuyện dự án 30 giây bằng tiếng Việt.</li>
+    </ul>
+</div>
+<div class="part-header" id="tuan4">
+    <h1>TUẦN 4 — PYTHON + PHÂN TÍCH DỮ LIỆU THẬT (Ngày 22–30)</h1>
+    <p>numpy/scipy/matplotlib · Log encoder STM32 của CHÍNH BẠN · Kiểm tra chéo Kalman 2 ngôn ngữ</p>
+</div>
+
+<div class="goal-box">
+    <strong>🎯 Mục đích của cả tuần — tại sao phải làm:</strong> Python là công cụ chẩn đoán của nghề: VinFast ghi "Python for data analysis, plotting and test automation", RTC ghi "Sử dụng tốt Python". Nhưng lý do sâu hơn: <strong>kỹ sư control dành 60% thời gian đọc dữ liệu, không phải viết controller</strong>. Robot chạy lệch → log ở đâu → vẽ → sai số bao nhiêu → nguyên nhân gì. Tuần này bạn học đúng công việc đó trên dữ liệu THẬT từ đồ án STM32-CAN của chính mình — biến tài liệu cũ thành kỹ năng sống còn. Đỉnh điểm tuần: kiểm tra chéo — viết Kalman bằng numpy và đối chiếu từng điểm với output.csv C++ tuần trước. Hai ngôn ngữ cho cùng kết quả = bạn hiểu bản chất, không phải thuộc lệnh.
+</div>
+
+<div class="step-card">
+    <span class="step-number">22</span>
+    <h3>Ngày 22 — numpy: mảng, slicing, matmul, broadcasting</h3>
+    <div class="goal-box">
+        <strong>🎯 Mục đích:</strong> numpy là "ma trận tốc độ cao" của Python — Kalman/MPC của bạn (tuần 19–22) sẽ chạy trên numpy. Hiểu array vs list, slicing, <code>@</code> (matmul), broadcasting = đọc được 90% code khoa học Python bạn gặp. 1 giờ hôm nay tiết kiệm 10 giờ tuần 4.
+    </div>
+    <ul>
+        <li>np.array, shape, dtype, indexing/slicing (a[1:4], a[:, 0]), reshape, np.zeros/ones/eye/arange.</li>
+        <li>Phép nhân ma trận: <code>A @ B</code> vs <code>A * B</code> (element-wise) — sai lầm #1 của người mới; broadcasting (shape (3,1) + (1,3)).</li>
+        <li>Bài tập: tạo ma trận F (2×2) và P (2×2), tính F P F^T bằng numpy — đây CHÍNH LÀ bước predict của Kalman. Viết lại bằng tay so sánh kết quả.</li>
+    </ul>
+    <div class="answer-section">
+        <span class="box-title">✅ Checklist ngày 22</span>
+        ☐ Phân biệt @ và * (giải thích được) · ☐ Tính F P Fᵀ bằng numpy đúng kết quả · ☐ Slicing mảng 2D thành thạo · ☐ Commit script vào repo <code>py_analysis</code> (tạo hôm nay) + nhật ký
+    </div>
+</div>
+
+<div class="step-card">
+    <span class="step-number">23</span>
+    <h3>Ngày 23 — scipy.signal + matplotlib: lọc, bode, vẽ</h3>
+    <div class="goal-box">
+        <strong>🎯 Mục đích:</strong> scipy.signal là bộ công cụ mà mọi kỹ sư control dùng hàng ngày: vẽ Bode để kiểm tra margin (tuần 5–6 của bạn sẽ cần), lọc tín hiệu nhiễu, step response để nhận dạng hệ thống. matplotlib là "máy ảnh" ghi lại mọi bằng chứng. Học 2 thứ này hôm nay = tuần 5–6 bạn không phải dừng lại để học công cụ.
+    </div>
+    <ul>
+        <li>scipy.signal: <code>lti</code>, <code>bode</code>, <code>step_response</code>, <code>butter</code> + <code>sosfilt</code> (lọc nhiễu).</li>
+        <li>matplotlib: <code>plot</code>, <code>subplot</code>, <code>legend</code>, <code>grid</code>, <code>savefig</code>, <code>xlabel/ylabel/title</code>.</li>
+        <li>Bài tập: tạo tín hiệu sin + nhiễu → lọc bằng butter → vẽ 2 đồ thị chồng nhau (nhiễu vs đã lọc). Đây là mẫu mọi báo cáo kỹ thuật.</li>
+    </ul>
+    <div class="answer-section">
+        <span class="box-title">✅ Checklist ngày 23</span>
+        ☐ Lọc nhiễu bằng butter + vẽ chồng 2 đường · ☐ Vẽ được Bode của hệ bậc 1 (5 phút) · ☐ savefig ra file PNG (không chỉ show) · ☐ Commit + nhật ký
+    </div>
+</div>
+
+<div class="step-card">
+    <span class="step-number">24</span>
+    <h3>Ngày 24 — Dữ liệu THẬT: log encoder từ đồ án STM32-CAN</h3>
+    <div class="goal-box">
+        <strong>🎯 Mục đích — ngày dữ liệu thật:</strong> Cho đến nay mọi thứ đều là dữ liệu giả. Hôm nay bạn xử lý dữ liệu do CHÍNH BẠN đo từ phần cứng thật (encoder + CAN trong đồ án). Khác biệt: dữ liệu thật có gián đoạn, nhiễu lạ, sai định dạng — đúng thứ bạn sẽ gặp 100% thời gian đi làm. Xử lý được dữ liệu thật = kể được câu chuyện "tôi phân tích dữ liệu robot của chính tôi" — hơn hẳn ứng viên chỉ làm bài tập mẫu.
+    </div>
+    <ul>
+        <li>Tìm log encoder/vận tốc trong đồ án STM32 (hoặc tự chạy lại đồ án để ghi log mới). Format: CSV hoặc text, có cột thời gian + giá trị.</li>
+        <li>Viết script <code>read_log.py</code>: đọc file, làm sạch (bỏ dòng rác, NaN), chuyển kiểu, in 5 dòng đầu + số dòng đếm được.</li>
+        <li>Vẽ vận tốc theo thời gian. Quan sát: có spike không? nhiễu đo? trễ? — ghi 3 nhận xét vào sổ.</li>
+    </ul>
+    <div class="answer-section">
+        <span class="box-title">✅ Checklist ngày 24</span>
+        ☐ read_log.py đọc được log thật, sạch dữ liệu · ☐ Vẽ được đồ thị vận tốc theo thời gian · ☐ Ghi 3 nhận xét kỹ thuật về dữ liệu · ☐ Commit + nhật ký
+    </div>
+</div>
+
+<div class="step-card">
+    <span class="step-number">25</span>
+    <h3>Ngày 25 — Sai số bám + so sánh trước/sau chỉnh PID</h3>
+    <div class="goal-box">
+        <strong>🎯 Mục đích:</strong> "Tính sai số bám" là bản chất công việc của kỹ sư control: bộ điều khiển có tốt không, tốt bao nhiêu, số liệu nào chứng minh. Hôm nay bạn tính RMSE/MAE từ log PID cũ của đồ án (trước/sau khi chỉnh tham số nếu có 2 lần đo) — tạo ra con số "bộ điều khiển của tôi cải thiện X%". Đây là mẫu câu kể CV: "tuning PID giảm overshoot từ 20% xuống 5%". JD VinFast nói "test automation" — script tự đo này chính là nó.
+    </div>
+    <ul>
+        <li>Viết <code>analyze_tracking.py</code>: tính sai số e(t) = setpoint − thực tế, RMSE, MAE, overshoot %, thời gian xác lập.</li>
+        <li>Nếu có 2 log (trước/sau tuning): vẽ 2 đồ thị chồng, tính RMSE mỗi bản, ghi bảng so sánh.</li>
+        <li>Ghi kết quả vào README của repo py_analysis (kèm đồ thị).</li>
+    </ul>
+    <div class="answer-section">
+        <span class="box-title">✅ Checklist ngày 25</span>
+        ☐ RMSE/MAE/overshoot tính đúng từ log thật · ☐ Bảng so sánh trước/sau (nếu có) · ☐ Kể được câu "giảm X%" bằng số · ☐ Commit + nhật ký
+    </div>
+</div>
+
+<div class="step-card">
+    <span class="step-number">26</span>
+    <h3>Ngày 26 — Kiểm tra chéo: Kalman bằng numpy vs C++</h3>
+    <div class="goal-box">
+        <strong>🎯 Mục đích — đỉnh điểm của tháng:</strong> Viết Kalman bằng numpy từ đầu (không nhìn code C++) rồi chạy CÙNG input.csv → so sánh từng điểm với output.csv của C++. Hai ngôn ngữ, hai cách viết, cùng kết quả = <strong>bạn hiểu BẢN CHẤT Kalman, không phải thuộc cú pháp</strong>. Đây là tiêu chuẩn mà phỏng vấn "hiểu sâu" kiểm tra: giải thích được bằng 2 ngôn ngữ. Kết quả khớp cũng xác nhận code C++ tuần 3 của bạn đúng tuyệt đối.
+    </div>
+    <ul>
+        <li>Viết <code>kalman_numpy.py</code>: đọc input.csv, vòng lặp predict/update bằng numpy, xuất output_py.csv.</li>
+        <li>So sánh: <code>np.allclose(cpp, py, atol=1e-9)</code> + vẽ 2 đường chồng (phải trùng sát).</li>
+        <li>Nếu lệch: tìm ra dòng khác biệt bằng index — thường là sai thứ tự predict/update hoặc sai phép nhân (@ vs *).</li>
+        <li>Cập nhật README kalman_cpp: thêm phần "verified with numpy implementation".</li>
+    </ul>
+    <div class="answer-section">
+        <span class="box-title">✅ Checklist ngày 26</span>
+        ☐ output_py.csv trùng output.csv (allclose) · ☐ Giải thích được vì sao phải trùng · ☐ README kalman_cpp có dòng verified · ☐ Commit + nhật ký
+    </div>
+</div>
+
+<div class="step-card">
+    <span class="step-number">27</span>
+    <h3>Ngày 27 — Hoàn thiện py_analysis + tài liệu tổng</h3>
+    <div class="goal-box">
+        <strong>🎯 Mục đích:</strong> Ngày "đóng gói tháng": repo py_analysis với README kể câu chuyện 3 chương — (1) phân tích log encoder thật, (2) so sánh PID trước/sau, (3) kiểm tra chéo Kalman 2 ngôn ngữ. Một repo như thế cho recruiter thấy: người này biết đo lường, biết phân tích, biết viết tài liệu — 3 kỹ năng hiếm ở fresh grad.
+    </div>
+    <ul>
+        <li>README py_analysis: 3 chương + đồ thị + bảng số liệu + cách chạy.</li>
+        <li>Dọn dẹp cả 2 repo: xóa file rác, .gitignore đầy đủ (build/, __pycache__, *.csv nếu không muốn public data — nhưng giữ 1 file mẫu nhỏ).</li>
+        <li>Viết 1 trang tổng "Tháng 1 của tôi" trong notes: 4 tuần làm gì, 3 lỗi lớn nhất, 3 điều tự hào nhất.</li>
+    </ul>
+    <div class="answer-section">
+        <span class="box-title">✅ Checklist ngày 27</span>
+        ☐ 2 repo sạch sẽ + README đầy đủ · ☐ Trang "Tháng 1 của tôi" viết xong · ☐ Commit cuối · ☐ Nhật ký
+    </div>
+</div>
+
+<div class="step-card">
+    <span class="step-number">28</span>
+    <h3>Ngày 28 — Tự kiểm tra: 5 câu bẫy phỏng vấn (đọc trước) + review checklist</h3>
+    <div class="goal-box">
+        <strong>🎯 Mục đích:</strong> Tuần 5–6 của lộ trình 24 tuần là "5 câu bẫy phỏng vấn". Hôm nay bạn đọc trước 1 lượt (30 phút mỗi chủ đề — không học sâu) để não "ngấm ngầm" xử lý trong lúc nghỉ, tuần 5 vào học sẽ nhanh hơn gấp đôi. Đồng thời rà soát toàn bộ checklist tháng — phát hiện lỗ hổng ngay trong tháng 1 còn dễ sửa, để sang tháng 2 là lỗ nặng.
+    </div>
+    <ul>
+        <li>Đọc 5 chủ đề trong LoTrinh (Phần 2 Giai đoạn 1): margin/stability, anti-windup, sysid, discretization + Ts, vehicle dynamics. Chỉ cần hiểu 20% — đánh dấu chỗ chưa hiểu vào sổ.</li>
+        <li>Rà checklist tuần 1–4, đánh dấu mục chưa đạt → lên kế hoạch bù trong 2 ngày cuối tháng.</li>
+        <li>Kiểm tra "sức khỏe repo": mở 2 repo của bạn bằng mắt người lạ — clone về máy khác (hoặc container mới) build lại theo README.</li>
+    </ul>
+    <div class="answer-section">
+        <span class="box-title">✅ Checklist ngày 28</span>
+        ☐ Đọc xong 5 chủ đề (hiểu 20%, đánh dấu chưa hiểu) · ☐ Rà checklist tháng, liệt kê mục chưa đạt · ☐ 2 repo build được từ bản clone sạch
+    </div>
+</div>
+
+<div class="step-card">
+    <span class="step-number">29</span>
+    <h3>Ngày 29 — Bù lỗ hổng + chuẩn bị tháng 2</h3>
+    <div class="goal-box">
+        <strong>🎯 Mục đích:</strong> Ngày dự phòng: dùng cho đúng thứ checklist ngày 28 chỉ ra còn thiếu (lỗ hổng phải được bù TRONG tháng, không dồn sang tháng sau). Tháng 2 = ROS2 — chuẩn bị trước (cài môi trường, đọc trước) làm ngày 1 tháng 2 chạy ngay, không mất 2 ngày setup.
+    </div>
+    <ul>
+        <li>Bù: làm lại bài tập nào còn yếu (ưu tiên Phần 5 Template/Lambda nếu vẫn khó).</li>
+        <li>Chuẩn bị tháng 2: đọc tài liệu ROS2 căn bản (tài liệu bạn đang có hoặc docs.ros.org "Tutorials → Beginner: CLI tools"), kiểm tra Docker có thể chạy image ros:humble.</li>
+        <li>Viết mục tiêu tháng 2 (3 dòng) vào notes: "hết tháng 2 phải có node C++ publish/subscribe chạy được".</li>
+    </ul>
+    <div class="answer-section">
+        <span class="box-title">✅ Checklist ngày 29</span>
+        ☐ Lỗ hổng đã bù xong (liệt kê) · ☐ Image ros:humble chạy được trong Docker · ☐ Mục tiêu tháng 2 viết xong
+    </div>
+</div>
+
+<div class="step-card">
+    <span class="step-number">30</span>
+    <h3>Ngày 30 — Nghỉ + tổng kết tháng 1</h3>
+    <div class="goal-box">
+        <strong>🎯 Mục đích:</strong> Kết thúc tháng bằng một cái nhìn lại: tháng 1 bạn đã đi từ "chưa biết Linux" đến "2 repo công khai chạy được + kể được câu chuyện kỹ thuật". Đọc lại thành quả của chính mình là động lực lớn nhất cho tháng 2. Nghỉ thật sự sau đó — tháng 2 (ROS2) là tháng khó nhất lộ trình, cần khởi động tươi mới.
+    </div>
+    <ul>
+        <li>Đánh dấu checklist tổng tháng (bảng dưới).</li>
+        <li>Viết 1 trang "review tháng 1": 3 điều tự hào, 3 lỗi đã học, 1 điều sẽ làm khác đi ở tháng 2.</li>
+        <li>Kể lại cho 1 người (bạn bè/mentor/người thân hiểu kỹ thuật) câu chuyện 30 giây về repo kalman_cpp — nói ra thành tiếng giúp củng cố và phát hiện chỗ mình còn lủng.</li>
+        <li>Nghỉ phần còn lại của ngày.</li>
+    </ul>
+</div>
+
+<div class="cheat-sheet">
+    <span class="box-title">✅ CHECKLIST TỔNG THÁNG 1 (đánh dấu cuối ngày 30)</span>
+    <ul>
+        <li>☐ Môi trường: Ubuntu/Docker ổn định, terminal thành thạo, apt/quyền/PATH hiểu đúng.</li>
+        <li>☐ Git: repo public, commit mỗi ngày (≥ 20 commit tháng này), branch/merge/conflict biết xử lý.</li>
+        <li>☐ Docker: chạy container, mount, tự viết Dockerfile.</li>
+        <li>☐ C++: toàn bộ BT1–BT5 tài liệu CPP_HienDai làm xong, Template/Lambda không còn là điểm yếu.</li>
+        <li>☐ Repo 1 — <code>kalman_cpp</code>: CMake + C++ thuần + CSV + README 7 phần + bảng RMSE tuning + đồ thị.</li>
+        <li>☐ Repo 2 — <code>py_analysis</code>: log encoder THẬT + RMSE PID + kiểm tra chéo Kalman (numpy ≡ C++).</li>
+        <li>☐ GDB dùng được (breakpoint + print + backtrace).</li>
+        <li>☐ Đọc trước 5 chủ đề bẫy (tuần 5–6) — đánh dấu chỗ chưa hiểu.</li>
+        <li>☐ Sổ tay kỹ thuật: nhật ký 30 ngày + trang lỗi cập nhật + review tháng 1.</li>
+    </ul>
+</div>
+<div class="part-header" id="ket">
+    <h1>TỔNG KẾT THÁNG 1 &amp; CẦU NỐI SANG THÁNG 2</h1>
+    <p>Bạn đang đứng ở đâu, và vì sao tháng 2 sẽ dễ hơn nhờ tháng 1</p>
+</div>
+
+<div class="important-note">
+    <span class="box-title">⚡ Vì sao tháng 2 (ROS2) sẽ dễ hơn nhờ tháng 1</span>
+    <ul>
+        <li><strong>ROS2 node = class + con trỏ + lambda + CMake:</strong> cả 4 thứ bạn đã gõ tay trong tháng 1. Người học ROS2 trước khi biết C++ mất 3 tuần đầu để vật lộn cú pháp; bạn mất 0 ngày.</li>
+        <li><strong>Linux/Docker đã sẵn:</strong> cài ROS2 Humble (hoặc kéo image <code>ros:humble</code>) mất 30 phút, không phải 3 ngày chiến đấu với driver/môi trường.</li>
+        <li><strong>Git đã thành phản xạ:</strong> mỗi bài ROS2 là một commit — bạn không còn phải nghĩ "commit thế nào", chỉ nghĩ "viết gì".</li>
+        <li><strong>Kalman đã thuộc:</strong> tuần 15–16 (EKF fusion) chỉ cần bọc code Kalman của bạn vào node ROS2 — phần khó nhất (toán + code) đã xong từ tháng 1.</li>
+    </ul>
+</div>
+
+<div class="warning-box">
+    <span class="box-title">⚠️ 3 lỗi phổ biến nhất khi học 30 ngày đầu (tránh)</span>
+    <ol>
+        <li><strong>Bỏ qua gõ tay, chỉ đọc + copy:</strong> đọc 10 trang bằng gõ 10 dòng. Nếu cuối tuần 2 bạn không thể viết lại class Motor từ trí nhớ, quay lại ngày 10.</li>
+        <li><strong>Chạy theo "cảm giác tiến bộ":</strong> cài đủ thứ, xem đủ video, nhưng không có commit nào. Commit là thước đo duy nhất — không có commit = chưa học.</li>
+        <li><strong>Bỏ qua phần "vì sao":</strong> gõ đúng mà không hiểu vì sao (vd: vì sao update Kalman trước predict, vì sao @ khác *). Phỏng vấn tháng thứ 3 sẽ lột trần chỗ này. Luôn trả lời câu "tại sao" trước khi chuyển bài.</li>
+    </ol>
+</div>
+
+<div class="summary-box">
+    <h2>🎯 Tổng Kết Tháng 1</h2>
+    <ul>
+        <li><strong>Nguyên tắc:</strong> JD làm la bàn (C++ 8/11, Linux 4/11, Python 4/11 JD), kiến thức bổ trợ làm nền (Git, Docker, GDB, tiếng Anh kỹ thuật, ghi chú) — không JD nào ghi nhưng thiếu là tắc.</li>
+        <li><strong>Tuần 1:</strong> môi trường — Ubuntu, terminal, Git/GitHub, Docker, repo notes commit mỗi ngày.</li>
+        <li><strong>Tuần 2:</strong> C++ hiện đại — toàn bộ BT1–BT5 tài liệu CPP_HienDai, Template/Lambda học chậm từng bước (điểm yếu cũ).</li>
+        <li><strong>Tuần 3:</strong> CMake + dự án <code>kalman_cpp</code> — bằng chứng C++/Linux đầu tiên, kèm bảng RMSE tuning (mẫu cho phỏng vấn MPC sau này).</li>
+        <li><strong>Tuần 4:</strong> Python + dữ liệu THẬT — log encoder STM32, RMSE PID, kiểm tra chéo Kalman numpy ≡ C++.</li>
+        <li><strong>Đầu ra tháng 1:</strong> 2 repo công khai + 30 commit + 5 chủ đề bẫy đã đọc trước + sổ tay 30 ngày. Đúng tiến độ của lộ trình 24 tuần: bắt đầu tháng 2 ở tuần 5.</li>
+    </ul>
+</div>
+
+<div style="text-align: center; margin: 35px 0; color: var(--text-secondary); font-size: 0.9em;">
+    <p>— Hết tài liệu Lộ Trình Hàng Ngày 30 Ngày Đầu Tiên —</p>
+    <p><em>Nhấn nút "📄 Xuất PDF" ở góc phải dưới để lưu thành PDF — in ra và đánh dấu mỗi ngày</em></p>
+</div>
+
+</body>
+</html>

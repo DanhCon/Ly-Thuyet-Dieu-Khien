@@ -1,0 +1,1486 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tuần 1 — Nền Móng Môi Trường: Ubuntu, Terminal, Git, Docker</title>
+<script>
+window.MathJax = {
+    tex: { inlineMath: [['$','$']], displayMath: [['$$','$$']], tags: 'ams' },
+    svg: { fontCache: 'global' }
+};
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<style>
+:root {
+    --primary: #0f172a;
+    --accent: #2563eb;
+    --accent-light: #3b82f6;
+    --success: #16a34a;
+    --warning: #d97706;
+    --danger: #dc2626;
+    --bg: #f8fafc;
+    --card-bg: #ffffff;
+    --text: #1e293b;
+    --text-secondary: #475569;
+    --code-bg: #0f172a;
+    --border: #e2e8f0;
+    --quiz-bg: #f0f9ff;
+    --answer-bg: #f0fdf4;
+    --yellow-bg: #fffbeb;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.75;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+h1, h2, h3, h4 { color: var(--primary); line-height: 1.4; }
+h2 { font-size: 1.45em; margin: 28px 0 12px; }
+h3 { font-size: 1.2em; margin: 22px 0 10px; }
+p { margin: 10px 0; }
+ul, ol { margin: 10px 0 10px 28px; }
+li { margin: 6px 0; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+strong { color: var(--primary); }
+table.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 0.95em;
+}
+.table th {
+    background: var(--primary);
+    color: #fff;
+    padding: 10px 12px;
+    text-align: left;
+    border: 1px solid var(--primary);
+}
+.table td {
+    padding: 9px 12px;
+    border: 1px solid var(--border);
+    vertical-align: top;
+}
+.table tr:nth-child(even) { background: #f1f5f9; }
+pre {
+    background: var(--code-bg);
+    color: #e2e8f0;
+    padding: 14px 16px;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 14px 0;
+    font-size: 0.9em;
+    white-space: pre-wrap;
+}
+code {
+    font-family: Consolas, 'Fira Code', monospace;
+    background: #e2e8f0;
+    color: var(--danger);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.92em;
+}
+pre code { background: none; color: inherit; padding: 0; }
+.cover-page {
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    color: #fff;
+    text-align: center;
+    padding: 70px 30px;
+    border-radius: 12px;
+    margin-bottom: 30px;
+}
+.cover-page h1 { color: #fff; font-size: 2.2em; margin-bottom: 10px; }
+.cover-page .subtitle { color: #94a3b8; font-size: 1.15em; margin-bottom: 18px; }
+.cover-page .tagline { color: #cbd5e1; font-size: 1.02em; max-width: 700px; margin: 0 auto 25px; }
+.cover-page .meta { color: #60a5fa; font-size: 0.95em; border-top: 1px solid #334155; padding-top: 18px; display: inline-block; }
+.toc {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px 30px;
+    margin: 20px 0;
+}
+.toc h2 { margin-top: 0; border-bottom: 2px solid var(--accent); padding-bottom: 8px; }
+.toc ol { margin-left: 20px; }
+.toc a { display: inline-block; padding: 3px 0; }
+.part-header {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    color: #fff;
+    padding: 26px 28px;
+    border-radius: 10px;
+    margin: 36px 0 20px;
+}
+.part-header h1 { color: #fff; margin: 0 0 6px; font-size: 1.5em; }
+.part-header p { color: #bfdbfe; margin: 0; }
+.part-header-intro {
+    background: linear-gradient(135deg, #16a34a, #15803d);
+    color: #fff;
+    padding: 26px 28px;
+    border-radius: 10px;
+    margin: 36px 0 20px;
+}
+.part-header-intro h1 { color: #fff; margin: 0 0 6px; font-size: 1.5em; }
+.part-header-intro p { color: #dcfce7; margin: 0; }
+.part-header-purple {
+    background: linear-gradient(135deg, #7c3aed, #6d28d9);
+    color: #fff;
+    padding: 26px 28px;
+    border-radius: 10px;
+    margin: 36px 0 20px;
+}
+.part-header-purple h1 { color: #fff; margin: 0 0 6px; font-size: 1.5em; }
+.part-header-purple p { color: #ddd6fe; margin: 0; }
+.part-header-orange {
+    background: linear-gradient(135deg, #ea580c, #c2410c);
+    color: #fff;
+    padding: 26px 28px;
+    border-radius: 10px;
+    margin: 36px 0 20px;
+}
+.part-header-orange h1 { color: #fff; margin: 0 0 6px; font-size: 1.5em; }
+.part-header-orange p { color: #fed7aa; margin: 0; }
+.part-header-danger {
+    background: linear-gradient(135deg, #dc2626, #b91c1c);
+    color: #fff;
+    padding: 26px 28px;
+    border-radius: 10px;
+    margin: 36px 0 20px;
+}
+.part-header-danger h1 { color: #fff; margin: 0 0 6px; font-size: 1.5em; }
+.part-header-danger p { color: #fecaca; margin: 0; }
+.definition, .theorem, .important-note, .example-box, .analogy-box, .warning-box, .cheat-sheet {
+    border-radius: 10px;
+    padding: 18px 22px;
+    margin: 18px 0;
+}
+.box-title {
+    display: inline-block;
+    font-weight: 700;
+    font-size: 0.95em;
+    margin-bottom: 10px;
+    padding: 4px 12px;
+    border-radius: 6px;
+}
+.definition { background: #eff6ff; border-left: 5px solid var(--accent); }
+.definition .box-title { background: var(--accent); color: #fff; }
+.theorem { background: #f5f3ff; border-left: 5px solid #7c3aed; }
+.theorem .box-title { background: #7c3aed; color: #fff; }
+.important-note { background: #fffbeb; border-left: 5px solid var(--warning); }
+.important-note .box-title { background: var(--warning); color: #fff; }
+.example-box { background: #f0fdf4; border-left: 5px solid var(--success); }
+.example-box .box-title { background: var(--success); color: #fff; }
+.analogy-box { background: #f0f9ff; border-left: 5px solid #06b6d4; }
+.analogy-box .box-title { background: #06b6d4; color: #fff; }
+.warning-box { background: #fef2f2; border-left: 5px solid var(--danger); }
+.warning-box .box-title { background: var(--danger); color: #fff; }
+.cheat-sheet { background: #f0fdfa; border: 1px dashed #14b8a6; }
+.cheat-sheet .box-title { background: #14b8a6; color: #fff; }
+.step-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 22px;
+    margin: 16px 0;
+    position: relative;
+}
+.step-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.05em;
+    margin-bottom: 10px;
+}
+.quiz-section { background: var(--quiz-bg); border-radius: 10px; padding: 22px 24px; margin: 20px 0; }
+.quiz-section > h3 { margin-top: 0; }
+.quiz-question {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 14px 0;
+}
+.answer-section {
+    background: var(--answer-bg);
+    border-left: 4px solid var(--success);
+    border-radius: 8px;
+    padding: 12px 18px;
+    margin: 10px 0 16px;
+}
+.answer-section .box-title { background: var(--success); color: #fff; }
+.goal-box {
+    background: linear-gradient(135deg, #fefce8, #fffbeb);
+    border: 1px solid #fde68a;
+    border-left: 5px solid var(--warning);
+    border-radius: 8px;
+    padding: 12px 18px;
+    margin: 10px 0 14px;
+    font-size: 0.95em;
+}
+.goal-box strong { color: #92400e; }
+.level-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.82em;
+    font-weight: 600;
+    margin: 0 4px;
+}
+.level-apply { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+.level-deep { background: #dbeafe; color: #1e40af; border: 1px solid #93c5fd; }
+.level-concept { background: #ede9fe; color: #5b21b6; border: 1px solid #c4b5fd; }
+.legend-box {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 16px 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+}
+.legend-item { display: flex; align-items: center; gap: 8px; font-size: 0.92em; }
+.print-btn {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 30px;
+    font-size: 0.95em;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+    z-index: 100;
+}
+.print-btn:hover { background: var(--primary); }
+.summary-box {
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    color: #fff;
+    padding: 30px 34px;
+    border-radius: 12px;
+    margin: 30px 0;
+}
+.summary-box h2 { color: #60a5fa; margin-top: 0; }
+.summary-box ul { color: #cbd5e1; }
+@media print {
+    .print-btn { display: none; }
+    .part-header, .part-header-intro, .part-header-purple, .part-header-orange, .part-header-danger { page-break-before: always; }
+    .definition, .theorem, .important-note, .example-box, .analogy-box, .warning-box, .cheat-sheet, .quiz-section, .answer-section, .step-card, .toc, .goal-box { break-inside: avoid; }
+    body { background: #fff; }
+}
+</style>
+</head>
+<body>
+
+<button class="print-btn" onclick="window.print()">📄 Xuất PDF</button>
+
+<div class="cover-page">
+    <h1>🧱 Tuần 1 — Nền Móng Môi Trường</h1>
+    <div class="subtitle">Ubuntu · Terminal · Git/GitHub · Docker · Sổ tay kỹ thuật (Ngày 1–7)</div>
+    <div class="tagline">
+        Tài liệu học chi tiết cho tuần đầu tiên của lộ trình 30 ngày. Mỗi phần có <strong>🎯 Mục đích</strong> (học để làm gì, mất gì nếu bỏ), giải thích từ cơ bản với ẩn dụ, <strong>🚦 Kiểm tra nhanh</strong> giữa bài và <strong>💪 Luyện tập gõ tay</strong> (BT kèm đáp án WHY). Làm xong tuần này bạn có: môi trường Linux sạch + repo GitHub commit mỗi ngày + biết dùng Docker.
+    </div>
+    <div class="meta">Dành cho: Huỳnh Công Danh · Tuần 1 trong lộ trình 24 tuần Control &amp; Planning · 2026</div>
+</div>
+
+<div class="toc">
+    <h2>📑 Mục Lục</h2>
+    <ol>
+        <li><a href="#part0">Phần 0 — Vì sao tuần 1 học môi trường, không học robot?</a></li>
+        <li><a href="#ngay1">Phần 1 — Ngày 1: Cài Ubuntu + 10 lệnh terminal đầu đời</a></li>
+        <li><a href="#ngay2">Phần 2 — Ngày 2: Hệ thống file Linux + quyền + cài phần mềm</a></li>
+        <li><a href="#ngay3">Phần 3 — Ngày 3: Git cơ bản — lịch sử và bằng chứng</a></li>
+        <li><a href="#ngay4">Phần 4 — Ngày 4: GitHub, branch, merge — làm việc với thế giới</a></li>
+        <li><a href="#ngay5">Phần 5 — Ngày 5: Docker — môi trường đóng gói</a></li>
+        <li><a href="#ngay6">Phần 6 — Ngày 6: Dựng "sổ tay kỹ thuật" + ôn tập tuần</a></li>
+        <li><a href="#ngay7">Phần 7 — Ngày 7: Tổng kết tuần + Quiz toàn diện</a></li>
+    </ol>
+</div>
+
+<div class="legend-box">
+    <div class="legend-item"><span class="level-badge level-deep">🔬 CẦN HIỂU SÂU</span> hiểu bản chất — dùng mỗi ngày</div>
+    <div class="legend-item"><span class="level-badge level-apply">🔧 CHỈ CẦN CÔNG THỨC</span> gõ được là đủ</div>
+    <div class="legend-item"><span class="level-badge level-concept">🔎 HIỂU Ý TƯỞNG</span> nắm khái niệm để kể chuyện</div>
+</div>
+
+<div class="part-header-intro" id="part0">
+    <h1>PHẦN 0 — VÌ SAO TUẦN 1 HỌC MÔI TRƯỜNG?</h1>
+    <p>Trả lời câu hỏi bạn đang thắc mắc nhất: "bao giờ mới thấy robot chạy?"</p>
+</div>
+
+<div class="goal-box">
+    <strong>🎯 Mục đích của cả tuần — tại sao phải làm:</strong> Mọi công ty AV (RTC, Phenikaa-X, Avride...) làm việc trên Ubuntu, lưu code bằng Git, đóng gói môi trường bằng Docker. Tuần này không học "điều khiển" — tuần này học <strong>nơi điều khiển sẽ sống</strong>. Bỏ qua để học ROS2 sớm giống như xây tầng 2 khi chưa có móng: tầng 2 có thể dựng trong 2 tuần, nhưng sập ngay khi gặp lỗi thật. Mỗi lệnh bạn học hôm nay sẽ được dùng MỖI NGÀY trong 23 tuần còn lại và cả sự nghiệp.
+</div>
+
+<div class="definition">
+    <span class="box-title">🔍 Tuần 1 trả lời 4 câu hỏi nền</span>
+    <table class="table">
+        <tr>
+            <th>Ngày</th>
+            <th>Câu hỏi</th>
+            <th>Trả lời được sau ngày</th>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>"Máy tính của tôi chạy phần mềm robot ở đâu?"</td>
+            <td>Ubuntu là nơi ROS2 sống; terminal là cửa sổ duy nhất vào nó.</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>"Vì sao lỗi permission denied, command not found?"</td>
+            <td>Hiểu quyền file, sudo, PATH — tự sửa 80% lỗi cài đặt.</td>
+        </tr>
+        <tr>
+            <td>3–4</td>
+            <td>"Lịch sử code của tôi ghi ở đâu, ai đọc được?"</td>
+            <td>Git lưu mọi thay đổi = bằng chứng học tập; GitHub là CV kỹ thuật.</td>
+        </tr>
+        <tr>
+            <td>5</td>
+            <td>"Làm sao cài ROS2 mà không phá máy?"</td>
+            <td>Docker đóng gói mọi thứ vào container riêng biệt.</td>
+        </tr>
+    </table>
+</div>
+
+<div class="analogy-box">
+    <span class="box-title">🔎 Ẩn dụ cả tuần: Bạn đang chuyển đến "thành phố kỹ thuật"</span>
+    <p>Windows là ngôi nhà cũ bạn quen. Ubuntu là thành phố mới: <strong>terminal = phố chính</strong> (mọi thứ đều đi qua đây), <strong>Git = sổ đăng ký đất đai</strong> (ai xây gì, sửa gì, khi nào — ghi chép đầy đủ), <strong>GitHub = quảng trường công cộng</strong> (thành phố khác nhìn vào, đánh giá bạn qua công trình), <strong>Docker = căn hộ đóng gói</strong> (mang cả phòng làm việc đi bất cứ đâu, không dọn dẹp cũng không bừa bộn). Tuần này bạn học đi lại trong thành phố đó — sau này mới có chỗ đặt robot.</p>
+</div>
+
+<div class="warning-box">
+    <span class="box-title">⚠️ 3 quy tắc vàng của tuần 1</span>
+    <ol>
+        <li><strong>Gõ tay, không copy.</strong> Mọi lệnh trong tài liệu đều ngắn — gõ lại từng ký tự. Tay nhớ nhanh hơn mắt.</li>
+        <li><strong>Đừng sợ lỗi.</strong> Lỗi là dữ liệu: mỗi lỗi bạn gặp và tự sửa hôm nay là một "cột mốc" ít ai có. Ghi lỗi vào sổ tay (ngày 6 sẽ tổ chức lại).</li>
+        <li><strong>Commit mỗi ngày.</strong> Từ ngày 3 trở đi: không có commit trong ngày = ngày đó chưa thực sự học. Đây là thước đo duy nhất không nói dối.</li>
+    </ol>
+</div>
+
+<div class="cheat-sheet">
+    <span class="box-title">📋 Bản đồ tuần — bạn sẽ biết gì sau 7 ngày</span>
+    <ul>
+        <li><strong>Sau ngày 1:</strong> Ubuntu chạy, gõ được 10 lệnh đầu đời, có cây thư mục <code>~/dev</code>.</li>
+        <li><strong>Sau ngày 2:</strong> hiểu quyền + sudo + PATH, cài được phần mềm bằng apt.</li>
+        <li><strong>Sau ngày 3:</strong> repo Git đầu tiên với 2 commit, viết được README.</li>
+        <li><strong>Sau ngày 4:</strong> repo public trên GitHub, merge được branch, biết sửa conflict.</li>
+        <li><strong>Sau ngày 5:</strong> chạy container, mount thư mục, tự build Dockerfile.</li>
+        <li><strong>Sau ngày 6:</strong> sổ tay kỹ thuật 4 file + trang lỗi + nhật ký 6 ngày.</li>
+        <li><strong>Sau ngày 7:</strong> checklist tuần hoàn tất, đầu óc tươi cho tuần 2 (C++).</li>
+    </ul>
+</div>
+<div class="part-header" id="ngay1">
+    <h1>NGÀY 1 — CÀI UBUNTU + 10 LỆNH TERMINAL ĐẦU ĐỜI</h1>
+    <p>Chọn cách cài Ubuntu · Làm quen prompt · 10 lệnh sống còn · man và --help</p>
+</div>
+
+<div class="goal-box">
+    <strong>🎯 Mục đích ngày 1 — tại sao phải làm:</strong> Mọi JD robot (RTC, Phenikaa-X, Modern System) đều yêu cầu Ubuntu/Linux. Nhưng lý do thực dụng hơn: <strong>từ tuần 7 trở đi bạn sẽ cài ROS2 trên Ubuntu</strong> — nếu môi trường chưa sẵn, tuần đó biến thành tuần chiến đấu với cài đặt thay vì học. Hôm nay 4 tiếng này quyết định: bạn là người "có môi trường sẵn sàng" hay "người mất 3 ngày cho mỗi lần cài đặt". Lệnh terminal là chữ cái của ngôn ngữ bạn sẽ nói 23 tuần nữa.
+</div>
+
+<h2>1.1 — Chọn cách cài Ubuntu (chọn 1 trong 3)</h2>
+
+<table class="table">
+    <tr>
+        <th>Cách</th>
+        <th>Ai hợp</th>
+        <th>Ưu</th>
+        <th>Nhược</th>
+    </tr>
+    <tr>
+        <td><strong>WSL2</strong> (Windows Subsystem for Linux)</td>
+        <td>Hầu hết mọi người — khuyến nghị khi máy Windows còn dư RAM (≥ 8GB)</td>
+        <td>Chạy song song Windows, không cần reboot, cài nhanh, đủ dùng ROS2/Ubuntu CLI 100%</td>
+        <td>Đồ họa/RViz2 có thể lag nhẹ (tuần 11+ mới đụng, khi đó chuyển máy thật nếu cần)</td>
+    </tr>
+    <tr>
+        <td><strong>Ubuntu song song (dual boot)</strong></td>
+        <td>Máy cũ/RAM ít, muốn ROS2 với đồ họa tốt</td>
+        <td>Hiệu năng tuyệt đối, đúng môi trường sản xuất thật</td>
+        <td>Phải reboot để đổi hệ điều hành, rủi ro mất dữ liệu nếu chia partition sai</td>
+    </tr>
+    <tr>
+        <td><strong>Máy ảo VirtualBox</strong></td>
+        <td>Muốn thử nghiệm trước, không dám đụng máy</td>
+        <td>An toàn tuyệt đối, xóa là xong</td>
+        <td>Chậm nhất trong 3 cách; đừng dùng cho ROS2 thật (tuần 7+ chuyển WSL2/dual boot)</td>
+    </tr>
+</table>
+
+<div class="important-note">
+    <span class="box-title">⚡ Khuyến nghị của tài liệu</span>
+    <p>Dùng <strong>WSL2</strong> nếu bạn đang dùng Windows và máy ≥ 8GB RAM. Lệnh trong toàn bộ tài liệu này chạy nguyên vẹn trên WSL2 — không có gì khác biệt với Ubuntu thật. Cài nhanh nhất: mở PowerShell (Run as administrator) và gõ:</p>
+    <pre><code>wsl --install -d Ubuntu-22.04</code></pre>
+    <p>Sau đó khởi động lại máy, tạo tên người dùng + mật khẩu khi được hỏi. Kiểm tra bằng lệnh <code>cat /etc/os-release</code> — nếu thấy <code>VERSION="22.04.x"</code> là xong. (Ubuntu 22.04 = bản đi kèm ROS2 Humble, bản dùng trong JD Phenikaa-X.)</p>
+</div>
+
+<h2>1.2 — Terminal là gì? Làm quen prompt</h2>
+
+<div class="analogy-box">
+    <span class="box-title">🔎 Ẩn dụ: Terminal = phố chính của thành phố Ubuntu</span>
+    <p>Windows bạn bấm chuột vào icon. Ubuntu cũng có chuột, nhưng <strong>mọi thứ quan trọng đều đi qua terminal</strong>: cài ROS2, chạy robot, đọc log — không có nút bấm nào cho những việc đó. Terminal là dòng chữ: bạn gõ lệnh, máy trả kết quả. Đọc prompt (dấu nhắc) như đọc biển báo đường:</p>
+    <pre><code>danh@danh-pc:~$</code></pre>
+    <ul>
+        <li><code>danh</code> — tên người dùng hiện tại.</li>
+        <li><code>@danh-pc</code> — tên máy.</li>
+        <li><code>~</code> — thư mục đang đứng (chỗ này đứng trong <code>/home/danh</code>).</li>
+        <li><code>$</code> — bạn đang là người thường. Nếu là <code>#</code> tức bạn đang là root (quyền tối cao) — nguy hiểm, thường xuyên gặp <code>#</code> là đang làm gì đó sai.</li>
+    </ul>
+</div>
+
+<div class="warning-box">
+    <span class="box-title">⚠️ Lỗi kinh điển người mới: "command not found"</span>
+    <p>Ví dụ gõ <code>cd C:\Users\danh</code> → <code>bash: cd: C:\Users\danh: No such file or directory</code>. Vì: (1) Windows dùng dấu gạch chéo ngược <code>\</code>, Linux dùng <code>/</code>; (2) Windows đường dẫn bắt đầu từ ổ đĩa <code>C:</code>, Linux từ gốc <code>/</code>. <strong>Ghi nhớ: ở Linux, mọi đường dẫn bắt đầu bằng <code>/</code>.</strong></p>
+</div>
+
+<h2>1.3 — 10 lệnh đầu đời (gõ tay từng lệnh, quan sát kết quả)</h2>
+
+<div class="step-card">
+    <span class="step-number">1</span>
+    <h3><code>pwd</code> — Print Working Directory (tôi đang đứng ở đâu?)</h3>
+    <p>Lệnh đầu tiên ai cũng nên gõ khi mở terminal. Trả về đường dẫn tuyệt đối hiện tại.</p>
+    <pre><code>danh@danh-pc:~$ pwd
+/home/danh</code></pre>
+    <p>Đường dẫn đọc từ phải sang: đang đứng trong thư mục <code>danh</code>, nằm trong <code>home</code>, nằm trong gốc <code>/</code>.</p>
+</div>
+
+<div class="step-card">
+    <span class="step-number">2</span>
+    <h3><code>ls</code> — List (trong thư mục này có gì?)</h3>
+    <pre><code>$ ls
+Desktop  Documents  Downloads  ...
+$ ls -la        # -l: chi tiết, -a: kể cả file ẩn (bắt đầu bằng dấu .)</code></pre>
+    <p><code>ls -la</code> là cặp lệnh bạn gõ nhiều nhất trong đời: thấy ngay quyền, chủ sở hữu, kích thước, ngày sửa. Cột đầu tiên (vd <code>drwxr-xr-x</code>) sẽ đọc kỹ ở ngày 2.</p>
+</div>
+
+<div class="step-card">
+    <span class="step-number">3</span>
+    <h3><code>cd</code> — Change Directory (đi đến thư mục khác)</h3>
+    <pre><code>$ cd /home/danh/Documents   # đi theo đường dẫn tuyệt đối
+$ cd Documents               # đường dẫn tương đối (từ nơi đang đứng)
+$ cd ..                      # lên một cấp
+$ cd ~                       # về nhà (home)
+$ cd -                       # về thư mục vừa đứng trước đó</code></pre>
+</div>
+
+<div class="step-card">
+    <span class="step-number">4</span>
+    <h3><code>mkdir</code> — Make Directory (tạo thư mục)</h3>
+    <pre><code>$ mkdir dev                 # tạo thư mục dev
+$ mkdir -p a/b/c             # -p: tạo luôn cả chuỗi cấp (b, c chưa tồn tại)</code></pre>
+    <p>Quy ước của cả lộ trình: <strong>tất cả code để trong <code>~/dev</code></strong> — một chỗ duy nhất, dễ tìm, dễ đóng gói. Tạo ngay hôm nay: <code>mkdir -p ~/dev</code>.</p>
+</div>
+
+<div class="step-card">
+    <span class="step-number">5</span>
+    <h3><code>touch</code> — tạo file rỗng</h3>
+    <pre><code>$ touch hello.txt           # tạo file rỗng hello.txt
+$ touch a.txt b.txt c.txt    # tạo nhiều file cùng lúc</code></pre>
+</div>
+
+<div class="step-card">
+    <span class="step-number">6</span>
+    <h3><code>cp</code> — Copy (sao chép)</h3>
+    <pre><code>$ cp hello.txt hello2.txt   # copy file
+$ cp -r dev dev_backup       # -r: copy cả thư mục (recursive)</code></pre>
+</div>
+
+<div class="step-card">
+    <span class="step-number">7</span>
+    <h3><code>mv</code> — Move (di chuyển / đổi tên)</h3>
+    <pre><code>$ mv hello2.txt ~/dev/      # chuyển file vào thư mục dev
+$ mv hello.txt greeting.txt  # đổi tên: dùng mv với 2 tên cùng chỗ</code></pre>
+</div>
+
+<div class="step-card">
+    <span class="step-number">8</span>
+    <h3><code>rm</code> — Remove (xóa) — ⚠️ không có thùng rác</h3>
+    <pre><code>$ rm greeting.txt           # xóa file
+$ rm -r dev_backup           # -r: xóa cả thư mục
+$ rm -rf /somewhere          # ⚠️ -f: xóa không hỏi — TUYỆT ĐỐI CẨN THẬN</code></pre>
+    <div class="warning-box">
+        <span class="box-title">⚠️ Quy tắc sinh tử</span>
+        <p><code>rm -rf</code> trên thư mục sai = mất dữ liệu vĩnh viễn, không có thùng rác, không có Ctrl+Z. Trước khi gõ <code>rm</code>: dừng 3 giây, đọc lại đường dẫn. Đặc biệt không bao giờ gõ <code>rm -rf /</code> hoặc <code>rm -rf ~/.*</code> khi chưa chắc chắn.</p>
+    </div>
+</div>
+
+<div class="step-card">
+    <span class="step-number">9</span>
+    <h3><code>cat</code> — đọc nội dung file ra màn hình</h3>
+    <pre><code>$ cat hello.txt</code></pre>
+    <p>Ghi nhớ cặp: <code>touch</code> tạo file, <code>cat</code> đọc file, <code>nano</code> (lệnh 10) sửa file.</p>
+</div>
+
+<div class="step-card">
+    <span class="step-number">10</span>
+    <h3><code>nano</code> — trình soạn thảo trong terminal</h3>
+    <pre><code>$ nano hello.txt</code></pre>
+    <p>Mở file để sửa. Gõ nội dung, rồi: <code>Ctrl+O</code> (lưu, Enter để xác nhận), <code>Ctrl+X</code> (thoát). Hai phím đó là đủ cho cả năm học — không cần học vim ở thời điểm này.</p>
+</div>
+
+<h2>1.4 — Trợ giúp: man và --help (kỹ năng "tự học" sống còn)</h2>
+
+<div class="goal-box">
+    <strong>🎯 Mục đích — vì sao phải biết:</strong> Không ai nhớ hết lệnh. Kỹ sư thật gõ <code>man ls</code> nhiều hơn là nhớ. Biết cách tra cứu = tự mình thoát được 50% lỗi mà không cần hỏi ai. JD nào cũng ghi "tự học" — đây là chứng cứ đầu tiên của bạn.
+</div>
+
+<pre><code>$ man ls            # mở sách hướng dẫn của ls (phím q để thoát)
+$ ls --help         # bản ngắn gọn hơn, in thẳng ra màn hình</code></pre>
+
+<div class="quiz-section">
+    <h3>🚦 Kiểm tra nhanh K1 — ngày 1</h3>
+    <div class="quiz-question">
+        <p><strong>K1.1</strong> Lệnh nào trả lời câu hỏi "tôi đang đứng ở thư mục nào?"</p>
+        <div class="answer-section"><span class="box-title">✅ Đáp án</span> <code>pwd</code> — in đường dẫn tuyệt đối hiện tại.</div>
+    </div>
+    <div class="quiz-question">
+        <p><strong>K1.2</strong> Bạn vừa gõ <code>cd /home/danh/dev</code> nhưng máy báo <code>No such file or directory</code>. Vì sao? Kiểm tra thế nào?</p>
+        <div class="answer-section"><span class="box-title">✅ Đáp án</span> Vì thư mục <code>dev</code> chưa tồn tại. Kiểm tra bằng <code>ls /home/danh</code> xem có gì; nếu chưa có thì tạo bằng <code>mkdir -p ~/dev</code>.</div>
+    </div>
+    <div class="quiz-question">
+        <p><strong>K1.3</strong> Dấu <code>#</code> ở cuối prompt nghĩa là gì và vì sao nguy hiểm?</p>
+        <div class="answer-section"><span class="box-title">✅ Đáp án</span> Bạn đang là root (quyền tối cao). Mọi lệnh đều chạy không cần xin phép — gõ <code>rm -rf</code> sai là mất cả hệ thống, không ai chặn.</div>
+    </div>
+    <div class="quiz-question">
+        <p><strong>K1.4</strong> Sự khác biệt giữa <code>ls</code> và <code>ls -la</code> là gì?</p>
+        <div class="answer-section"><span class="box-title">✅ Đáp án</span> <code>-l</code> hiện chi tiết (quyền, chủ sở hữu, kích thước, ngày), <code>-a</code> hiện cả file ẩn (tên bắt đầu bằng <code>.</code> như <code>.git</code>).</div>
+    </div>
+</div>
+
+<div class="quiz-section">
+    <h3>💪 Luyện tập BT1 — xây cây thư mục + ghi nhật ký đầu tiên</h3>
+    <p><strong>Yêu cầu:</strong> Gõ lại TỪNG DÒNG (đừng copy), quan sát kết quả mỗi lệnh. Mục tiêu cuối: cây thư mục chuẩn của lộ trình.</p>
+    <pre><code>mkdir -p ~/dev
+cd ~/dev
+mkdir -p notes/lich-su
+touch notes/nhat-ky-ngay1.md
+cat notes/nhat-ky-ngay1.md        # rỗng đúng không?
+nano notes/nhat-ky-ngay1.md       # gõ 3 dòng: ngày, đã làm gì, 1 lỗi gặp phải
+cat notes/nhat-ky-ngay1.md        # đọc lại — thấy chữ mình vừa gõ
+cd ~/dev && pwd && ls</code></pre>
+    <div class="answer-section">
+        <span class="box-title">✅ Dự đoán trước khi chạy</span>
+        <p>Dòng cuối: <code>pwd</code> in <code>/home/danh/dev</code>, <code>ls</code> in <code>notes</code>. Giải thích: <code>&&</code> chạy lệnh tiếp theo CHỈ NẾU lệnh trước thành công — nếu <code>cd</code> lỗi thì <code>pwd</code> và <code>ls</code> không chạy, tránh thực thi sai chỗ. Đây là kỹ thuật bảo vệ dùng trong mọi script thật.</p>
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Giải thích WHY — vì sao ghi nhật ký ngay từ ngày 1?</span>
+        <p>Ký ức của con người là bộ lọc không đáng tin. 30 ngày nữa bạn sẽ không nhớ "ngày 1 tôi gặp lỗi gì" — nhưng nhật ký sẽ nhớ. Trang lỗi này sau thành chuyện kể trong phỏng vấn ("tôi từng xóa nhầm thư mục, từ đó tôi luôn chạy <code>ls</code> trước khi <code>rm</code>") và là dữ liệu cho việc tự cải tiến. Không ghi = học lại từ đầu mỗi lần vấp cùng một hòn đá.</p>
+    </div>
+</div>
+
+<div class="cheat-sheet">
+    <span class="box-title">✅ CHECKLIST NGÀY 1</span>
+    <ul>
+        <li>☐ Ubuntu chạy được (WSL2/dual boot/máy ảo) — kiểm tra <code>cat /etc/os-release</code> ra 22.04</li>
+        <li>☐ Gõ tay được 10 lệnh: pwd ls cd mkdir touch cp mv rm cat nano (không nhìn tài liệu)</li>
+        <li>☐ Tạo được cây <code>~/dev/notes</code> + file nhật ký ngày 1 (có nội dung thật)</li>
+        <li>☐ Dùng được <code>nano</code>: lưu (Ctrl+O) và thoát (Ctrl+X)</li>
+        <li>☐ Hiểu vì sao <code>rm -rf</code> nguy hiểm, biết kiểm tra trước khi xóa</li>
+    </ul>
+</div>
+<div class="part-header-purple" id="ngay2">
+    <h1>NGÀY 2 — HỆ THỐNG FILE + QUYỀN + CÀI PHẦN MỀM</h1>
+    <p>Cây thư mục Linux · rwx và chmod · sudo và PATH · apt — bộ não của mọi lỗi cài đặt</p>
+</div>
+
+<div class="goal-box">
+    <strong>🎯 Mục đích ngày 2 — tại sao phải làm:</strong> Khoảng 60% lỗi người mới gặp trên Linux là 1 trong 3 thứ hôm nay: <strong>permission denied</strong> (quyền), <strong>command not found</strong> (PATH), <strong>lỗi khi cài gói</strong> (apt). Tuần 7 cài ROS2 — gõ một dòng <code>apt install</code> là đụng cả ba. Học 4 tiếng hôm nay = tự xử lý được những lỗi mà người học khác phải lên Google 30 phút mỗi lần. Ngoài ra: hiểu cây thư mục là biết "đồ vật để ở đâu" trong thành phố Ubuntu — <code>/etc</code> (cấu hình), <code>/var/log</code> (nhật ký hệ thống) sẽ là nơi bạn soi lỗi ROS2 hàng ngày từ tuần 7.
+</div>
+
+<h2>2.1 — Bản đồ thành phố: cây thư mục Linux</h2>
+
+<div class="analogy-box">
+    <span class="box-title">🔎 Ẩn dụ: thư mục gốc / là "trung tâm hành chính"</span>
+    <p>Linux không có ổ C:, D:. Tất cả bắt đầu từ <code>/</code> (gốc) và phân theo CHỨC NĂNG, không theo ổ đĩa. Nhớ vai trò 6 thư mục quan trọng nhất — đủ dùng cho cả lộ trình:</p>
+    <table class="table">
+        <tr>
+            <th>Thư mục</th>
+            <th>Vai trò</th>
+            <th>Bạn đụng khi nào</th>
+        </tr>
+        <tr>
+            <td><code>/</code></td>
+            <td>Gốc — đỉnh của mọi thứ</td>
+            <td>Mọi đường dẫn tuyệt đối bắt đầu ở đây</td>
+        </tr>
+        <tr>
+            <td><code>/home/&lt;user&gt;</code></td>
+            <td>Nhà của bạn (có ký hiệu <code>~</code>)</td>
+            <td>Code, tài liệu, mọi thứ cá nhân</td>
+        </tr>
+        <tr>
+            <td><code>/usr</code></td>
+            <td>Phần mềm hệ thống + thư viện</td>
+            <td><code>apt install</code> đặt gói vào đây</td>
+        </tr>
+        <tr>
+            <td><code>/etc</code></td>
+            <td>Cấu hình của hệ thống</td>
+            <td>Sửa file config (vd <code>/etc/os-release</code>)</td>
+        </tr>
+        <tr>
+            <td><code>/var/log</code></td>
+            <td>Nhật ký của hệ thống</td>
+            <td>Soi lỗi: <code>tail -f /var/log/syslog</code> — thói quen sống còn với ROS2</td>
+        </tr>
+        <tr>
+            <td><code>/tmp</code></td>
+            <td>File tạm — tự xóa khi khởi động lại</td>
+            <td>Thử nghiệm vô thưởng vô phạt</td>
+        </tr>
+    </table>
+</div>
+
+<div class="example-box">
+    <span class="box-title">📖 Ví dụ đọc đường dẫn</span>
+    <p><code>/var/log/syslog</code> đọc từ trái: "trong gốc <code>/</code> → thư mục <code>var</code> → thư mục <code>log</code> → file <code>syslog</code>". Lệnh <code>tail -n 20 /var/log/syslog</code> in 20 dòng cuối — nơi mọi lỗi phần cứng/driver hiện ra.</p>
+</div>
+
+<h2>2.2 — Quyền: vì sao "Permission denied"</h2>
+
+<div class="goal-box">
+    <strong>🎯 Mục đích — vì sao phải hiểu sâu:</strong> Lỗi <code>Permission denied</code> là lỗi phổ biến #1 của người mới. Nhưng hơn thế: <strong>quyền là tường thành của robot thật</strong> — xe tự hành KHÔNG cho ROS2 node chạy với quyền root (một lỗi trong node = hacker điều khiển cả xe). JD Phenikaa-X yêu cầu "Security" mindset; JD nào cũng đánh giá kỹ sư biết quyền vì người đó không tạo ra lỗ hổng.
+</div>
+
+<p>Mỗi file/thư mục có 9 bit quyền, chia 3 nhóm × 3 quyền. Đọc cột đầu của <code>ls -l</code>:</p>
+
+<pre><code>$ ls -l notes/nhat-ky-ngay1.md
+-rw-r--r-- 1 danh danh 45 Feb  1 10:00 nhat-ky-ngay1.md
+│└┬┘└┬┘└┬┘  └┬─┘└┬─┘
+│ │   │   │   │   └── chủ sở hữu (danh) — nhóm (danh)
+│ │   │   │   └──────── kích thước, ngày
+│ └───┴───┴──────────── 3 nhóm: chủ (u) | nhóm (g) | người khác (o)
+└────────────────────── d: thư mục, -: file thường, l: liên kết</code></pre>
+
+<table class="table">
+    <tr>
+        <th>Ký tự</th>
+        <th>Quyền</th>
+        <th>Ý nghĩa với file</th>
+        <th>Ý nghĩa với thư mục</th>
+    </tr>
+    <tr>
+        <td><code>r</code></td>
+        <td>Đọc (read, =4)</td>
+        <td>Xem nội dung</td>
+        <td>Liệt kê tên file (<code>ls</code>)</td>
+    </tr>
+    <tr>
+        <td><code>w</code></td>
+        <td>Ghi (write, =2)</td>
+        <td>Sửa nội dung</td>
+        <td>Tạo/xóa file trong đó</td>
+    </tr>
+    <tr>
+        <td><code>x</code></td>
+        <td>Chạy (execute, =1)</td>
+        <td>Chạy như chương trình</td>
+        <td>Đi VÀO thư mục (<code>cd</code>)</td>
+    </tr>
+</table>
+
+<h3>2.2.1 — chmod: đổi quyền bằng số (học cách này là đủ)</h3>
+
+<p>Mỗi nhóm có tổng điểm: <code>r=4, w=2, x=1</code>. Ví dụ <code>755</code> = chủ 7 (4+2+1: đọc, ghi, chạy) · nhóm 5 (4+1: đọc, chạy) · người khác 5. Cách ghi số này được dùng trong MỌI tài liệu cài đặt robot — biết đọc nó là biết đọc hướng dẫn.</p>
+
+<pre><code>$ chmod 755 script.sh        # script của bạn: chủ đầy đủ, người khác đọc+chạy
+$ chmod 644 file.txt          # file dữ liệu: chủ ghi, người khác chỉ đọc
+$ chmod +x script.sh          # chỉ thêm quyền chạy (nhanh, dùng nhiều)</code></pre>
+
+<div class="warning-box">
+    <span class="box-title">⚠️ Lỗi kinh điển: script không chạy</span>
+    <p><code>$ ./script.sh</code> → <code>Permission denied</code>. Vì file chưa có bit <code>x</code> (cột quyền hiện <code>-rw-r--r--</code>). Sửa: <code>chmod +x script.sh</code> rồi chạy lại. <code>./</code> nghĩa là "file ở ngay đây" — bắt buộc khi chạy script tại chỗ, vì Linux không tìm lệnh trong thư mục hiện tại (bảo mật).</p>
+</div>
+
+<h2>2.3 — sudo: quyền tối cao có kiểm soát</h2>
+
+<p><code>sudo</code> = "superuser do" — chạy 1 lệnh với quyền root, sau đó trả lại quyền thường. Đúng cách dùng: chỉ dùng khi lệnh đó cần (cài phần mềm, sửa file hệ thống).</p>
+
+<pre><code>$ apt update                 # ❌ lỗi: Permission denied — cần root
+$ sudo apt update            # ✅ đúng</code></pre>
+
+<div class="important-note">
+    <span class="box-title">⚡ Quy tắc vàng: đừng lạm dụng sudo</span>
+    <p>Nếu bạn gõ <code>sudo</code> cho lệnh không cần — bạn đang mất lớp bảo vệ. Với ROS2: <strong>không bao giờ chạy node với sudo</strong> (nút bấm dừng khẩn cấp của xe chạy với quyền thường — nếu node của bạn root, nó có thể chặn luôn nút dừng). Dấu hiệu nhận biết: prompt hiện <code>$</code> là thường, <code>#</code> là root.</p>
+</div>
+
+<h2>2.4 — PATH: vì sao "command not found"</h2>
+
+<div class="analogy-box">
+    <span class="box-title">🔎 Ẩn dụ: PATH = danh bạ điện thoại của hệ thống</span>
+    <p>Gõ <code>ls</code> — máy tính phải tìm chương trình <code>ls</code> ở ĐÂU? Nó tìm trong từng thư mục liệt kê trong biến <code>PATH</code>, theo thứ tự. Không tìm thấy → <code>command not found</code>. Xem danh bạ: <code>echo $PATH</code>. Thường gồm <code>/usr/bin</code>, <code>/bin</code>, <code>~/.local/bin</code>... vì vậy <code>python3</code>, <code>git</code> chạy được từ bất kỳ đâu. Còn <code>./script.sh</code> thì phải gõ rõ đường dẫn vì <code>.</code> KHÔNG có trong PATH (bảo mật: tránh chạy nhầm lệnh độc hại tên trùng).</p>
+</div>
+
+<pre><code>$ echo $PATH
+/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+$ which python3                # máy tìm thấy python3 ở đâu?
+/usr/bin/python3</code></pre>
+
+<div class="definition">
+    <span class="box-title">🔍 Ứng dụng thực tế: thêm chương trình của MÌNH vào PATH</span>
+    <p>Từ tuần 2, bạn sẽ build các chương trình C++ của mình. Muốn gõ tên chương trình ở mọi nơi (không cần <code>./</code>): đặt bản sao vào <code>~/.local/bin</code> (thư mục đã có trong PATH) — hoặc thêm thư mục của bạn vào PATH trong <code>~/.bashrc</code>:</p>
+    <pre><code>echo 'export PATH="$HOME/mybin:$PATH"' >> ~/.bashrc
+source ~/.bashrc</code></pre>
+    <p><code>source</code> = đọc lại file cấu hình ngay lập tức, không cần mở terminal mới. <code>~/.bashrc</code> là file chạy mỗi khi mở terminal — nơi đặt mọi "cài đặt môi trường" của bạn (sẽ rất quan trọng khi nguồn ROS2 setup.bash ở tuần 7).</p>
+</div>
+
+<h2>2.5 — apt: siêu thị phần mềm của Ubuntu</h2>
+
+<p>3 lệnh là đủ cho cả lộ trình:</p>
+
+<pre><code>$ sudo apt update              # cập nhật DANH SÁCH gói (đọc menu siêu thị mới)
+$ sudo apt upgrade             # nâng cấp các gói đã cài (mua bản mới hơn)
+$ sudo apt install git curl build-essential gdb  # cài gói MỚI</code></pre>
+
+<p><strong>Bộ gói ngày 2 (cài ngay, dùng suốt lộ trình):</strong> <code>git</code> (ngày 3–4), <code>build-essential</code> (g++/make — tuần 2), <code>gdb</code> (debug — tuần 3), <code>curl</code> (tải file từ mạng).</p>
+
+<div class="important-note">
+    <span class="box-title">⚡ Phân biệt update vs upgrade (sai lầm phổ biến)</span>
+    <p><code>apt update</code> chỉ tải DANH SÁCH phiên bản mới — không cài gì cả. <code>apt upgrade</code> mới thực sự nâng cấp. Nhớ: <strong>update = đọc menu, upgrade = ăn</strong>. Cứ mỗi phiên mới: chạy <code>sudo apt update</code> rồi mới install — nếu không, máy không biết gói mới tồn tại.</p>
+</div>
+
+<div class="quiz-section">
+    <h3>🚦 Kiểm tra nhanh K2 — ngày 2</h3>
+    <div class="quiz-question">
+        <p><strong>K2.1</strong> File có quyền <code>r-xr--r--</code> — chủ sở hữu làm được gì? Người khác làm được gì?</p>
+        <div class="answer-section"><span class="box-title">✅ Đáp án</span> Chủ: đọc + chạy (không ghi). Người khác: chỉ đọc. Lưu ý quyền <code>x</code> với file = chạy như chương trình; nếu là thư mục, <code>x</code> = được <code>cd</code> vào.</div>
+    </div>
+    <div class="quiz-question">
+        <p><strong>K2.2</strong> <code>755</code> nghĩa là gì? Viết ra dạng chữ cái.</p>
+        <div class="answer-section"><span class="box-title">✅ Đáp án</span> 7=4+2+1 → <code>rwx</code> (chủ); 5=4+1 → <code>r-x</code> (nhóm); 5 → <code>r-x</code> (người khác). Kết quả: <code>rwxr-xr-x</code>.</div>
+    </div>
+    <div class="quiz-question">
+        <p><strong>K2.3</strong> Gõ <code>myprogram</code> báo <code>command not found</code>, nhưng <code>./myprogram</code> chạy được. Giải thích vì sao.</p>
+        <div class="answer-section"><span class="box-title">✅ Đáp án</span> Thư mục hiện tại không nằm trong PATH nên máy không tìm thấy. <code>./myprogram</code> chỉ rõ "file ở ngay đây". Muốn gõ trực tiếp: thêm thư mục chứa nó vào PATH (hoặc copy vào <code>~/.local/bin</code>).</div>
+    </div>
+    <div class="quiz-question">
+        <p><strong>K2.4</strong> Bạn cần xem log hệ thống để tìm lỗi driver. Đường dẫn nào? Lệnh nào in 20 dòng cuối?</p>
+        <div class="answer-section"><span class="box-title">✅ Đáp án</span> <code>/var/log/syslog</code> (hoặc <code>/var/log/</code> nói chung). Lệnh: <code>tail -n 20 /var/log/syslog</code>.</div>
+    </div>
+</div>
+
+<div class="quiz-section">
+    <h3>💪 Luyện tập BT2 — quyền + apt + PATH</h3>
+    <p><strong>Bước 1 — quyền:</strong> tạo script nhỏ và sửa quyền cho nó chạy.</p>
+    <pre><code>cd ~/dev
+mkdir -p thu-nghiem && cd thu-nghiem
+nano hello.sh
+# nội dung gõ vào file: 
+#   #!/bin/bash
+#   echo "Hello from my first script"
+# Ctrl+O, Enter, Ctrl+X để lưu thoát
+
+ls -l hello.sh              # quan sát cột quyền: -rw-r--r-- (chưa có x)
+./hello.sh                  # ❌ Permission denied — dự đoán đúng chưa?
+chmod +x hello.sh
+ls -l hello.sh              # giờ là -rwxr-xr-x
+./hello.sh                  # ✅ in ra "Hello from my first script"</code></pre>
+    <div class="answer-section">
+        <span class="box-title">✅ Giải thích WHY</span>
+        <p>Dòng đầu <code>#!/bin/bash</code> gọi là <em>shebang</em>: báo cho hệ điều hành "file này chạy bằng chương trình nào". Không có nó, máy không biết đây là script bash. Khi gõ <code>./hello.sh</code>, máy cần bit <code>x</code> (chạy) — lúc đầu chưa có nên Permission denied. <code>chmod +x</code> thêm bit đó. Nhìn lại cả chuỗi: quyền chặn ở bước nào, sửa đúng chỗ nào — đây chính là cách kỹ sư thật gỡ lỗi "không chạy được".</p>
+    </div>
+    <p><strong>Bước 2 — apt + PATH:</strong></p>
+    <pre><code>sudo apt update
+sudo apt install git curl build-essential gdb   # nếu chưa có
+which git gdb g++ curl                            # cả 4 đều có đường dẫn
+echo $PATH
+which python3</code></pre>
+    <div class="answer-section">
+        <span class="box-title">✅ Dự đoán trước khi chạy</span>
+        <p><code>which git</code> in <code>/usr/bin/git</code>; <code>which python3</code> in <code>/usr/bin/python3</code>. Giải thích: lệnh <code>which</code> tra trong PATH — nếu in ra đường dẫn nghĩa là gói đã cài đúng và sẵn sàng. Đây là cách kiểm tra "đã cài chưa" nhanh nhất, dùng hàng ngày.</p>
+    </div>
+</div>
+
+<div class="cheat-sheet">
+    <span class="box-title">✅ CHECKLIST NGÀY 2</span>
+    <ul>
+        <li>☐ Kể được vai trò 6 thư mục: / /home /usr /etc /var/log /tmp</li>
+        <li>☐ Đọc được cột quyền <code>-rwxr-xr-x</code> thành 3 nhóm × 3 quyền</li>
+        <li>☐ Giải thích được <code>755</code> và <code>644</code>; sửa quyền bằng chmod thành thạo</li>
+        <li>☐ BT2 hoàn tất: script <code>hello.sh</code> chạy được sau khi chmod +x</li>
+        <li>☐ Phân biệt apt update/upgrade/install; đã cài git, build-essential, gdb, curl</li>
+        <li>☐ Hiểu PATH; thêm được đường dẫn vào ~/.bashrc + source</li>
+    </ul>
+</div>
+<div class="part-header-orange" id="ngay3">
+    <h1>NGÀY 3 — GIT CƠ BẢN: LỊCH SỬ VÀ BẰNG CHỨNG</h1>
+    <p>Repo · Working directory → Staging → Commit · status/log/diff · README và Markdown</p>
+</div>
+
+<div class="goal-box">
+    <strong>🎯 Mục đích ngày 3 — tại sao phải làm:</strong> Git là kiến thức bổ trợ số 1 của cả lộ trình: <strong>không có commit = không có bằng chứng = không có gì để kể trong CV</strong>. Đến tuần 23–24, nhà tuyển dụng sẽ mở GitHub của bạn — người có 60 commit đều đặn với message rõ ràng khác hẳn người có 2 commit. Nhưng lý do sâu hơn nữa: Git cho phép bạn SAI. Trước khi có Git, một lần sửa code sai là một lần hối tiếc; có Git, mọi thử nghiệm đều có nút "quay lại". Robot thật (xe tự hành) KHÔNG BAO GIỜ được phát triển không có Git — đây là chuẩn ngành. Bỏ qua hôm nay = 23 tuần còn lại làm việc trong sợ hãi.
+</div>
+
+<h2>3.1 — Ba vùng của Git (nền tảng không thể bỏ)</h2>
+
+<div class="analogy-box">
+    <span class="box-title">🔎 Ẩn dụ: ba vùng = bàn làm việc, bàn đóng gói, kho lưu trữ</span>
+    <table class="table">
+        <tr>
+            <th>Vùng</th>
+            <th>Tên tiếng Anh</th>
+            <th>Ẩn dụ</th>
+            <th>Lệnh</th>
+        </tr>
+        <tr>
+            <td><strong>Thư mục làm việc</strong></td>
+            <td>Working directory</td>
+            <td>Bàn làm việc: file bạn đang sửa, bừa bộn</td>
+            <td>sửa file tự do</td>
+        </tr>
+        <tr>
+            <td><strong>Vùng chờ</strong></td>
+            <td>Staging area</td>
+            <td>Bàn đóng gói: đã chọn hàng nào sẽ gửi</td>
+            <td><code>git add</code></td>
+        </tr>
+        <tr>
+            <td><strong>Kho lưu trữ</strong></td>
+            <td>Repository</td>
+            <td>Kho: kiện hàng đã niêm phong, có số hiệu, không sửa được nữa</td>
+            <td><code>git commit</code></td>
+        </tr>
+    </table>
+    <p>Dòng chảy bất biến: <strong>sửa (working) → add (staging) → commit (repo)</strong>. Mỗi commit là một "ảnh chụp" có đánh số (hash) — quay lại bất kỳ ảnh nào bất cứ lúc nào.</p>
+</div>
+
+<div class="example-box">
+    <span class="box-title">📖 Lần đầu chạy (định danh bản thân — làm 1 lần)</span>
+    <pre><code>git config --global user.name "Huynh Cong Danh"
+git config --global user.email "email_cua_ban@example.com"
+git config --global core.editor nano</code></pre>
+    <p>Mỗi commit đóng dấu tên + email — đúng người, đúng thời gian. <code>--global</code> = áp dụng cho mọi repo của bạn (một lần, xong vĩnh viễn).</p>
+</div>
+
+<h2>3.2 — Khởi tạo repo và commit đầu tiên</h2>
+
+<pre><code>$ cd ~/dev
+$ mkdir notes && cd notes          # repo của bạn: sổ tay kỹ thuật
+$ git init                          # ✅ biến thư mục này thành repo
+$ git status                        # ❓ status: "git đang nhìn thấy gì?"
+$ git add nhat-ky-ngay1.md          # đưa 1 file vào bàn đóng gói
+$ git status                        # file giờ màu xanh: "new file"
+$ git commit -m "Ghi nhat ky ngay 1"  # 📦 niêm phong
+$ git log --oneline                 # 🕐 xem lịch sử</code></pre>
+
+<div class="important-note">
+    <span class="box-title">⚡ 3 lệnh trạng thái bạn sống cùng</span>
+    <ul>
+        <li><code>git status</code> — TRƯỚC mọi thứ: hỏi git "bây giờ có gì chưa xong?" (thói quen sống còn: chạy status trước khi commit, trước khi chuyển việc).</li>
+        <li><code>git log --oneline</code> — lịch sử gọn: hash + message. <code>git log</code> đầy đủ cho biết ai, khi nào, đổi gì.</li>
+        <li><code>git diff</code> — "khác biệt giữa đang sửa và bản đã commit": in ra từng dòng thêm (+) / xóa (-). Trước khi commit, chạy diff để soi lại — tránh commit nhầm rác.</li>
+    </ul>
+</div>
+
+<h2>3.3 — Message chuẩn: người khác đọc được mới tính là commit</h2>
+
+<div class="cheat-sheet">
+    <span class="box-title">📋 Quy ước commit của cả lộ trình (bắt buộc)</span>
+    <ul>
+        <li>Viết ở thì quá khứ, mô tả VIỆC LÀM, không mô tả cảm xúc.</li>
+        <li><strong>Sai:</strong> "sua lai", "update", "done", "sua code de chay duoc".</li>
+        <li><strong>Đúng:</strong> "Them ham predict cua Kalman filter", "Sua loi chia cho 0 o update step", "Viet README: huong dan build va chay".</li>
+        <li>Với thay đổi nhỏ: 1 câu ≤ 60 ký tự. Với thay đổi lớn: dòng đầu = tóm tắt, xuống dòng = chi tiết (qua <code>git commit</code> không có -m).</li>
+        <li>Commit thường xuyên: <strong>1 commit cho 1 việc trọn vẹn</strong>. Không để cuối ngày dồn 20 thay đổi vào 1 commit — lịch sử như vậy vô dụng khi cần quay lại.</li>
+    </ul>
+</div>
+
+<h2>3.4 — README và Markdown: bộ mặt của repo</h2>
+
+<div class="goal-box">
+    <strong>🎯 Mục đích — vì sao README quan trọng không kém code:</strong> Nhà tuyển dụng mở GitHub của bạn mất 30 giây để quyết định "đọc tiếp hay thôi". README là 30 giây đó. Một README tốt trả lời: repo này làm gì, chạy thế nào, cần gì. Kỹ năng này còn là "documentation" — JD VinFast/RTC đều yêu cầu. Hôm nay học Markdown đủ dùng (tiêu đề, in đậm, danh sách, code) — hơn nữa để dành ngày 4.
+</div>
+
+<pre><code># Sổ tay kỹ thuật của tôi
+
+Nhật ký học tập hàng ngày — lộ trình 24 tuần Control &amp; Planning.
+
+## Cách dùng
+Mỗi ngày tạo file `nhat-ky-ngayN.md`, cuối ngày commit.
+
+## Cấu trúc
+- `nhat-ky-ngay1.md` — ngày 1: Ubuntu + terminal
+
+## Lỗi đã gặp (trang lỗi)
+| Ngày | Lỗi | Cách sửa |
+|------|-----|----------|
+| 1 | Permission denied khi ./script | chmod +x |</code></pre>
+
+<p>Markdown: <code>#</code> = tiêu đề lớn, <code>##</code> = nhỏ hơn; <code>**đậm**</code>; <code>`code`</code> (backtick) = mã nguồn trong dòng; <code>```</code> 3 backtick = khối code; bảng dùng <code>|</code> (như trên); dấu <code>-</code> = bullet list.</p>
+
+<div class="quiz-section">
+    <h3>🚦 Kiểm tra nhanh K3 — ngày 3</h3>
+    <div class="quiz-question">
+        <p><strong>K3.1</strong> Thứ tự đúng của 3 vùng Git khi ghi lại thay đổi?</p>
+        <div class="answer-section"><span class="box-title">✅ Đáp án</span> Working directory (sửa) → <code>git add</code> đưa vào staging → <code>git commit</code> lưu vào repository. Chỉ thứ tự này, không có đường tắt.</div>
+    </div>
+    <div class="quiz-question">
+        <p><strong>K3.2</strong> Bạn sửa file nhưng <code>git log</code> không thấy thay đổi. Vì sao?</p>
+        <div class="answer-section"><span class="box-title">✅ Đáp án</span> Vì chưa <code>git add</code> + <code>git commit</code>. Chỉ có commit mới đi vào lịch sử; sửa file trên đĩa không làm gì cho git.</div>
+    </div>
+    <div class="quiz-question">
+        <p><strong>K3.3</strong> Lệnh nào xem "thay đổi chưa commit" dưới dạng dòng thêm/xóa?</p>
+        <div class="answer-section"><span class="box-title">✅ Đáp án</span> <code>git diff</code> (khác biệt giữa working và bản đã commit). Muốn xem chính xác mình sửa gì trước khi commit — luôn chạy nó.</div>
+    </div>
+    <div class="quiz-question">
+        <p><strong>K3.4</strong> Chọn commit message ĐÚNG theo quy ước: (a) "sua xong", (b) "update", (c) "Sua loi tham chieu null o ham predict".</p>
+        <div class="answer-section"><span class="box-title">✅ Đáp án</span> (c). Nó mô tả việc làm cụ thể, đọc là hiểu ngay không cần mở code.</div>
+    </div>
+</div>
+
+<div class="quiz-section">
+    <h3>💪 Luyện tập BT3 — repo notes + 3 commit chuẩn</h3>
+    <p><strong>Mục tiêu:</strong> repo <code>~/dev/notes</code> với 3 commit sạch. Gõ từng lệnh, đọc kết quả từng bước.</p>
+    <pre><code>cd ~/dev/notes
+nano nhat-ky-ngay3.md
+# gõ nội dung: ngày 3, đã học Git, 1 lỗi gặp phải hôm nay
+# lưu thoát
+
+git status                     # 1 file mới: nhat-ky-ngay3.md
+git add nhat-ky-ngay3.md
+git commit -m "Ghi nhat ky ngay 3: Git co ban"
+git status                     # ✅ clean — không còn gì chưa xong
+
+nano README.md                 # gõ README như ví dụ 3.4
+git add README.md
+git commit -m "Viet README: mo ta repo va cau truc"
+git log --oneline              # 3 commit? (kể cả commit ngày 1)</code></pre>
+    <div class="answer-section">
+        <span class="box-title">✅ Giải thích WHY — vì sao 2 commit nhỏ thay vì 1 commit to?</span>
+        <p>Vì quy tắc "1 commit = 1 việc". Commit 1 = nhật ký, commit 2 = README — 2 việc khác nhau. Lợi ích thật: 3 tháng nữa bạn quay lại tìm "README viết khi nào" — <code>git log --oneline</code> trả lời trong 1 giây. Nếu dồn thành 1 commit, phải mở code ra soi. Với code thật (robot), việc tìm đúng commit giới thiệu 1 tính năng là thao tác hàng ngày của kỹ sư.</p>
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Giải thích WHY — vì sao status cuối báo "clean"?</span>
+        <p>"Nothing to commit, working tree clean" = working directory giống hệt bản đã commit. Đây là trạng thái mong muốn khi kết thúc một phiên: mọi thứ đã được chốt, không sót gì. Cuối mỗi ngày, <code>git status</code> báo clean = ngày đó xong việc thật.</p>
+    </div>
+</div>
+
+<div class="cheat-sheet">
+    <span class="box-title">✅ CHECKLIST NGÀY 3</span>
+    <ul>
+        <li>☐ Giải thích được 3 vùng Git + dòng chảy sửa → add → commit</li>
+        <li>☐ git init/add/commit/status/log/diff dùng thành thạo (gõ tay không nhìn)</li>
+        <li>☐ Repo ~/dev/notes có 3 commit với message đúng chuẩn</li>
+        <li>☐ README.md viết xong bằng Markdown (tiêu đề, bảng, code block)</li>
+        <li>☐ Trang lỗi trong README có ít nhất 1 dòng (lỗi ngày 1)</li>
+    </ul>
+</div>
+<div class="part-header-danger" id="ngay4">
+    <h1>NGÀY 4 — GITHUB, BRANCH, MERGE: LÀM VIỆC VỚI THẾ GIỚI</h1>
+    <p>remote · push/pull/clone · branch và merge · xử lý conflict · Markdown nâng cao</p>
+</div>
+
+<div class="goal-box">
+    <strong>🎯 Mục đích ngày 4 — tại sao phải làm:</strong> Hôm qua Git chỉ ở máy bạn. Hôm nay repo của bạn lên GitHub — <strong>repo public là CV kỹ thuật hoạt động</strong>: nhà tuyển dụng (Phenikaa-X, Modern System) thường xuyên mở link GitHub trong hồ sơ. Nhưng có 2 lý do lớn hơn: (1) <strong>RTC/Phenikaa yêu cầu làm việc nhóm</strong> — trong đội robot, 5 người sửa cùng code, branch/merge là cách họ không đè lên nhau; (2) <strong>branch là "thí nghiệm an toàn"</strong>: thử ý tưởng mới trên nhánh riêng, hỏng thì xóa, đẹp thì merge — đúng tư duy người làm control thử thuật toán mới trên nhánh riêng trước khi nhập vào nhánh chính của xe.
+</div>
+
+<h2>4.1 — GitHub: máy chủ chứa repo</h2>
+
+<div class="definition">
+    <span class="box-title">🔍 Git vs GitHub — 2 thứ khác nhau</span>
+    <p><strong>Git</strong> = phần mềm quản lý lịch sử, chạy trên máy bạn. <strong>GitHub</strong> = trang web lưu bản sao repo (máy chủ), cho phép người khác xem và cộng tác. Máy bạn (local) và GitHub (remote) là 2 bản sao — <strong>đồng bộ bằng 2 lệnh: push (gửi lên) và pull (kéo xuống)</strong>. Không push = GitHub không biết bạn làm gì.</p>
+</div>
+
+<h3>4.1.1 — Tạo repo trên GitHub (trình duyệt)</h3>
+<ol>
+    <li>Vào github.com → Sign in (tạo tài khoản nếu chưa có).</li>
+    <li>Nút <strong>New repository</strong> (góc phải trên).</li>
+    <li>Tên: <code>notes</code>; chọn <strong>Public</strong> (đây là CV của bạn — public mới có giá trị); không tích "Add a README" (đã có README ở máy).</li>
+    <li>Bấm Create — GitHub hiện 3 lựa chọn. Bạn dùng lựa chọn "…or push an existing repository from the command line".</li>
+</ol>
+
+<h2>4.2 — Nối máy với GitHub: remote + push</h2>
+
+<pre><code>cd ~/dev/notes
+git remote add origin https://github.com/TEN_TAI_KHOAN/notes.git
+# "origin" = tên mặc định đặt cho máy chủ GitHub (quy ước toàn ngành)
+
+git branch -M main               # đổi nhánh chính thành "main" (chuẩn hiện đại)
+git push -u origin main          # gửi toàn bộ lịch sử lên GitHub lần đầu
+# -u: nhớ luôn "gửi lên origin/main" cho những lần sau
+git remote -v                    # xem danh sách máy chủ đang nối</code></pre>
+
+<div class="warning-box">
+    <span class="box-title">⚠️ Lỗi thường gặp: username/password khi push</span>
+    <p>Từ 2021, GitHub KHÔNG nhận mật khẩu — cần <strong>Personal Access Token (PAT)</strong>: GitHub → Settings → Developer settings → Personal access tokens → Tokens (classic) → Generate new token (tích quyền <code>repo</code>) → dùng token này thay mật khẩu khi push. Lưu token ở nơi an toàn (như mật khẩu).</p>
+</div>
+
+<h2>4.3 — Clone và Pull: lấy code về</h2>
+
+<pre><code># Mở repo của NGƯỜI KHÁC (vd tài liệu tham khảo): sao chép toàn bộ về máy
+git clone https://github.com/nguoi-khac/repo.git  # tạo thư mục repo/ tại chỗ
+
+# Repo của mình đã có ở máy: kéo cập nhật mới nhất
+git pull                        # đồng bộ những gì người khác đã push</code></pre>
+
+<p><code>clone</code> = sao chép lần đầu; <code>pull</code> = cập nhật những lần sau. Với bạn solo: clone dùng để xem lại repo "bằng mắt người lạ" (ngày 28 của lộ trình sẽ làm kiểm tra này).</p>
+
+<h2>4.4 — Branch: đường ray riêng cho thí nghiệm</h2>
+
+<div class="analogy-box">
+    <span class="box-title">🔎 Ẩn dụ: branch = làn đường riêng, merge = nhập làn</span>
+    <p>Đường cao tốc chính là <code>main</code>. Muốn thử điều mới (viết thuật toán, đổi cấu trúc) mà không làm kẹt xe cho người khác → rẽ vào làn riêng (<code>branch</code>). Làn riêng xong việc, hợp lưu về lại đường chính (<code>merge</code>). Trong đội robot: mỗi người một branch tính năng, không ai giẫm lên code của ai.</p>
+</div>
+
+<pre><code>git branch                    # danh sách nhánh (dấu * = đang đứng ở nhánh nào)
+git branch thu-nghiem-markdown   # tạo nhánh mới (từ nơi đang đứng)
+git checkout thu-nghiem-markdown  # chuyển sang nhánh đó
+git switch thu-nghiem-markdown    # lệnh mới hơn, tương đương checkout
+# — sửa file, commit như bình thường —
+git checkout main              # quay về nhánh chính
+git merge thu-nghiem-markdown  # hợp lưu thay đổi vào main</code></pre>
+
+<p>Ghi nhớ cặp <code>git switch</code> (chuyển nhánh) và <code>git branch -d ten-nhanh</code> (xóa nhánh sau khi merge xong).</p>
+
+<h2>4.5 — Conflict: khi hai đường ray đâm nhau (sẽ gặp, phải biết xử)</h2>
+
+<div class="goal-box">
+    <strong>🎯 Mục đích — vì sao phải học conflict ngay hôm nay:</strong> Conflict KHÔNG phải lỗi — nó là cơ chế bảo vệ của Git: <em>"hai bản sửa cùng một chỗ, tao không biết giữ cái nào, mày quyết đi"</em>. Ai làm việc nhóm cũng gặp. Không biết xử = tê liệt; biết xử = chuyện thường. Hôm nay học trong môi trường giả lập an toàn, tuần 11+ khi làm việc thật với team thì chỉ là lặp lại.
+</div>
+
+<p>Khi merge mà Git báo conflict, file chứa cả 2 phiên bản:</p>
+
+<pre><code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+phiên bản trên nhánh main
+=======
+phiên bản trên nhánh kia
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; thu-nghiem-markdown</code></pre>
+
+<p>Việc của bạn: <strong>chọn giữ cái nào (hoặc kết hợp cả hai), xóa 6 dòng đánh dấu <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; ... &gt;&gt;&gt;&gt;&gt;&gt;&gt;</code></strong>, rồi commit lại:</p>
+
+<pre><code>nano conflicted.txt           # sửa: giữ ý đúng, bỏ toàn bộ ký hiệu
+git add conflicted.txt
+git commit -m "Giai quyet conflict: giu phien ban ket hop"</code></pre>
+
+<div class="warning-box">
+    <span class="box-title">⚠️ Quy tắc trước khi merge</span>
+    <p>Luôn <code>git status</code> để chắc working tree sạch; commit mọi thứ trên nhánh đang làm TRƯỚC khi checkout/merge — Git không cho merge khi còn thay đổi chưa commit (hoặc sẽ đòi stash). Quy tắc nằm lòng: <strong>dọn bàn trước khi chuyển làn</strong>.</p>
+</div>
+
+<h2>4.6 — Markdown nâng cao (đủ cho mọi README sau này)</h2>
+
+<pre><code># Tiêu đề 1
+## Tiêu đề 2
+### Tiêu đề 3
+
+**in đậm**  *in nghiêng*  ~~gạch ngang~~
+
+[Liên kết](https://github.com)          # link
+![alt text](duong-dan-anh.png)          # chèn ảnh (vd ảnh kết quả đồ thị)
+
+- bullet 1
+- bullet 2
+  1. con số lồng nhau
+
+```cpp                          # khối code có tô màu ngôn ngữ
+#include &lt;iostream&gt;
+int main() { return 0; }
+```
+
+| Cột A | Cột B |      # bảng
+|-------|-------|
+| 1     | 2     |
+
+&gt; Trích dẫn / ghi chú nổi bật</code></pre>
+
+<div class="quiz-section">
+    <h3>🚦 Kiểm tra nhanh K4 — ngày 4</h3>
+    <div class="quiz-question">
+        <p><strong>K4.1</strong> Phân biệt Git và GitHub bằng 1 câu.</p>
+        <div class="answer-section"><span class="box-title">✅ Đáp án</span> Git là phần mềm quản lý lịch sử chạy trên máy bạn; GitHub là trang web chứa bản sao repo để chia sẻ/cộng tác. Git không cần GitHub (dùng offline), nhưng GitHub cần Git.</div>
+    </div>
+    <div class="quiz-question">
+        <p><strong>K4.2</strong> Bạn vừa commit ở máy. Lệnh nào đưa commit đó lên GitHub?</p>
+        <div class="answer-section"><span class="box-title">✅ Đáp án</span> <code>git push origin main</code> (sau lần đầu dùng <code>-u</code> thì gõ <code>git push</code> là đủ). Ngược lại: <code>git pull</code> kéo về.</div>
+    </div>
+    <div class="quiz-question">
+        <p><strong>K4.3</strong> Conflict nghĩa là gì và tại sao nó xảy ra?</p>
+        <div class="answer-section"><span class="box-title">✅ Đáp án</span> Hai nhánh sửa cùng một dòng/file; khi merge Git không tự quyết được → để cả hai bản trong file với ký hiệu &lt;&lt;&lt;&lt;&lt;&lt;&lt;. Giải quyết: chọn/kết hợp nội dung, xóa ký hiệu, commit lại.</div>
+    </div>
+    <div class="quiz-question">
+        <p><strong>K4.4</strong> Lệnh nào tạo branch và lệnh nào chuyển sang branch?</p>
+        <div class="answer-section"><span class="box-title">✅ Đáp án</span> Tạo: <code>git branch &lt;tên&gt;</code>. Chuyển: <code>git switch &lt;tên&gt;</code> (hoặc checkout). Có thể gộp: <code>git switch -c &lt;tên&gt;</code> tạo + chuyển 1 lần.</div>
+    </div>
+</div>
+
+<div class="quiz-section">
+    <h3>💪 Luyện tập BT4 — push + branch + conflict tự tạo</h3>
+    <p><strong>Bước 1 — push repo notes lên GitHub:</strong> tạo repo trống trên GitHub (mục 4.1.1) rồi chạy nhóm lệnh ở mục 4.2. Kiểm tra bằng trình duyệt: mở link github.com/TEN_TAI_KHOAN/notes — thấy README và nhật ký. ✅ Đây là commit đầu tiên "thấy được từ thế giới".</p>
+    <p><strong>Bước 2 — branch + conflict (giả lập 2 người):</strong> tạo file <code>ke-hoach-thang2.md</code> ở main, rồi nhánh khác sửa nó — tạo conflict chủ động để biết cảm giác sửa:</p>
+    <pre><code>cd ~/dev/notes
+nano ke-hoach-thang2.md
+# gõ: "Thang 2: hoc ROS2 tu co ban"
+git add ke-hoach-thang2.md
+git commit -m "Them ke hoach thang 2: ROS2"
+
+git switch -c sua-ke-hoach            # tạo nhánh mới và chuyển ngay
+nano ke-hoach-thang2.md               # sửa thành: "Thang 2: hoc ROS2 nang cao va build package"
+git add ke-hoach-thang2.md
+git commit -m "Nang cap noi dung thang 2"
+git switch main                       # quay về main
+nano ke-hoach-thang2.md               # sửa thành: "Thang 2: hoc ROS2 co ban va CMake"
+git add ke-hoach-thang2.md
+git commit -m "Chinh noi dung thang 2"
+git merge sua-ke-hoach                # 💥 CONFLICT — đúng như dự đoán?</code></pre>
+    <div class="answer-section">
+        <span class="box-title">✅ Dự đoán trước khi chạy</span>
+        <p>Có conflict: main sửa "ROS2 co ban va CMake", nhánh sửa "ROS2 nang cao va build package" — cùng 1 dòng, cùng 1 lần sửa → Git không biết giữ cái nào. Mở file: thấy <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</code>… <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt; sua-ke-hoach</code>. Giải quyết: nano → giữ nội dung "ROS2 nang cao va build package" (hoặc gộp cả hai) → xóa ký hiệu → add + commit.</p>
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Giải thích WHY — vì sao phải chủ động tạo conflict?</span>
+        <p>Conflict đầu tiên ai cũng sợ và mò 2 tiếng. Tự tạo ra nó hôm nay: bạn thấy conflict không phá hỏng gì, cách sửa rõ ràng, quá trình "giả 2 người" cho bạn nhìn thấy chính xác vì sao Git đánh dấu (cùng dòng, 2 lần sửa sau cùng 1 điểm gốc). Khi gặp conflict thật ở tuần 12+ (khi làm việc với code ROS2), bạn đã có cơ bắp nhớ.</p>
+    </div>
+    <p><strong>Bước 3 — dọn:</strong> xóa nhánh <code>git branch -d sua-ke-hoach</code>, push main lên GitHub, mở trình duyệt kiểm tra lịch sử.</p>
+</div>
+
+<div class="cheat-sheet">
+    <span class="box-title">✅ CHECKLIST NGÀY 4</span>
+    <ul>
+        <li>☐ Repo notes public trên GitHub, push/pull thông thạo</li>
+        <li>☐ Phân biệt được clone (lần đầu) và pull (cập nhật)</li>
+        <li>☐ Tạo/chuyển/xóa branch thành thạo; hiểu vì sao phải dùng branch</li>
+        <li>☐ Tự tạo và giải quyết được 1 conflict (BT4 bước 2)</li>
+        <li>☐ Viết được bảng, khối code, link, ảnh trong Markdown</li>
+    </ul>
+</div>
+<div class="part-header" id="ngay5">
+    <h1>NGÀY 5 — DOCKER: MÔI TRƯỜNG ĐÓNG GÓI</h1>
+    <p>image vs container · pull/run/exec/ps · mount thư mục · Dockerfile đầu tiên</p>
+</div>
+
+<div class="goal-box">
+    <strong>🎯 Mục đích ngày 5 — tại sao phải làm:</strong> (1) <strong>JD Phenikaa-X ghi thẳng "Docker" vào yêu cầu</strong>; (2) từ tuần 7, bạn sẽ chạy ROS2 Humble TRONG container — không phá hệ thống, dọn dẹp dễ; (3) tư duy cốt lõi của ngành: <strong>"chạy được trên máy tôi" không có giá trị — phải "chạy được trên máy bất kỳ ai"</strong>. Docker chính là công cụ biến câu đó thành hiện thực: đóng gói môi trường + code vào một "kiện hàng" (image), ai kéo về cũng chạy y hệt. Nhà tuyển dụng nào cũng thích người biết Docker vì họ đỡ tốn 2 tuần setup cho bạn.
+</div>
+
+<h2>5.1 — Image vs Container: bản vẽ và căn hộ</h2>
+
+<div class="analogy-box">
+    <span class="box-title">🔎 Ẩn dụ: image = bản vẽ căn hộ, container = căn hộ xây ra</span>
+    <table class="table">
+        <tr>
+            <th></th>
+            <th>Image (bản vẽ)</th>
+            <th>Container (căn hộ)</th>
+        </tr>
+        <tr>
+            <td><strong>Là gì</strong></td>
+            <td>Tệp đóng gói MÔI TRƯỜNG: OS + phần mềm + cấu hình</td>
+            <td>Một "căn hộ" chạy từ bản vẽ — có thể nhiều căn từ 1 bản vẽ</td>
+        </tr>
+        <tr>
+            <td><strong>Thay đổi</strong></td>
+            <td>Bất biến — không sửa trực tiếp</td>
+            <td>Chạy được, sửa được — nhưng sửa xong nếu không lưu thì mất</td>
+        </tr>
+        <tr>
+            <td><strong>Lệnh</strong></td>
+            <td><code>docker build</code> (xây), <code>docker pull</code> (kéo bản vẽ về)</td>
+            <td><code>docker run</code> (dựng căn từ bản vẽ), <code>docker rm</code> (phá căn)</td>
+        </tr>
+    </table>
+    <p>Người ta thường nói: <em>"container là process (tiến trình) chạy trong phòng cách ly"</em> — vì container KHÔNG có hệ điều hành riêng, nó dùng chung kernel với máy chủ nhưng cách ly hoàn toàn về file, mạng, tiến trình. Đó là vì sao container nhẹ (khởi động trong vài giây) so với máy ảo.</p>
+</div>
+
+<h2>5.2 — Bốn lệnh sống còn</h2>
+
+<pre><code>$ docker pull ubuntu:22.04        # kéo image Ubuntu 22.04 về máy (từ Docker Hub)
+$ docker images                   # xem danh sách image đã có
+$ docker run --rm -it ubuntu:22.04 bash
+#   --rm: tự xóa container khi thoát (dọn dẹp tự động)
+#   -it: mở terminal tương tác bên trong container
+#   bash: lệnh khởi động — mở shell trong "căn hộ"
+# → bạn đang ĐỨNG BÊN TRONG Ubuntu của container. Gõ thử:
+#   cat /etc/os-release    → thấy Ubuntu 22.04
+#   ls /                   → đây là hệ thống riêng, KHÔNG phải máy bạn
+#   exit                   → thoát, container tự xóa (nhờ --rm)</code></pre>
+
+<div class="warning-box">
+    <span class="box-title">⚠️ Lỗi "permission denied" khi chạy docker</span>
+    <p>Trên Ubuntu: chạy <code>docker</code> cần quyền root hoặc nhóm <code>docker</code>. Nếu gặp lỗi, chạy: <code>sudo usermod -aG docker $USER</code> rồi đăng xuất/đăng nhập lại (hoặc reboot WSL). Lệnh này thêm bạn vào nhóm docker — không cần sudo mỗi lần. Kiểm tra: <code>docker run --rm hello-world</code>.</p>
+</div>
+
+<h2>5.3 — Làm việc bên trong: exec + mount</h2>
+
+<div class="goal-box">
+    <strong>🎯 Mục đích — vì sao mount là kỹ năng bắt buộc:</strong> Container bị "cách ly": file tạo trong container <code>--rm</code> sẽ BIẾN MẤT khi thoát. Vậy làm sao chạy code của mình trong container? — <strong>mount: treo thư mục máy bạn vào bên trong container</strong>. Code nằm ở máy, container "nhìn thấy" qua cửa sổ mount, chỉnh sửa 2 chiều. Từ tuần 7: bạn sẽ mount thư mục ROS2 workspace của mình vào container — không có mount là không có gì.
+</div>
+
+<pre><code>$ docker run -it --rm -v /home/danh/dev:/workspace ubuntu:22.04 bash
+#   -v /home/danh/dev:/workspace: thư mục máy bạn trái → chỗ container phải
+# Bên trong container:
+#   cd /workspace && ls    → thấy chính các file của bạn!
+#   touch test.txt         → tạo file trong container...
+# exit
+$ ls /home/danh/dev        # ...file vẫn còn ở máy! (2 chiều đồng bộ)</code></pre>
+
+<p>Còn <code>docker exec</code>: container đang chạy nền (không gắn terminal) → chui vào nó:</p>
+
+<pre><code>$ docker run -d --name ubuntu-nen ubuntu:22.04 sleep infinity
+#   -d: chạy nền (background), sleep infinity: giữ container sống
+$ docker ps                 # danh sách container đang chạy
+$ docker exec -it ubuntu-nen bash   # chui vào container đang chạy
+# ...làm gì thì làm...
+$ exit
+$ docker stop ubuntu-nen    # dừng
+$ docker rm ubuntu-nen      # xóa</code></pre>
+
+<h2>5.4 — Dockerfile: bản vẽ của CHÍNH BẠN</h2>
+
+<p>Thay vì chạy container rồi cài tay từng thứ (và quên mất đã cài gì), ghi mọi bước vào file <code>Dockerfile</code> — tái tạo được y hệt bất cứ máy nào. Đây là cách ROS2 images chính thức được xây.</p>
+
+<pre><code># Dockerfile — môi trường C++ của lộ trình
+FROM ubuntu:22.04
+
+RUN apt-get update && apt-get install -y \
+    build-essential gdb git cmake \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /workspace
+
+CMD ["bash"]</code></pre>
+
+<p>4 chỉ thị đầu tiên (chỉ học 4 này là đủ cả năm): <code>FROM</code> (nền từ image nào), <code>RUN</code> (chạy lệnh khi XÂY image), <code>WORKDIR</code> (thư mục mặc định khi chạy), <code>CMD</code> (lệnh khởi động khi chạy container). Xây và chạy:</p>
+
+<pre><code>mkdir -p ~/dev/docker-cpp && cd ~/dev/docker-cpp
+nano Dockerfile        # gõ nội dung trên
+docker build -t cpp-dev .
+#   -t cpp-dev: đặt tên image là cpp-dev
+docker run --rm -it -v ~/dev:/workspace cpp-dev
+# bên trong: g++ --version, git --version → thấy đủ công cụ
+# kiểm tra mount: ls /workspace → thấy notes của bạn</code></pre>
+
+<div class="important-note">
+    <span class="box-title">⚡ Lời khuyên thực chiến về dung lượng</span>
+    <p>Mỗi <code>RUN apt-get install</code> tạo "lớp" (layer) trong image. Nhiều lớp = image to. Lệnh <code>rm -rf /var/lib/apt/lists/*</code> ngay sau install xóa bộ nhớ đệm gói — giảm kích thước đáng kể. Nhìn vào Dockerfile của ROS2 (github.com/ros/docker) để thấy kỹ thuật này dùng ở quy mô thật.</p>
+</div>
+
+<div class="quiz-section">
+    <h3>🚦 Kiểm tra nhanh K5 — ngày 5</h3>
+    <div class="quiz-question">
+        <p><strong>K5.1</strong> Phân biệt image và container bằng ẩn dụ 1 câu.</p>
+        <div class="answer-section"><span class="box-title">✅ Đáp án</span> Image là bản vẽ căn hộ, container là căn hộ được xây từ bản vẽ đó — một bản vẽ dựng được nhiều căn hộ giống hệt nhau.</div>
+    </div>
+    <div class="quiz-question">
+        <p><strong>K5.2</strong> Bạn chạy <code>docker run --rm -it ubuntu:22.04 bash</code>, tạo file trong container, thoát. File còn không? Vì sao?</p>
+        <div class="answer-section"><span class="box-title">✅ Đáp án</span> Không còn. Container bị xóa khi thoát (--rm), mọi thay đổi trong đó mất theo. Muốn giữ: mount thư mục máy chủ bằng -v.</div>
+    </div>
+    <div class="quiz-question">
+        <p><strong>K5.3</strong> Lệnh nào gắn thư mục <code>~/dev</code> của máy vào <code>/workspace</code> trong container?</p>
+        <div class="answer-section"><span class="box-title">✅ Đáp án</span> <code>-v ~/dev:/workspace</code> (trái = máy chủ, phải = container; đường dẫn trái phải TUYỆT ĐỐI).</div>
+    </div>
+    <div class="quiz-question">
+        <p><strong>K5.4</strong> Trong Dockerfile, <code>RUN</code> chạy lúc nào và <code>CMD</code> chạy lúc nào?</p>
+        <div class="answer-section"><span class="box-title">✅ Đáp án</span> <code>RUN</code> chạy khi XÂY image (docker build) — dùng để cài phần mềm. <code>CMD</code> chạy khi container KHỞI ĐỘNG (docker run) — dùng để chỉ định chương trình mặc định.</div>
+    </div>
+</div>
+
+<div class="quiz-section">
+    <h3>💪 Luyện tập BT5 — image C++ của riêng bạn</h3>
+    <p><strong>Mục tiêu:</strong> image <code>cpp-dev</code> build được, chạy được, mount đúng. Toàn bộ các bước ở mục 5.4 — gõ tay, không copy.</p>
+    <pre><code>mkdir -p ~/dev/docker-cpp && cd ~/dev/docker-cpp
+nano Dockerfile
+# gõ 4 chỉ thị: FROM / RUN (2 dòng) / WORKDIR / CMD
+# lưu thoát
+docker build -t cpp-dev .
+docker images            # thấy cpp-dev trong danh sách
+docker run --rm -it -v ~/dev:/workspace cpp-dev
+# trong container: g++ --version  → 11.4.0 (hoặc tương đương)
+#                 ls /workspace   → thấy notes, docker-cpp
+#                 exit</code></pre>
+    <div class="answer-section">
+        <span class="box-title">✅ Giải thích WHY — vì sao image này sẽ dùng suốt lộ trình?</span>
+        <p>Môi trường C++ (g++, gdb, cmake, git) giờ là MỘT LỆNH: <code>docker run --rm -it -v ~/dev:/workspace cpp-dev</code>. Máy hỏng, đổi máy, lên máy tính công ty — chỉ cần có Docker là có nguyên vẹn môi trường. Đây chính là lý do mọi công ty dùng Docker cho dev: "works on my machine" (chạy được trên máy tôi) trở thành "works anywhere". Tuần 7 bạn chỉ đổi dòng FROM sang image ROS2 và cài thêm vài gói — cùng một kỹ thuật.</p>
+    </div>
+    <div class="answer-section">
+        <span class="box-title">✅ Kiểm tra nhanh khả năng hiểu (tự trả lời trước khi đọc):</span>
+        <p>Vì sao phải chạy <code>docker build</code> lại sau khi SỬA Dockerfile? — Vì image chỉ là ảnh chụp tại thời điểm build; sửa file nguồn (bản vẽ) không tự động đổi căn hộ đã xây. Luôn build lại sau khi sửa Dockerfile.</p>
+    </div>
+</div>
+
+<div class="cheat-sheet">
+    <span class="box-title">✅ CHECKLIST NGÀY 5</span>
+    <ul>
+        <li>☐ Kể được image vs container (ẩn dụ bản vẽ/căn hộ)</li>
+        <li>☐ pull/images/run với --rm, -it, -v dùng thành thạo</li>
+        <li>☐ exec vào container đang chạy nền + ps/stop/rm</li>
+        <li>☐ BT5 xong: image cpp-dev build + chạy + mount hoạt động</li>
+        <li>☐ Đọc hiểu Dockerfile cơ bản: FROM/RUN/WORKDIR/CMD</li>
+    </ul>
+</div>
+<div class="part-header-purple" id="ngay6">
+    <h1>NGÀY 6 — DỰNG "SỔ TAY KỸ THUẬT" + ÔN TẬP CẢ TUẦN</h1>
+    <p>4 file của người kỹ sư · trang lỗi · nhật ký · bài ôn tổng hợp 5 ngày</p>
+</div>
+
+<div class="goal-box">
+    <strong>🎯 Mục đích ngày 6 — tại sao phải làm:</strong> Kiến thức bổ trợ "ghi chú kỹ thuật" là thứ không JD nào liệt kê nhưng là <strong>điều kiện để thực hiện mọi JD</strong>: người không ghi chép sẽ học 23 tuần rồi quên 20. Ngày 6 dọn dẹp: sắp hệ thống notes của bạn thành 4 file chuẩn, viết lại trang lỗi (dữ liệu quý nhất của tuần), và <strong>ôn lại toàn bộ bằng bài kiểm tra</strong> — kiến thức chưa ôn là kiến thức chưa thuộc. Cuối ngày bạn có một "tài sản" vận hành được: sổ tay 6 ngày + trang lỗi + lịch sử Git đều đặn.
+</div>
+
+<h2>6.1 — Cấu trúc sổ tay kỹ thuật (chuẩn của lộ trình)</h2>
+
+<p>Repo <code>~/dev/notes</code> từ nay có 4 file cố định — mở rộng dần, không thay cấu trúc:</p>
+
+<pre><code>notes/
+├── README.md            # bộ mặt repo: mô tả + cấu trúc + link
+├── nhat-ky/             # thư mục nhật ký ngày: nhat-ky-ngayN.md
+├── trang-loi.md         # bảng: ngày | lỗi | nguyên nhân | cách sửa (định kỳ gộp)
+└── y-tuong.md           # ý tưởng/project muốn làm — ghi ngay, quyết định sau</code></pre>
+
+<div class="analogy-box">
+    <span class="box-title">🔎 Ẩn dụ: sổ tay = kho dữ liệu, trang-loi = bệnh án</span>
+    <p>Nhật ký là nhịp tim (ghi mỗi ngày). Trang lỗi là bệnh án: ghi LẠNH LÙNG nguyên nhân + cách sửa — không cảm xúc, không tự trách. 6 tháng nữa, trang lỗi là thứ bạn đọc trước khi phỏng vấn: nó chứa 20 câu chuyện "tôi gặp lỗi X, tự sửa bằng Y" — vàng cho phần "kể về một lỗi khó" (câu hỏi phỏng vấn gần như chắc chắn có).</p>
+</div>
+
+<h2>6.2 — Dọn dẹp repo notes</h2>
+
+<pre><code>cd ~/dev/notes
+mkdir -p nhat-ky
+mv nhat-ky-ngay1.md nhat-ky-ngay2.md nhat-ky-ngay3.md nhat-ky-ngay4.md nhat-ky-ngay5.md nhat-ky/ 2>/dev/null
+# 2>/dev/null: nuốt lỗi "file không tồn tại" (chỉ có file nào tồn tại mới được chuyển)
+touch trang-loi.md y-tuong.md
+nano trang-loi.md     # gõ bảng: Ngày | Lỗi | Nguyên nhân | Cách sửa — điền 3-5 lỗi của tuần
+nano README.md        # cập nhật cấu trúc mới (4 thành phần)
+git add .
+git commit -m "Sap xep notes: tao nhat-ky, trang-loi, y-tuong"</code></pre>
+
+<div class="important-note">
+    <span class="box-title">⚡ <code>2>/dev/null</code> là gì?</span>
+    <p>Mỗi lệnh có 2 ngõ ra: <code>1</code> = kết quả thường, <code>2</code> = thông báo lỗi. <code>2>/dev/null</code> = "bỏ thông báo lỗi vào thùng rác" (vì <code>/dev/null</code> là hố đen của Linux). Dùng khi bạn BIẾT lỗi nhỏ vô hại đang xảy ra và không muốn màn hình rác. Đọc kỹ: đây là "nuốt lỗi có chủ đích" — KHÔNG dùng để che lỗi mình không hiểu.</p>
+</div>
+
+<h2>6.3 — Bài ôn tổng hợp (làm trước khi đọc đáp án — tự trả lời thành tiếng)</h2>
+
+<div class="quiz-section">
+    <h3>📝 Ôn tổng hợp Tuần 1 — 10 câu hỏi</h3>
+    <div class="quiz-question">
+        <p><strong>Ô1</strong> Gõ <code>pwd</code> được kết quả <code>/home/danh</code>. Đang đứng ở đâu? Gõ lệnh gì để về đây từ bất kỳ đâu?</p>
+        <div class="answer-section"><span class="box-title">✅ Đáp án</span> Đang ở nhà người dùng danh. Lệnh về: <code>cd ~</code> (hoặc <code>cd</code> không tham số — cũng về home).</div>
+    </div>
+    <div class="quiz-question">
+        <p><strong>Ô2</strong> Bạn cần xóa cả thư mục <code>test</code> kèm mọi thứ trong đó. Lệnh? Cảnh báo nào trước khi gõ?</p>
+        <div class="answer-section"><span class="box-title">✅ Đáp án</span> <code>rm -r test</code> (có thể thêm <code>ls</code> trước để xem nội dung). Cảnh báo: không có thùng rác — <code>-rf</code> sai đường dẫn = mất dữ liệu vĩnh viễn.</div>
+    </div>
+    <div class="quiz-question">
+        <p><strong>Ô3</strong> Quyền <code>drwxr-x--x</code>: ký tự <code>d</code> nghĩa gì? Người khác (o) làm được gì?</p>
+        <div class="answer-section"><span class="box-title">✅ Đáp án</span> <code>d</code> = thư mục. Người khác: <code>--x</code> = chỉ <code>cd</code> vào được, không liệt kê (<code>ls</code>) vì thiếu <code>r</code>, không tạo/xóa file vì thiếu <code>w</code>.</div>
+    </div>
+    <div class="quiz-question">
+        <p><strong>Ô4</strong> <code>sudo apt update</code> báo đầy đủ gói, nhưng <code>apt install cmake</code> báo "unable to locate package". Vì sao và sửa sao?</p>
+        <div class="answer-section"><span class="box-title">✅ Đáp án</span> Vì chạy install không có sudo (quyền) HOẶC cần chạy <code>sudo apt update</code> trước khi install (danh sách gói cũ). Sửa: <code>sudo apt update</code> rồi <code>sudo apt install cmake</code>.</div>
+    </div>
+    <div class="quiz-question">
+        <p><strong>Ô5</strong> Bạn sửa file a.txt, chạy <code>git add a.txt</code>, rồi SỬA TIẾP a.txt, rồi <code>git commit</code>. Bản commit chứa nội dung nào?</p>
+        <div class="answer-section"><span class="box-title">✅ Đáp án</span> Chứa bản tại thời điểm <code>git add</code> (bản 1). Lần sửa sau đó nằm ở working directory, chưa được stage → không vào commit. Phải <code>git add</code> lại rồi commit. Đây là lý do luôn chạy <code>git status</code> trước commit.</div>
+    </div>
+    <div class="quiz-question">
+        <p><strong>Ô6</strong> Lệnh nào xem lịch sử commit gọn 1 dòng/commit?</p>
+        <div class="answer-section"><span class="box-title">✅ Đáp án</span> <code>git log --oneline</code>.</div>
+    </div>
+    <div class="quiz-question">
+        <p><strong>Ô7</strong> Conflict xảy ra khi nào? Bước đầu tiên khi thấy <code>CONFLICT (content)</code> là gì?</p>
+        <div class="answer-section"><span class="box-title">✅ Đáp án</span> Khi 2 nhánh sửa cùng dòng/file và merge không tự quyết được. Bước đầu: mở file, đọc 2 phiên bản giữa &lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD và &gt;&gt;&gt;&gt;&gt;&gt;&gt;, quyết định giữ gì, xóa ký hiệu, add + commit.</div>
+    </div>
+    <div class="quiz-question">
+        <p><strong>Ô8</strong> Trong Docker, <code>-v ~/dev:/workspace</code> nghĩa là gì? Nếu thư mục trái chưa tồn tại thì sao?</p>
+        <div class="answer-section"><span class="box-title">✅ Đáp án</span> Mount thư mục ~/dev của máy chủ vào /workspace trong container (2 chiều). Nếu trái chưa tồn tại, Docker tự tạo nó (thư mục rỗng) — nên luôn kiểm tra đường dẫn trái trước.</div>
+    </div>
+    <div class="quiz-question">
+        <p><strong>Ô9</strong> Một image Docker gồm nhiều "lớp" (layer). Khi nào lớp mới được thêm và vì sao nên gộp lệnh apt?</p>
+        <div class="answer-section"><span class="box-title">✅ Đáp án</span> Mỗi chỉ thị RUN tạo 1 lớp tại thời điểm build. Gộp nhiều apt-get vào 1 RUN (dấu &&) giảm số lớp → image nhỏ hơn, build nhanh hơn; thêm <code>rm -rf /var/lib/apt/lists/*</code> xóa cache.</div>
+    </div>
+    <div class="quiz-question">
+        <p><strong>Ô10</strong> Kể lại 1 lỗi bạn đã gặp tuần này: lỗi gì, nguyên nhân, cách tự sửa. (Trả lời thành tiếng, 30 giây.)</p>
+        <div class="answer-section"><span class="box-title">✅ Mẫu câu trả lời chuẩn phỏng vấn</span> "Tuần 1 tôi gặp 'Permission denied' khi chạy script: nguyên nhân file thiếu bit x, tôi sửa bằng chmod +x. Từ đó tôi luôn kiểm tra cột quyền bằng ls -l trước khi chạy." — cấu trúc: lỗi → nguyên nhân → cách sửa → bài học. Đây chính là công thức STAR rút gọn dùng trong phỏng vấn.</div>
+    </div>
+</div>
+
+<div class="cheat-sheet">
+    <span class="box-title">✅ CHECKLIST NGÀY 6</span>
+    <ul>
+        <li>☐ Sổ tay có đủ 4 thành phần: README, nhat-ky/, trang-loi.md, y-tuong.md</li>
+        <li>☐ trang-loi.md có ít nhất 3 lỗi của tuần (ngày | lỗi | nguyên nhân | cách sửa)</li>
+        <li>☐ Trả lời được 8/10 câu ôn tập mà không cần nhìn tài liệu</li>
+        <li>☐ y-tuong.md ghi ít nhất 1 ý tưởng (vd: "thử chạy ROS2 trong container")</li>
+        <li>☐ Commit sạch sẽ + push lên GitHub</li>
+    </ul>
+</div>
+
+<div class="part-header-orange" id="ngay7">
+    <h1>NGÀY 7 — NGHỈ + TỔNG KẾT TUẦN</h1>
+    <p>Checklist tuần 1 · Quiz tổng kết · Nghỉ thật sự — vì tuần 2 là C++</p>
+</div>
+
+<div class="goal-box">
+    <strong>🎯 Mục đích ngày 7 — tại sao phải làm:</strong> Nghỉ là MỘT PHẦN của lộ trình, không phải ngày lười. Não cần 1 ngày "không code" để củng cố: kiến thức ngấm trong giấc ngủ và nghỉ ngơi. Tuần 2 (C++) là tuần dày nhất về khối lượng gõ code — khởi động với đầu mệt mỏi là thua ngay ngày 8. Việc duy nhất hôm nay: kiểm tra checklist (trung thực!), làm quiz tổng kết nhẹ nhàng, và dừng lại.
+</div>
+
+<div class="cheat-sheet">
+    <span class="box-title">✅ CHECKLIST TUẦN 1 (đánh dấu trung thực — không đạt thì bù vào ngày nghỉ)</span>
+    <ul>
+        <li>☐ <strong>Ngày 1:</strong> Ubuntu chạy, 10 lệnh gõ tay, cây ~/dev, nhật ký ngày 1</li>
+        <li>☐ <strong>Ngày 2:</strong> quyền rwx + chmod + sudo + PATH + apt; hello.sh chạy được</li>
+        <li>☐ <strong>Ngày 3:</strong> repo notes, 3 commit chuẩn, README Markdown</li>
+        <li>☐ <strong>Ngày 4:</strong> repo public GitHub, push/pull, branch/merge, conflict tự xử</li>
+        <li>☐ <strong>Ngày 5:</strong> image cpp-dev build + chạy + mount ~/dev</li>
+        <li>☐ <strong>Ngày 6:</strong> sổ tay 4 thành phần + trang lỗi ≥ 3 dòng + ôn 10 câu</li>
+        <li>☐ <strong>Toàn tuần:</strong> ít nhất 6 commit (1/ngày), repo notes push lên GitHub public</li>
+        <li>☐ <strong>Chuẩn bị tuần 2:</strong> mở trước tài liệu C++ — đọc mục lục, đoán "Phần 1 con trỏ học để làm gì" (không cần học — chỉ đọc mục lục 15 phút)</li>
+    </ul>
+</div>
+
+<div class="quiz-section">
+    <h3>🎯 Quiz tổng kết tuần — 5 câu (tự trả lời trước, mở đáp án sau)</h3>
+    <div class="quiz-question">
+        <p><strong>Q1</strong> Kể tên 3 vùng của Git và lệnh tương ứng đưa file đi qua từng vùng.</p>
+        <div class="answer-section"><span class="box-title">✅ Đáp án</span> Working directory (sửa file) → <code>git add</code> → Staging → <code>git commit</code> → Repository. Kèm: <code>git status</code> xem trạng thái ở mọi lúc.</div>
+    </div>
+    <div class="quiz-question">
+        <p><strong>Q2</strong> Vì sao nên chạy ROS2/node trong container thay vì cài trực tiếp? Nêu 2 lý do.</p>
+        <div class="answer-section"><span class="box-title">✅ Đáp án</span> (1) Cách ly: cài hỏng/phá hệ thống thì xóa container là sạch, không phải cài lại OS. (2) Tái lập: cùng image → mọi máy chạy giống hệt, không còn "máy tôi chạy được". (3) Giữ máy chủ gọn: không cài chồng nhiều phiên bản phần mềm.</div>
+    </div>
+    <div class="quiz-question">
+        <p><strong>Q3</strong> Lệnh nào: (a) cập nhật danh sách gói? (b) cài gói? (c) chạy script tại chỗ? (d) xem lịch sử commit?</p>
+        <div class="answer-section"><span class="box-title">✅ Đáp án</span> (a) <code>sudo apt update</code> (b) <code>sudo apt install &lt;gói&gt;</code> (c) <code>./script.sh</code> (cần bit x) (d) <code>git log --oneline</code>.</div>
+    </div>
+    <div class="quiz-question">
+        <p><strong>Q4</strong> Trang lỗi của bạn có bao nhiêu dòng? Nêu 1 dòng bạn sẽ kể trong phỏng vấn (lỗi → nguyên nhân → cách sửa → bài học).</p>
+        <div class="answer-section"><span class="box-title">✅ Đáp án mẫu</span> "Permission denied khi chạy script → thiếu bit execute → chmod +x → bài học: luôn ls -l trước khi chạy file lạ." (Câu trả lời của bạn phải theo đúng cấu trúc này.)</div>
+    </div>
+    <div class="quiz-question">
+        <p><strong>Q5</strong> Tuần sau là C++. Trong 1 câu: vì sao C++ là ngôn ngữ quan trọng nhất của lộ trình này?</p>
+        <div class="answer-section"><span class="box-title">✅ Đáp án</span> Vì C++ xuất hiện trong 8/11 JD đã quét (Phenikaa-X, Avride, Venti...), ROS2 viết bằng C++, và control thời gian thực (MPC chạy 50–100Hz) đòi hỏi ngôn ngữ có hiệu năng cao — C++ là tiêu chuẩn ngành, không phải lựa chọn.</div>
+    </div>
+</div>
+
+<div class="summary-box">
+    <h2>🎯 Tổng Kết Tuần 1</h2>
+    <ul>
+        <li><strong>Bạn đã xây xong nền móng:</strong> môi trường Ubuntu hoạt động, terminal thành thạo 10 lệnh, hiểu quyền/sudo/PATH/apt — tức tự xử lý được 60% lỗi cài đặt của người mới.</li>
+        <li><strong>Bạn có bằng chứng công khai:</strong> repo <code>notes</code> public trên GitHub, ≥ 6 commit, README + trang lỗi + nhật ký 6 ngày — thứ mà nhà tuyển dụng đọc được ngay hôm nay.</li>
+        <li><strong>Bạn biết đóng gói môi trường:</strong> image <code>cpp-dev</code> — công cụ sẽ dùng lại cho ROS2 tuần 7.</li>
+        <li><strong>Bạn có hệ thống ghi chép:</strong> sổ tay 4 thành phần + trang lỗi — tài sản tích lũy cho 23 tuần còn lại.</li>
+    </ul>
+    <p style="color:#cbd5e1; margin-top:14px;">Tuần 2 bắt đầu với C++ — ngôn ngữ xuất hiện trong 8/11 JD của lộ trình. Bạn đã có môi trường, Git, Docker để thực hành: tuần 2 là tuần GÕ CODE nhiều nhất. Nghỉ hết hôm nay, mai bắt đầu.</p>
+</div>
+
+<div style="text-align: center; margin: 35px 0; color: var(--text-secondary); font-size: 0.9em;">
+    <p>— Hết tài liệu Tuần 1: Nền Móng Môi Trường —</p>
+    <p><em>Nhấn nút "📄 Xuất PDF" để in ra — dùng làm phiếu theo dõi mỗi ngày</em></p>
+</div>
+
+</body>
+</html>

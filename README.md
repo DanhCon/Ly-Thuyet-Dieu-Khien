@@ -8,39 +8,41 @@ Kho tài liệu tự học toàn diện về **Lý thuyết Điều khiển Tố
 
 ## 🔗 Xem Trực Tiếp Trên Trình Duyệt (Không Cần Tải Về)
 
-### 🚀 Lộ Trình & Toán Nền Tảng
+### 🚀 Lộ Trình & Hằng Ngày
 | # | Tài liệu | Link Xem Trực Tiếp (Website) |
 |---|----------|-------------------------------|
 | 1 | **Lộ Trình Học Robotics & Control 2026** | 🌐 [Xem trang web](https://danhcon.github.io/Ly-Thuyet-Dieu-Khien/LoTrinh_Hoc_Robotics_Control_2026.html) |
-| 2 | **Toán Nền Tảng Robotics & Control** | 🌐 [Xem trang web](https://danhcon.github.io/Ly-Thuyet-Dieu-Khien/Toan_NenTang_Robotics_Control.html) |
+| 2 | **Lộ Trình Hằng Ngày 30 Ngày Đầu** | 🌐 [Xem trang web](https://danhcon.github.io/Ly-Thuyet-Dieu-Khien/LoTrinh_HangNgay_30NgayDau.html) |
+| 3 | **Toán Nền Tảng Robotics & Control** | 🌐 [Xem trang web](https://danhcon.github.io/Ly-Thuyet-Dieu-Khien/Toan_NenTang_Robotics_Control.html) |
 
 ### 📘 Lý thuyết Điều khiển Cốt lõi
 | # | Tài liệu | Link Xem Trực Tiếp (Website) |
 |---|----------|-------------------------------|
-| 3 | **Tuần 1-2: Mô Hình Hóa State Space** | 🌐 [Xem trang web](https://danhcon.github.io/Ly-Thuyet-Dieu-Khien/Tuan1_2_MoHinhHoa_StateSpace.html) |
-| 4 | **LQR Toàn Tập** | 🌐 [Xem trang web](https://danhcon.github.io/Ly-Thuyet-Dieu-Khien/LQR_ToanTap.html) |
-| 5 | **LQR Nâng Cao & LQG** | 🌐 [Xem trang web](https://danhcon.github.io/Ly-Thuyet-Dieu-Khien/LQR_NangCao_LQG_ToanTap.html) |
-| 6 | **Kalman Filter Toàn Tập** | 🌐 [Xem trang web](https://danhcon.github.io/Ly-Thuyet-Dieu-Khien/Kalman_Filter_ToanTap.html) |
-| 7 | **EKF Toàn Tập** | 🌐 [Xem trang web](https://danhcon.github.io/Ly-Thuyet-Dieu-Khien/EKF_ToanTap.html) |
+| 4 | **Tuần 1-2: Mô Hình Hóa State Space** | 🌐 [Xem trang web](https://danhcon.github.io/Ly-Thuyet-Dieu-Khien/Tuan1_2_MoHinhHoa_StateSpace.html) |
+| 5 | **LQR Toàn Tập** | 🌐 [Xem trang web](https://danhcon.github.io/Ly-Thuyet-Dieu-Khien/LQR_ToanTap.html) |
+| 6 | **LQR Nâng Cao & LQG** | 🌐 [Xem trang web](https://danhcon.github.io/Ly-Thuyet-Dieu-Khien/LQR_NangCao_LQG_ToanTap.html) |
+| 7 | **Kalman Filter Toàn Tập** | 🌐 [Xem trang web](https://danhcon.github.io/Ly-Thuyet-Dieu-Khien/Kalman_Filter_ToanTap.html) |
+| 8 | **EKF Toàn Tập** | 🌐 [Xem trang web](https://danhcon.github.io/Ly-Thuyet-Dieu-Khien/EKF_ToanTap.html) |
 
 ### 💡 Kiến thức Bổ trợ & Cảm biến
 | # | Tài liệu | Link Xem Trực Tiếp (Website) |
 |---|----------|-------------------------------|
-| 8 | **IMU & Cảm Biến Toàn Tập** | 🌐 [Xem trang web](https://danhcon.github.io/Ly-Thuyet-Dieu-Khien/IMU_CanBien_ToanTap.html) |
-| 9 | **Kiến thức Bổ sung Phần 1** | 🌐 [Xem trang web](https://danhcon.github.io/Ly-Thuyet-Dieu-Khien/KienThuc_NenTang_BoSung_LQR.html) |
-| 10 | **Kiến thức Bổ sung Phần 2** | 🌐 [Xem trang web](https://danhcon.github.io/Ly-Thuyet-Dieu-Khien/KienThuc_NenTang_BoSung_Phan2_LQR.html) |
+| 9 | **IMU & Cảm Biến Toàn Tập** | 🌐 [Xem trang web](https://danhcon.github.io/Ly-Thuyet-Dieu-Khien/IMU_CanBien_ToanTap.html) |
+| 10 | **Kiến thức Bổ sung Phần 1** | 🌐 [Xem trang web](https://danhcon.github.io/Ly-Thuyet-Dieu-Khien/KienThuc_NenTang_BoSung_LQR.html) |
+| 11 | **Kiến thức Bổ sung Phần 2** | 🌐 [Xem trang web](https://danhcon.github.io/Ly-Thuyet-Dieu-Khien/KienThuc_NenTang_BoSung_Phan2_LQR.html) |
 
-### 💻 Lập Trình & Thực Chiến
+### 💻 Lập Trình & Môi Trường Thực Chiến
 | # | Tài liệu | Link Xem Trực Tiếp (Website) |
 |---|----------|-------------------------------|
-| 11 | **C++ Hiện Đại cho Control & AV** | 🌐 [Xem trang web](https://danhcon.github.io/Ly-Thuyet-Dieu-Khien/CPP_HienDai_Control_AV_ToanTap.html) |
-| 12 | **LQR Thực Chiến Robot Thật** | 🌐 [Xem trang web](https://danhcon.github.io/Ly-Thuyet-Dieu-Khien/LQR_ThucChien_RobotThat.html) |
+| 12 | **Tuần 1: Môi Trường Linux, Git, Docker** | 🌐 [Xem trang web](https://danhcon.github.io/Ly-Thuyet-Dieu-Khien/Tuan1_NenMong_MoiTruong_Linux_Git_Docker.html) |
+| 13 | **C++ Hiện Đại cho Control & AV** | 🌐 [Xem trang web](https://danhcon.github.io/Ly-Thuyet-Dieu-Khien/CPP_HienDai_Control_AV_ToanTap.html) |
+| 14 | **LQR Thực Chiến Robot Thật** | 🌐 [Xem trang web](https://danhcon.github.io/Ly-Thuyet-Dieu-Khien/LQR_ThucChien_RobotThat.html) |
 
 ### ✏️ Bài Tập & Kiểm Tra
 | # | Tài liệu | Link Xem Trực Tiếp (Website) |
 |---|----------|-------------------------------|
-| 13 | **Bài Tập LQR Toàn Tập** | 🌐 [Xem trang web](https://danhcon.github.io/Ly-Thuyet-Dieu-Khien/BaiTap_LQR_ToanTap.html) |
-| 14 | **Bài Kiểm Tra Kiến Thức Toàn Tập** | 🌐 [Xem trang web](https://danhcon.github.io/Ly-Thuyet-Dieu-Khien/BaiKiemTra_KienThuc_ToanTap.html) |
+| 15 | **Bài Tập LQR Toàn Tập** | 🌐 [Xem trang web](https://danhcon.github.io/Ly-Thuyet-Dieu-Khien/BaiTap_LQR_ToanTap.html) |
+| 16 | **Bài Kiểm Tra Kiến Thức Toàn Tập** | 🌐 [Xem trang web](https://danhcon.github.io/Ly-Thuyet-Dieu-Khien/BaiKiemTra_KienThuc_ToanTap.html) |
 
 ---
 
