@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bài Tập Test & Đánh Giá Tuần 1 — Linux, Terminal, Git, Docker</title>
+<script>
+window.MathJax = {
+    tex: { inlineMath: [['$','$']], displayMath: [['$$','$$']], tags: 'ams' },
+    svg: { fontCache: 'global' }
+};
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<style>
+:root {
+    --primary: #0f172a;
+    --accent: #2563eb;
+    --accent-light: #3b82f6;
+    --success: #16a34a;
+    --warning: #d97706;
+    --danger: #dc2626;
+    --bg: #f8fafc;
+    --card-bg: #ffffff;
+    --text: #1e293b;
+    --text-secondary: #475569;
+    --code-bg: #0f172a;
+    --border: #e2e8f0;
+    --quiz-bg: #f0f9ff;
+    --answer-bg: #f0fdf4;
+    --yellow-bg: #fffbeb;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.75;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+h1, h2, h3, h4 { color: var(--primary); line-height: 1.4; }
+h2 { font-size: 1.45em; margin: 28px 0 12px; }
+h3 { font-size: 1.2em; margin: 22px 0 10px; }
+p { margin: 10px 0; }
+ul, ol { margin: 10px 0 10px 28px; }
+li { margin: 6px 0; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+strong { color: var(--primary); }
+table.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 0.95em;
+}
+.table th {
+    background: var(--primary);
+    color: #fff;
+    padding: 10px 12px;
+    text-align: left;
+    border: 1px solid var(--primary);
+}
+.table td {
+    padding: 9px 12px;
+    border: 1px solid var(--border);
+    vertical-align: top;
+}
+.table tr:nth-child(even) { background: #f1f5f9; }
+pre {
+    background: var(--code-bg);
+    color: #e2e8f0;
+    padding: 14px 16px;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 14px 0;
+    font-size: 0.9em;
+    line-height: 1.6;
+}
+code {
+    font-family: Consolas, 'Fira Code', monospace;
+    background: #e2e8f0;
+    color: var(--danger);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.92em;
+}
+pre code { background: none; color: inherit; padding: 0; }
+.cover-page {
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    color: #fff;
+    text-align: center;
+    padding: 70px 30px;
+    border-radius: 12px;
+    margin-bottom: 30px;
+}
+.cover-page h1 { color: #fff; font-size: 2.2em; margin-bottom: 10px; }
+.cover-page .subtitle { color: #94a3b8; font-size: 1.15em; margin-bottom: 18px; }
+.cover-page .tagline { color: #cbd5e1; font-size: 1.02em; max-width: 750px; margin: 0 auto 25px; }
+.cover-page .meta { color: #60a5fa; font-size: 0.95em; border-top: 1px solid #334155; padding-top: 18px; display: inline-block; }
+.toc {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px 30px;
+    margin: 20px 0;
+}
+.toc h2 { margin-top: 0; border-bottom: 2px solid var(--accent); padding-bottom: 8px; }
+.toc ol { margin-left: 20px; }
+.toc a { display: inline-block; padding: 3px 0; }
+.part-header {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    color: #fff;
+    padding: 26px 28px;
+    border-radius: 10px;
+    margin: 36px 0 20px;
+}
+.part-header h1 { color: #fff; margin: 0 0 6px; font-size: 1.5em; }
+.part-header p { color: #bfdbfe; margin: 0; }
+.part-header-intro {
+    background: linear-gradient(135deg, #16a34a, #15803d);
+    color: #fff;
+    padding: 26px 28px;
+    border-radius: 10px;
+    margin: 36px 0 20px;
+}
+.part-header-intro h1 { color: #fff; margin: 0 0 6px; font-size: 1.5em; }
+.part-header-intro p { color: #dcfce7; margin: 0; }
+.part-header-purple {
+    background: linear-gradient(135deg, #7c3aed, #6d28d9);
+    color: #fff;
+    padding: 26px 28px;
+    border-radius: 10px;
+    margin: 36px 0 20px;
+}
+.part-header-purple h1 { color: #fff; margin: 0 0 6px; font-size: 1.5em; }
+.part-header-purple p { color: #ddd6fe; margin: 0; }
+.part-header-orange {
+    background: linear-gradient(135deg, #ea580c, #c2410c);
+    color: #fff;
+    padding: 26px 28px;
+    border-radius: 10px;
+    margin: 36px 0 20px;
+}
+.part-header-orange h1 { color: #fff; margin: 0 0 6px; font-size: 1.5em; }
+.part-header-orange p { color: #fed7aa; margin: 0; }
+.part-header-danger {
+    background: linear-gradient(135deg, #dc2626, #b91c1c);
+    color: #fff;
+    padding: 26px 28px;
+    border-radius: 10px;
+    margin: 36px 0 20px;
+}
+.part-header-danger h1 { color: #fff; margin: 0 0 6px; font-size: 1.5em; }
+.part-header-danger p { color: #fecaca; margin: 0; }
+.definition, .theorem, .important-note, .example-box, .analogy-box, .warning-box, .cheat-sheet {
+    border-radius: 10px;
+    padding: 18px 22px;
+    margin: 18px 0;
+}
+.box-title {
+    display: inline-block;
+    font-weight: 700;
+    font-size: 0.95em;
+    margin-bottom: 10px;
+    padding: 4px 12px;
+    border-radius: 6px;
+}
+.definition { background: #eff6ff; border-left: 5px solid var(--accent); }
+.definition .box-title { background: var(--accent); color: #fff; }
+.theorem { background: #f5f3ff; border-left: 5px solid #7c3aed; }
+.theorem .box-title { background: #7c3aed; color: #fff; }
+.important-note { background: #fffbeb; border-left: 5px solid var(--warning); }
+.important-note .box-title { background: var(--warning); color: #fff; }
+.example-box { background: #f0fdf4; border-left: 5px solid var(--success); }
+.example-box .box-title { background: var(--success); color: #fff; }
+.analogy-box { background: #f0f9ff; border-left: 5px solid #06b6d4; }
+.analogy-box .box-title { background: #06b6d4; color: #fff; }
+.warning-box { background: #fef2f2; border-left: 5px solid var(--danger); }
+.warning-box .box-title { background: var(--danger); color: #fff; }
+.cheat-sheet { background: #f0fdfa; border: 1px dashed #14b8a6; }
+.cheat-sheet .box-title { background: #14b8a6; color: #fff; }
+.step-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 22px;
+    margin: 16px 0;
+    position: relative;
+}
+.step-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.05em;
+    margin-bottom: 10px;
+}
+.quiz-section { background: var(--quiz-bg); border-radius: 10px; padding: 22px 24px; margin: 20px 0; }
+.quiz-section > h3 { margin-top: 0; }
+.quiz-question {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 14px 0;
+}
+.answer-section {
+    background: var(--answer-bg);
+    border-left: 4px solid var(--success);
+    border-radius: 8px;
+    padding: 12px 18px;
+    margin: 10px 0 16px;
+}
+.answer-section .box-title { background: var(--success); color: #fff; }
+.goal-box {
+    background: linear-gradient(135deg, #fefce8, #fffbeb);
+    border: 1px solid #fde68a;
+    border-left: 5px solid var(--warning);
+    border-radius: 8px;
+    padding: 12px 18px;
+    margin: 10px 0 14px;
+    font-size: 0.95em;
+}
+.goal-box strong { color: #92400e; }
+.level-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.82em;
+    font-weight: 600;
+    margin: 0 4px;
+}
+.level-apply { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+.level-deep { background: #dbeafe; color: #1e40af; border: 1px solid #93c5fd; }
+.level-concept { background: #ede9fe; color: #5b21b6; border: 1px solid #c4b5fd; }
+.legend-box {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 16px 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+}
+.legend-item { display: flex; align-items: center; gap: 8px; font-size: 0.92em; }
+.print-btn {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 30px;
+    font-size: 0.95em;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+    z-index: 100;
+}
+.print-btn:hover { background: var(--primary); }
+.summary-box {
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    color: #fff;
+    padding: 30px 34px;
+    border-radius: 12px;
+    margin: 30px 0;
+}
+.summary-box h2 { color: #60a5fa; margin-top: 0; }
+.summary-box ul { color: #cbd5e1; }
+@media print {
+    .print-btn { display: none; }
+    .part-header, .part-header-intro, .part-header-purple, .part-header-orange, .part-header-danger { page-break-before: always; }
+    .definition, .theorem, .important-note, .example-box, .analogy-box, .warning-box, .cheat-sheet, .quiz-section, .answer-section, .step-card, .toc, .goal-box { break-inside: avoid; }
+    body { background: #fff; }
+}
+</style>
+</head>
+<body>
+
+<button class="print-btn" onclick="window.print()">📄 Xuất PDF</button>
+
+<div class="cover-page">
+    <h1>📝 Bài Tập Test &amp; Đánh Giá Tuần 1</h1>
+    <div class="subtitle">Nền Móng Môi Trường: Linux · Terminal · Git/GitHub · Docker</div>
+    <div class="tagline">
+        Bộ bài tập đánh giá năng lực toàn diện cho Tuần 1. Bao gồm 4 phần: Trắc nghiệm lý thuyết tình huống, Đọc hiểu &amp; Dự đoán kết quả lệnh, Kịch bản gỡ lỗi thực tế (Debugging), và Thử thách thực hành (Hands-on Lab).
+    </div>
+    <div class="meta">Thang điểm: 100 điểm · Thời gian khuyến nghị: 60 phút · Dành cho: Huỳnh Công Danh</div>
+</div>
+
+<div class="toc">
+    <h2>📑 Mục Lục Bài Test</h2>
+    <ol>
+        <li><a href="#part1">Phần 1 — Trắc nghiệm tình huống lý thuyết (25 điểm)</a></li>
+        <li><a href="#part2">Phần 2 — Đọc hiểu lệnh Terminal &amp; Dự đoán đầu ra (25 điểm)</a></li>
+        <li><a href="#part3">Phần 3 — Kịch bản gỡ lỗi thực tế / Debugging Scenarios (25 điểm)</a></li>
+        <li><a href="#part4">Phần 4 — Thử thách kỹ thuật thực hành / Hands-on Challenge Labs (25 điểm)</a></li>
+        <li><a href="#part5">Phần 5 — Đáp án chi tiết &amp; Thang điểm tự đánh giá</a></li>
+    </ol>
+</div>
+
+<!-- PHẦN 1 -->
+<div class="part-header" id="part1">
+    <h1>PHẦN 1 — TRẮC NGHIỆM TÌNH HUỐNG LÝ THUYẾT</h1>
+    <p>10 câu trắc nghiệm kiểm tra tư duy môi trường &amp; công cụ (2.5 điểm/câu)</p>
+</div>
+
+<div class="quiz-section">
+    <div class="quiz-question">
+        <p><strong>Câu 1.1:</strong> Tại sao các công ty phát triển Xe tự hành (Phenikaa-X, Avride, RTC) bắt buộc sử dụng Ubuntu Linux thay vì Windows làm môi trường phát triển chính?</p>
+        <ul>
+            <li>A. Vì Ubuntu Linux là hệ điều hành miễn phí nên tiết kiệm chi phí bản quyền.</li>
+            <li>B. Vì Ubuntu Linux cung cấp tính năng Real-time Determinism tốt hơn, không có rác hệ thống gây giật lag ngẫu nhiên và là môi trường duy nhất hỗ trợ ROS2 nguyên bản.</li>
+            <li>C. Vì Windows không thể cài đặt được ngôn ngữ C++ và Python.</li>
+            <li>D. Vì các công tắc phần cứng của robot chỉ nhận diện được dòng lệnh Terminal của Linux.</li>
+        </ul>
+    </div>
+
+    <div class="quiz-question">
+        <p><strong>Câu 1.2:</strong> Khi thực thi lệnh <code>ls -l</code>, bạn nhìn thấy dòng <code>-rwxr-xr-- 1 danh danh ... script.sh</code>. Quyền thực thi (<code>x</code>) đang được trao cho những ai?</p>
+        <ul>
+            <li>A. Chỉ trao cho Chủ sở hữu (User) và Nhóm (Group). Người khác (Others) không có quyền chạy.</li>
+            <li>B. Trao cho tất cả mọi người (User, Group, Others).</li>
+            <li>C. Chỉ trao cho quyền Root.</li>
+            <li>D. Chỉ trao cho Người khác (Others), Chủ sở hữu bị cấm.</li>
+        </ul>
+    </div>
+
+    <div class="quiz-question">
+        <p><strong>Câu 1.3:</strong> Sự khác biệt căn bản giữa <code>sudo apt update</code> và <code>sudo apt upgrade</code> là gì?</p>
+        <ul>
+            <li>A. <code>update</code> dùng cho C++, <code>upgrade</code> dùng cho Python.</li>
+            <li>B. <code>update</code> tải danh sách thông tin phiên bản gói mới nhất về máy; <code>upgrade</code> mới thực sự tải và cài đặt bản cập nhật phần mềm.</li>
+            <li>C. <code>update</code> chỉ cập nhật hệ thống Linux, <code>upgrade</code> cập nhật phần cứng.</li>
+            <li>D. Hai lệnh này hoàn toàn giống hệt nhau về tác dụng.</li>
+        </ul>
+    </div>
+
+    <div class="quiz-question">
+        <p><strong>Câu 1.4:</strong> Khái niệm biến môi trường <code>PATH</code> trong Linux đóng vai trò gì?</p>
+        <ul>
+            <li>A. Lưu trữ đường dẫn đến thư mục chứa file hình ảnh của Robot.</li>
+            <li>B. Lưu danh sách các thư mục mà Terminal sẽ tìm kiếm chương trình thực thi khi bạn gõ tên lệnh.</li>
+            <li>C. Quy định đường đi cho thuật toán rẽ nhánh A* / Dijkstra.</li>
+            <li>D. Quản lý dung lượng bộ nhớ RAM của Docker Container.</li>
+        </ul>
+    </div>
+
+    <div class="quiz-question">
+        <p><strong>Câu 1.5:</strong> Khi làm việc với Git, lệnh <code>git commit -m "Message"</code> làm nhiệm vụ gì?</p>
+        <ul>
+            <li>A. Gửi ngay lập tức code lên trang web GitHub.com.</li>
+            <li>B. Lưu lại trạng thái của các thay đổi đã được add (Staging Area) vào lịch sử Repository cục bộ (Local Repo) kèm lời nhắn.</li>
+            <li>C. Đổi tên branch hiện tại thành "Message".</li>
+            <li>D. Xóa các file thừa trong dự án.</li>
+        </ul>
+    </div>
+
+    <div class="quiz-question">
+        <p><strong>Câu 1.6:</strong> Khi hai kỹ sư cùng sửa chung một dòng code trong file <code>robot_params.yaml</code> trên hai branch khác nhau rồi merge lại, Git sẽ xử lý thế nào?</p>
+        <ul>
+            <li>A. Tự động lấy file của người push sau và đè lên người trước.</li>
+            <li>B. Tự động xóa cả hai file để đảm bảo an toàn.</li>
+            <li>C. Báo lỗi Merge Conflict và yêu cầu kỹ sư tự mở file ra đối soát và quyết định giữ lại dòng code nào.</li>
+            <li>D. Tự động gọi trí tuệ nhân tạo để sửa code.</li>
+        </ul>
+    </div>
+
+    <div class="quiz-question">
+        <p><strong>Câu 1.7:</strong> Phân biệt sự khác nhau giữa Docker Image và Docker Container?</p>
+        <ul>
+            <li>A. Image là container đang chạy, Container là bản lưu trên ổ đĩa.</li>
+            <li>B. Image là "bản thiết kế/khuôn mẫu" tĩnh read-only; Container là một "thể hiện (Instance)" đang thực thi được tạo ra từ bản thiết kế đó.</li>
+            <li>C. Image dùng cho Linux, Container dùng cho Windows.</li>
+            <li>D. Image là file video mô phỏng, Container là code C++.</li>
+        </ul>
+    </div>
+
+    <div class="quiz-question">
+        <p><strong>Câu 1.8:</strong> Cờ <code>-v ~/dev:/workspace</code> trong lệnh <code>docker run</code> có ý nghĩa gì?</p>
+        <ul>
+            <li>A. Đổi tên thư mục <code>~/dev</code> thành <code>workspace</code>.</li>
+            <li>B. Gắn (Mount) thư mục <code>~/dev</code> trên máy thật (Host) vào thư mục <code>/workspace</code> bên trong Container, giúp dữ liệu đồng bộ 2 chiều tức thì.</li>
+            <li>C. Xóa thư mục <code>/workspace</code> bên trong container.</li>
+            <li>D. Giới hạn dung lượng RAM của workspace là 1GB.</li>
+        </ul>
+    </div>
+
+    <div class="quiz-question">
+        <p><strong>Câu 1.9:</strong> Lệnh <code>tail -f /var/log/syslog</code> dùng để làm gì trong công việc bảo trì robot?</p>
+        <ul>
+            <li>A. In ra toàn bộ nội dung file log từ đầu đến cuối rồi dừng.</li>
+            <li>B. Theo dõi liên tục theo thời gian thực các dòng thông báo lỗi/sự kiện phần cứng mới nhất nảy ra trong hệ thống.</li>
+            <li>C. Xóa toàn bộ file log để giải phóng ổ cứng.</li>
+            <li>D. Đổi tên file log thành syslog.bak.</li>
+        </ul>
+    </div>
+
+    <div class="quiz-question">
+        <p><strong>Câu 1.10:</strong> Tại sao khi viết script Bash, người ta luôn đặt dòng <code>#!/bin/bash</code> ở dòng đầu tiên (Shebang)?</p>
+        <ul>
+            <li>A. Để ghi chú đây là file bản quyền của tác giả.</li>
+            <li>B. Để báo cho trình thông dịch của hệ điều hành biết chính xác chương trình nào (ở đây là Bash Shell) sẽ chịu trách nhiệm biên dịch/thực thi file script này.</li>
+            <li>C. Để script tự động cấp quyền <code>chmod +x</code>.</li>
+            <li>D. Để chương trình tự động đẩy lên GitHub.</li>
+        </ul>
+    </div>
+</div>
+
+<!-- PHẦN 2 -->
+<div class="part-header-purple" id="part2">
+    <h1>PHẦN 2 — ĐỌC HIỂU LỆNH TERMINAL &amp; DỰ ĐOÁN ĐẦU RA</h1>
+    <p>Đoán đầu ra của các chuỗi lệnh Bash/Git/Docker phức tạp (2.5 điểm/câu)</p>
+</div>
+
+<div class="quiz-section">
+    <div class="quiz-question">
+        <p><strong>Câu 2.1:</strong> Cho chuỗi lệnh sau:</p>
+        <pre><code>cd ~/dev && mkdir -p test_dir/sub && touch test_dir/sub/file.txt && pwd</code></pre>
+        <p>Đầu ra màn hình của lệnh <code>pwd</code> cuối cùng sẽ in ra chuỗi gì?</p>
+    </div>
+
+    <div class="quiz-question">
+        <p><strong>Câu 2.2:</strong> Một file có quyền <code>chmod 600 config.json</code>. Những ai có thể đọc và sửa file này?</p>
+    </div>
+
+    <div class="quiz-question">
+        <p><strong>Câu 2.3:</strong> Bạn thực thi chuỗi lệnh Git sau:</p>
+        <pre><code>git checkout -b feature/pid-controller
+touch pid.cpp
+git add pid.cpp
+git commit -m "Add PID skeleton"
+git checkout main</code></pre>
+        <p>Nếu bây giờ bạn gõ <code>ls pid.cpp</code> trên branch <code>main</code>, chuyện gì sẽ xảy ra? Vì sao?</p>
+    </div>
+
+    <div class="quiz-question">
+        <p><strong>Câu 2.4:</strong> Bạn gõ lệnh <code>docker run -d --name my_ros_container ubuntu:22.04 sleep 1000</code>. Lệnh <code>docker ps</code> có hiển thị container này không? Muốn chui vào trong container này gõ lệnh terminal thì dùng lệnh gì?</p>
+    </div>
+
+    <div class="quiz-question">
+        <p><strong>Câu 2.5:</strong> Phân tích sự khác biệt giữa hai lệnh sau:</p>
+        <pre><code>cp -r ~/dev/notes ~/dev/notes_backup
+mv ~/dev/notes ~/dev/notes_backup</code></pre>
+    </div>
+</div>
+
+<!-- PHẦN 3 -->
+<div class="part-header-orange" id="part3">
+    <h1>PHẦN 3 — KỊCH BẢN GỠ LỖI THỰC TẾ (DEBUGGING SCENARIOS)</h1>
+    <p>Giải quyết các sự cố môi trường kinh điển mà kỹ sư Robot gặp phải (6.25 điểm/kịch bản)</p>
+</div>
+
+<div class="step-card">
+    <span class="step-number">🐛</span>
+    <h3>Kịch bản 1: Lỗi "Permission denied" khi nạp code xuống STM32 / Arduino</h3>
+    <p><strong>Mô tả sự cố:</strong> Kỹ sư Nam kết nối mạch STM32/Arduino qua cổng USB vào Ubuntu. Khi chạy lệnh nạp code <code>st-flash write build/firmware.bin 0x08000000</code> hoặc mở cổng Serial <code>cat /dev/ttyUSB0</code>, màn hình báo lỗi:</p>
+    <pre><code>cat: /dev/ttyUSB0: Permission denied</code></pre>
+    <p><strong>Yêu cầu:</strong></p>
+    <ol>
+        <li>Giải thích nguyên nhân vì sao User hiện tại lại bị báo lỗi Permission denied với thiết bị phần cứng <code>/dev/ttyUSB0</code>.</li>
+        <li>Đưa ra 2 cách khắc phục (Cách tạm thời ngắn hạn và Cách khắc phục triệt để dài hạn chuẩn kỹ sư Linux bằng <code>usermod</code> / <code>dialout</code> group).</li>
+    </ol>
+</div>
+
+<div class="step-card">
+    <span class="step-number">🐛</span>
+    <h3>Kịch bản 2: Lỗi "command not found: ros2" sau khi mở Terminal mới</h3>
+    <p><strong>Mô tả sự cố:</strong> Kỹ sư An vừa cài xong ROS2 Humble theo tài liệu. Ở terminal vừa cài xong, lệnh <code>ros2 topic list</code> chạy rất mượt. Tuy nhiên, khi An mở một cửa sổ Terminal mới (hoặc khởi động lại máy) và gõ <code>ros2 topic list</code>, màn hình báo lỗi:</p>
+    <pre><code>ros2: command not found</code></pre>
+    <p><strong>Yêu cầu:</strong></p>
+    <ol>
+        <li>Giải thích nguyên nhân tại sao Terminal mới lại không tìm thấy lệnh <code>ros2</code>.</li>
+        <li>Chỉ ra chính xác file cấu hình nào trong thư mục <code>~</code> cần được chỉnh sửa và gõ câu lệnh Bash nào để từ nay về sau mọi Terminal mở ra đều tự động nhận diện lệnh <code>ros2</code>.</li>
+    </ol>
+</div>
+
+<div class="step-card">
+    <span class="step-number">🐛</span>
+    <h3>Kịch bản 3: Xử lý Git Merge Conflict trên file cấu hình Robot</h3>
+    <p><strong>Mô tả sự cố:</strong> Bạn vừa gõ <code>git merge feature/ekf-filter</code> vào branch <code>main</code> thì Git chặn lại và thông báo:</p>
+    <pre><code>AUTO-MERGING config/robot_params.yaml
+CONFLICT (content): Merge conflict in config/robot_params.yaml
+Automatic merge failed; fix conflicts and then commit the result.</code></pre>
+    <p>Mở file <code>config/robot_params.yaml</code> ra, bạn thấy nội dung như sau:</p>
+    <pre><code><<<<<<< HEAD
+max_speed: 2.0 # m/s (Cấu hình cu trên main)
+=======
+max_speed: 3.5 # m/s (Cấu hình moi tren feature branch)
+>>>>>>> feature/ekf-filter</code></pre>
+    <p><strong>Yêu cầu:</strong> Trình bày từng bước (Step-by-step commands) để bạn chọn mức tốc độ tối đa là <code>3.5 m/s</code>, xóa bỏ các ký hiệu xung đột Git và hoàn tất việc merge sạch đàng hoàng.</p>
+</div>
+
+<div class="step-card">
+    <span class="step-number">🐛</span>
+    <h3>Kịch bản 4: Docker Container không thấy file code vừa sửa trên VS Code</h3>
+    <p><strong>Mô tả sự cố:</strong> Kỹ sư Bình chạy Docker Container chứa ROS2 bằng lệnh: <code>docker run -it ros:humble bash</code>. Bình mở VS Code trên máy thật sửa file <code>main.cpp</code> trong thư mục <code>~/dev/ros_ws</code>, nhưng khi vào trong container gõ <code>ls /workspace</code> thì không thấy file đâu.</p>
+    <p><strong>Yêu cầu:</strong> Giải thích lý do Bình thiếu cờ (flag) quan trọng nào khi chạy <code>docker run</code> và viết lại câu lệnh <code>docker run</code> đúng chuẩn để gắn thư mục máy thật vào container.</p>
+</div>
+
+<!-- PHẦN 4 -->
+<div class="part-header-danger" id="part4">
+    <h1>PHẦN 4 — THỬ THÁCH KỸ THUẬT THỰC HÀNH (HANDS-ON LABS)</h1>
+    <p>Thực hành tự dựng Script, Git Repo &amp; Dockerfile trên máy thật (25 điểm)</p>
+</div>
+
+<div class="step-card">
+    <span class="step-number">💻</span>
+    <h3>Thử thách 1: Viết Script Bash quản lý sao lưu nhật ký Robot (10 điểm)</h3>
+    <p>Tạo một file script đặt tên là <code>backup_logs.sh</code> trong <code>~/dev/</code> thực hiện các nhiệm vụ sau:</p>
+    <ol>
+        <li>Tự động tạo thư mục <code>~/dev/robot_backups/</code> nếu chưa tồn tại.</li>
+        <li>Tạo một file nén <code>.tar.gz</code> chứa toàn bộ các file trong <code>~/dev/notes/</code> với tên file nén kèm mốc thời gian (ví dụ: <code>backup_2026_08_17.tar.gz</code>).</li>
+        <li>Cấp quyền thực thi cho script và chạy thử kiểm tra xem file nén có xuất hiện đúng vị trí không.</li>
+    </ol>
+</div>
+
+<div class="step-card">
+    <span class="step-number">🐳</span>
+    <h3>Thử thách 2: Viết Dockerfile chuẩn phát triển C++ cho Robot (15 điểm)</h3>
+    <p>Viết một <code>Dockerfile</code> đặt tại <code>~/dev/my_cpp_env/Dockerfile</code> có cấu hình đúng như sau:</p>
+    <ol>
+        <li>Sử dụng hệ điều hành nền: <code>ubuntu:22.04</code>.</li>
+        <li>Tự động chạy lệnh cập nhật <code>apt update</code> và cài đặt 3 gói bắt buộc: <code>build-essential</code> (g++), <code>cmake</code>, <code>git</code>.</li>
+        <li>Đặt thư mục làm việc mặc định trong container là <code>/app</code>.</li>
+        <li>Khi container khởi động, tự động chạy lệnh in ra phiên bản g++ (<code>g++ --version</code>).</li>
+        <li>Viết lệnh terminal để <code>docker build</code> image này với tên <code>my_cpp_robot:v1</code> và lệnh <code>docker run</code> chạy thử nghiệm.</li>
+    </ol>
+</div>
+
+<!-- PHẦN 5 -->
+<div class="part-header-intro" id="part5">
+    <h1>PHẦN 5 — ĐÁP ÁN CHI TIẾT &amp; THANG ĐIỂM TỰ ĐÁNH GIÁ</h1>
+    <p>Đối chiếu câu trả lời để chấm điểm năng lực Tuần 1 của bạn</p>
+</div>
+
+<div class="quiz-section">
+    <h3>🔑 ĐÁP ÁN PHẦN 1: TRẮC NGHIỆM LÝ THUYẾT</h3>
+    <div class="answer-section">
+        <p><strong>1.1: B</strong> — Ubuntu Linux có tính xác định thời gian tốt, không bị Garbage Collector ngắt quãng ngẫu nhiên và là chuẩn nguyên bản của ROS2.</p>
+        <p><strong>1.2: A</strong> — <code>-rwxr-xr--</code>: Owner có <code>rwx</code> (đọc/ghi/chạy), Group có <code>r-x</code> (đọc/chạy), Others chỉ có <code>r--</code> (chỉ đọc, không có x).</p>
+        <p><strong>1.3: B</strong> — <code>update</code> tải menu/danh sách gói; <code>upgrade</code> mới thực sự tải và nâng cấp phần mềm.</p>
+        <p><strong>1.4: B</strong> — <code>PATH</code> lưu danh sách thư mục chứa các file thực thi mà terminal sẽ tìm kiếm.</p>
+        <p><strong>1.5: B</strong> — <code>git commit</code> chốt trạng thái Staging vào lịch sử Git CỤC BỘ trên máy, chưa push lên mạng.</p>
+        <p><strong>1.6: C</strong> — Git báo Merge Conflict và đánh dấu file để con người tự đối soát chỉnh sửa.</p>
+        <p><strong>1.7: B</strong> — Image là bản vẽ/khuôn mẫu tĩnh; Container là căn hộ đang sống/thực thi được tạo từ bản vẽ đó.</p>
+        <p><strong>1.8: B</strong> — Cờ <code>-v</code> dùng để Mount thư mục máy host vào container đồng bộ 2 chiều.</p>
+        <p><strong>1.9: B</strong> — <code>tail -f</code> theo dõi liên tục dòng dữ liệu log mới nhất theo thời gian thực.</p>
+        <p><strong>1.10: B</strong> — Shebang <code>#!/bin/bash</code> chỉ định trình thông dịch Bash sẽ thực thi script.</p>
+    </div>
+
+    <h3>🔑 ĐÁP ÁN PHẦN 2: ĐỌC HIỂU LỆNH</h3>
+    <div class="answer-section">
+        <p><strong>2.1:</strong> Màn hình in ra: <code>/home/danh/dev</code>. Lý do: Lệnh <code>cd ~/dev</code> đã chuyển thư mục hiện tại thành <code>~/dev</code>. Các lệnh sau <code>mkdir</code> và <code>touch</code> thao tác với đường dẫn tương đối <code>test_dir/...</code> nên vị trí đứng của terminal vẫn là <code>~/dev</code>.</p>
+        <p><strong>2.2:</strong> <code>600</code> = <code>rw-------</code>. Chỉ có duy nhất <strong>Chủ sở hữu (Owner)</strong> có quyền đọc và sửa file. Tất cả mọi người khác (Group &amp; Others) bị cấm hoàn toàn.</p>
+        <p><strong>2.3:</strong> Màn hình báo lỗi: <code>ls: cannot access 'pid.cpp': No such file or directory</code>. Vì file <code>pid.cpp</code> mới được tạo và commit trên branch <code>feature/pid-controller</code>, khi chuyển về branch <code>main</code>, Git tự động dọn dẹp làm sạch không gian làm việc tương ứng với trạng thái của <code>main</code>.</p>
+        <p><strong>2.4:</strong> Có hiển thị trong <code>docker ps</code> vì container đang chạy ngầm với cờ <code>-d</code> và lệnh <code>sleep 1000</code>. Muốn chui vào trong container tương tác gõ lệnh: <code>docker exec -it my_ros_container bash</code>.</p>
+        <p><strong>2.5:</strong> Lệnh <code>cp -r</code> tạo ra một bản sao (Copy) mới độc lập của thư mục <code>notes</code> sang <code>notes_backup</code> (thư mục cũ vẫn còn). Lệnh <code>mv</code> thực hiện Đổi tên hoặc Di chuyển (Move) thư mục gốc sang tên mới (thư mục gốc <code>notes</code> không còn nữa).</p>
+    </div>
+
+    <h3>🔑 ĐÁP ÁN PHẦN 3: KỊCH BẢN GỠ LỖI</h3>
+    <div class="answer-section">
+        <p><strong>Kịch bản 1 (STM32 USB Permission):</strong></p>
+        <p>1. Nguyên nhân: Cổng thiết bị USB Serial <code>/dev/ttyUSB0</code> thuộc sở hữu của nhóm <code>dialout</code> hoặc <code>root</code>. User thường không nằm trong nhóm <code>dialout</code> nên bị từ chối truy cập.</p>
+        <p>2. Khắc phục chuẩn dài hạn: Thêm user hiện tại vào nhóm <code>dialout</code> bằng lệnh: <code>sudo usermod -aG dialout $USER</code> sau đó đăng xuất khởi động lại máy hoặc gõ <code>newgrp dialout</code>.</p>
+        
+        <p><strong>Kịch bản 2 (Missing ROS2 Command):</strong></p>
+        <p>1. Nguyên nhân: Các biến môi trường và đường dẫn thi hành của ROS2 nằm trong file setup script <code>/opt/ros/humble/setup.bash</code> chưa được load vào môi trường Shell của Terminal mới.</p>
+        <p>2. Khắc phục triệt để: Gõ lệnh thêm dòng source vào <code>~/.bashrc</code>:</p>
+        <pre><code>echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc
+source ~/.bashrc</code></pre>
+
+        <p><strong>Kịch bản 3 (Git Merge Conflict):</strong></p>
+        <p>Các bước xử lý chuẩn:</p>
+        <ol>
+            <li>Mở file <code>config/robot_params.yaml</code> bằng trình biên soạn (nano/VS Code).</li>
+            <li>Sửa nội dung file thành duy nhất 1 dòng chuẩn mong muốn: <code>max_speed: 3.5</code> và xóa các dòng đánh dấu <code><<<<<<<</code>, <code>=======</code>, <code>>>>>>>></code>.</li>
+            <li>Lưu file lại và gõ lệnh: <code>git add config/robot_params.yaml</code>.</li>
+            <li>Hoàn tất merge bằng lệnh: <code>git commit -m "Fix merge conflict: set max_speed to 3.5"</code>.</li>
+        </ol>
+
+        <p><strong>Kịch bản 4 (Docker Volume Mount):</strong></p>
+        <p>1. Nguyên nhân: Bình chưa truyền cờ <code>-v</code> (Volume Mount) để liên kết thư mục trên máy host với thư mục bên trong container.</p>
+        <p>2. Câu lệnh chuẩn đúng:</p>
+        <pre><code>docker run -it -v ~/dev/ros_ws:/workspace ros:humble bash</code></pre>
+    </div>
+
+    <h3>🔑 ĐÁP ÁN PHẦN 4: HANDS-ON LABS</h3>
+    <div class="answer-section">
+        <p><strong>Thử thách 1 (Script Bash):</strong></p>
+        <pre><code>#!/bin/bash
+# Code chuẩn cho backup_logs.sh
+BACKUP_DIR="$HOME/dev/robot_backups"
+SOURCE_DIR="$HOME/dev/notes"
+TIMESTAMP=$(date +%Y_%m_%d_%H%M%S)
+
+mkdir -p "$BACKUP_DIR"
+tar -czf "$BACKUP_DIR/backup_$TIMESTAMP.tar.gz" -C "$SOURCE_DIR" .
+echo "Sao luu thanh cong vao: $BACKUP_DIR/backup_$TIMESTAMP.tar.gz"</code></pre>
+
+        <p><strong>Thử thách 2 (Dockerfile chuẩn):</strong></p>
+        <pre><code># Dockerfile
+FROM ubuntu:22.04
+
+# Tránh hỏi timezone khi install
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt update && apt install -y \
+    build-essential \
+    cmake \
+    git \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+CMD ["g++", "--version"]</code></pre>
+        <p>Lệnh Terminal để build và run:</p>
+        <pre><code>cd ~/dev/my_cpp_env
+docker build -t my_cpp_robot:v1 .
+docker run --rm my_cpp_robot:v1</code></pre>
+    </div>
+</div>
+
+<div class="summary-box">
+    <h2>📊 THANG ĐIỂM TỰ ĐÁNH GIÁ KẾT QUẢ TUẦN 1</h2>
+    <table class="table" style="color: #cbd5e1;">
+        <tr>
+            <th>Khoảng điểm</th>
+            <th>Xếp loại Năng lực</th>
+            <th>Hành động tiếp theo</th>
+        </tr>
+        <tr>
+            <td><strong>90 – 100 điểm</strong></td>
+            <td><strong>Xuất sắc (Mastery):</strong> Nền móng môi trường Linux/Git/Docker của bạn cực kỳ vững chắc.</td>
+            <td>Sẵn sàng 100% bước sang Tuần 2 chiến C++ Hiện Đại!</td>
+        </tr>
+        <tr>
+            <td><strong>70 – 89 điểm</strong></td>
+            <td><strong>Khá (Good):</strong> Đã nắm được tư duy và lệnh cơ bản, còn vấp nhẹ ở kịch bản gỡ lỗi hoặc Docker.</td>
+            <td>Xem lại kỹ các đáp án gỡ lỗi ở Phần 3 &amp; 4 trước khi gõ C++.</td>
+        </tr>
+        <tr>
+            <td><strong>Dưới 70 điểm</strong></td>
+            <td><strong>Cần Cải Thiện:</strong> Cần gõ lại tay các lệnh ở tài liệu Tuần 1.</td>
+            <td>Thực hành lại 10 lệnh Terminal &amp; lệnh Git trên máy thật 30 phút.</td>
+        </tr>
+    </table>
+</div>
+
+</body>
+</html>

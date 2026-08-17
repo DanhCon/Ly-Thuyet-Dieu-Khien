@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tuần 2 — C++ Hiện Đại Cho Robotics & Control (Ngày 8–14)</title>
+<script>
+window.MathJax = {
+    tex: { inlineMath: [['$','$']], displayMath: [['$$','$$']], tags: 'ams' },
+    svg: { fontCache: 'global' }
+};
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<style>
+:root {
+    --primary: #0f172a;
+    --accent: #2563eb;
+    --accent-light: #3b82f6;
+    --success: #16a34a;
+    --warning: #d97706;
+    --danger: #dc2626;
+    --bg: #f8fafc;
+    --card-bg: #ffffff;
+    --text: #1e293b;
+    --text-secondary: #475569;
+    --code-bg: #0f172a;
+    --border: #e2e8f0;
+    --quiz-bg: #f0f9ff;
+    --answer-bg: #f0fdf4;
+    --yellow-bg: #fffbeb;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.75;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+h1, h2, h3, h4 { color: var(--primary); line-height: 1.4; }
+h2 { font-size: 1.45em; margin: 28px 0 12px; }
+h3 { font-size: 1.2em; margin: 22px 0 10px; }
+p { margin: 10px 0; }
+ul, ol { margin: 10px 0 10px 28px; }
+li { margin: 6px 0; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+strong { color: var(--primary); }
+table.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 0.95em;
+}
+.table th {
+    background: var(--primary);
+    color: #fff;
+    padding: 10px 12px;
+    text-align: left;
+    border: 1px solid var(--primary);
+}
+.table td {
+    padding: 9px 12px;
+    border: 1px solid var(--border);
+    vertical-align: top;
+}
+.table tr:nth-child(even) { background: #f1f5f9; }
+pre {
+    background: var(--code-bg);
+    color: #e2e8f0;
+    padding: 14px 16px;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 14px 0;
+    font-size: 0.9em;
+    line-height: 1.6;
+}
+code {
+    font-family: Consolas, 'Fira Code', monospace;
+    background: #e2e8f0;
+    color: var(--danger);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.92em;
+}
+pre code { background: none; color: inherit; padding: 0; }
+.cover-page {
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    color: #fff;
+    text-align: center;
+    padding: 70px 30px;
+    border-radius: 12px;
+    margin-bottom: 30px;
+}
+.cover-page h1 { color: #fff; font-size: 2.2em; margin-bottom: 10px; }
+.cover-page .subtitle { color: #94a3b8; font-size: 1.15em; margin-bottom: 18px; }
+.cover-page .tagline { color: #cbd5e1; font-size: 1.02em; max-width: 750px; margin: 0 auto 25px; }
+.cover-page .meta { color: #60a5fa; font-size: 0.95em; border-top: 1px solid #334155; padding-top: 18px; display: inline-block; }
+.toc {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px 30px;
+    margin: 20px 0;
+}
+.toc h2 { margin-top: 0; border-bottom: 2px solid var(--accent); padding-bottom: 8px; }
+.toc ol { margin-left: 20px; }
+.toc a { display: inline-block; padding: 3px 0; }
+.part-header {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    color: #fff;
+    padding: 26px 28px;
+    border-radius: 10px;
+    margin: 36px 0 20px;
+}
+.part-header h1 { color: #fff; margin: 0 0 6px; font-size: 1.5em; }
+.part-header p { color: #bfdbfe; margin: 0; }
+.part-header-intro {
+    background: linear-gradient(135deg, #16a34a, #15803d);
+    color: #fff;
+    padding: 26px 28px;
+    border-radius: 10px;
+    margin: 36px 0 20px;
+}
+.part-header-intro h1 { color: #fff; margin: 0 0 6px; font-size: 1.5em; }
+.part-header-intro p { color: #dcfce7; margin: 0; }
+.part-header-purple {
+    background: linear-gradient(135deg, #7c3aed, #6d28d9);
+    color: #fff;
+    padding: 26px 28px;
+    border-radius: 10px;
+    margin: 36px 0 20px;
+}
+.part-header-purple h1 { color: #fff; margin: 0 0 6px; font-size: 1.5em; }
+.part-header-purple p { color: #ddd6fe; margin: 0; }
+.part-header-orange {
+    background: linear-gradient(135deg, #ea580c, #c2410c);
+    color: #fff;
+    padding: 26px 28px;
+    border-radius: 10px;
+    margin: 36px 0 20px;
+}
+.part-header-orange h1 { color: #fff; margin: 0 0 6px; font-size: 1.5em; }
+.part-header-orange p { color: #fed7aa; margin: 0; }
+.part-header-danger {
+    background: linear-gradient(135deg, #dc2626, #b91c1c);
+    color: #fff;
+    padding: 26px 28px;
+    border-radius: 10px;
+    margin: 36px 0 20px;
+}
+.part-header-danger h1 { color: #fff; margin: 0 0 6px; font-size: 1.5em; }
+.part-header-danger p { color: #fecaca; margin: 0; }
+.definition, .theorem, .important-note, .example-box, .analogy-box, .warning-box, .cheat-sheet {
+    border-radius: 10px;
+    padding: 18px 22px;
+    margin: 18px 0;
+}
+.box-title {
+    display: inline-block;
+    font-weight: 700;
+    font-size: 0.95em;
+    margin-bottom: 10px;
+    padding: 4px 12px;
+    border-radius: 6px;
+}
+.definition { background: #eff6ff; border-left: 5px solid var(--accent); }
+.definition .box-title { background: var(--accent); color: #fff; }
+.theorem { background: #f5f3ff; border-left: 5px solid #7c3aed; }
+.theorem .box-title { background: #7c3aed; color: #fff; }
+.important-note { background: #fffbeb; border-left: 5px solid var(--warning); }
+.important-note .box-title { background: var(--warning); color: #fff; }
+.example-box { background: #f0fdf4; border-left: 5px solid var(--success); }
+.example-box .box-title { background: var(--success); color: #fff; }
+.analogy-box { background: #f0f9ff; border-left: 5px solid #06b6d4; }
+.analogy-box .box-title { background: #06b6d4; color: #fff; }
+.warning-box { background: #fef2f2; border-left: 5px solid var(--danger); }
+.warning-box .box-title { background: var(--danger); color: #fff; }
+.cheat-sheet { background: #f0fdfa; border: 1px dashed #14b8a6; }
+.cheat-sheet .box-title { background: #14b8a6; color: #fff; }
+.step-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 22px;
+    margin: 16px 0;
+    position: relative;
+}
+.step-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.05em;
+    margin-bottom: 10px;
+}
+.quiz-section { background: var(--quiz-bg); border-radius: 10px; padding: 22px 24px; margin: 20px 0; }
+.quiz-section > h3 { margin-top: 0; }
+.quiz-question {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 14px 0;
+}
+.answer-section {
+    background: var(--answer-bg);
+    border-left: 4px solid var(--success);
+    border-radius: 8px;
+    padding: 12px 18px;
+    margin: 10px 0 16px;
+}
+.answer-section .box-title { background: var(--success); color: #fff; }
+.goal-box {
+    background: linear-gradient(135deg, #fefce8, #fffbeb);
+    border: 1px solid #fde68a;
+    border-left: 5px solid var(--warning);
+    border-radius: 8px;
+    padding: 12px 18px;
+    margin: 10px 0 14px;
+    font-size: 0.95em;
+}
+.goal-box strong { color: #92400e; }
+.level-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.82em;
+    font-weight: 600;
+    margin: 0 4px;
+}
+.level-apply { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+.level-deep { background: #dbeafe; color: #1e40af; border: 1px solid #93c5fd; }
+.level-concept { background: #ede9fe; color: #5b21b6; border: 1px solid #c4b5fd; }
+.legend-box {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 16px 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+}
+.legend-item { display: flex; align-items: center; gap: 8px; font-size: 0.92em; }
+.print-btn {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 30px;
+    font-size: 0.95em;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+    z-index: 100;
+}
+.print-btn:hover { background: var(--primary); }
+.summary-box {
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    color: #fff;
+    padding: 30px 34px;
+    border-radius: 12px;
+    margin: 30px 0;
+}
+.summary-box h2 { color: #60a5fa; margin-top: 0; }
+.summary-box ul { color: #cbd5e1; }
+@media print {
+    .print-btn { display: none; }
+    .part-header, .part-header-intro, .part-header-purple, .part-header-orange, .part-header-danger { page-break-before: always; }
+    .definition, .theorem, .important-note, .example-box, .analogy-box, .warning-box, .cheat-sheet, .quiz-section, .answer-section, .step-card, .toc, .goal-box { break-inside: avoid; }
+    body { background: #fff; }
+}
+</style>
+</head>
+<body>
+
+<button class="print-btn" onclick="window.print()">📄 Xuất PDF</button>
+
+<div class="cover-page">
+    <h1>⚡ Tuần 2 — C++ Hiện Đại Cho Robotics &amp; Control</h1>
+    <div class="subtitle">OOP · RAII · Smart Pointers · STL · Template · Lambda Callback (Ngày 8–14)</div>
+    <div class="tagline">
+        Tài liệu học tập chuyên sâu chi tiết: Xây dựng nền tảng C++17/20 vững chắc cho Robotics, hệ thống nhúng thời gian thực và Xe tự hành (AV). Đơn giản hóa các khái niệm trừu tượng với <strong>dự đoán code - chạy thực tế - giải thích WHY</strong>.
+    </div>
+    <div class="meta">Dành cho: Huỳnh Công Danh · Tuần 2 trong lộ trình 24 tuần Control &amp; Planning · 2026</div>
+</div>
+
+<div class="toc">
+    <h2>📑 Mục Lục</h2>
+    <ol>
+        <li><a href="#part0">Phần 0 — Vì sao C++ là ngôn ngữ cốt lõi của Robotics &amp; Xe tự hành?</a></li>
+        <li><a href="#part1">Phần 1 — Ngày 8–9: Bộ nhớ, Con trỏ, Tham chiếu &amp; const (Memory Layout)</a></li>
+        <li><a href="#part2">Phần 2 — Ngày 10–11: OOP Thực chiến cho Robotics (Class, Interface &amp; Polymorphism)</a></li>
+        <li><a href="#part3">Phần 3 — Ngày 12: RAII &amp; Smart Pointers (Xử lý an toàn bộ nhớ 24/7)</a></li>
+        <li><a href="#part4">Phần 4 — Ngày 13: Cấu trúc dữ liệu STL &amp; Tối ưu thuật toán (vector, map, reserve)</a></li>
+        <li><a href="#part5">Phần 5 — Ngày 14: Template &amp; Lambda Expressions (Đập tan điểm yếu, ROS2 Callback)</a></li>
+        <li><a href="#part6">Phần 6 — Dự án thực hành Tuần 2: Viết Bộ Lọc LowPassFilter &amp; Controller PID bằng C++</a></li>
+        <li><a href="#part7">Phần 7 — Tổng kết Tuần 2 &amp; Bộ Quiz Tự Kiểm Tra (Có đáp án giải thích)</a></li>
+    </ol>
+</div>
+
+<div class="legend-box">
+    <div class="legend-item"><span class="level-badge level-deep">🔬 CẦN HIỂU SÂU</span> Bắt buộc làm chủ — Nền tảng phỏng vấn &amp; đọc code Nav2</div>
+    <div class="legend-item"><span class="level-badge level-apply">🔧 CHỈ CẦN CÔNG THỨC</span> Gõ đúng cú pháp — Sử dụng như công cụ hàng ngày</div>
+    <div class="legend-item"><span class="level-badge level-concept">🔎 HIỂU Ý TƯỞNG</span> Khái niệm thiết kế kiến trúc hệ thống</div>
+</div>
+
+<!-- PHẦN 0 -->
+<div class="part-header-intro" id="part0">
+    <h1>PHẦN 0 — VÌ SAO C++ LÀ NGÔN NGỮ CỐT LÕI CỦA ROBOTICS?</h1>
+    <p>Giải mã lý do 8/11 Job Descriptions xe tự hành &amp; robot gọi tên C++ hiện đại</p>
+</div>
+
+<div class="definition">
+    <span class="box-title">🎯 Vì sao C++ áp đảo trong Robotics &amp; Autonomous Vehicles?</span>
+    <p>Một chiếc xe tự hành chạy với tốc độ 80 km/h di chuyển khoảng <strong>22 mét mỗi giây</strong>. Nếu thuật toán tránh vật cản bị chậm 50ms do trình thu gom rác (Garbage Collector của Python/Java) tạm dừng hệ thống, hậu quả là va chạm. C++ cung cấp 3 điều kiện tiên quyết:</p>
+    <ol>
+        <li><strong>Deterministic Performance (Tính xác định về thời gian):</strong> Không có Garbage Collector bất ngờ tạm dừng chương trình. Bộ nhớ cấp phát và giải phóng chính xác khi lập trình viên yêu cầu.</li>
+        <li><strong>Hardware-Level Control (Thao tác sát phần cứng):</strong> Đọc trực tiếp bộ nhớ CAN bus, thanh ghi cảm biến IMU/Encoder, bộ nhớ DMA với độ trễ tính bằng microgiây ($\mu s$).</li>
+        <li><strong>Zero-Cost Abstractions (Trừu tượng hóa chi phí bằng 0):</strong> Viết code Hướng đối tượng (OOP), Template, Lambda cực kỳ đẹp mắt nhưng khi biên dịch qua <code>g++ -O3</code>, máy tính thực thi nhanh hệt như C thuần hoặc Assembly.</li>
+    </ol>
+</div>
+
+<div class="analogy-box">
+    <span class="box-title">🔎 Ẩn dụ: Python là xe số tự động du lịch, C++ là xe đua Công thức 1 (F1)</span>
+    <p>Python giúp bạn dựng prototype nhanh chóng (lái xe tự động đi siêu thị). Nhưng C++ là chiếc xe đua F1: không có trợ lực lái tự động cản trở tay lái, phản ứng tức thì với từng cú nhấn ga. Để điều khiển hệ thống robot thời gian thực (Real-time Control), bạn phải làm chủ tay lái C++.</p>
+</div>
+
+<!-- PHẦN 1 -->
+<div class="part-header" id="part1">
+    <h1>PHẦN 1 — NGÀY 8–9: BỘ NHỚ, CON TRỎ, THAM CHIẾU &amp; CONST</h1>
+    <p>Hiểu sâu Stack vs Heap · Con trỏ (*) · Tham chiếu (&amp;) · const correctness <span class="level-badge level-deep">🔬 CẦN HIỂU SÂU</span></p>
+</div>
+
+<div class="goal-box">
+    <strong>🎯 Mục đích:</strong> 80% câu hỏi phỏng vấn C++ và 90% lỗi crash (Segmentation Fault) bắt nguồn từ con trỏ &amp; quản lý bộ nhớ. Hiểu rõ Stack vs Heap giúp bạn tối ưu bộ nhớ cho vi điều khiển STM32/ESP32 và tránh rò rỉ bộ nhớ trên Linux ROS2 node.
+</div>
+
+<h2>1.1 Bản đồ bộ nhớ: Stack vs Heap</h2>
+<table class="table">
+    <tr>
+        <th>Tiêu chí</th>
+        <th>Vùng nhớ Stack (Ngăn xếp)</th>
+        <th>Vùng nhớ Heap (Đống)</th>
+    </tr>
+    <tr>
+        <td><strong>Đặc điểm</strong></td>
+        <td>Cấp phát tự động, kích thước nhỏ (thường 2MB–8MB)</td>
+        <td>Cấp phát thủ công qua <code>new</code> / <code>malloc</code>, kích thước lớn (bằng RAM)</td>
+    </tr>
+    <tr>
+        <td><strong>Tốc độ</strong></td>
+        <td>Cực kỳ nhanh (chỉ cần dịch chuyển con trỏ Stack Pointer)</td>
+        <td>Chậm hơn (phải tìm khoảng trống bộ nhớ phù hợp)</td>
+    </tr>
+    <tr>
+        <td><strong>Quản lý</strong></td>
+        <td>Tự động thu hồi khi ra khỏi Scope <code>{}</code></td>
+        <td>Phải thu hồi thủ công (<code>delete</code>/<code>free</code>) hoặc dùng Smart Pointer</td>
+    </tr>
+    <tr>
+        <td><strong>Ứng dụng Robot</strong></td>
+        <td>Lưu biến cục bộ, ma trận PID kích thước cố định $3 \times 3$</td>
+        <td>Lưu mảng mây điểm LiDAR ($100,000$ điểm), bản đồ Costmap Nav2</td>
+    </tr>
+</table>
+
+<h2>1.2 Con trỏ (*) vs Tham chiếu (&amp;) vs Const</h2>
+
+<div class="definition">
+    <span class="box-title">📌 Phân biệt bản chất</span>
+    <ul>
+        <li><strong>Con trỏ (Pointer <code>T*</code>):</strong> Là một biến lưu <em>địa chỉ bộ nhớ</em> của biến khác. Có thể trỏ tới <code>nullptr</code>, có thể thay đổi địa chỉ trỏ tới.</li>
+        <li><strong>Tham chiếu (Reference <code>T&amp;</code>):</strong> Là một <em>bí danh (alias)</em> cho một biến đã tồn tại. Không thể null, không thể đổi sang tham chiếu biến khác sau khi khởi tạo.</li>
+        <li><strong>Tham chiếu hằng (<code>const T&amp;</code>):</strong> Cho phép truyền biến vào hàm không tốn chi phí copy, đồng thời bảo vệ biến không bị hàm sửa đổi. <strong>Đây là chuẩn mực truyền tham số trong Robotics!</strong></li>
+    </ul>
+</div>
+
+<div class="step-card">
+    <span class="step-number">1</span>
+    <h3>Ví dụ gõ tay: So sánh các cách truyền tham số</h3>
+    <pre><code>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+
+// 1. Truyền bằng Value (Copy): Tốn thời gian copy mảng lớn!
+void process_map_copy(std::vector&lt;double&gt; data) {
+    // data là bản sao độc lập
+}
+
+// 2. Truyền bằng Reference: Nhanh, nhưng có thể lỡ tay sửa mảng gốc
+void process_map_ref(std::vector&lt;double&gt;&amp; data) {
+    data[0] = 999.0; // Sửa trực tiếp biến bên ngoài!
+}
+
+// 3. Truyền bằng Const Reference (CHUẨN ROBOTICS): Nhanh + An toàn tuyệt đối
+void process_map_const_ref(const std::vector&lt;double&gt;&amp; data) {
+    // data[0] = 999.0; // LỖI BIÊN DỊCH: Không cho sửa!
+    std::cout &lt;&lt; "Kich thuoc may diem: " &lt;&lt; data.size() &lt;&lt; std::endl;
+}
+
+int main() {
+    std::vector&lt;double&gt; lidar_points(100000, 1.5); // 100,000 điểm LiDAR
+    
+    process_map_const_ref(lidar_points); // Truyền tham chiếu hằng: 0ms copy!
+    return 0;
+}</code></pre>
+</div>
+
+<!-- PHẦN 2 -->
+<div class="part-header-purple" id="part2">
+    <h1>PHẦN 2 — NGÀY 10–11: OOP THỰC CHIẾN CHO ROBOTICS</h1>
+    <p>Class · Interface · Polymorphism · Virtual Destructor <span class="level-badge level-deep">🔬 CẦN HIỂU SÂU</span></p>
+</div>
+
+<div class="goal-box">
+    <strong>🎯 Mục đích:</strong> Kiến trúc phần mềm Nav2 và ROS2 được xây dựng hoàn toàn trên kế thừa và đa hình (Polymorphism). Học cách tạo Interface chung cho các bộ điều khiển (Controller Base Class) giúp bạn hoán đổi giữa Pure Pursuit, Stanley, LQR và MPC mà không cần sửa code hệ thống chính.
+</div>
+
+<h2>2.1 Xây dựng Controller Interface với Virtual Functions</h2>
+<p>Giả sử bạn thiết kế hệ thống xe tự hành. Bạn cần một lớp cha chung <code>AbstractController</code> để mọi thuật toán điều khiển tuân theo:</p>
+
+<pre><code>#include &lt;iostream&gt;
+#include &lt;cmath&gt;
+
+// Struct lưu trạng thái robot: x, y, yaw (góc hướng), v (vận tốc)
+struct RobotState {
+    double x = 0.0;
+    double y = 0.0;
+    double yaw = 0.0;
+    double v = 0.0;
+};
+
+// Struct lưu lệnh điều khiển: góc lái (steering) & gia tốc (accel)
+struct ControlOutput {
+    double steering_angle = 0.0;
+    double acceleration = 0.0;
+};
+
+// --- CLASS CHA TRỪU TƯỢNG (INTERFACE) ---
+class AbstractController {
+public:
+    // Destructor ảo: BẮT BUỘC để tránh rò rỉ bộ nhớ khi xóa qua con trỏ lớp cha
+    virtual ~AbstractController() {
+        std::cout &lt;&lt; "[Base] Destructor AbstractController\n";
+    }
+
+    // Hàm thuần ảo (Pure Virtual Function): Bắt buộc lớp con phải Override
+    virtual ControlOutput compute_control(const RobotState&amp; current_state, 
+                                         double target_x, double target_y) = 0;
+};
+
+// --- LỚP CON 1: BỘ ĐIỀU KHIỂN PURE PURSUIT ---
+class PurePursuitController : public AbstractController {
+private:
+    double lookahead_distance_;
+public:
+    PurePursuitController(double L) : lookahead_distance_(L) {}
+
+    ControlOutput compute_control(const RobotState&amp; state, 
+                                 double target_x, double target_y) override {
+        ControlOutput out;
+        double dx = target_x - state.x;
+        double dy = target_y - state.y;
+        double alpha = std::atan2(dy, dx) - state.yaw;
+        out.steering_angle = std::atan2(2.0 * 0.5 * std::sin(alpha), lookahead_distance_);
+        out.acceleration = 0.5; // Gia tốc hằng số
+        std::cout &lt;&lt; "[PurePursuit] Tinh goc lai: " &lt;&lt; out.steering_angle &lt;&lt; " rad\n";
+        return out;
+    }
+};
+
+// --- LỚP CON 2: BỘ ĐIỀU KHIỂN PID PHAN HỒI ---
+class PIDVelocityController : public AbstractController {
+private:
+    double kp_, ki_, kd_;
+    double prev_error_ = 0.0;
+    double integral_ = 0.0;
+public:
+    PIDVelocityController(double kp, double ki, double kd) 
+        : kp_(kp), ki_(ki), kd_(kd) {}
+
+    ControlOutput compute_control(const RobotState&amp; state, 
+                                 double target_x, double target_y) override {
+        ControlOutput out;
+        double distance_error = std::sqrt(std::pow(target_x - state.x, 2) + 
+                                          std::pow(target_y - state.y, 2));
+        integral_ += distance_error;
+        double derivative = distance_error - prev_error_;
+        out.acceleration = kp_ * distance_error + ki_ * integral_ + kd_ * derivative;
+        out.steering_angle = 0.0;
+        prev_error_ = distance_error;
+        std::cout &lt;&lt; "[PID] Tinh gia toc: " &lt;&lt; out.acceleration &lt;&lt; " m/s^2\n";
+        return out;
+    }
+};
+
+int main() {
+    RobotState robot{0.0, 0.0, 0.0, 1.0};
+    
+    // ĐA HÌNH (POLYMORPHISM): Dùng con trỏ lớp cha trỏ tới đối tượng lớp con
+    AbstractController* controller = new PurePursuitController(2.0);
+    controller-&gt;compute_control(robot, 5.0, 2.0);
+    delete controller; // Gọi đúng destructor nhờ Virtual Destructor!
+
+    controller = new PIDVelocityController(1.2, 0.01, 0.1);
+    controller-&gt;compute_control(robot, 5.0, 2.0);
+    delete controller;
+
+    return 0;
+}</code></pre>
+
+<div class="warning-box">
+    <span class="box-title">⚠️ Quy tắc sinh tử: Cần có Virtual Destructor `virtual ~BaseClass()`</span>
+    <p>Nếu lớp cha có hàm ảo mà <strong>không có Virtual Destructor</strong>, khi bạn gọi <code>delete controller;</code> qua con trỏ lớp cha, <strong>chỉ có Destructor lớp cha được gọi</strong>! Destructor lớp con bị bỏ qua, dẫn đến tài nguyên cấp phát trong lớp con (như file handle, socket, RAM) bị rò rỉ nghiêm trọng (Memory Leak).</p>
+</div>
+
+<!-- PHẦN 3 -->
+<div class="part-header" id="part3">
+    <h1>PHẦN 3 — NGÀY 12: RAII &amp; SMART POINTERS</h1>
+    <p>Quản lý tài nguyên tự động · unique_ptr · shared_ptr · weak_ptr <span class="level-badge level-deep">🔬 CẦN HIỂU SÂU</span></p>
+</div>
+
+<div class="goal-box">
+    <strong>🎯 Mục đích:</strong> Trong C++ hiện đại (C++11 trở lên), bạn <strong>hạn chế tối đa gõ từ khóa `new` và `delete` thủ công</strong>. Kỹ thuật RAII (Resource Acquisition Is Initialization) kết hợp với Smart Pointers giúp chương trình robot tự động giải phóng bộ nhớ ngay khi đối tượng ra khỏi scope, chống Memory Leak 100%.
+</div>
+
+<h2>3.1 Ba loại Smart Pointers trong C++17</h2>
+<table class="table">
+    <tr>
+        <th>Loại Smart Pointer</th>
+        <th>Quyền sở hữu</th>
+        <th>Khi nào dùng trong Robotics?</th>
+    </tr>
+    <tr>
+        <td><code>std::unique_ptr&lt;T&gt;</code></td>
+        <td><strong>Độc quyền (Unique):</strong> Chỉ có 1 con trỏ duy nhất sở hữu vùng nhớ. Không thể copy, chỉ có thể move.</td>
+        <td>Dùng mặc định! (vd: Node điều khiển sở hữu duy nhất 1 đối tượng Cảm biến IMU hay Driver Động cơ). Zero cost overhead!</td>
+    </tr>
+    <tr>
+        <td><code>std::shared_ptr&lt;T&gt;</code></td>
+        <td><strong>Chia sẻ (Shared):</strong> Nhiều con trỏ cùng sở hữu. Vùng nhớ giải phóng khi con trỏ cuối cùng hủy (Reference Count = 0).</td>
+        <td>Dùng khi dữ liệu cần chia sẻ giữa nhiều Thread/Node (vd: Bản đồ Slam Map được đọc bởi cả Node Global Planner và Local Planner).</td>
+    </tr>
+    <tr>
+        <td><code>std::weak_ptr&lt;T&gt;</code></td>
+        <td><strong>Không sở hữu (Weak):</strong> Tham chiếu tới <code>shared_ptr</code> mà không tăng Reference Count.</td>
+        <td>Tránh hiện tượng "Vòng lặp tham chiếu" (Circular Reference) gây rò rỉ bộ nhớ. Biến quan sát không nắm giữ lifetime.</td>
+    </tr>
+</table>
+
+<h2>3.2 Thực hành code RAII với Smart Pointers</h2>
+<pre><code>#include &lt;iostream&gt;
+#include &lt;memory&gt;
+
+class IMUSensor {
+public:
+    IMUSensor() { std::cout &lt;&lt; "--> [IMU] Khoi tao phan cung IMU (MPU6050/ICM20948)\n"; }
+    ~IMUSensor() { std::cout &lt;&lt; "<-- [IMU] Ngắt ket noi & Giai phong IMU\n"; }
+    
+    void read_accel() {
+        std::cout &lt;&lt; "    [IMU] Doc gia toc: ax = 0.02 m/s^2, ay = -0.1 m/s^2\n";
+    }
+};
+
+void run_control_loop() {
+    std::cout &lt;&lt; "--- Bat dau Control Loop Scope ---\n";
+    
+    // Tạo unique_ptr bằng std::make_unique (C++14/17 Standard)
+    auto imu = std::make_unique&lt;IMUSensor&gt;();
+    imu-&gt;read_accel();
+    
+    // Không cần gõ delete imu! 
+    std::cout &lt;&lt; "--- Ket thuc Control Loop Scope ---\n";
+} // imu tự động bị hủy TẠI ĐÂY!
+
+int main() {
+    run_control_loop();
+    std::cout &lt;&lt; "Chuong trinh hoan tat an toan.\n";
+    return 0;
+}</code></pre>
+
+<!-- PHẦN 4 -->
+<div class="part-header-orange" id="part4">
+    <h1>PHẦN 4 — NGÀY 13: CẤU TRÚC DỮ LIỆU STL &amp; TỐI ƯU</h1>
+    <p>std::vector · std::unordered_map · reserve() · std::sort <span class="level-badge level-apply">🔧 CHỈ CẦN CÔNG THỨC</span></p>
+</div>
+
+<div class="goal-box">
+    <strong>🎯 Mục đích:</strong> Thư viện chuẩn STL cung cấp các cấu trúc dữ liệu cực kỳ tối ưu. Trong lập trình robot, việc sử dụng <code>std::vector::reserve()</code> là bắt buộc để tránh vi phạm tính thời gian thực (re-allocation làm chậm chương trình).
+</div>
+
+<h2>4.1 Mẹo tối ưu bộ nhớ bắt buộc: `reserve()` trong `std::vector`</h2>
+<p>Khi bạn <code>push_back()</code> vào vector mà chưa reserve, vector phải liên tục cấp phát lại mảng mới có kích thước gấp đôi, copy dữ liệu cũ sang và xóa mảng cũ. Trong vòng lặp $100\text{ Hz}$ của Robot, việc này gây giật lag ngẫu nhiên (Latency Spikes).</p>
+
+<pre><code>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;chrono&gt;
+
+struct Waypoint {
+    double x, y, speed;
+};
+
+int main() {
+    const int N = 1000000; // 1 triệu waypoint quỹ đạo
+    
+    // KHÔNG RESERVE: Tốn thời gian re-allocation
+    std::vector&lt;Waypoint&gt; path1;
+    auto t1 = std::chrono::high_resolution_clock::now();
+    for(int i=0; i&lt;N; ++i) {
+        path1.push_back({i * 0.1, i * 0.2, 5.0});
+    }
+    auto t2 = std::chrono::high_resolution_clock::now();
+    
+    // CÓ RESERVE: Cấp phát 1 lần duy nhất!
+    std::vector&lt;Waypoint&gt; path2;
+    path2.reserve(N); // Xóa bỏ hoàn toàn chi phí re-allocate
+    auto t3 = std::chrono::high_resolution_clock::now();
+    for(int i=0; i&lt;N; ++i) {
+        path2.push_back({i * 0.1, i * 0.2, 5.0});
+    }
+    auto t4 = std::chrono::high_resolution_clock::now();
+
+    std::cout &lt;&lt; "Thoi gian khong reserve: " 
+              &lt;&lt; std::chrono::duration_cast&lt;std::chrono::milliseconds&gt;(t2 - t1).count() &lt;&lt; " ms\n";
+    std::cout &lt;&lt; "Thoi gian CO reserve:    " 
+              &lt;&lt; std::chrono::duration_cast&lt;std::chrono::milliseconds&gt;(t4 - t3).count() &lt;&lt; " ms\n";
+
+    return 0;
+}</code></pre>
+
+<!-- PHẦN 5 -->
+<div class="part-header-danger" id="part5">
+    <h1>PHẦN 5 — NGÀY 14: TEMPLATE &amp; LAMBDA EXPRESSIONS</h1>
+    <p>Đập tan điểm yếu · Template Class · Lambda Syntax · ROS2 Callback <span class="level-badge level-deep">🔬 CẦN HIỂU SÂU</span></p>
+</div>
+
+<div class="goal-box">
+    <strong>🎯 Mục đích:</strong> Đẩy lùi rào cản Template và Lambda! Lambda xuất hiện ở mọi nơi trong ROS2 (Callback đăng ký Subscriber, Timer Callback, Service Handler). Nắm vững Lambda giúp bạn viết code ROS2 cực kỳ ngắn gọn và dễ bảo trì.
+</div>
+
+<h2>5.1 Cú pháp Lambda Expression từng bước</h2>
+<div class="definition">
+    <span class="box-title">📐 Cấu trúc tổng quát của Lambda:</span>
+    <pre><code>auto my_lambda = [ capture_list ] ( parameters ) -> return_type {
+    // Body của lambda
+};</code></pre>
+    <ul>
+        <li><code>[ ]</code> <strong>Capture List (Danh sách bắt biến ngoài):</strong>
+            <ul>
+                <li><code>[]</code>: Không bắt biến nào từ scope bên ngoài.</li>
+                <li><code>[&amp;]</code>: Bắt TẤT CẢ các biến ngoài bằng <em>Tham chiếu</em> (sửa được biến ngoài).</li>
+                <li><code>[=]</code>: Bắt TẤT CẢ các biến ngoài bằng <em>Bản sao (Copy)</em> (read-only).</li>
+                <li><code>[this]</code>: Bắt con trỏ <code>this</code> của class hiện tại (dùng cực nhiều trong ROS2 Callback!).</li>
+            </ul>
+        </li>
+        <li><code>( parameters )</code>: Tham số nhận vào hệt như hàm bình thường.</li>
+        <li><code>-&gt; return_type</code>: Kiểu trả về (thường trình biên dịch tự suy luận được, có thể bỏ qua).</li>
+    </ul>
+</div>
+
+<h2>5.2 Ứng dụng Lambda làm Callback trong ROS2 Subscriber</h2>
+<pre><code>#include &lt;iostream&gt;
+#include &lt;functional&gt;
+#include &lt;string&gt;
+
+// Mô phỏng ROS2 Subscription Callback bằng std::function
+class ROS2NodeSimulator {
+private:
+    std::string node_name_;
+    double target_speed_ = 0.0;
+public:
+    ROS2NodeSimulator(const std::string&amp; name) : node_name_(name) {}
+
+    // Đăng ký Callback lắng nghe tin nhắn vế tốc độ
+    void subscribe_cmd_vel(std::functional&lt;void(double)&gt; callback) {
+        std::cout &lt;&lt; "[" &lt;&lt; node_name_ &lt;&lt; "] Nhan tin nhan cmd_vel moi: 2.5 m/s\n";
+        callback(2.5); // Gọi callback function
+    }
+
+    void setup_subscribers() {
+        // LAMBDA DÙNG [this] ĐỂ CẬP NHẬT BIẾN THÀNH VIÊN CỦA CLASS!
+        subscribe_cmd_vel([this](double msg_speed) {
+            this-&gt;target_speed_ = msg_speed;
+            std::cout &lt;&lt; "  --> Callback thuc thi! Cap nhat target_speed = " 
+                      &lt;&lt; this-&gt;target_speed_ &lt;&lt; " m/s trong node " &lt;&lt; node_name_ &lt;&lt; "\n";
+        });
+    }
+};
+
+int main() {
+    ROS2NodeSimulator node("motion_controller_node");
+    node.setup_subscribers();
+    return 0;
+}</code></pre>
+
+<h2>5.3 Class Template: Bộ lọc LowPassFilter dùng chung mọi kiểu dữ liệu</h2>
+<pre><code>#include &lt;iostream&gt;
+
+// Class Template cho phép lọc cả float, double, hoặc Vector3D
+template &lt;typename T&gt;
+class LowPassFilter {
+private:
+    T alpha_;      // Hệ số lọc (0.0 < alpha < 1.0)
+    T prev_output_;
+    bool initialized_ = false;
+public:
+    LowPassFilter(T alpha) : alpha_(alpha), prev_output_(0) {}
+
+    T filter(T input) {
+        if (!initialized_) {
+            prev_output_ = input;
+            initialized_ = true;
+            return input;
+        }
+        // Công thức bộ lọc thông thấp: y[k] = alpha * x[k] + (1 - alpha) * y[k-1]
+        T output = alpha_ * input + (static_cast&lt;T&gt;(1.0) - alpha_) * prev_output_;
+        prev_output_ = output;
+        return output;
+    }
+};
+
+int main() {
+    // Dùng cho kiểu double (đọc cảm biến vận tốc)
+    LowPassFilter&lt;double&gt; vel_filter(0.2); // alpha = 0.2
+    
+    std::cout &lt;&lt; "Doc nhieu IMU: 10.0 -> Filtered: " &lt;&lt; vel_filter.filter(10.0) &lt;&lt; std::endl;
+    std::cout &lt;&lt; "Doc nhieu IMU: 15.0 -> Filtered: " &lt;&lt; vel_filter.filter(15.0) &lt;&lt; std::endl;
+    std::cout &lt;&lt; "Doc nhieu IMU: 12.0 -> Filtered: " &lt;&lt; vel_filter.filter(12.0) &lt;&lt; std::endl;
+
+    return 0;
+}</code></pre>
+
+<!-- PHẦN 6 -->
+<div class="part-header-intro" id="part6">
+    <h1>PHẦN 6 — DỰ ÁN THỰC HÀNH TUẦN 2</h1>
+    <p>Viết Bộ Điều Khiển PID Hoàn Chỉnh Bằng C++17 Chuẩn Kỹ Thuật (Clean Code)</p>
+</div>
+
+<div class="step-card">
+    <span class="step-number">🛠️</span>
+    <h3>Dự án nhỏ: Module PIDController chuẩn C++17 dùng cho Robot thật</h3>
+    <pre><code>#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+
+class PIDController {
+private:
+    double kp_, ki_, kd_;
+    double dt_;
+    double min_output_, max_output_;
+    double prev_error_ = 0.0;
+    double integral_ = 0.0;
+
+public:
+    PIDController(double kp, double ki, double kd, double dt, 
+                  double min_out, double max_out)
+        : kp_(kp), ki_(ki), kd_(kd), dt_(dt), 
+          min_output_(min_out), max_output_(max_out) {}
+
+    // Reset bộ tích phân khi chuyển chế độ
+    void reset() {
+        prev_error_ = 0.0;
+        integral_ = 0.0;
+    }
+
+    double compute(double setpoint, double measurement) {
+        double error = setpoint - measurement;
+        
+        // Tích phân
+        integral_ += error * dt_;
+        
+        // Vi phân
+        double derivative = (error - prev_error_) / dt_;
+        
+        // Tính tổng tín hiệu điều khiển U
+        double output = kp_ * error + ki_ * integral_ + kd_ * derivative;
+        
+        // Bão hòa tín hiệu đầu ra (Saturation Limit) để bảo vệ động cơ
+        double clamped_output = std::clamp(output, min_output_, max_output_);
+        
+        // Chống bão hòa bộ tích phân (Anti-windup cơ bản)
+        if (output != clamped_output && ki_ != 0.0) {
+            integral_ -= error * dt_; // Khôi phục trạng thái tích phân
+        }
+
+        prev_error_ = error;
+        return clamped_output;
+    }
+};
+
+int main() {
+    // Khởi tạo PID điều khiển vận tốc xe: Kp=1.5, Ki=0.2, Kd=0.05, dt=0.01s (100Hz)
+    // Output giới hạn từ -12V đến +12V
+    PIDController speed_pid(1.5, 0.2, 0.05, 0.01, -12.0, 12.0);
+
+    double target_speed = 5.0; // m/s
+    double current_speed = 0.0; // m/s
+
+    std::cout &lt;&lt; "--- MO PHONG VÒNG LẶP ĐIỀU KHIỂN ENCODER (10 BƯỚC) ---\n";
+    for (int step = 1; step &lt;= 10; ++step) {
+        double u_voltage = speed_pid.compute(target_speed, current_speed);
+        
+        // Mô phỏng đáp ứng động cơ (Vật lý đơn giản)
+        current_speed += (u_voltage * 0.4) * 0.01;
+
+        std::printf("Step %2d | Target: %.2f m/s | Current: %.2f m/s | Output U: %6.2f V\n", 
+                    step, target_speed, current_speed, u_voltage);
+    }
+    return 0;
+}</code></pre>
+</div>
+
+<!-- PHẦN 7 -->
+<div class="part-header-purple" id="part7">
+    <h1>PHẦN 7 — TỔNG KẾT TUẦN 2 &amp; BỘ QUIZ TỰ KIỂM TRA</h1>
+    <p>Kiểm tra toàn bộ kiến thức Tuần 2 — Có đáp án giải thích chi tiết</p>
+</div>
+
+<div class="quiz-section">
+    <h3>🚦 Bộ Quiz Tự Kiểm Tra C++ Tuần 2</h3>
+    
+    <div class="quiz-question">
+        <p><strong>Q2.1</strong> Trong C++, sự khác biệt giữa <code>unique_ptr</code> và <code>shared_ptr</code> là gì? Khi nào NÊN dùng <code>unique_ptr</code> mặc định?</p>
+        <div class="answer-section">
+            <span class="box-title">✅ Đáp án giải thích</span>
+            <p><code>unique_ptr</code> quản lý độc quyền đối tượng (không copy được, chỉ move). <code>shared_ptr</code> cho phép nhiều con trỏ chia sẻ quyền sở hữu bằng Reference Counting. NÊN dùng <code>unique_ptr</code> làm mặc định vì nó có <strong>Zero Overhead</strong> (hiệu năng bằng hệt con trỏ thô), an toàn và thể hiện rõ quyền sở hữu duy nhất.</p>
+        </div>
+    </div>
+
+    <div class="quiz-question">
+        <p><strong>Q2.2</strong> Tại sao mọi destructor của Base Class trong Hướng đối tượng C++ bắt buộc phải có từ khóa <code>virtual</code>?</p>
+        <div class="answer-section">
+            <span class="box-title">✅ Đáp án giải thích</span>
+            <p>Khi ta xóa một đối tượng lớp con thông qua con trỏ lớp cha (vd: <code>AbstractController* ptr = new PIDController(); delete ptr;</code>), nếu destructor không phải <code>virtual</code>, chương trình chỉ gọi destructor của <code>AbstractController</code>. Destructor của <code>PIDController</code> bị bỏ qua, gây rò rỉ bộ nhớ (Memory Leak) các tài nguyên mà lớp con đang nắm giữ.</p>
+        </div>
+    </div>
+
+    <div class="quiz-question">
+        <p><strong>Q2.3</strong> Lambda capture <code>[this]</code> và <code>[&amp;]</code> khác nhau thế nào trong ngữ cảnh đăng ký Callback ROS2?</p>
+        <div class="answer-section">
+            <span class="box-title">✅ Đáp án giải thích</span>
+            <p><code>[this]</code> chỉ bắt con trỏ đại diện cho đối tượng class hiện tại, cho phép Lambda truy cập biến thành viên và phương thức của class một cách an toàn. <code>[&amp;]</code> bắt TẤT CẢ các biến cục bộ trong scope theo tham chiếu — nguy hiểm nếu Callback được thực thi bất đồng bộ sau khi các biến cục bộ đó đã bị hủy khỏi Stack.</p>
+        </div>
+    </div>
+
+    <div class="quiz-question">
+        <p><strong>Q2.4</strong> Việc không gọi <code>reserve()</code> trước khi <code>push_back()</code> hàng triệu phần tử vào <code>std::vector</code> gây ra nguy cơ gì cho hệ thống điều khiển Real-time?</p>
+        <div class="answer-section">
+            <span class="box-title">✅ Đáp án giải thích</span>
+            <p>Khi vector vượt quá sức chứa (capacity), nó phải xin hệ điều hành cấp phát một vùng nhớ mới lớn hơn, copy toàn bộ phần tử cũ sang và xóa vùng nhớ cũ. Quá trình này làm mất tính xác định thời gian, gây ra các cú giật lag ngẫu nhiên (Latency Spikes) vi phạm điều kiện thời gian thực (Real-time Requirement).</p>
+        </div>
+    </div>
+</div>
+
+<div class="summary-box">
+    <h2>📌 Tổng Kết Tuần 2 — C++ Hiện Đại Thành Thạo</h2>
+    <ul>
+        <li>✅ Hiểu sâu bản chất bộ nhớ: Stack vs Heap, tránh rò rỉ bộ nhớ hoàn toàn nhờ RAII.</li>
+        <li>✅ Làm chủ <code>unique_ptr</code> và <code>shared_ptr</code> để quản lý đối tượng tự động không cần <code>delete</code>.</li>
+        <li>✅ Thiết kế kiến trúc Hướng đối tượng chuẩn mực với Virtual Destructor và Pure Virtual Class Interface.</li>
+        <li>✅ Tối ưu hiệu năng STL với <code>reserve()</code> cho <code>std::vector</code>.</li>
+        <li>✅ Đập tan nỗi sợ Template &amp; Lambda, sẵn sàng gõ Callback ROS2 thành thạo ở Tuần 7.</li>
+    </ul>
+</div>
+
+</body>
+</html>
