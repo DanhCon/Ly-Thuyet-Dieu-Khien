@@ -328,6 +328,43 @@ footer {
     .definition, .theorem, .important-note, .example-box, .analogy-box, .warning-box, .cheat-sheet, .quiz-section, .answer-section, .step-card, .toc, .goal-box { break-inside: avoid; }
     body { background: #fff; }
 }
+
+/* --- STYLING CHO HOAT DONG DONG LUC HOC MOTIVATION BOX --- */
+.motivation-box {
+    background: linear-gradient(135deg, #eff6ff, #f0f9ff);
+    border: 1px solid #bfdbfe;
+    border-left: 6px solid #2563eb;
+    border-radius: 10px;
+    padding: 18px 22px;
+    margin: 18px 0 22px;
+    font-size: 0.96em;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.08);
+}
+.motivation-title {
+    font-weight: 700;
+    color: #1e40af;
+    font-size: 1.05em;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.motivation-list {
+    margin: 6px 0 6px 22px;
+    color: #1e293b;
+}
+.motivation-list li {
+    margin: 4px 0;
+}
+.danger-tag {
+    color: #dc2626;
+    font-weight: 600;
+}
+.app-tag {
+    color: #16a34a;
+    font-weight: 600;
+}
+
 </style>
 </head>
 <body>
@@ -374,6 +411,15 @@ footer {
 <div class="part-header-intro" id="part0">
     <h1>PHẦN 0 — VÌ SAO C++ LÀ NGÔN NGỮ CỐT LÕI CỦA ROBOTICS?</h1>
     <p>Giải mã lý do 8/11 Job Descriptions Xe Tự Hành &amp; Robot gọi tên C++ hiện đại</p>
+</div>
+
+<div class="motivation-box">
+    <div class="motivation-title">💡 Ý NGHĨA &amp; MỤC ĐÍCH HỌC PHẦN 0: VÌ SAO PHẢI LÀ C++?</div>
+    <ul class="motivation-list">
+        <li><strong>🎯 Học để làm gì?</strong> Định hình tư duy kỹ sư C++ thời gian thực, hiểu rõ lý do 8/11 công ty Xe tự hành &amp; Robot bắt buộc gọi tên C++ hiện đại thay vì Python hay Java.</li>
+        <li><span class="app-tag">🚗 Ứng dụng thực tế:</span> Làm chủ bản chất CPU Cache Line (L1/L2/L3) để xử lý hàng triệu dữ liệu cảm biến mỗi giây không bị trễ microgiây nào.</li>
+        <li><span class="danger-tag">⚠️ Nếu không biết phần này:</span> Bạn sẽ lầm tưởng Python có thể làm mọi thứ trong Robotics, dẫn đến việc thiết kế sai kiến trúc hệ thống điều khiển làm robot bị dừng khựng bất ngờ do Garbage Collector thu gom rác.</li>
+    </ul>
 </div>
 
 <div class="definition">
@@ -433,6 +479,15 @@ footer {
 <div class="part-header" id="part1">
     <h1>PHẦN 1 — BỘ NHỚ, CON TRỎ, THAM CHIẾU &amp; CONST CORRECTNESS</h1>
     <p>Hiểu sâu Stack vs Heap · Memory Layout · Dangling Pointers · const correctness <span class="level-badge level-deep">🔬 CẦN HIỂU SÂU</span></p>
+</div>
+
+<div class="motivation-box">
+    <div class="motivation-title">💡 Ý NGHĨA &amp; MỤC ĐÍCH HỌC PHẦN 1: BỘ NHỚ, CON TRỎ &amp; CONST CORRECTNESS</div>
+    <ul class="motivation-list">
+        <li><strong>🎯 Học để làm gì?</strong> Quản lý bộ nhớ RAM trực tiếp, làm chủ ranh giới giữa Stack vs Heap và quy tắc vàng <code>const T&amp;</code> khi truyền tham số.</li>
+        <li><span class="app-tag">🚗 Ứng dụng thực tế:</span> Truyền mảng dữ liệu quét 360 tia LiDAR vào hàm xử lý mà không tốn chi phí CPU copy mảng ($0\text{ms}$ copy time), diệt sạch bug rò rỉ bộ nhớ.</li>
+        <li><span class="danger-tag">⚠️ Nếu không biết phần này:</span> Chương trình xe tự hành của bạn sẽ liên tục bị sập nguồn/dừng đột ngột với lỗi kinh hoàng <strong>Segmentation Fault</strong> do con trỏ bị hoang (Dangling Pointer) hoặc tràn bộ nhớ Stack.</li>
+    </ul>
 </div>
 
 <div class="goal-box">
@@ -733,6 +788,15 @@ int main() {
     <p>Encapsulation · Struct vs Class · Interface · Polymorphism · Virtual Destructor · Rule of 5 · Operator Overloading <span class="level-badge level-deep">🔬 CẦN HIỂU SÂU</span></p>
 </div>
 
+<div class="motivation-box">
+    <div class="motivation-title">💡 Ý NGHĨA &amp; MỤC ĐÍCH HỌC PHẦN 2: LẬP TRÌNH HƯỚNG ĐỐI TƯỢNG (OOP) THỰC CHIẾN</div>
+    <ul class="motivation-list">
+        <li><strong>🎯 Học để làm gì?</strong> Thiết kế hệ thống phần mềm modular hóa bằng Encapsulation (Đóng gói), Inheritance (Kế thừa) và Polymorphism (Đa hình).</li>
+        <li><span class="app-tag">🚗 Ứng dụng thực tế:</span> Tạo Interface chung <code>AbstractController</code> để hoán đổi linh hoạt giữa các thuật toán bám đường <strong>Pure Pursuit, Stanley, MPC, LQR</strong> trong Nav2/F1TENTH mà không cần sửa code hệ thống chính.</li>
+        <li><span class="danger-tag">⚠️ Nếu không biết phần này:</span> Code của bạn sẽ bị rối như tơ vò (Spaghetti Code), mỗi lần thay đổi thuật toán điều khiển xe là phải đập đi xây lại toàn bộ dự án từ đầu.</li>
+    </ul>
+</div>
+
 <div class="goal-box">
     <strong>🎯 Mục đích:</strong> Kiến trúc Nav2 và ROS 2 (rclcpp) dựa hoàn toàn trên kế thừa và đa hình (Polymorphism). Học cách tạo Interface chung cho bộ điều khiển (Controller Base Class) giúp bạn hoán đổi giữa Pure Pursuit, Stanley, LQR, MPC mà không cần sửa code hệ thống chính.
 </div>
@@ -992,6 +1056,15 @@ int main() {
     <p>RAII Pattern · std::unique_ptr · std::shared_ptr · std::weak_ptr · shared_from_this · Lifecycle Node Pattern <span class="level-badge level-deep">🔬 CẦN HIỂU SÂU</span></p>
 </div>
 
+<div class="motivation-box">
+    <div class="motivation-title">💡 Ý NGHĨA &amp; MỤC ĐÍCH HỌC PHẦN 3: RAII &amp; SMART POINTERS CHUẨN ROS 2</div>
+    <ul class="motivation-list">
+        <li><strong>🎯 Học để làm gì?</strong> Tự động hóa quản lý bộ nhớ, loại bỏ hoàn toàn việc gõ từ khóa <code>new</code> và <code>delete</code> thủ công bằng RAII và Smart Pointers (C++17).</li>
+        <li><span class="app-tag">🚗 Ứng dụng thực tế:</span> Viết các ROS 2 Nodes (`rclcpp::Node`), chia sẻ dữ liệu Costmap 2D giữa Global Planner và Local Planner bằng `std::shared_ptr`, và triển khai Lifecycle Node State Machine.</li>
+        <li><span class="danger-tag">⚠️ Nếu không biết phần này:</span> Phần mềm robot chạy liên tục vài tiếng sẽ bị rò rỉ bộ nhớ (Memory Leak), làm kiệt huệ dung lượng RAM và khiến hệ điều hành sập hoàn toàn (OS Out-Of-Memory Crash).</li>
+    </ul>
+</div>
+
 <div class="goal-box">
     <strong>🎯 Mục đích:</strong> Trong C++ hiện đại (C++17 trở lên), bạn <strong>hạn chế tối đa gõ từ khóa `new` và `delete` thủ công</strong>. Kỹ thuật RAII (Resource Acquisition Is Initialization) kết hợp với Smart Pointers giúp chương trình robot tự động giải phóng bộ nhớ ngay khi đối tượng ra khỏi scope, chống Memory Leak 100%.
 </div>
@@ -1177,6 +1250,15 @@ int main() {
 <div class="part-header-orange" id="part4">
     <h1>PHẦN 4 — CẤU TRÚC DỮ LIỆU STL CONTAINERS TOÀN DIỆN</h1>
     <p>std::array · std::vector · std::deque · std::unordered_map · std::priority_queue · Thuật toán A* &amp; Costmap Inflation <span class="level-badge level-apply">🔧 CHỈ CẦN CÔNG THỨC</span></p>
+</div>
+
+<div class="motivation-box">
+    <div class="motivation-title">💡 Ý NGHĨA &amp; MỤC ĐÍCH HỌC PHẦN 4: CẤU TRÚC DỮ LIỆU STL CONTAINERS TOÀN DIỆN</div>
+    <ul class="motivation-list">
+        <li><strong>🎯 Học để làm gì?</strong> Chọn đúng cấu trúc dữ liệu tối ưu nhất cho từng dạng dữ liệu cảm biến và thuật toán Robot.</li>
+        <li><span class="app-tag">🚗 Ứng dụng thực tế:</span> Dùng `std::array` cho State Vector $[x,y,\theta,v]$ (100% Real-time safe), `std::deque` cho bộ lọc IMU Sliding Window, `std::priority_queue` cho thuật toán quy hoạch đường đi **A* Path Planner**, và 1D `std::vector` cho Nav2 Costmap Grid.</li>
+        <li><span class="danger-tag">⚠️ Nếu không biết phần này:</span> Chọn sai Container (vd: dùng vector xóa đầu mảng hoặc list tìm kiếm nhị phân) sẽ làm thuật toán tìm đường A* bị chậm gấp 50-100 lần, làm trễ vòng lặp điều khiển xe.</li>
+    </ul>
 </div>
 
 <div class="goal-box">
@@ -1400,6 +1482,15 @@ int main() {
     <p>sort · find_if · transform · accumulate · clamp · lower_bound · remove_if · min_element <span class="level-badge level-deep">🔬 CẦN HIỂU SÂU</span></p>
 </div>
 
+<div class="motivation-box">
+    <div class="motivation-title">💡 Ý NGHĨA &amp; MỤC ĐÍCH HỌC PHẦN 5: THUẬT TOÁN STL ALGORITHMS THỰC CHIẾN</div>
+    <ul class="motivation-list">
+        <li><strong>🎯 Học để làm gì?</strong> Thay thế các vòng lặp `for` thủ công rườm rà bằng các thuật toán chuẩn hóa cao cấp đã được tối ưu SIMD ở cấp độ trình biên dịch.</li>
+        <li><span class="app-tag">🚗 Ứng dụng thực tế:</span> Lọc bỏ tia LiDAR nhiễu/NaN bằng Erase-Remove (`remove_if`), kẹp bão hòa góc lái xe F1TENTH bằng `std::clamp`, và tìm Waypoint theo mốc thời gian bằng tìm kiếm nhị phân `lower_bound`.</li>
+        <li><span class="danger-tag">⚠️ Nếu không biết phần này:</span> Code rườm rà, dễ phát sinh lỗi lệch chỉ số mảng (Off-by-one errors) gây crash ngẫu nhiên khi xử lý mảng mây điểm LiDAR.</li>
+    </ul>
+</div>
+
 <div class="goal-box">
     <strong>🎯 Mục đích:</strong> Đừng viết lại vòng lặp <code>for</code> thủ công! Sử dụng STL Algorithms giúp code ngắn hơn 50%, tối ưu SIMD vectorization và loại bỏ hoàn toàn các lỗi lệch chỉ số mảng (Off-by-one errors).
 </div>
@@ -1593,6 +1684,15 @@ int main() {
     <p>Lambda Captures [this] · std::function · std::bind · Class Template <span class="level-badge level-deep">🔬 CẦN HIỂU SÂU</span></p>
 </div>
 
+<div class="motivation-box">
+    <div class="motivation-title">💡 Ý NGHĨA &amp; MỤC ĐÍCH HỌC PHẦN 6: TEMPLATES &amp; LAMBDA EXPRESSIONS (ROS 2 CALLBACKS)</div>
+    <ul class="motivation-list">
+        <li><strong>🎯 Học để làm gì?</strong> Làm chủ Lập trình tổng quát (Generic Programming) và Hàm ẩn danh (Lambda Expressions) có khả năng bắt biến ngữ cảnh.</li>
+        <li><span class="app-tag">🚗 Ứng dụng thực tế:</span> Đăng ký các hàm Callback bất đồng bộ cho Subscriber/Timer trong ROS 2 (`rclcpp`) bằng cú pháp `[this](const auto msg)`, viết class template `LowPassFilter<T>` dùng chung cho cả `float` và `double`.</li>
+        <li><span class="danger-tag">⚠️ Nếu không biết phần này:</span> Bạn sẽ không thể đọc hiểu hay tự viết được bất kỳ ROS 2 Topic Subscriber hay Service Callback nào trong codebase công nghiệp.</li>
+    </ul>
+</div>
+
 <div class="goal-box">
     <strong>🎯 Mục đích:</strong> Lambda và <code>std::function</code> là nền tảng của cơ chế Asynchronous Callbacks trong ROS 2. Làm chủ Lambda giúp bạn viết code Subscriber, Timer và Action Handler cực kỳ gọn gàng.
 </div>
@@ -1751,6 +1851,15 @@ int main() {
     <p>Structured Bindings · enum class · std::optional · std::string_view · EKF State Estimator <span class="level-badge level-apply">🔧 CHỈ CẦN CÔNG THỨC</span></p>
 </div>
 
+<div class="motivation-box">
+    <div class="motivation-title">💡 Ý NGHĨA &amp; MỤC ĐÍCH HỌC PHẦN 7: MODERN C++17 / C++20 FEATURES CẦN THIẾT</div>
+    <ul class="motivation-list">
+        <li><strong>🎯 Học để làm gì?</strong> Áp dụng các chuẩn C++ mới nhất giúp code clean, hiện đại, an toàn kiểu dữ liệu và nâng cao hiệu suất thực thi.</li>
+        <li><span class="app-tag">🚗 Ứng dụng thực tế:</span> Trích xuất tọa độ Robot qua Structured Bindings (`auto [x, y, yaw]`), kiểm soát giá trị trả về có/không tồn tại bằng `std::optional`, quan sát chuỗi `std::string_view` không tốn copy, và triển khai **Extended Kalman Filter (EKF 2D State Estimator)**.</li>
+        <li><span class="danger-tag">⚠️ Nếu không biết phần này:</span> Bạn phải dùng các cờ lỗi giả nguy hiểm kiểu C (như trả về `-1.0` hoặc con trỏ `NULL`), dễ gây sai số nghiêm trọng khi tính toán bộ lọc Kalman định vị xe.</li>
+    </ul>
+</div>
+
 <h2>7.1 Các Tính Năng Hiện Đại Giúp Code Clean &amp; An Toàn</h2>
 
 <div class="step-card">
@@ -1902,6 +2011,15 @@ int main() {
     <p>Lvalue vs Rvalue · std::move · Move Constructor · Zero-Copy PointCloud <span class="level-badge level-deep">🔬 CẦN HIỂU SÂU</span></p>
 </div>
 
+<div class="motivation-box">
+    <div class="motivation-title">💡 Ý NGHĨA &amp; MỤC ĐÍCH HỌC PHẦN 8: MOVE SEMANTICS &amp; QUẢN LÝ SỞ HỮU BỘ NHỚ ZERO-COPY</div>
+    <ul class="motivation-list">
+        <li><strong>🎯 Học để làm gì?</strong> Hiểu cơ chế di chuyển tài nguyên (Move) thay vì sao chép (Copy) thông qua Lvalue và Rvalue references.</li>
+        <li><span class="app-tag">🚗 Ứng dụng thực tế:</span> Truyền mảng mây điểm LiDAR $20\text{ MB}$ hoặc Frame hình ảnh HD 4K giữa các Thread/Node với chi phí $0\text{ms}$ ($0\text{ bytes}$ memory copy time).</li>
+        <li><span class="danger-tag">⚠️ Nếu không biết phần này:</span> Vòng lặp nhận dữ liệu cảm biến Camera/LiDAR của bạn sẽ bị sụt giảm FPS trầm trọng do CPU phải liên tục copy dữ liệu dung lượng khổng lồ.</li>
+    </ul>
+</div>
+
 <div class="definition">
     <span class="box-title">🎯 Khái niệm Move Semantics (C++11/17)</span>
     <p>Khi bạn truyền một mảng mây điểm LiDAR ($20\text{ MB}$) vào hàm, thay vì <strong>Copy</strong> toàn bộ $20\text{ MB}$ bộ nhớ (mất $5\text{ms}$ CPU), <code>std::move</code> cho phép **"Chuyển giao quyền sở hữu con trỏ"** từ biến này sang biến khác trong $0.0001\text{ms}$ ($0\text{ bytes}$ memory copy)!</p>
@@ -1973,6 +2091,15 @@ int main() {
 <div class="part-header-danger" id="part9">
     <h1>PHẦN 9 — LẬP TRÌNH ĐA LUỒNG (MULTI-THREADING) CƠ BẢN</h1>
     <p>std::thread · std::mutex · std::lock_guard · std::atomic · Lock-free SPSC Queue · ROS 2 Callback Groups <span class="level-badge level-deep">🔬 CẦN HIỂU SÂU</span></p>
+</div>
+
+<div class="motivation-box">
+    <div class="motivation-title">💡 Ý NGHĨA &amp; MỤC ĐÍCH HỌC PHẦN 9: LẬP TRÌNH ĐA LUỒNG (MULTI-THREADING) &amp; CONCURRENCY</div>
+    <ul class="motivation-list">
+        <li><strong>🎯 Học để làm gì?</strong> Làm chủ xử lý song song nhiều tác vụ đồng thời trên CPU đa nhân mà vẫn bảo vệ tuyệt đối dữ liệu dùng chung (Shared Data).</li>
+        <li><span class="app-tag">🚗 Ứng dụng thực tế:</span> Chạy luồng đọc IMU song song với vòng lặp điều khiển $100\text{ Hz}$, áp dụng mô hình **Lock-Free SPSC Queue**, và cấu hình ROS 2 Callback Groups (`MutuallyExclusive` vs `Reentrant`) trong `MultiThreadedExecutor`.</li>
+        <li><span class="danger-tag">⚠️ Nếu không biết phần này:</span> Chương trình xe tự hành của bạn sẽ bị đơ (Deadlock) hoặc bị xung đột dữ liệu ngầm (Race Condition) khiến xe đánh lái hỗn loạn bất ngờ.</li>
+    </ul>
 </div>
 
 <div class="goal-box">
@@ -2120,6 +2247,15 @@ int main() {
     <p>std::fstream · std::stringstream · Parse CSV Waypoints · Log Data <span class="level-badge level-apply">🔧 CHỈ CẦN CÔNG THỨC</span></p>
 </div>
 
+<div class="motivation-box">
+    <div class="motivation-title">💡 Ý NGHĨA &amp; MỤC ĐÍCH HỌC PHẦN 10: XỬ LÝ FILE I/O &amp; CHUỖI DỮ LIỆU WAYPOINT</div>
+    <ul class="motivation-list">
+        <li><strong>🎯 Học để làm gì?</strong> Giao tiếp đọc/ghi dữ liệu từ file đĩa cứng vào chương trình C++ và ngược lại.</li>
+        <li><span class="app-tag">🚗 Ứng dụng thực tế:</span> Parse (phân tích) file CSV chứa danh sách Waypoint quỹ đạo đường chạy `[x, y, yaw, velocity]` nạp vào xe F1TENTH, ghi log biến PID ra file `.csv` để phân tích đồ thị đáp ứng bước trong Python.</li>
+        <li><span class="danger-tag">⚠️ Nếu không biết phần này:</span> Xe của bạn không thể tự nạp bản đồ đường chạy từ ngoài vào và bạn không thể trích xuất dữ liệu nghiệm thu thuật toán.</li>
+    </ul>
+</div>
+
 <p>Kỹ sư Robot thường xuyên phải đọc file CSV chứa danh sách Waypoint quỹ đạo <code>[x, y, yaw, velocity]</code> được tạo bởi Python hoặc MATLAB để truyền cho bộ điều khiển C++.</p>
 
 <pre><code>#include &lt;iostream&gt;
@@ -2212,6 +2348,15 @@ int main() {
 <div class="part-header-intro" id="part11">
     <h1>PHẦN 11 — DỰ ÁN THỰC HÀNH TỔNG HỢP TUẦN 2</h1>
     <p>Dự án 1: PID Controller C++17 · Dự án 2: Pure Pursuit Waypoint Tracker Simulator</p>
+</div>
+
+<div class="motivation-box">
+    <div class="motivation-title">💡 Ý NGHĨA &amp; MỤC ĐÍCH HỌC PHẦN 11: DỰ ÁN THỰC HÀNH TỔNG HỢP TUẦN 2</div>
+    <ul class="motivation-list">
+        <li><strong>🎯 Học để làm gì?</strong> Tổng hợp toàn bộ các kỹ năng C++ ở 10 phần trước để xây dựng 2 sản phẩm phần mềm hoàn chỉnh chạy mô phỏng thực tế.</li>
+        <li><span class="app-tag">🚗 Ứng dụng thực tế:</span> **Dự án 1:** Bộ điều khiển vận tốc động cơ PID C++17 chuẩn công nghiệp (Anti-windup + Saturation). **Dự án 2:** Pure Pursuit Trajectory Tracker Engine bám đường cho xe mô hình F1TENTH.</li>
+        <li><span class="danger-tag">⚠️ Nếu không biết phần này:</span> Bạn chỉ nắm các mảnh ghép lý thuyết rời rạc mà không biết cách xâu chuỗi chúng thành một phần mềm Robot vận hành thực sự.</li>
+    </ul>
 </div>
 
 <div class="step-card">
@@ -2333,6 +2478,15 @@ int main() {
 <div class="part-header-purple" id="part12">
     <h1>PHẦN 12 — BỘ QUIZ TỔNG KẾT TOÀN DIỆN &amp; CHEAT SHEET</h1>
     <p>15+ câu quiz tự kiểm tra năng lực + Cheat Sheet tóm tắt C++ Modern</p>
+</div>
+
+<div class="motivation-box">
+    <div class="motivation-title">💡 Ý NGHĨA &amp; MỤC ĐÍCH HỌC PHẦN 12: BỘ QUIZ TỔNG KẾT &amp; CHEAT SHEET</div>
+    <ul class="motivation-list">
+        <li><strong>🎯 Học để làm gì?</strong> Tự kiểm tra, đánh giá mức độ thấu hiểu kiến thức C++ và sở hữu bảng tra cứu nhanh khi làm dự án thực tế.</li>
+        <li><span class="app-tag">🚗 Ứng dụng thực tế:</span> Tự tin trả lời chính xác 100% các câu hỏi phỏng vấn vị trí **C++ Robotics / Autonomous Vehicle Software Engineer**, tra cứu nhanh cú pháp chuẩn khi gõ code hàng ngày.</li>
+        <li><span class="danger-tag">⚠️ Nếu không biết phần này:</span> Bạn sẽ không đánh giá được mình còn hổng kiến thức ở đâu và mất nhiều thời gian tra cứu cú pháp khi vào làm dự án thực tế.</li>
+    </ul>
 </div>
 
 <div class="quiz-section">
