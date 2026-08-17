@@ -35,14 +35,16 @@ Kho tài liệu tự học toàn diện về **Lý thuyết Điều khiển Tố
 | # | Tài liệu | Link Xem Trực Tiếp (Website) |
 |---|----------|-------------------------------|
 | 12 | **Tuần 1: Môi Trường Linux, Git, Docker** | 🌐 [Xem trang web](https://danhcon.github.io/Ly-Thuyet-Dieu-Khien/Tuan1_NenMong_MoiTruong_Linux_Git_Docker.html) |
-| 13 | **C++ Hiện Đại cho Control & AV** | 🌐 [Xem trang web](https://danhcon.github.io/Ly-Thuyet-Dieu-Khien/CPP_HienDai_Control_AV_ToanTap.html) |
-| 14 | **LQR Thực Chiến Robot Thật** | 🌐 [Xem trang web](https://danhcon.github.io/Ly-Thuyet-Dieu-Khien/LQR_ThucChien_RobotThat.html) |
+| 13 | **Tuần 2: C++ Hiện Đại cho Robotics & Control** | 🌐 [Xem trang web](https://danhcon.github.io/Ly-Thuyet-Dieu-Khien/Tuan2_CPP_HienDai_Robotics_Control.html) |
+| 14 | **C++ Hiện Đại cho Control & AV (Tổng Quan)** | 🌐 [Xem trang web](https://danhcon.github.io/Ly-Thuyet-Dieu-Khien/CPP_HienDai_Control_AV_ToanTap.html) |
+| 15 | **LQR Thực Chiến Robot Thật** | 🌐 [Xem trang web](https://danhcon.github.io/Ly-Thuyet-Dieu-Khien/LQR_ThucChien_RobotThat.html) |
 
 ### ✏️ Bài Tập & Kiểm Tra
 | # | Tài liệu | Link Xem Trực Tiếp (Website) |
 |---|----------|-------------------------------|
-| 15 | **Bài Tập LQR Toàn Tập** | 🌐 [Xem trang web](https://danhcon.github.io/Ly-Thuyet-Dieu-Khien/BaiTap_LQR_ToanTap.html) |
-| 16 | **Bài Kiểm Tra Kiến Thức Toàn Tập** | 🌐 [Xem trang web](https://danhcon.github.io/Ly-Thuyet-Dieu-Khien/BaiKiemTra_KienThuc_ToanTap.html) |
+| 16 | **Bài Tập Test & Đánh Giá Tuần 1 (Linux, Git, Docker)** | 🌐 [Xem trang web](https://danhcon.github.io/Ly-Thuyet-Dieu-Khien/BaiTap_Test_Tuan1_Linux_Git_Docker.html) |
+| 17 | **Bài Tập LQR Toàn Tập** | 🌐 [Xem trang web](https://danhcon.github.io/Ly-Thuyet-Dieu-Khien/BaiTap_LQR_ToanTap.html) |
+| 18 | **Bài Kiểm Tra Kiến Thức Toàn Tập** | 🌐 [Xem trang web](https://danhcon.github.io/Ly-Thuyet-Dieu-Khien/BaiKiemTra_KienThuc_ToanTap.html) |
 
 ---
 
