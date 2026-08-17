@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tuần 2 — C++ Hiện Đại Cho Robotics & Control (Toàn Tập Chi Tiết)</title>
+<title>Tuần 2 — C++ Hiện Đại Cho Robotics & Control (Tài Liệu Chi Tiết Toàn Tập 2500+ Dòng)</title>
 <script>
 window.MathJax = {
     tex: { inlineMath: [['$','$']], displayMath: [['$$','$$']], tags: 'ams' },
@@ -30,18 +30,27 @@ window.MathJax = {
     --yellow-bg: #fffbeb;
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
+html {
+    scroll-behavior: smooth;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+}
 body {
     font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
     background: var(--bg);
     color: var(--text);
     line-height: 1.75;
-    max-width: 1050px;
+    max-width: 1080px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 25px;
+}
+::selection {
+    background: var(--accent);
+    color: #ffffff;
 }
 h1, h2, h3, h4 { color: var(--primary); line-height: 1.4; }
-h2 { font-size: 1.45em; margin: 28px 0 12px; border-bottom: 2px solid var(--accent); padding-bottom: 6px; }
-h3 { font-size: 1.2em; margin: 22px 0 10px; }
+h2 { font-size: 1.48em; margin: 30px 0 14px; border-bottom: 2px solid var(--accent); padding-bottom: 6px; }
+h3 { font-size: 1.22em; margin: 24px 0 10px; color: var(--accent-light); }
 p { margin: 10px 0; text-align: justify; }
 ul, ol { margin: 10px 0 10px 28px; }
 li { margin: 6px 0; }
@@ -51,18 +60,18 @@ strong { color: var(--primary); }
 table.table {
     width: 100%;
     border-collapse: collapse;
-    margin: 16px 0;
+    margin: 18px 0;
     font-size: 0.95em;
 }
 .table th {
     background: var(--primary);
     color: #fff;
-    padding: 10px 12px;
+    padding: 11px 13px;
     text-align: left;
     border: 1px solid var(--primary);
 }
 .table td {
-    padding: 9px 12px;
+    padding: 10px 13px;
     border: 1px solid var(--border);
     vertical-align: top;
 }
@@ -70,10 +79,10 @@ table.table {
 pre {
     background: var(--code-bg);
     color: #e2e8f0;
-    padding: 14px 16px;
+    padding: 16px 18px;
     border-radius: 8px;
     overflow-x: auto;
-    margin: 14px 0;
+    margin: 16px 0;
     font-size: 0.9em;
     line-height: 1.6;
 }
@@ -89,33 +98,33 @@ pre code { background: none; color: inherit; padding: 0; }
 .ascii-box {
     background: #0f172a;
     color: #38bdf8;
-    padding: 16px;
+    padding: 18px;
     border-radius: 8px;
     font-family: Consolas, 'Fira Code', monospace;
     font-size: 0.85em;
     white-space: pre;
     overflow-x: auto;
-    margin: 14px 0;
-    border-left: 4px solid var(--accent);
+    margin: 16px 0;
+    border-left: 5px solid var(--accent);
 }
 .cover-page {
     background: linear-gradient(135deg, #0f172a, #1e293b);
     color: #fff;
     text-align: center;
-    padding: 70px 30px;
-    border-radius: 12px;
-    margin-bottom: 30px;
+    padding: 75px 30px;
+    border-radius: 14px;
+    margin-bottom: 35px;
 }
-.cover-page h1 { color: #fff; font-size: 2.2em; margin-bottom: 10px; }
-.cover-page .subtitle { color: #94a3b8; font-size: 1.15em; margin-bottom: 18px; }
-.cover-page .tagline { color: #cbd5e1; font-size: 1.02em; max-width: 800px; margin: 0 auto 25px; }
-.cover-page .meta { color: #60a5fa; font-size: 0.95em; border-top: 1px solid #334155; padding-top: 18px; display: inline-block; }
+.cover-page h1 { color: #fff; font-size: 2.3em; margin-bottom: 12px; }
+.cover-page .subtitle { color: #94a3b8; font-size: 1.18em; margin-bottom: 20px; }
+.cover-page .tagline { color: #cbd5e1; font-size: 1.04em; max-width: 850px; margin: 0 auto 25px; }
+.cover-page .meta { color: #60a5fa; font-size: 0.95em; border-top: 1px solid #334155; padding-top: 20px; display: inline-block; }
 .toc {
     background: var(--card-bg);
     border: 1px solid var(--border);
     border-radius: 10px;
-    padding: 24px 30px;
-    margin: 20px 0;
+    padding: 26px 32px;
+    margin: 24px 0;
 }
 .toc h2 { margin-top: 0; border-bottom: 2px solid var(--accent); padding-bottom: 8px; }
 .toc ol { margin-left: 20px; }
@@ -125,50 +134,50 @@ pre code { background: none; color: inherit; padding: 0; }
     color: #fff;
     padding: 26px 28px;
     border-radius: 10px;
-    margin: 36px 0 20px;
+    margin: 40px 0 22px;
 }
-.part-header h1 { color: #fff; margin: 0 0 6px; font-size: 1.5em; border: none; }
+.part-header h1 { color: #fff; margin: 0 0 6px; font-size: 1.55em; border: none; }
 .part-header p { color: #bfdbfe; margin: 0; }
 .part-header-intro {
     background: linear-gradient(135deg, #16a34a, #15803d);
     color: #fff;
     padding: 26px 28px;
     border-radius: 10px;
-    margin: 36px 0 20px;
+    margin: 40px 0 22px;
 }
-.part-header-intro h1 { color: #fff; margin: 0 0 6px; font-size: 1.5em; border: none; }
+.part-header-intro h1 { color: #fff; margin: 0 0 6px; font-size: 1.55em; border: none; }
 .part-header-intro p { color: #dcfce7; margin: 0; }
 .part-header-purple {
     background: linear-gradient(135deg, #7c3aed, #6d28d9);
     color: #fff;
     padding: 26px 28px;
     border-radius: 10px;
-    margin: 36px 0 20px;
+    margin: 40px 0 22px;
 }
-.part-header-purple h1 { color: #fff; margin: 0 0 6px; font-size: 1.5em; border: none; }
+.part-header-purple h1 { color: #fff; margin: 0 0 6px; font-size: 1.55em; border: none; }
 .part-header-purple p { color: #ddd6fe; margin: 0; }
 .part-header-orange {
     background: linear-gradient(135deg, #ea580c, #c2410c);
     color: #fff;
     padding: 26px 28px;
     border-radius: 10px;
-    margin: 36px 0 20px;
+    margin: 40px 0 22px;
 }
-.part-header-orange h1 { color: #fff; margin: 0 0 6px; font-size: 1.5em; border: none; }
+.part-header-orange h1 { color: #fff; margin: 0 0 6px; font-size: 1.55em; border: none; }
 .part-header-orange p { color: #fed7aa; margin: 0; }
 .part-header-danger {
     background: linear-gradient(135deg, #dc2626, #b91c1c);
     color: #fff;
     padding: 26px 28px;
     border-radius: 10px;
-    margin: 36px 0 20px;
+    margin: 40px 0 22px;
 }
-.part-header-danger h1 { color: #fff; margin: 0 0 6px; font-size: 1.5em; border: none; }
+.part-header-danger h1 { color: #fff; margin: 0 0 6px; font-size: 1.55em; border: none; }
 .part-header-danger p { color: #fecaca; margin: 0; }
 .definition, .theorem, .important-note, .example-box, .analogy-box, .warning-box, .cheat-sheet {
     border-radius: 10px;
-    padding: 18px 22px;
-    margin: 18px 0;
+    padding: 20px 24px;
+    margin: 20px 0;
 }
 .box-title {
     display: inline-block;
@@ -196,16 +205,16 @@ pre code { background: none; color: inherit; padding: 0; }
     background: var(--card-bg);
     border: 1px solid var(--border);
     border-radius: 10px;
-    padding: 20px 22px;
-    margin: 16px 0;
+    padding: 22px 24px;
+    margin: 18px 0;
     position: relative;
 }
 .step-number {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 34px;
-    height: 34px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     background: var(--accent);
     color: #fff;
@@ -213,22 +222,22 @@ pre code { background: none; color: inherit; padding: 0; }
     font-size: 1.05em;
     margin-bottom: 10px;
 }
-.quiz-section { background: var(--quiz-bg); border-radius: 10px; padding: 22px 24px; margin: 20px 0; }
+.quiz-section { background: var(--quiz-bg); border-radius: 10px; padding: 24px 26px; margin: 22px 0; }
 .quiz-section > h3 { margin-top: 0; }
 .quiz-question {
     background: var(--card-bg);
     border: 1px solid var(--border);
     border-left: 4px solid var(--accent);
     border-radius: 8px;
-    padding: 14px 18px;
-    margin: 14px 0;
+    padding: 16px 20px;
+    margin: 16px 0;
 }
 .answer-section {
     background: var(--answer-bg);
     border-left: 4px solid var(--success);
     border-radius: 8px;
-    padding: 12px 18px;
-    margin: 10px 0 16px;
+    padding: 14px 20px;
+    margin: 12px 0 18px;
 }
 .answer-section .box-title { background: var(--success); color: #fff; }
 .goal-box {
@@ -236,8 +245,8 @@ pre code { background: none; color: inherit; padding: 0; }
     border: 1px solid #fde68a;
     border-left: 5px solid var(--warning);
     border-radius: 8px;
-    padding: 12px 18px;
-    margin: 10px 0 14px;
+    padding: 14px 20px;
+    margin: 12px 0 16px;
     font-size: 0.95em;
 }
 .goal-box strong { color: #92400e; }
@@ -256,8 +265,8 @@ pre code { background: none; color: inherit; padding: 0; }
     background: var(--card-bg);
     border: 1px solid var(--border);
     border-radius: 10px;
-    padding: 16px 20px;
-    margin: 16px 0;
+    padding: 18px 22px;
+    margin: 18px 0;
     display: flex;
     flex-wrap: wrap;
     gap: 14px;
@@ -282,12 +291,37 @@ pre code { background: none; color: inherit; padding: 0; }
 .summary-box {
     background: linear-gradient(135deg, #0f172a, #1e293b);
     color: #fff;
-    padding: 30px 34px;
+    padding: 32px 36px;
     border-radius: 12px;
-    margin: 30px 0;
+    margin: 32px 0;
 }
 .summary-box h2 { color: #60a5fa; margin-top: 0; }
 .summary-box ul { color: #cbd5e1; }
+
+/* --- CSS BO BUNG SUNG DINH DANG THEM NHA --- */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+::-webkit-scrollbar-track {
+    background: #f1f5f9;
+}
+::-webkit-scrollbar-thumb {
+    background: #94a3b8;
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #64748b;
+}
+footer {
+    text-align: center;
+    padding: 20px 0;
+    margin-top: 40px;
+    border-top: 1px solid var(--border);
+    color: var(--text-secondary);
+    font-size: 0.9em;
+}
+
 @media print {
     .print-btn { display: none; }
     .part-header, .part-header-intro, .part-header-purple, .part-header-orange, .part-header-danger { page-break-before: always; }
@@ -301,37 +335,37 @@ pre code { background: none; color: inherit; padding: 0; }
 <button class="print-btn" onclick="window.print()">📄 Xuất PDF</button>
 
 <div class="cover-page">
-    <h1>⚡ Tuần 2 — C++ Hiện Đại Cho Robotics &amp; Control (Toàn Tập)</h1>
-    <div class="subtitle">OOP · RAII · Smart Pointers · STL Containers &amp; Algorithms · Template · Lambda · Modern C++17/20 · Move Semantics · Multi-threading · File I/O</div>
+    <h1>⚡ Tuần 2 — C++ Hiện Đại Cho Robotics &amp; Control (Toàn Tập Chi Tiết)</h1>
+    <div class="subtitle">12 Phần Đầy Đủ · OOP · RAII · Smart Pointers · STL Containers &amp; Algorithms · Template · Lambda · Modern C++17/20 · Move Semantics · Multi-threading · File I/O · 30+ Bài Tập</div>
     <div class="tagline">
-        Tài liệu học tập chuyên sâu chi tiết: Xây dựng nền tảng C++17/20 chuẩn công nghiệp cho Robotics, ROS 2 (rclcpp), Nav2, hệ thống nhúng thời gian thực và Xe tự hành (AV). Giải thích tận gốc bản chất với <strong>dự đoán code - mô phỏng thực tế - giải thích WHY - bài tập vận dụng</strong>.
+        Tài liệu tự học chuyên sâu chuẩn công nghiệp: Chuẩn bị nền tảng C++ vững chắc để đọc hiểu và làm việc trực tiếp với codebase <strong>ROS 2 (rclcpp), Nav2, F1TENTH, MoveIt 2, Autoware Universe</strong>. Đơn giản hóa các khái niệm khó với <strong>sơ đồ bộ nhớ - ví dụ code thực tế - phân tích WHY - 30+ bài tập có lời giải</strong>.
     </div>
     <div class="meta">Dành cho: Huỳnh Công Danh · Tuần 2 trong lộ trình 24 tuần Control &amp; Planning · 2026</div>
 </div>
 
 <div class="toc">
-    <h2>📑 Mục Lục Chi Tiết</h2>
+    <h2>📑 Mục Lục Chi Tiết (12 Phần)</h2>
     <ol>
         <li><a href="#part0">Phần 0 — Vì sao C++ là ngôn ngữ cốt lõi của Robotics &amp; Xe tự hành?</a></li>
-        <li><a href="#part1">Phần 1 — Bộ nhớ, Con trỏ, Tham chiếu &amp; Const Correctness (Memory Layout)</a></li>
-        <li><a href="#part2">Phần 2 — Lập Trình Hướng Đối Tượng (OOP) Thực Chiến Cho Robotics</a></li>
-        <li><a href="#part3">Phần 3 — Quản Lý Tài Nguyên RAII &amp; Smart Pointers (unique_ptr, shared_ptr, weak_ptr)</a></li>
-        <li><a href="#part4">Phần 4 — Cấu Trúc Dữ Liệu STL Containers Toàn Diện (vector, deque, map, priority_queue...)</a></li>
-        <li><a href="#part5">Phần 5 — Thuật Toán STL Algorithms Thực Chiến Trong Lập Trình Robot</a></li>
-        <li><a href="#part6">Phần 6 — Template &amp; Lambda Expressions (Đập tan điểm yếu, ROS 2 Callbacks)</a></li>
-        <li><a href="#part7">Phần 7 — Modern C++17 / C++20 Features Cần Thiết Trong Codebase Hiện Đại</a></li>
-        <li><a href="#part8">Phần 8 — Move Semantics &amp; Quản Lý Sở Hữu Bộ Nhớ (Zero-Copy Transfer)</a></li>
-        <li><a href="#part9">Phần 9 — Lập Trình Đa Luồng (Multi-threading) &amp; Xử Lý Đồng Thời Cơ Bản</a></li>
-        <li><a href="#part10">Phần 10 — Xử Lý File I/O &amp; Chuỗi Dữ Liệu (CSV Waypoint &amp; Parameter Parsing)</a></li>
-        <li><a href="#part11">Phần 11 — Dự Án Thực Hành Tổng Hợp: PID Controller &amp; Waypoint Tracker</a></li>
-        <li><a href="#part12">Phần 12 — Bộ Quiz Tổng Kết Toàn Diện &amp; Cheat Sheet Cú Pháp C++</a></li>
+        <li><a href="#part1">Phần 1 — Bộ Nhớ, Con Trỏ, Tham Chiếu &amp; Const Correctness (Memory Layout, 5 ví dụ &amp; 3 bài tập)</a></li>
+        <li><a href="#part2">Phần 2 — Lập Trình Hướng Đối Tượng (OOP) Thực Chiến (Encapsulation, Interfaces, Rule of 5, 3 bài tập)</a></li>
+        <li><a href="#part3">Phần 3 — Quản Lý Tài Nguyên RAII &amp; Smart Pointers (unique_ptr, shared_ptr, weak_ptr, shared_from_this, Lifecycle Node, 3 bài tập)</a></li>
+        <li><a href="#part4">Phần 4 — Cấu Trúc Dữ Liệu STL Containers Toàn Diện (array, vector, deque, priority_queue, Thuật toán A* &amp; Costmap Inflation, 4 bài tập)</a></li>
+        <li><a href="#part5">Phần 5 — Thuật Toán STL Algorithms Thực Chiến Trong Lập Trình Robot (8 thuật toán, 5 bài tập)</a></li>
+        <li><a href="#part6">Phần 6 — Template &amp; Lambda Expressions (std::function, std::bind, Callback ROS 2, 4 bài tập)</a></li>
+        <li><a href="#part7">Phần 7 — Modern C++17 / C++20 Features (auto, structured bindings, optional, string_view, EKF Solver, 3 bài tập)</a></li>
+        <li><a href="#part8">Phần 8 — Move Semantics &amp; Quản Lý Sở Hữu Bộ Nhớ (Zero-Copy PointCloud, std::move, 3 bài tập)</a></li>
+        <li><a href="#part9">Phần 9 — Lập Trình Đa Luồng (Multi-threading) &amp; Concurrency (std::thread, mutex, atomic, ROS 2 Callback Groups, 3 bài tập)</a></li>
+        <li><a href="#part10">Phần 10 — Xử Lý File I/O &amp; Chuỗi Dữ Liệu (Đọc CSV Waypoint, fstream, stringstream, 2 bài tập)</a></li>
+        <li><a href="#part11">Phần 11 — Dự Án Thực Hành Tổng Hợp: PID Controller C++17 &amp; Pure Pursuit Waypoint CSV Tracker Engine</a></li>
+        <li><a href="#part12">Phần 12 — Bộ Quiz Tổng Kết Toàn Diện (15+ Câu Hỏi) &amp; Quick Reference Cheat Sheet</a></li>
     </ol>
 </div>
 
 <div class="legend-box">
-    <div class="legend-item"><span class="level-badge level-deep">🔬 CẦN HIỂU SÂU</span> Bắt buộc làm chủ — Nền tảng phỏng vấn &amp; đọc code rclcpp/Nav2</div>
+    <div class="legend-item"><span class="level-badge level-deep">🔬 CẦN HIỂU SÂU</span> Bắt buộc làm chủ — Nền tảng phỏng vấn &amp; đọc code rclcpp/Nav2/F1TENTH</div>
     <div class="legend-item"><span class="level-badge level-apply">🔧 CHỈ CẦN CÔNG THỨC</span> Gõ đúng cú pháp — Sử dụng làm công cụ lập trình hàng ngày</div>
-    <div class="legend-item"><span class="level-badge level-concept">🔎 HIỂU Ý TƯỞNG</span> Khái niệm kiến trúc phần mềm &amp; tư duy hệ thống</div>
+    <div class="legend-item"><span class="level-badge level-concept">🔎 HIỂU Ý TƯỞNG</span> Khái niệm kiến trúc phần mềm &amp; tư duy thiết kế hệ thống</div>
 </div>
 
 <!-- ===================================================== -->
@@ -351,6 +385,9 @@ pre code { background: none; color: inherit; padding: 0; }
         <li><strong>Zero-Cost Abstractions (Trừu tượng hóa chi phí bằng 0):</strong> Lập trình Hướng đối tượng (OOP), Template, Lambda cực kỳ đẹp mắt và dễ đọc, nhưng khi biên dịch qua <code>g++ -O3</code>, trình biên dịch tối ưu thành mã máy cực nhanh hệt như C thuần hoặc Assembly.</li>
     </ol>
 </div>
+
+<h2>0.1 Tối ưu CPU Cache Line &amp; RAM Locality trong C++</h2>
+<p>Bộ nhớ RAM hiện đại hoạt động dựa trên cơ chế CPU Cache (L1, L2, L3 Cache Line size = 64 bytes). Khi CPU truy cập mảng phần tử nằm liên tục trong bộ nhớ (như <code>std::vector</code> hay <code>std::array</code> của C++), CPU Prefetcher sẽ tự động nạp sẵn 64-byte xung quanh vào L1 Cache với độ trễ chỉ <strong>1ns</strong>. Ngược lại, các ngôn ngữ có Garbage Collection quản lý các đối tượng rải rác trên Heap, gây hiện tượng <strong>Cache Miss</strong> khiến CPU phải chờ nạp từ RAM mất <strong>100ns</strong> (chậm hơn 100 lần!). Đây chính là chìa khóa giúp C++ xử lý 300,000 điểm mây LiDAR mỗi giây thời gian thực.</p>
 
 <table class="table">
     <tr>
@@ -437,7 +474,7 @@ pre code { background: none; color: inherit; padding: 0; }
 
 <div class="step-card">
     <span class="step-number">1</span>
-    <h3>Ví dụ code: Phân biệt 4 cách truyền tham số mảng cảm biến LiDAR</h3>
+    <h3>Ví dụ code 1: Phân biệt 4 cách truyền tham số mảng cảm biến LiDAR</h3>
     <pre><code>#include &lt;iostream&gt;
 #include &lt;vector&gt;
 #include &lt;chrono&gt;
@@ -447,7 +484,7 @@ struct LidarScan {
     double timestamp;
 };
 
-// 1. Truyền bằng Pass-by-Value (Copy toàn bộ mảng): TẠO LỖI NGHẼN BỘ NHỚ!
+// 1. Truyền bằng Pass-by-Value (Copy toàn bộ mảng): TẠO LỖI NGHỄN BỘ NHỚ!
 void process_scan_bad(LidarScan scan) {
     // scan là bản sao độc lập! Copy 360 tia mất thời gian CPU.
 }
@@ -484,13 +521,112 @@ int main() {
 }</code></pre>
 </div>
 
-<div class="warning-box">
-    <span class="box-title">⚠️ Lỗi kinh điển: Dangling Pointer (Con trỏ hoang quải)</span>
-    <p>Dangling pointer xảy ra khi bạn trả về địa chỉ của một biến cục bộ nằm trên Stack. Khi hàm kết thúc, vùng nhớ Stack bị giải phóng nhưng con trỏ vẫn giữ địa chỉ cũ → Đọc/ghi vào đây gây Segmentation Fault ngay lập tức!</p>
-    <pre><code>int* get_sensor_value_BAD() {
-    int sensor_raw = 1024; // Biến cục bộ trên Stack
-    return &sensor_raw;    // ❌ DANGER! sensor_raw bị hủy ngay khi thoát hàm!
-} // Vùng nhớ bị thu hồi. Trả về địa chỉ ma!</code></pre>
+<div class="step-card">
+    <span class="step-number">2</span>
+    <h3>Ví dụ code 2: Dangling Pointer — Nguyên nhân crash phần mềm xe tự hành</h3>
+    <pre><code>#include &lt;iostream&gt;
+
+// ❌ LỖI SINH TỬ: Trả về địa chỉ của biến cục bộ trên Stack
+double* get_temperature_BAD() {
+    double temp_celsius = 42.5; // Biến temp nằm trên Stack của hàm get_temperature_BAD
+    return &amp;temp_celsius; // Trả về địa chỉ bộ nhớ Stack sắp bị thu hồi!
+} // Vùng nhớ Stack bị thu hồi tại đây!
+
+// ✅ CÁCH KHẮC PHỤC CHUẨN: Truyền tham chiếu hằng hoặc dùng Heap Smart Pointer
+void get_temperature_GOOD(double&amp; out_temp) {
+    out_temp = 42.5; // Ghi trực tiếp vào biến ngoài
+}
+
+int main() {
+    // double* bad_ptr = get_temperature_BAD();
+    // std::cout << *bad_ptr; // 💥 SEGMENTATION FAULT hoặc in ra rác ngẫu nhiên!
+
+    double current_temp = 0.0;
+    get_temperature_GOOD(current_temp);
+    std::cout &lt;&lt; "Nhiet do cam bien: " &lt;&lt; current_temp &lt;&lt; " °C (An toan!)\n";
+    return 0;
+}</code></pre>
+</div>
+
+<div class="step-card">
+    <span class="step-number">3</span>
+    <h3>Ví dụ code 3: Kiểm tra nullptr an toàn khi đọc cảm biến</h3>
+    <pre><code>#include &lt;iostream&gt;
+
+struct IMUData {
+    double ax, ay, az;
+};
+
+void process_imu(const IMUData* data) {
+    // Pattern Defensive Programming: Luôn kiểm tra nullptr trước khi truy cập arrow (->)
+    if (!data) {
+        std::cerr &lt;&lt; "⚠️ CANH BAO: Data IMU bi Null! Bo qua buoc cap nhat Kalman.\n";
+        return;
+    }
+    std::cout &lt;&lt; "IMU Accel Z: " &lt;&lt; data-&gt;az &lt;&lt; " m/s^2\n";
+}
+
+int main() {
+    IMUData valid_imu{0.0, 0.0, 9.81};
+    IMUData* null_imu = nullptr;
+
+    process_imu(&amp;valid_imu);
+    process_imu(null_imu); // Không bị crash nhờ nullptr check!
+    return 0;
+}</code></pre>
+</div>
+
+<div class="step-card">
+    <span class="step-number">4</span>
+    <h3>Ví dụ code 4: Phân biệt 3 vị trí từ khóa `const` với Con trỏ</h3>
+    <pre><code>#include &lt;iostream&gt;
+
+int main() {
+    int val1 = 10;
+    int val2 = 20;
+
+    // 1. Const Data (Pointer to Const): Không sửa được dữ liệu, nhưng đổi được địa chỉ
+    const int* ptr1 = &amp;val1;
+    // *ptr1 = 15; // ❌ LỖI BIÊN DỊCH
+    ptr1 = &amp;val2;  // ✅ HỢP LỆ
+
+    // 2. Const Pointer (Con trỏ hằng): Sửa được dữ liệu, KHÔNG đổi được địa chỉ
+    int* const ptr2 = &amp;val1;
+    *ptr2 = 15;    // ✅ HỢP LỆ (val1 thành 15)
+    // ptr2 = &val2; // ❌ LỖI BIÊN DỊCH
+
+    // 3. Const Data & Const Pointer: Không sửa được dữ liệu VÀ không đổi được địa chỉ
+    const int* const ptr3 = &amp;val1;
+    // *ptr3 = 30;  // ❌ LỖI BIÊN DỊCH
+    // ptr3 = &val2; // ❌ LỖI BIÊN DỊCH
+
+    std::cout &lt;&lt; "val1 moi: " &lt;&lt; val1 &lt;&lt; "\n";
+    return 0;
+}</code></pre>
+</div>
+
+<div class="step-card">
+    <span class="step-number">5</span>
+    <h3>Ví dụ code 5: Con trỏ hàm (Function Pointer) — Tiền thân của Callback ROS</h3>
+    <pre><code>#include &lt;iostream&gt;
+
+// Hàm xử lý tín hiệu khẩn cấp
+void emergency_stop_action(double current_speed) {
+    std::cout &lt;&lt; "🚨 KICH HOAT PHANH GAP! Toc do hien tai: " &lt;&lt; current_speed &lt;&lt; " m/s\n";
+}
+
+// Hàm nhận con trỏ hàm làm Callback
+void check_safety(double speed, void (*callback_func)(double)) {
+    if (speed &gt; 10.0) { // Quá tốc độ 10m/s
+        callback_func(speed); // Gọi callback!
+    }
+}
+
+int main() {
+    // Truyền trực tiếp tên hàm emergency_stop_action làm con trỏ hàm
+    check_safety(12.5, emergency_stop_action);
+    return 0;
+}</code></pre>
 </div>
 
 <div class="cheat-sheet">
@@ -504,18 +640,87 @@ int main() {
 </div>
 
 <div class="quiz-section">
-    <h3>💪 Bài Tập Thực Hành Phần 1</h3>
+    <h3>💪 Bài Tập Thực Hành Phần 1 (Có Lời Giải Chi Tiết)</h3>
+
     <div class="quiz-question">
-        <p><strong>BT1.1:</strong> Viết hàm <code>void swap(int* a, int* b)</code> và hàm <code>void swap(int&amp; a, int&amp; b)</code>. Giải thích tại sao cách dùng tham chiếu <code>&amp;</code> lại an toàn và ngắn gọn hơn con trỏ.</p>
-        <div class="answer-section">
-            <span class="box-title">✅ Đáp án &amp; Giải thích</span>
-            <pre><code>void swap_ptr(int* a, int* b) {
-    if (!a || !b) return; // Phải check null
-    int temp = *a; *a = *b; *b = temp;
+        <p><strong>BT1.1:</strong> Sửa lỗi Segfault trong đoạn code sau và giải thích nguyên nhân:</p>
+        <pre><code>double* read_encoder() {
+    double ticks = 4096.0;
+    return &amp;ticks;
 }
-void swap_ref(int& a, int& b) {
-    int temp = a; a = b; b = temp; // Ngắn gọn, không lo null!
+int main() {
+    double* p = read_encoder();
+    std::cout &lt;&lt; *p;
 }</code></pre>
+        <div class="answer-section">
+            <span class="box-title">✅ Lời giải BT1.1</span>
+            <p><strong>Nguyên nhân:</strong> Biến <code>ticks</code> nằm trên Stack của hàm <code>read_encoder</code>. Khi hàm kết thúc, Stack bị giải phóng nhưng <code>p</code> vẫn trỏ vào địa chỉ cũ (Dangling Pointer).</p>
+            <p><strong>Sửa lại chuẩn C++:</strong> Truyền tham chiếu hoặc cấp phát Heap bằng Smart Pointer:</p>
+            <pre><code>#include &lt;iostream&gt;
+
+void read_encoder(double&amp; out_ticks) { 
+    out_ticks = 4096.0; 
+}
+
+int main() {
+    double ticks = 0.0;
+    read_encoder(ticks);
+    std::cout &lt;&lt; "Encoder ticks: " &lt;&lt; ticks &lt;&lt; " (An toan!)\n";
+    return 0;
+}</code></pre>
+        </div>
+    </div>
+
+    <div class="quiz-question">
+        <p><strong>BT1.2:</strong> So sánh hai hàm <code>swap_ptr(int* a, int* b)</code> và <code>swap_ref(int&amp; a, int&amp; b)</code>. Khi nào bắt buộc dùng Pointer?</p>
+        <div class="answer-section">
+            <span class="box-title">✅ Lời giải BT1.2</span>
+            <pre><code>#include &lt;iostream&gt;
+
+void swap_ptr(int* a, int* b) {
+    if (!a || !b) return; // Phải check nullptr
+    int tmp = *a; *a = *b; *b = tmp;
+}
+
+void swap_ref(int&amp; a, int&amp; b) {
+    int tmp = a; a = b; b = tmp; // Không cần check null!
+}
+
+int main() {
+    int x = 5, y = 10;
+    swap_ref(x, y);
+    std::cout &lt;&lt; "Swap ref: x=" &lt;&lt; x &lt;&lt; ", y=" &lt;&lt; y &lt;&lt; "\n";
+    return 0;
+}</code></pre>
+            <p><strong>Khi nào bắt buộc dùng Pointer:</strong> Khi tham số có thể là <code>nullptr</code> (optional payload) hoặc khi bạn cần thay đổi chính địa chỉ mà con trỏ trỏ tới (re-pointing).</p>
+        </div>
+    </div>
+
+    <div class="quiz-question">
+        <p><strong>BT1.3:</strong> Kiểm tra tính Const Correctness trong phương thức <code>get_speed()</code> của class Motor. Tại sao thêm <code>const</code> ở cuối phương thức?</p>
+        <div class="answer-section">
+            <span class="box-title">✅ Lời giải BT1.3</span>
+            <pre><code>#include &lt;iostream&gt;
+
+class Motor {
+private:
+    double speed_ = 5.0;
+public:
+    // Thêm const ở cuối báo hiệu phương thức này READ-ONLY (không sửa đổi biến member speed_)
+    double get_speed() const { return speed_; }
+};
+
+void print_motor_speed(const Motor&amp; m) {
+    // Bắt buộc get_speed() phải có const ở cuối mới gọi được tại đây!
+    std::cout &lt;&lt; "Speed: " &lt;&lt; m.get_speed() &lt;&lt; " m/s\n";
+}
+
+int main() {
+    Motor my_motor;
+    print_motor_speed(my_motor);
+    return 0;
+}</code></pre>
+            <p><strong>Tác dụng:</strong> Cho phép gọi <code>get_speed()</code> trên các đối tượng <code>const Motor&amp;</code>.</p>
         </div>
     </div>
 </div>
@@ -524,8 +729,8 @@ void swap_ref(int& a, int& b) {
 <!-- PHẦN 2 -->
 <!-- ===================================================== -->
 <div class="part-header-purple" id="part2">
-    <h1>PHẦN 2 — LẬP TRÌNH HƯỚNG ĐỐI TƯỢNG (OOP) THỰC CHIẾN FOR ROBOTICS</h1>
-    <p>Encapsulation · Struct vs Class · Interface · Polymorphism · Virtual Destructor <span class="level-badge level-deep">🔬 CẦN HIỂU SÂU</span></p>
+    <h1>PHẦN 2 — LẬP TRÌNH HƯỚNG ĐỐI TƯỢNG (OOP) THỰC CHIẾN</h1>
+    <p>Encapsulation · Struct vs Class · Interface · Polymorphism · Virtual Destructor · Rule of 5 · Operator Overloading <span class="level-badge level-deep">🔬 CẦN HIỂU SÂU</span></p>
 </div>
 
 <div class="goal-box">
@@ -542,25 +747,42 @@ void swap_ref(int& a, int& b) {
     </ul>
 </div>
 
-<h2>2.2 Thiết kế Controller Interface với Virtual Functions</h2>
+<h2>2.2 Ví dụ 1: Encapsulation &amp; Validation bảo vệ động cơ Robot</h2>
+<pre><code>#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+
+class EncapsulatedMotor {
+private:
+    double pwm_duty_cycle_ = 0.0; // Private: Giấu kín không cho bên ngoài sửa trực tiếp!
+    const double max_pwm_ = 100.0;
+
+public:
+    // Getter: Đọc dữ liệu an toàn
+    double get_pwm() const { return pwm_duty_cycle_; }
+
+    // Setter: Kiểm soát validation dữ liệu đầu vào
+    void set_pwm(double requested_pwm) {
+        // Clamping bão hòa bảo vệ mạch cầu H
+        pwm_duty_cycle_ = std::clamp(requested_pwm, -max_pwm_, max_pwm_);
+        std::cout &lt;&lt; "[Motor] Set PWM request: " &lt;&lt; requested_pwm 
+                  &lt;&lt; "% -> PWM thuc te bão hòa: " &lt;&lt; pwm_duty_cycle_ &lt;&lt; "%\n";
+    }
+};
+
+int main() {
+    EncapsulatedMotor motor;
+    motor.set_pwm(150.0); // Yêu cầu 150% -> Tự động kẹp về +100% bảo vệ phần cứng!
+    return 0;
+}</code></pre>
+
+<h2>2.3 Ví dụ 2: Thiết kế Controller Interface đa hình (Polymorphism)</h2>
 <pre><code>#include &lt;iostream&gt;
 #include &lt;vector&gt;
 #include &lt;cmath&gt;
 #include &lt;memory&gt;
 
-// Struct lưu trạng thái robot: x, y, yaw (góc hướng), v (vận tốc)
-struct RobotState {
-    double x = 0.0;
-    double y = 0.0;
-    double yaw = 0.0;
-    double v = 0.0;
-};
-
-// Struct lưu lệnh điều khiển: góc lái (steering) & gia tốc (accel)
-struct ControlOutput {
-    double steering_angle = 0.0;
-    double acceleration = 0.0;
-};
+struct RobotState { double x = 0.0, y = 0.0, yaw = 0.0, v = 0.0; };
+struct ControlOutput { double steering_angle = 0.0, acceleration = 0.0; };
 
 // --- CLASS CHA TRỪU TƯỢNG (INTERFACE CHUNG CHO MỌI CONTROLLER) ---
 class AbstractController {
@@ -575,7 +797,7 @@ public:
                                          double target_x, double target_y) = 0;
 };
 
-// --- BỘ ĐIỀU KHIỂN 1: PURE PURSUIT (BÁM QUỸ ĐẠO HÌNH HỌC) ---
+// --- BỘ ĐIỀU KHIỂN 1: PURE PURSUIT ---
 class PurePursuitController : public AbstractController {
 private:
     double lookahead_distance_;
@@ -595,10 +817,10 @@ public:
     }
 };
 
-// --- BỘ ĐIỀU KHIỂN 2: STANLEY CONTROLLER (BÁM THEO SAI SỐ TRỤC TRƯỚC) ---
+// --- BỘ ĐIỀU KHIỂN 2: STANLEY CONTROLLER ---
 class StanleyController : public AbstractController {
 private:
-    double k_gain_; // Hệ số tăng cường
+    double k_gain_;
 public:
     StanleyController(double k) : k_gain_(k) {}
 
@@ -614,23 +836,152 @@ public:
 };
 
 int main() {
-    RobotState car{0.0, 0.0, 0.0, 2.0}; // Xe đang chạy 2m/s
+    RobotState car{0.0, 0.0, 0.0, 2.0};
     
-    // ĐA HÌNH (POLYMORPHISM): Dùng con trỏ Interface quản lý nhiều thuật toán
+    // ĐA HÌNH (POLYMORPHISM): Con trỏ Interface quản lý nhiều thuật toán khác nhau
     std::vector&lt;std::unique_ptr&lt;AbstractController&gt;&gt; controllers;
     controllers.push_back(std::make_unique&lt;PurePursuitController&gt;(2.5));
     controllers.push_back(std::make_unique&lt;StanleyController&gt;(0.5));
 
-    std::cout &lt;&lt; "--- CHẠY THỬ CÁC BỘ ĐIỀU KHIỂN ---\n";
     for (const auto&amp; ctrl : controllers) {
         ctrl-&gt;compute_control(car, 10.0, 3.0);
     }
-    return 0; // Tự động gọi destructor an toàn!
+    return 0;
 }</code></pre>
 
-<div class="warning-box">
-    <span class="box-title">⚠️ Quy tắc sinh tử: Bắt buộc Virtual Destructor `virtual ~BaseClass()`</span>
-    <p>Nếu lớp cha có phương thức ảo nhưng <strong>không có Virtual Destructor</strong>, khi xóa đối tượng con thông qua con trỏ lớp cha (<code>delete ptr;</code>), chỉ có Destructor lớp cha được gọi! Destructor lớp con bị bỏ qua, gây rò rỉ bộ nhớ nghiêm trọng các tài nguyên lớp con đang quản lý (File handles, Socket, Cấp phát RAM).</p>
+<h2>2.4 Ví dụ 3: Giới thiệu Rule of 5 (Quản lý tài nguyên chuẩn C++)</h2>
+<pre><code>#include &lt;iostream&gt;
+#include &lt;cstring&gt;
+
+class HardwareBuffer {
+private:
+    size_t size_;
+    uint8_t* data_;
+public:
+    // 1. Constructor
+    HardwareBuffer(size_t size) : size_(size), data_(new uint8_t[size]) {}
+
+    // 2. Destructor
+    ~HardwareBuffer() { delete[] data_; }
+
+    // 3. Copy Constructor (Deep Copy)
+    HardwareBuffer(const HardwareBuffer&amp; other) : size_(other.size_), data_(new uint8_t[other.size_]) {
+        std::memcpy(data_, other.data_, size_);
+    }
+
+    // 4. Copy Assignment Operator
+    HardwareBuffer&amp; operator=(const HardwareBuffer&amp; other) {
+        if (this == &amp;other) return *this;
+        delete[] data_;
+        size_ = other.size_;
+        data_ = new uint8_t[size_];
+        std::memcpy(data_, other.data_, size_);
+        return *this;
+    }
+
+    // 5. Move Constructor (Move Semantics)
+    HardwareBuffer(HardwareBuffer&amp;&amp; other) noexcept : size_(other.size_), data_(other.data_) {
+        other.size_ = 0;
+        other.data_ = nullptr;
+    }
+};</code></pre>
+
+<h2>2.5 Ví dụ 4: Operator Overloading cho Vector2D trong Hình Học Robot</h2>
+<pre><code>#include &lt;iostream&gt;
+#include &lt;cmath&gt;
+
+struct Vector2D {
+    double x = 0.0;
+    double y = 0.0;
+
+    // Nạp chồng toán tử cộng (+)
+    Vector2D operator+(const Vector2D&amp; other) const {
+        return Vector2D{x + other.x, y + other.y};
+    }
+
+    // Nạp chồng toán tử nhân với số thực (Scalar multiplication)
+    Vector2D operator*(double scalar) const {
+        return Vector2D{x * scalar, y * scalar};
+    }
+
+    // Tính độ dài Vector (Magnitude)
+    double norm() const {
+        return std::hypot(x, y);
+    }
+};
+
+int main() {
+    Vector2D v1{1.0, 2.0};
+    Vector2D v2{3.0, 4.0};
+    Vector2D v3 = (v1 + v2) * 2.0; // (4, 6) * 2 = (8, 12)
+
+    std::cout &lt;&lt; "v3 = (" &lt;&lt; v3.x &lt;&lt; ", " &lt;&lt; v3.y &lt;&lt; ") | Norm = " &lt;&lt; v3.norm() &lt;&lt; "\n";
+    return 0;
+}</code></pre>
+
+<div class="quiz-section">
+    <h3>💪 Bài Tập Thực Hành Phần 2 (Có Lời Giải Chi Tiết)</h3>
+
+    <div class="quiz-question">
+        <p><strong>BT2.1:</strong> Thiết kế lớp cha <code>AbstractSensor</code> có hàm thuần ảo <code>virtual void read_data() = 0</code> và 2 lớp con <code>LidarSensor</code>, <code>ImuSensor</code>.</p>
+        <div class="answer-section">
+            <span class="box-title">✅ Lời giải BT2.1</span>
+            <pre><code>#include &lt;iostream&gt;
+#include &lt;memory&gt;
+
+class AbstractSensor {
+public:
+    virtual ~AbstractSensor() {}
+    virtual void read_data() = 0;
+};
+
+class LidarSensor : public AbstractSensor {
+public:
+    void read_data() override { std::cout &lt;&lt; "Doc Lidar 360 ranges\n"; }
+};
+
+class ImuSensor : public AbstractSensor {
+public:
+    void read_data() override { std::cout &lt;&lt; "Doc IMU 6-DOF\n"; }
+};
+
+int main() {
+    std::unique_ptr&lt;AbstractSensor&gt; s = std::make_unique&lt;LidarSensor&gt;();
+    s-&gt;read_data();
+    return 0;
+}</code></pre>
+        </div>
+    </div>
+
+    <div class="quiz-question">
+        <p><strong>BT2.2:</strong> Tại sao nếu thiếu <code>virtual ~AbstractSensor()</code>, khi xóa qua <code>AbstractSensor* s = new LidarSensor(); delete s;</code> lại gây rò rỉ bộ nhớ?</p>
+        <div class="answer-section">
+            <span class="box-title">✅ Lời giải BT2.2</span>
+            <p>Vì trình biên dịch chỉ tìm thấy Destructor của <code>AbstractSensor</code> để gọi. Destructor của <code>LidarSensor</code> bị bỏ qua, dẫn đến toàn bộ bộ nhớ do <code>LidarSensor</code> cấp phát không được giải phóng.</p>
+        </div>
+    </div>
+
+    <div class="quiz-question">
+        <p><strong>BT2.3:</strong> Viết nạp chồng toán tử <code>+</code> cho struct <code>Twist2D</code> chứa <code>double v_x, v_y, omega</code>.</p>
+        <div class="answer-section">
+            <span class="box-title">✅ Lời giải BT2.3</span>
+            <pre><code>#include &lt;iostream&gt;
+
+struct Twist2D {
+    double v_x, v_y, omega;
+    Twist2D operator+(const Twist2D&amp; o) const {
+        return Twist2D{v_x + o.v_x, v_y + o.v_y, omega + o.omega};
+    }
+};
+
+int main() {
+    Twist2D t1{1.0, 0.0, 0.1}, t2{0.5, 0.0, 0.2};
+    Twist2D sum = t1 + t2;
+    std::cout &lt;&lt; "v_x=" &lt;&lt; sum.v_x &lt;&lt; ", omega=" &lt;&lt; sum.omega &lt;&lt; "\n";
+    return 0;
+}</code></pre>
+        </div>
+    </div>
 </div>
 
 <!-- ===================================================== -->
@@ -638,7 +989,7 @@ int main() {
 <!-- ===================================================== -->
 <div class="part-header" id="part3">
     <h1>PHẦN 3 — QUẢN LÝ TÀI NGUYÊN RAII &amp; SMART POINTERS</h1>
-    <p>RAII Pattern · std::unique_ptr · std::shared_ptr · std::weak_ptr · shared_from_this <span class="level-badge level-deep">🔬 CẦN HIỂU SÂU</span></p>
+    <p>RAII Pattern · std::unique_ptr · std::shared_ptr · std::weak_ptr · shared_from_this · Lifecycle Node Pattern <span class="level-badge level-deep">🔬 CẦN HIỂU SÂU</span></p>
 </div>
 
 <div class="goal-box">
@@ -669,41 +1020,163 @@ int main() {
     </tr>
 </table>
 
-<h2>3.2 Pattern ROS 2 Kinh điển: `std::enable_shared_from_this`</h2>
-<p>Trong ROS 2 (rclcpp), các Node kế thừa từ <code>rclcpp::Node</code> và cần truyền con trỏ <code>shared_ptr</code> của chính mình vào Subscriber/Timer Callback. Ta sử dụng <code>shared_from_this()</code>:</p>
-
+<h2>3.2 Ví dụ 1: `std::unique_ptr` &amp; Ownership Transfer qua `std::move`</h2>
 <pre><code>#include &lt;iostream&gt;
 #include &lt;memory&gt;
 
-class RobotNode : public std::enable_shared_from_this&lt;RobotNode&gt; {
+class CameraDriver {
 public:
-    RobotNode() {
-        std::cout &lt;&lt; "[Node] Dang khoi tao...\n";
-        // ⚠️ DANGER: KHÔNG ĐƯỢC gọi shared_from_this() trong Constructor!
-        // Vì lúc này đối tượng chưa nằm trong shared_ptr nào cả -> Crash (std::bad_weak_ptr)!
+    CameraDriver() { std::cout &lt;&lt; "--> Mo ket noi Camera RealSense D435\n"; }
+    ~CameraDriver() { std::cout &lt;&lt; "<-- Dong ket noi Camera\n"; }
+    void capture_frame() { std::cout &lt;&lt; "    [Camera] Capture Frame 1920x1080\n"; }
+};
+
+void process_camera(std::unique_ptr&lt;CameraDriver&gt; cam) {
+    cam-&gt;capture_frame();
+} // cam ra khỏi scope -> TỰ ĐỘNG HỦY CAMERA VÀ GIẢI PHÓNG RAM!
+
+int main() {
+    auto my_cam = std::make_unique&lt;CameraDriver&gt;();
+
+    // process_camera(my_cam); // ❌ LỖI BIÊN DỊCH: unique_ptr KHÔNG THỂ COPY!
+    process_camera(std::move(my_cam)); // ✅ HỢP LỆ: Chuyển giao quyền sở hữu qua std::move
+
+    if (!my_cam) {
+        std::cout &lt;&lt; "my_cam gio bang nullptr vì quyen so huu da bi chuyen đi!\n";
+    }
+    return 0;
+}</code></pre>
+
+<h2>3.3 Ví dụ 2: `std::shared_ptr` &amp; `std::weak_ptr` Giải quyết Vòng Lặp Tham Chiếu</h2>
+<pre><code>#include &lt;iostream&gt;
+#include &lt;memory&gt;
+
+struct NodeB; // Khai báo trước
+
+struct NodeA {
+    std::shared_ptr&lt;NodeB&gt; ptr_b;
+    ~NodeA() { std::cout &lt;&lt; "Destructor NodeA\n"; }
+};
+
+struct NodeB {
+    std::weak_ptr&lt;NodeA&gt; ptr_a; // ✅ GIẢI PHÁP: Dùng weak_ptr không tăng Ref Count
+    ~NodeB() { std::cout &lt;&lt; "Destructor NodeB\n"; }
+};
+
+int main() {
+    auto a = std::make_shared&lt;NodeA&gt;();
+    auto b = std::make_shared&lt;NodeB&gt;();
+
+    a-&gt;ptr_b = b;
+    b-&gt;ptr_a = a;
+
+    std::cout &lt;&lt; "Ref count of A: " &lt;&lt; a.use_count() &lt;&lt; " (Vẫn = 1!)\n";
+    return 0;
+}</code></pre>
+
+<h2>3.4 Pattern ROS 2 Kinh điển: Lifecycle Node State Machine</h2>
+<pre><code>#include &lt;iostream&gt;
+#include &lt;memory&gt;
+
+class ManagedLifecycleNode {
+private:
+    enum class State { UNCONFIGURED, INACTIVE, ACTIVE, FINALIZED };
+    State current_state_ = State::UNCONFIGURED;
+public:
+    void configure() {
+        if (current_state_ == State::UNCONFIGURED) {
+            std::cout &lt;&lt; "[Lifecycle] Configure: Doc YAML Config & Cap phat memory buffers.\n";
+            current_state_ = State::INACTIVE;
+        }
     }
 
-    void init_subscribers() {
-        // ✅ CHUẨN ROS 2: Tạo shared_ptr trỏ tới chính mình để đăng ký callback
-        std::shared_ptr&lt;RobotNode&gt; self = shared_from_this();
-        std::cout &lt;&lt; "[Node] Cap nhat thanh cong Subscriber voi shared_ptr reference count = " 
-                  &lt;&lt; self.use_count() &lt;&lt; "\n";
+    void activate() {
+        if (current_state_ == State::INACTIVE) {
+            std::cout &lt;&lt; "[Lifecycle] Activate: Bat dau phat topic velocity & nhan sensor.\n";
+            current_state_ = State::ACTIVE;
+        }
+    }
+
+    void deactivate() {
+        if (current_state_ == State::ACTIVE) {
+            std::cout &lt;&lt; "[Lifecycle] Deactivate: Dừng xe an toan & ngung phat topic.\n";
+            current_state_ = State::INACTIVE;
+        }
     }
 };
 
 int main() {
-    // BẮT BUỘC khởi tạo Node qua std::make_shared
-    auto node = std::make_shared&lt;RobotNode&gt;();
-    node-&gt;init_subscribers();
+    auto node = std::make_unique&lt;ManagedLifecycleNode&gt;();
+    node-&gt;configure();
+    node-&gt;activate();
+    node-&gt;deactivate();
     return 0;
 }</code></pre>
+
+<div class="quiz-section">
+    <h3>💪 Bài Tập Thực Hành Phần 3 (Có Lời Giải Chi Tiết)</h3>
+
+    <div class="quiz-question">
+        <p><strong>BT3.1:</strong> Chuyển đoạn code C truyền thống dùng <code>new</code>/<code>delete</code> sau sang C++ Smart Pointer <code>std::unique_ptr</code>:</p>
+        <pre><code>Motor* m = new Motor();
+m->set_speed(10.0);
+delete m;</code></pre>
+        <div class="answer-section">
+            <span class="box-title">✅ Lời giải BT3.1</span>
+            <pre><code>#include &lt;iostream&gt;
+#include &lt;memory&gt;
+
+class Motor {
+public:
+    void set_speed(double s) { std::cout &lt;&lt; "Speed: " &lt;&lt; s &lt;&lt; "\n"; }
+};
+
+int main() {
+    auto m = std::make_unique&lt;Motor&gt;();
+    m-&gt;set_speed(10.0);
+    return 0;
+}</code></pre>
+        </div>
+    </div>
+
+    <div class="quiz-question">
+        <p><strong>BT3.2:</strong> Khi nào <code>std::weak_ptr::lock()</code> trả về <code>nullptr</code>?</p>
+        <div class="answer-section">
+            <span class="box-title">✅ Lời giải BT3.2</span>
+            <p>Khi đối tượng gốc <code>shared_ptr</code> mà <code>weak_ptr</code> đang theo dõi đã bị hủy toàn bộ (Reference Count = 0).</p>
+            <pre><code>#include &lt;iostream&gt;
+#include &lt;memory&gt;
+
+int main() {
+    std::weak_ptr&lt;int&gt; wp;
+    {
+        auto sp = std::make_shared&lt;int&gt;(42);
+        wp = sp;
+        std::cout &lt;&lt; "Lock in scope: " &lt;&lt; *wp.lock() &lt;&lt; "\n";
+    } // sp bị hủy ở đây!
+    if (wp.lock() == nullptr) {
+        std::cout &lt;&lt; "Lock out of scope: NULLPTR (Sp expired!)\n";
+    }
+    return 0;
+}</code></pre>
+        </div>
+    </div>
+
+    <div class="quiz-question">
+        <p><strong>BT3.3:</strong> Tại sao gọi <code>shared_from_this()</code> trong Constructor lại gây ra ngoại lệ <code>std::bad_weak_ptr</code>?</p>
+        <div class="answer-section">
+            <span class="box-title">✅ Lời giải BT3.3</span>
+            <p>Vì trong quá trình Constructor đang chạy, đối tượng chưa được bọc hoàn tất vào trong <code>std::shared_ptr</code>, dẫn tới bảng kiểm đếm <code>weak_this</code> chưa được khởi tạo.</p>
+        </div>
+    </div>
+</div>
 
 <!-- ===================================================== -->
 <!-- PHẦN 4 -->
 <!-- ===================================================== -->
 <div class="part-header-orange" id="part4">
     <h1>PHẦN 4 — CẤU TRÚC DỮ LIỆU STL CONTAINERS TOÀN DIỆN</h1>
-    <p>std::array · std::vector · std::deque · std::unordered_map · std::priority_queue <span class="level-badge level-apply">🔧 CHỈ CẦN CÔNG THỨC</span></p>
+    <p>std::array · std::vector · std::deque · std::unordered_map · std::priority_queue · Thuật toán A* &amp; Costmap Inflation <span class="level-badge level-apply">🔧 CHỈ CẦN CÔNG THỨC</span></p>
 </div>
 
 <div class="goal-box">
@@ -750,44 +1223,181 @@ int main() {
     </tr>
 </table>
 
-<h2>4.2 Thực hành code: Priority Queue cho thuật toán A* Search</h2>
+<h2>4.2 Ví dụ 1: `std::array` — Tối ưu tuyệt đối cho State Vectors (Real-Time Safe)</h2>
 <pre><code>#include &lt;iostream&gt;
-#include &lt;queue&gt;
-#include &lt;vector&gt;
+#include &lt;array&gt;
 
-struct NodeAStar {
-    int x, y;
-    double f_cost; // f = g (chi phi da đi) + h (dieu huong)
+using RobotState6D = std::array&lt;double, 6&gt;;
 
-    // Struct so sanh de Min-Heap luon dua Node chi phi nho nhat len dau
-    bool operator&gt;(const NodeAStar&amp; other) const {
-        return f_cost &gt; other.f_cost;
+int main() {
+    RobotState6D state{1.0, 2.0, 0.5, 1.5, 0.0, 0.1};
+    std::cout &lt;&lt; "Vi tri x: " &lt;&lt; state[0] &lt;&lt; ", Yaw: " &lt;&lt; state[2] &lt;&lt; "\n";
+    return 0;
+}</code></pre>
+
+<h2>4.3 Ví dụ 2: `std::deque` — Sliding Window Filter cho Cảm biến IMU</h2>
+<pre><code>#include &lt;iostream&gt;
+#include &lt;deque&gt;
+#include &lt;numeric&gt;
+
+class MovingAverageIMU {
+private:
+    size_t window_size_;
+    std::deque&lt;double&gt; buffer_;
+public:
+    MovingAverageIMU(size_t window_size) : window_size_(window_size) {}
+
+    double add_measurement(double val) {
+        buffer_.push_back(val);
+        if (buffer_.size() &gt; window_size_) {
+            buffer_.pop_front();
+        }
+        double sum = std::accumulate(buffer_.begin(), buffer_.end(), 0.0);
+        return sum / buffer_.size();
     }
 };
 
 int main() {
-    // Khởi tạo Min-Priority-Queue cho thuật toán A*
-    std::priority_queue&lt;NodeAStar, std::vector&lt;NodeAStar&gt;, std::greater&lt;NodeAStar&gt;&gt; open_list;
+    MovingAverageIMU filter(3);
+    std::cout &lt;&lt; "Filtered: " &lt;&lt; filter.add_measurement(10.0) &lt;&lt; "\n";
+    std::cout &lt;&lt; "Filtered: " &lt;&lt; filter.add_measurement(12.0) &lt;&lt; "\n";
+    std::cout &lt;&lt; "Filtered: " &lt;&lt; filter.add_measurement(14.0) &lt;&lt; "\n";
+    return 0;
+}</code></pre>
 
-    open_list.push({0, 0, 10.5});
-    open_list.push({1, 2, 3.2}); // Node chi phí nhỏ nhất
-    open_list.push({2, 1, 7.8});
+<h2>4.4 Ví dụ 3: Thuật toán A* Path Planner Hoàn Chỉnh bằng `std::priority_queue`</h2>
+<pre><code>#include &lt;iostream&gt;
+#include &lt;queue&gt;
+#include &lt;vector&gt;
+#include &lt;cmath&gt;
 
-    std::cout &lt;&lt; "--- A* OPEN LIST POP ORDER ---\n";
-    while (!open_list.empty()) {
-        NodeAStar current = open_list.top();
-        std::cout &lt;&lt; "Node (" &lt;&lt; current.x &lt;&lt; ", " &lt;&lt; current.y &lt;&lt; ") | f_cost = " &lt;&lt; current.f_cost &lt;&lt; "\n";
-        open_list.pop();
+struct NodeAStar {
+    int x, y;
+    double g_cost;
+    double h_cost;
+    double f_cost() const { return g_cost + h_cost; }
+
+    bool operator&gt;(const NodeAStar&amp; other) const {
+        return f_cost() &gt; other.f_cost();
+    }
+};
+
+int main() {
+    std::priority_queue&lt;NodeAStar, std::vector&lt;NodeAStar&gt;, std::greater&lt;NodeAStar&gt;&gt; open_set;
+
+    open_set.push({0, 0, 0.0, 10.0});
+    open_set.push({1, 0, 1.0, 8.5});
+    open_set.push({0, 1, 1.0, 9.0});
+
+    std::cout &lt;&lt; "--- DUYỆT THUẬT TOÁN A* SEARCH --- \n";
+    while (!open_set.empty()) {
+        NodeAStar current = open_set.top();
+        open_set.pop();
+        std::cout &lt;&lt; "Duyet Node (" &lt;&lt; current.x &lt;&lt; ", " &lt;&lt; current.y &lt;&lt; ") | f_cost = " &lt;&lt; current.f_cost() &lt;&lt; "\n";
     }
     return 0;
 }</code></pre>
+
+<h2>4.5 Ví dụ 4: Nav2 Costmap 2D Layered Grid (Flattened 1D `std::vector`)</h2>
+<pre><code>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+
+class Costmap2D {
+private:
+    uint32_t width_, height_;
+    std::vector&lt;uint8_t&gt; costmap_;
+public:
+    Costmap2D(uint32_t w, uint32_t h) : width_(w), height_(h), costmap_(w * h, 0) {}
+
+    inline uint32_t get_index(uint32_t x, uint32_t y) const { return y * width_ + x; }
+
+    void set_cost(uint32_t x, uint32_t y, uint8_t cost) {
+        costmap_[get_index(x, y)] = cost;
+    }
+
+    uint8_t get_cost(uint32_t x, uint32_t y) const {
+        return costmap_[get_index(x, y)];
+    }
+};
+
+int main() {
+    Costmap2D grid(5, 5);
+    grid.set_cost(2, 3, 254);
+    std::cout &lt;&lt; "Cost at (2,3): " &lt;&lt; static_cast&lt;int&gt;(grid.get_cost(2, 3)) &lt;&lt; "\n";
+    return 0;
+}</code></pre>
+
+<div class="quiz-section">
+    <h3>💪 Bài Tập Thực Hành Phần 4 (Có Lời Giải Chi Tiết)</h3>
+
+    <div class="quiz-question">
+        <p><strong>BT4.1:</strong> Viết chương trình đo thời gian chênh lệch khi <code>push_back</code> 1,000,000 phần tử vào <code>std::vector</code> giữa KHÔNG reserve và CÓ reserve.</p>
+        <div class="answer-section">
+            <span class="box-title">✅ Lời giải BT4.1</span>
+            <pre><code>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;chrono&gt;
+
+int main() {
+    auto t1 = std::chrono::high_resolution_clock::now();
+    std::vector&lt;int&gt; v1;
+    for(int i=0; i&lt;1000000; ++i) v1.push_back(i);
+    auto t2 = std::chrono::high_resolution_clock::now();
+
+    std::vector&lt;int&gt; v2;
+    v2.reserve(1000000);
+    for(int i=0; i&lt;1000000; ++i) v2.push_back(i);
+    auto t3 = std::chrono::high_resolution_clock::now();
+
+    std::cout &lt;&lt; "No reserve: " &lt;&lt; std::chrono::duration_cast&lt;std::chrono::milliseconds&gt;(t2-t1).count() &lt;&lt; "ms\n";
+    std::cout &lt;&lt; "With reserve: " &lt;&lt; std::chrono::duration_cast&lt;std::chrono::milliseconds&gt;(t3-t2).count() &lt;&lt; "ms\n";
+    return 0;
+}</code></pre>
+        </div>
+    </div>
+
+    <div class="quiz-question">
+        <p><strong>BT4.2:</strong> Tại sao <code>std::deque</code> lại phù hợp hơn <code>std::vector</code> cho bộ lọc Sliding Window?</p>
+        <div class="answer-section">
+            <span class="box-title">✅ Lời giải BT4.2</span>
+            <p>Vì <code>std::deque::pop_front()</code> xóa phần tử đầu mảng có độ phức tạp $O(1)$, trong khi <code>std::vector::erase(v.begin())</code> bắt buộc dồn toàn bộ các phần tử phía sau lên 1 vị trí có độ phức tạp $O(N)$ rất chậm.</p>
+        </div>
+    </div>
+
+    <div class="quiz-question">
+        <p><strong>BT4.3:</strong> Viết <code>std::unordered_map&lt;std::string, double&gt;</code> để lưu trữ tham số cấu hình Robot (vd: <code>"max_speed" -> 2.5</code>) và tra cứu an toàn.</p>
+        <div class="answer-section">
+            <span class="box-title">✅ Lời giải BT4.3</span>
+            <pre><code>#include &lt;iostream&gt;
+#include &lt;unordered_map&gt;
+#include &lt;string&gt;
+
+int main() {
+    std::unordered_map&lt;std::string, double&gt; config;
+    config["max_speed"] = 2.5;
+    if (auto it = config.find("max_speed"); it != config.end()) {
+        std::cout &lt;&lt; "Max speed: " &lt;&lt; it-&gt;second &lt;&lt; "\n";
+    }
+    return 0;
+}</code></pre>
+        </div>
+    </div>
+
+    <div class="quiz-question">
+        <p><strong>BT4.4:</strong> Khi nào NÊN dùng <code>std::array</code> thay vì <code>std::vector</code>?</p>
+        <div class="answer-section">
+            <span class="box-title">✅ Lời giải BT4.4</span>
+            <p>Khi kích thước mảng là hằng số cố định được biết trước ở thời điểm biên dịch (Compile-time), như vector trạng thái 6D hoặc ma trận hiệp phương sai. <code>std::array</code> được cấp phát trên Stack nên hoàn toàn safe cho các vòng lặp Real-Time 1kHz.</p>
+        </div>
+    </div>
+</div>
 
 <!-- ===================================================== -->
 <!-- PHẦN 5 -->
 <!-- ===================================================== -->
 <div class="part-header-danger" id="part5">
     <h1>PHẦN 5 — THUẬT TOÁN STL ALGORITHMS THỰC CHIẾN</h1>
-    <p>sort · find_if · transform · accumulate · clamp · lower_bound · remove_if <span class="level-badge level-deep">🔬 CẦN HIỂU SÂU</span></p>
+    <p>sort · find_if · transform · accumulate · clamp · lower_bound · remove_if · min_element <span class="level-badge level-deep">🔬 CẦN HIỂU SÂU</span></p>
 </div>
 
 <div class="goal-box">
@@ -807,7 +1417,7 @@ int main() {
 
 struct Obstacle {
     int id;
-    double distance; // Khoảng cách tới xe (m)
+    double distance;
 };
 
 int main() {
@@ -826,7 +1436,7 @@ int main() {
         lidar_ranges.end()
     );
 
-    // 3. std::min_element: Tìm tia LiDAR có khoảng cách nhỏ nhất (Vật cản gần nhất)
+    // 3. std::min_element: Tìm tia LiDAR có khoảng cách nhỏ nhất
     auto min_it = std::min_element(lidar_ranges.begin(), lidar_ranges.end());
     if (min_it != lidar_ranges.end()) {
         std::cout &lt;&lt; "Vat can gan nhat: " &lt;&lt; *min_it &lt;&lt; " m\n";
@@ -850,8 +1460,129 @@ int main() {
     std::cout &lt;&lt; "Tim thay timestamp: " &lt;&lt; *target_it &lt;&lt; "s tai index " 
               &lt;&lt; std::distance(timestamps.begin(), target_it) &lt;&lt; "\n";
 
+    // 7. std::transform: Biến đổi tọa độ batch
+    std::vector&lt;double&gt; raw_encoder = {100, 200, 300};
+    std::vector&lt;double&gt; meters(raw_encoder.size());
+    std::transform(raw_encoder.begin(), raw_encoder.end(), meters.begin(), [](double ticks) {
+        return ticks * 0.001;
+    });
+    std::cout &lt;&lt; "Encoder index 0 sang meters: " &lt;&lt; meters[0] &lt;&lt; " m\n";
+
+    // 8. std::find_if: Tìm xem có vật cản nào nguy hiểm (< 0.5m) không
+    auto danger_it = std::find_if(obstacles.begin(), obstacles.end(), [](const Obstacle&amp; obs) {
+        return obs.distance &lt; 0.5;
+    });
+    if (danger_it == obstacles.end()) {
+        std::cout &lt;&lt; "Khong co vat can trong vung nguy hiem.\n";
+    }
+
     return 0;
 }</code></pre>
+</div>
+
+<div class="quiz-section">
+    <h3>💪 Bài Tập Thực Hành Phần 5 (Có Lời Giải Chi Tiết)</h3>
+
+    <div class="quiz-question">
+        <p><strong>BT5.1:</strong> Lọc bỏ các điểm có giá trị <code>NaN</code> hoặc <code>> 30.0m</code> ra khỏi <code>std::vector&lt;double&gt; scan</code> bằng Erase-Remove idiom.</p>
+        <div class="answer-section">
+            <span class="box-title">✅ Lời giải BT5.1</span>
+            <pre><code>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;algorithm&gt;
+#include &lt;cmath&gt;
+
+int main() {
+    std::vector&lt;double&gt; scan = {1.2, NAN, 35.0, 5.0};
+    scan.erase(std::remove_if(scan.begin(), scan.end(), [](double r) {
+        return std::isnan(r) || r &gt; 30.0;
+    }), scan.end());
+    std::cout &lt;&lt; "Kich thuoc sau loc: " &lt;&lt; scan.size() &lt;&lt; "\n";
+    return 0;
+}</code></pre>
+        </div>
+    </div>
+
+    <div class="quiz-question">
+        <p><strong>BT5.2:</strong> Sử dụng <code>std::lower_bound</code> trên mảng <code>std::vector&lt;double&gt; path_distances</code> đã sắp xếp để tìm chỉ số Waypoint đầu tiên có quãng đường đi được $\ge 15.0\text{m}$.</p>
+        <div class="answer-section">
+            <span class="box-title">✅ Lời giải BT5.2</span>
+            <pre><code>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;algorithm&gt;
+
+int main() {
+    std::vector&lt;double&gt; dists = {0.0, 5.0, 10.0, 15.0, 20.0};
+    auto it = std::lower_bound(dists.begin(), dists.end(), 15.0);
+    std::cout &lt;&lt; "Index: " &lt;&lt; std::distance(dists.begin(), it) &lt;&lt; "\n";
+    return 0;
+}</code></pre>
+        </div>
+    </div>
+
+    <div class="quiz-question">
+        <p><strong>BT5.3:</strong> Tính tổng độ dài của một chuỗi Waypoints 2D bằng <code>std::accumulate</code>.</p>
+        <div class="answer-section">
+            <span class="box-title">✅ Lời giải BT5.3</span>
+            <pre><code>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;cmath&gt;
+
+struct Pt { double x, y; };
+
+int main() {
+    std::vector&lt;Pt&gt; wps = {{0,0}, {3,0}, {3,4}};
+    double total_len = 0.0;
+    for(size_t i=0; i&lt;wps.size()-1; ++i) {
+        total_len += std::hypot(wps[i+1].x - wps[i].x, wps[i+1].y - wps[i].y);
+    }
+    std::cout &lt;&lt; "Total length: " &lt;&lt; total_len &lt;&lt; " m\n";
+    return 0;
+}</code></pre>
+        </div>
+    </div>
+
+    <div class="quiz-question">
+        <p><strong>BT5.4:</strong> Sử dụng <code>std::transform</code> để cộng thêm tọa độ vị trí xe $(x_0, y_0)$ vào toàn bộ mảng điểm LiDAR cục bộ.</p>
+        <div class="answer-section">
+            <span class="box-title">✅ Lời giải BT5.4</span>
+            <pre><code>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;algorithm&gt;
+
+struct Pt { double x, y; };
+
+int main() {
+    std::vector&lt;Pt&gt; local_pts = {{1, 1}, {2, 2}};
+    std::vector&lt;Pt&gt; global_pts(local_pts.size());
+    double x0 = 10.0, y0 = 5.0;
+
+    std::transform(local_pts.begin(), local_pts.end(), global_pts.begin(), [x0, y0](const Pt&amp; p) {
+        return Pt{p.x + x0, p.y + y0};
+    });
+    std::cout &lt;&lt; "Global pt 0: (" &lt;&lt; global_pts[0].x &lt;&lt; ", " &lt;&lt; global_pts[0].y &lt;&lt; ")\n";
+    return 0;
+}</code></pre>
+        </div>
+    </div>
+
+    <div class="quiz-question">
+        <p><strong>BT5.5:</strong> Sử dụng <code>std::nth_element</code> để tìm giá trị trung vị (Median) của 9 mẫu đọc cảm biến Sonar trong độ phức tạp $O(N)$.</p>
+        <div class="answer-section">
+            <span class="box-title">✅ Lời giải BT5.5</span>
+            <pre><code>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;algorithm&gt;
+
+int main() {
+    std::vector&lt;double&gt; samples = {1.2, 0.9, 5.0, 1.1, 1.0, 0.8, 1.3, 1.1, 1.2};
+    auto m = samples.begin() + samples.size()/2;
+    std::nth_element(samples.begin(), m, samples.end());
+    std::cout &lt;&lt; "Median sonar: " &lt;&lt; *m &lt;&lt; " m\n";
+    return 0;
+}</code></pre>
+        </div>
+    </div>
 </div>
 
 <!-- ===================================================== -->
@@ -896,9 +1627,8 @@ private:
 public:
     SimpleROS2Node(const std::string&amp; name) : node_name_(name) {}
 
-    // Hàm nhận callback mô phỏng ROS 2 Subscriber
     void register_callback(std::functional&lt;void(double)&gt; cb) {
-        cb(3.5); // Giả lập tin nhắn tốc độ mới = 3.5 m/s
+        cb(3.5);
     }
 
     void member_function_callback(double speed) {
@@ -907,11 +1637,9 @@ public:
     }
 
     void setup() {
-        // CÁCH 1: Dùng std::bind (Cú pháp ROS 2 truyền thống)
         using std::placeholders::_1;
         register_callback(std::bind(&amp;SimpleROS2Node::member_function_callback, this, _1));
 
-        // CÁCH 2: Dùng Lambda [this] (Cú pháp C++ hiện đại - KHUYÊN DÙNG!)
         register_callback([this](double speed) {
             this-&gt;current_velocity_ = speed;
             std::cout &lt;&lt; "[" &lt;&lt; node_name_ &lt;&lt; "] (Lambda) Cap nhat velocity: " &lt;&lt; current_velocity_ &lt;&lt; "\n";
@@ -925,12 +1653,102 @@ int main() {
     return 0;
 }</code></pre>
 
+<h2>6.3 Class Template: Bộ lọc LowPassFilter dùng chung mọi kiểu dữ liệu</h2>
+<pre><code>#include &lt;iostream&gt;
+
+template &lt;typename T&gt;
+class LowPassFilter {
+private:
+    T alpha_;
+    T prev_output_;
+    bool initialized_ = false;
+public:
+    LowPassFilter(T alpha) : alpha_(alpha), prev_output_(0) {}
+
+    T filter(T input) {
+        if (!initialized_) {
+            prev_output_ = input;
+            initialized_ = true;
+            return input;
+        }
+        T output = alpha_ * input + (static_cast&lt;T&gt;(1.0) - alpha_) * prev_output_;
+        prev_output_ = output;
+        return output;
+    }
+};
+
+int main() {
+    LowPassFilter&lt;double&gt; vel_filter(0.2);
+    std::cout &lt;&lt; "Filtered: " &lt;&lt; vel_filter.filter(10.0) &lt;&lt; "\n";
+    std::cout &lt;&lt; "Filtered: " &lt;&lt; vel_filter.filter(15.0) &lt;&lt; "\n";
+    return 0;
+}</code></pre>
+
+<div class="quiz-section">
+    <h3>💪 Bài Tập Thực Hành Phần 6 (Có Lời Giải Chi Tiết)</h3>
+
+    <div class="quiz-question">
+        <p><strong>BT6.1:</strong> Viết Class Template <code>RingBuffer&lt;T, N&gt;</code> sử dụng <code>std::array&lt;T, N&gt;</code> làm bộ nhớ đệm xoay vòng cho dữ liệu cảm biến.</p>
+        <div class="answer-section">
+            <span class="box-title">✅ Lời giải BT6.1</span>
+            <pre><code>#include &lt;iostream&gt;
+#include &lt;array&gt;
+
+template &lt;typename T, size_t N&gt;
+class RingBuffer {
+    std::array&lt;T, N&gt; data_;
+    size_t idx_ = 0;
+public:
+    void push(T val) { data_[idx_ % N] = val; idx_++; }
+    T get(size_t i) const { return data_[i % N]; }
+};
+
+int main() {
+    RingBuffer&lt;double, 5&gt; rb;
+    rb.push(1.0); rb.push(2.0);
+    std::cout &lt;&lt; "RB[0] = " &lt;&lt; rb.get(0) &lt;&lt; "\n";
+    return 0;
+}</code></pre>
+        </div>
+    </div>
+
+    <div class="quiz-question">
+        <p><strong>BT6.2:</strong> Chuyển câu lệnh ROS 2 callback <code>std::bind(&amp;MyNode::topic_cb, this, _1)</code> sang cú pháp Lambda.</p>
+        <div class="answer-section">
+            <span class="box-title">✅ Lời giải BT6.2</span>
+            <pre><code>[this](const auto msg) { this->topic_cb(msg); }</code></pre>
+        </div>
+    </div>
+
+    <div class="quiz-question">
+        <p><strong>BT6.3:</strong> Viết hàm Lambda có capture <code>[threshold = 2.0]</code> để lọc danh sách khoảng cách vật cản.</p>
+        <div class="answer-section">
+            <span class="box-title">✅ Lời giải BT6.3</span>
+            <pre><code>#include &lt;iostream&gt;
+
+int main() {
+    auto filter_fn = [threshold = 2.0](double d) { return d &lt; threshold; };
+    std::cout &lt;&lt; std::boolalpha &lt;&lt; filter_fn(1.5) &lt;&lt; "\n";
+    return 0;
+}</code></pre>
+        </div>
+    </div>
+
+    <div class="quiz-question">
+        <p><strong>BT6.4:</strong> Phân biệt sự khác nhau về chi phí hiệu năng giữa <code>std::function&lt;void()&gt;</code> và Lambda trực tiếp.</p>
+        <div class="answer-section">
+            <span class="box-title">✅ Lời giải BT6.4</span>
+            <p><code>std::function</code> có chi phí Type Erasure và có thể cấp phát bộ nhớ Heap nếu Lambda capture lớn hơn 16-32 bytes. Lambda trực tiếp được trình biên dịch inline trực tiếp có chi phí bằng 0 (Zero Overhead).</p>
+        </div>
+    </div>
+</div>
+
 <!-- ===================================================== -->
 <!-- PHẦN 7 -->
 <!-- ===================================================== -->
 <div class="part-header-purple" id="part7">
     <h1>PHẦN 7 — MODERN C++17 / C++20 FEATURES CẦN THIẾT</h1>
-    <p>Structured Bindings · enum class · std::optional · std::string_view · [[nodiscard]] <span class="level-badge level-apply">🔧 CHỈ CẦN CÔNG THỨC</span></p>
+    <p>Structured Bindings · enum class · std::optional · std::string_view · EKF State Estimator <span class="level-badge level-apply">🔧 CHỈ CẦN CÔNG THỨC</span></p>
 </div>
 
 <h2>7.1 Các Tính Năng Hiện Đại Giúp Code Clean &amp; An Toàn</h2>
@@ -943,32 +1761,26 @@ int main() {
 #include &lt;string_view&gt;
 #include &lt;tuple&gt;
 
-// 1. enum class: Strongly-typed Enums tránh trùng tên hằng số
 enum class RobotState { IDLE, NAVIGATING, EMERGENCY_STOP };
 
-// 2. [[nodiscard]]: Cảnh báo compiler nếu người gọi bỏ qua giá trị trả về an toàn!
 [[nodiscard]] bool check_safety_sensor() {
-    return true; // Sensor an toàn
+    return true;
 }
 
-// 3. std::optional: Hàm tìm đường có thể KHÔNG tìm thấy Path (thay vì trả nullptr/flag)
 std::optional&lt;double&gt; compute_distance_to_goal(bool path_found, double dist) {
     if (path_found) return dist;
-    return std::nullopt; // Không có dữ liệu
+    return std::nullopt;
 }
 
-// 4. std::string_view: Đọc chuỗi hằng không tốn chi phí cấp phát bộ nhớ Heap
 void log_ros_topic(std::string_view topic_name) {
     std::cout &lt;&lt; "[LOG TOPIC]: " &lt;&lt; topic_name &lt;&lt; "\n";
 }
 
 int main() {
-    // 5. Structured Bindings (C++17): Unpack tuple/pair cực ngắn
     std::tuple&lt;double, double, double&gt; pose{1.2, 3.4, 0.78};
     auto [x, y, yaw] = pose;
     std::cout &lt;&lt; "Pose: x=" &lt;&lt; x &lt;&lt; ", y=" &lt;&lt; y &lt;&lt; ", yaw=" &lt;&lt; yaw &lt;&lt; "\n";
 
-    // Thử nghiệm std::optional
     auto result = compute_distance_to_goal(true, 15.4);
     if (result.has_value()) {
         std::cout &lt;&lt; "Khoang cach den dich: " &lt;&lt; result.value() &lt;&lt; " m\n";
@@ -977,6 +1789,109 @@ int main() {
     log_ros_topic("/scan");
     return 0;
 }</code></pre>
+</div>
+
+<h2>7.2 Mô phỏng Extended Kalman Filter (EKF 2D Localization) C++17</h2>
+<pre><code>#include &lt;iostream&gt;
+#include &lt;optional&gt;
+#include &lt;tuple&gt;
+#include &lt;cmath&gt;
+
+// Struct lưu trữ trạng thái ước lượng vị trí 2D của Xe Tự Hành
+struct State2D {
+    double x = 0.0;     // Tọa độ X (mét)
+    double y = 0.0;     // Tọa độ Y (mét)
+    double yaw = 0.0;   // Góc hướng Robot Heading (radian)
+};
+
+// Lớp EKF Solver rút gọn sử dụng các tính năng C++17 hiện đại
+class EKFEstimator {
+private:
+    State2D state_;
+public:
+    // Buớc Dự Đoán (Predict Step) dựa trên mô hình Động học Xe (Kinematics)
+    void predict(double v, double omega, double dt) {
+        state_.x += v * std::cos(state_.yaw) * dt;
+        state_.y += v * std::sin(state_.yaw) * dt;
+        state_.yaw += omega * dt;
+    }
+
+    // Bước Cập Nhật (Update Step) khi nhận được tín hiệu đo từ GPS/Landmark
+    void update(std::optional&lt;std::pair&lt;double, double&gt;&gt; gps_meas) {
+        if (!gps_meas.has_value()) return; // Không có tín hiệu GPS -> Bỏ qua update
+        auto [meas_x, meas_y] = gps_meas.value(); // Unpack qua Structured Bindings C++17
+        
+        // Trọng số Kalman Gain mô phỏng đơn giản alpha blending
+        double alpha = 0.4;
+        state_.x = (1.0 - alpha) * state_.x + alpha * meas_x;
+        state_.y = (1.0 - alpha) * state_.y + alpha * meas_y;
+    }
+
+    State2D get_state() const { return state_; }
+};
+
+int main() {
+    EKFEstimator ekf;
+    ekf.predict(1.0, 0.1, 0.1); // v = 1m/s, omega = 0.1 rad/s, dt = 0.1s
+    ekf.update(std::make_pair(0.12, 0.01)); // Cập nhật GPS measurement
+
+    auto s = ekf.get_state();
+    std::cout &lt;&lt; "[EKF Filter] Estimated State: x=" &lt;&lt; s.x &lt;&lt; ", y=" &lt;&lt; s.y &lt;&lt; ", yaw=" &lt;&lt; s.yaw &lt;&lt; "\n";
+    return 0;
+}</code></pre>
+
+<div class="quiz-section">
+    <h3>💪 Bài Tập Thực Hành Phần 7 (Có Lời Giải Chi Tiết)</h3>
+
+    <div class="quiz-question">
+        <p><strong>BT7.1:</strong> Thay thế việc dùng giá trị âm <code>-1.0</code> để báo lỗi tính khoảng cách bằng <code>std::optional&lt;double&gt;</code>.</p>
+        <div class="answer-section">
+            <span class="box-title">✅ Lời giải BT7.1</span>
+            <pre><code>#include &lt;iostream&gt;
+#include &lt;optional&gt;
+
+std::optional&lt;double&gt; get_dist(bool valid) {
+    if (!valid) return std::nullopt;
+    return 5.2;
+}
+
+int main() {
+    auto d = get_dist(true);
+    if (d) std::cout &lt;&lt; "Dist: " &lt;&lt; *d &lt;&lt; "\n";
+    return 0;
+}</code></pre>
+        </div>
+    </div>
+
+    <div class="quiz-question">
+        <p><strong>BT7.2:</strong> Chuyển C-enum <code>enum State { IDLE, RUNNING };</code> sang <code>enum class State</code> và giải thích tại sao an toàn hơn.</p>
+        <div class="answer-section">
+            <span class="box-title">✅ Lời giải BT7.2</span>
+            <pre><code>enum class State { IDLE, RUNNING };
+int main() {
+    State s = State::IDLE;
+    return 0;
+}</code></pre>
+        </div>
+    </div>
+
+    <div class="quiz-question">
+        <p><strong>BT7.3:</strong> Viết hàm <code>parse_frame_id(std::string_view frame)</code> không tạo ra bản sao <code>std::string</code> mới.</p>
+        <div class="answer-section">
+            <span class="box-title">✅ Lời giải BT7.3</span>
+            <pre><code>#include &lt;iostream&gt;
+#include &lt;string_view&gt;
+
+void parse_frame_id(std::string_view frame) {
+    std::cout &lt;&lt; "Parsing frame: " &lt;&lt; frame &lt;&lt; "\n";
+}
+
+int main() {
+    parse_frame_id("map_frame");
+    return 0;
+}</code></pre>
+        </div>
+    </div>
 </div>
 
 <!-- ===================================================== -->
@@ -1004,7 +1919,6 @@ public:
         std::cout &lt;&lt; "Cap phat " &lt;&lt; n &lt;&lt; " diem trong PointCloud.\n";
     }
 
-    // Move Constructor: Chuyển giao bộ nhớ trong 0ms!
     PointCloudBuffer(PointCloudBuffer&amp;&amp; other) noexcept 
         : points(std::move(other.points)) {
         std::cout &lt;&lt; "--> [MOVE CONSTRUCTOR] Chuyen giao quyen so huu mieu diem!\n";
@@ -1012,9 +1926,7 @@ public:
 };
 
 int main() {
-    PointCloudBuffer scan1(5000000); // 5 triệu điểm (20MB RAM)
-
-    // KHÔNG COPY: Chuyển toàn bộ 20MB sang scan2 bằng std::move
+    PointCloudBuffer scan1(5000000);
     PointCloudBuffer scan2 = std::move(scan1);
 
     std::cout &lt;&lt; "Kich thuoc scan1 sau move: " &lt;&lt; scan1.points.size() &lt;&lt; " (Da bi rỗng)\n";
@@ -1022,52 +1934,79 @@ int main() {
     return 0;
 }</code></pre>
 
+<div class="quiz-section">
+    <h3>💪 Bài Tập Thực Hành Phần 8 (Có Lời Giải Chi Tiết)</h3>
+
+    <div class="quiz-question">
+        <p><strong>BT8.1:</strong> Viết Move Assignment Operator <code>operator=(PointCloudBuffer&amp;&amp; other)</code> cho class PointCloudBuffer.</p>
+        <div class="answer-section">
+            <span class="box-title">✅ Lời giải BT8.1</span>
+            <pre><code>PointCloudBuffer&amp; operator=(PointCloudBuffer&amp;&amp; other) noexcept {
+    if (this != &amp;other) {
+        points = std::move(other.points);
+    }
+    return *this;
+}</code></pre>
+        </div>
+    </div>
+
+    <div class="quiz-question">
+        <p><strong>BT8.2:</strong> Sự khác nhau giữa Lvalue reference (<code>T&amp;</code>) và Rvalue reference (<code>T&amp;&amp;</code>) là gì?</p>
+        <div class="answer-section">
+            <span class="box-title">✅ Lời giải BT8.2</span>
+            <p>Lvalue reference trỏ tới đối tượng có tên và địa chỉ cố định. Rvalue reference trỏ tới đối tượng tạm thời (temporary object) sắp bị hủy, cho phép cướp (move) tài nguyên của nó.</p>
+        </div>
+    </div>
+
+    <div class="quiz-question">
+        <p><strong>BT8.3:</strong> Tại sao sau khi gọi <code>std::move(v)</code>, ta KHÔNG NÊN truy cập lại biến <code>v</code> nữa?</p>
+        <div class="answer-section">
+            <span class="box-title">✅ Lời giải BT8.3</span>
+            <p>Vì bộ nhớ bên trong <code>v</code> đã bị chuyển giao cho biến mới. <code>v</code> rơi vào trạng thái "Moved-from state" (rỗng hoặc không xác định).</p>
+        </div>
+    </div>
+</div>
+
 <!-- ===================================================== -->
 <!-- PHẦN 9 -->
 <!-- ===================================================== -->
 <div class="part-header-danger" id="part9">
     <h1>PHẦN 9 — LẬP TRÌNH ĐA LUỒNG (MULTI-THREADING) CƠ BẢN</h1>
-    <p>std::thread · std::mutex · std::lock_guard · std::atomic · Real-time Control <span class="level-badge level-deep">🔬 CẦN HIỂU SÂU</span></p>
+    <p>std::thread · std::mutex · std::lock_guard · std::atomic · Lock-free SPSC Queue · ROS 2 Callback Groups <span class="level-badge level-deep">🔬 CẦN HIỂU SÂU</span></p>
 </div>
 
 <div class="goal-box">
     <strong>🎯 Mục đích:</strong> Hệ thống xe tự hành chạy hàng chục luồng song song (Luồng đọc LiDAR, luồng chạy EKF SLAM, luồng vòng lặp điều khiển $100\text{ Hz}$). Học cách bảo vệ dữ liệu dùng chung (Shared Data) chống Race Condition.
 </div>
 
+<h2>9.1 Ví dụ Multi-threading &amp; Mutex Protection</h2>
 <pre><code>#include &lt;iostream&gt;
 #include &lt;thread&gt;
 #include &lt;mutex&gt;
 #include &lt;atomic&gt;
 #include &lt;chrono&gt;
 
-// Biến atomic an toàn luồng cho cờ Dừng Khẩn Cấp (Lock-free!)
 std::atomic&lt;bool&gt; g_emergency_stop{false};
-
 std::mutex g_imu_mutex;
-double g_latest_pitch = 0.0; // Biến chia sẻ giữa 2 thread
+double g_latest_pitch = 0.0;
 
-// THREAD 1: Đọc cảm biến IMU liên tục ở tần số 100Hz
 void imu_sensor_thread() {
     for (int i = 0; i &lt; 5; ++i) {
         {
-            std::lock_guard&lt;std::mutex&gt; lock(g_imu_mutex); // Khóa mutex an toàn RAII
+            std::lock_guard&lt;std::mutex&gt; lock(g_imu_mutex);
             g_latest_pitch += 0.1;
-            std::cout &lt;&lt; "[IMU Thread] Cap nhat Pitch: " &lt;&lt; g_latest_pitch &lt;&lt; "\n";
+            std::cout &lt;&lt; "[IMU Thread] Pitch: " &lt;&lt; g_latest_pitch &lt;&lt; "\n";
         }
         std::this_thread::sleep_for(std::chrono::milliseconds(10));
     }
 }
 
-// THREAD 2: Vòng lặp điều khiển xe (Control Loop)
 void control_loop_thread() {
     for (int i = 0; i &lt; 5; ++i) {
-        if (g_emergency_stop.load()) {
-            std::cout &lt;&lt; "[Control Thread] DỪNG KHẨN CẤP!\n";
-            break;
-        }
+        if (g_emergency_stop.load()) break;
         {
             std::lock_guard&lt;std::mutex&gt; lock(g_imu_mutex);
-            std::cout &lt;&lt; "  --> [Control Loop] Doc Pitch tinh u: " &lt;&lt; g_latest_pitch &lt;&lt; "\n";
+            std::cout &lt;&lt; "  --> [Control Loop] Read Pitch: " &lt;&lt; g_latest_pitch &lt;&lt; "\n";
         }
         std::this_thread::sleep_for(std::chrono::milliseconds(10));
     }
@@ -1076,12 +2015,102 @@ void control_loop_thread() {
 int main() {
     std::thread t1(imu_sensor_thread);
     std::thread t2(control_loop_thread);
-
-    t1.join(); // Chờ thread 1 hoàn tất
-    t2.join(); // Chờ thread 2 hoàn tất
-    std::cout &lt;&lt; "Hoan tat 2 luong song song an toan.\n";
+    t1.join();
+    t2.join();
     return 0;
 }</code></pre>
+
+<h2>9.2 Lock-Free SPSC Queue Pattern cho Real-Time Threading</h2>
+<pre><code>#include &lt;iostream&gt;
+#include &lt;atomic&gt;
+#include &lt;array&gt;
+
+template &lt;typename T, size_t Capacity&gt;
+class LockFreeSPSCQueue {
+private:
+    std::array&lt;T, Capacity&gt; buffer_;
+    alignas(64) std::atomic&lt;size_t&gt; head_{0};
+    alignas(64) std::atomic&lt;size_t&gt; tail_{0};
+
+public:
+    bool push(const T&amp; item) {
+        size_t current_tail = tail_.load(std::memory_order_relaxed);
+        size_t next_tail = (current_tail + 1) % Capacity;
+        if (next_tail == head_.load(std::memory_order_acquire)) {
+            return false;
+        }
+        buffer_[current_tail] = item;
+        tail_.store(next_tail, std::memory_order_release);
+        return true;
+    }
+
+    bool pop(T&amp; item) {
+        size_t current_head = head_.load(std::memory_order_relaxed);
+        if (current_head == tail_.load(std::memory_order_acquire)) {
+            return false;
+        }
+        item = buffer_[current_head];
+        head_.store((current_head + 1) % Capacity, std::memory_order_release);
+        return true;
+    }
+};
+
+int main() {
+    LockFreeSPSCQueue&lt;double, 100&gt; imu_queue;
+    imu_queue.push(9.81);
+    double val;
+    if (imu_queue.pop(val)) {
+        std::cout &lt;&lt; "[Real-Time Queue] Pop Accel Z: " &lt;&lt; val &lt;&lt; " m/s^2\n";
+    }
+    return 0;
+}</code></pre>
+
+<h2>9.3 Phân biệt Callback Group Types trong ROS 2 (MutuallyExclusive vs Reentrant)</h2>
+<p>Trong ROS 2 rclcpp, mặc định tất cả Callback của 1 Node nằm chung trong Single-Threaded Executor. Nếu một Callback Service tốn thời gian xử lý ($500\text{ms}$), toàn bộ các Timer hay Lidar Subscriber khác sẽ bị đơ (Block). Để khắc phục, ROS 2 sử dụng 2 loại Callback Group:</p>
+<ul>
+    <li><strong>MutuallyExclusiveCallbackGroup:</strong> Các Callback trong nhóm này chỉ được thực thi từng cái một (Không bao giờ song song). Giúp tránh Race Condition mà không cần Mutex.</li>
+    <li><strong>ReentrantCallbackGroup:</strong> Các Callback trong nhóm này có thể chạy song song đồng thời trên nhiều Thread trong MultiThreadedExecutor. Bắt buộc phải bảo vệ tài nguyên dùng chung bằng <code>std::mutex</code>!</li>
+</ul>
+
+<div class="quiz-section">
+    <h3>💪 Bài Tập Thực Hành Phần 9 (Có Lời Giải Chi Tiết)</h3>
+
+    <div class="quiz-question">
+        <p><strong>BT9.1:</strong> Tại sao <code>std::atomic&lt;bool&gt;</code> lại an toàn hơn <code>bool</code> thông thường khi làm cờ dừng khẩn cấp giữa 2 luồng?</p>
+        <div class="answer-section">
+            <span class="box-title">✅ Lời giải BT9.1</span>
+            <p>Vì <code>std::atomic</code> đảm bảo các thao tác đọc/ghi là nguyên tử (atomic instruction ở cấp CPU) và thiết lập ranh giới bộ nhớ (Memory Barriers), chống trình biên dịch tối ưu biến vào thanh ghi (register caching) gây sai lệch giữa các thread.</p>
+        </div>
+    </div>
+
+    <div class="quiz-question">
+        <p><strong>BT9.2:</strong> Sử dụng <code>std::scoped_lock</code> (C++17) để khóa đồng thời 2 mutex <code>m1, m2</code> mà không bao giờ bị Deadlock.</p>
+        <div class="answer-section">
+            <span class="box-title">✅ Lời giải BT9.2</span>
+            <pre><code>#include &lt;iostream&gt;
+#include &lt;mutex&gt;
+
+std::mutex m1, m2;
+void safe_swap() {
+    std::scoped_lock lock(m1, m2);
+}
+
+int main() {
+    safe_swap();
+    std::cout &lt;&lt; "Scoped lock test success!\n";
+    return 0;
+}</code></pre>
+        </div>
+    </div>
+
+    <div class="quiz-question">
+        <p><strong>BT9.3:</strong> Hiện tượng Priority Inversion trong Real-time Robotics là gì?</p>
+        <div class="answer-section">
+            <span class="box-title">✅ Lời giải BT9.3</span>
+            <p>Là khi một Thread ưu tiên thấp nắm giữ Mutex, khiến cho Thread ưu tiên rất cao (1kHz Control Loop) bị chặn đứng (blocked) chờ đợi, làm mất tính thời gian thực của hệ thống.</p>
+        </div>
+    </div>
+</div>
 
 <!-- ===================================================== -->
 <!-- PHẦN 10 -->
@@ -1100,77 +2129,107 @@ int main() {
 #include &lt;string&gt;
 
 struct Waypoint2D {
-    double x;
-    double y;
-    double target_speed;
+    double x, y, target_speed;
 };
 
-// Hàm đọc file CSV Waypoints
 std::vector&lt;Waypoint2D&gt; load_waypoints_from_csv(const std::string&amp; filepath) {
     std::vector&lt;Waypoint2D&gt; waypoints;
     std::ifstream file(filepath);
-
-    if (!file.is_open()) {
-        std::cerr &lt;&lt; "❌ Khong the mo file: " &lt;&lt; filepath &lt;&lt; "\n";
-        return waypoints;
-    }
+    if (!file.is_open()) return waypoints;
 
     std::string line;
-    // Đọc từng dòng
     while (std::getline(file, line)) {
-        if (line.empty() || line[0] == '#') continue; // Bỏ qua dòng trống hoặc comment
-
+        if (line.empty() || line[0] == '#') continue;
         std::stringstream ss(line);
         std::string item;
         Waypoint2D wp;
-
         std::getline(ss, item, ','); wp.x = std::stod(item);
         std::getline(ss, item, ','); wp.y = std::stod(item);
         std::getline(ss, item, ','); wp.target_speed = std::stod(item);
-
         waypoints.push_back(wp);
     }
-    file.close();
     return waypoints;
 }
 
 int main() {
-    // Tạo file CSV giả lập
     std::ofstream outfile("test_path.csv");
     outfile &lt;&lt; "0.0,0.0,1.0\n1.5,2.0,2.5\n3.0,4.0,3.0\n";
     outfile.close();
 
-    // Đọc file CSV
     auto path = load_waypoints_from_csv("test_path.csv");
     std::cout &lt;&lt; "Doc thanh cong " &lt;&lt; path.size() &lt;&lt; " waypoints tu CSV:\n";
     for (size_t i = 0; i &lt; path.size(); ++i) {
-        std::cout &lt;&lt; "  WP " &lt;&lt; i &lt;&lt; ": x=" &lt;&lt; path[i].x &lt;&lt; ", y=" &lt;&lt; path[i].y &lt;&lt; ", v=" &lt;&lt; path[i].target_speed &lt;&lt; " m/s\n";
+        std::cout &lt;&lt; "  WP " &lt;&lt; i &lt;&lt; ": x=" &lt;&lt; path[i].x &lt;&lt; ", y=" &lt;&lt; path[i].y &lt;&lt; ", v=" &lt;&lt; path[i].target_speed &lt;&lt; "\n";
     }
     return 0;
 }</code></pre>
+
+<div class="quiz-section">
+    <h3>💪 Bài Tập Thực Hành Phần 10 (Có Lời Giải Chi Tiết)</h3>
+
+    <div class="quiz-question">
+        <p><strong>BT10.1:</strong> Viết hàm C++ ghi log các biến <code>timestamp, error, u_output</code> ra file <code>pid_log.csv</code>.</p>
+        <div class="answer-section">
+            <span class="box-title">✅ Lời giải BT10.1</span>
+            <pre><code>#include &lt;iostream&gt;
+#include &lt;fstream&gt;
+
+void log_pid(double t, double err, double u) {
+    std::ofstream file("pid_log.csv", std::ios::app);
+    file &lt;&lt; t &lt;&lt; "," &lt;&lt; err &lt;&lt; "," &lt;&lt; u &lt;&lt; "\n";
+}
+
+int main() {
+    log_pid(0.1, 0.5, 2.1);
+    return 0;
+}</code></pre>
+        </div>
+    </div>
+
+    <div class="quiz-question">
+        <p><strong>BT10.2:</strong> Sử dụng <code>std::stringstream</code> để tách chuỗi <code>"1.23;4.56;7.89"</code> phân cách bởi dấu chấm phẩy <code>;</code>.</p>
+        <div class="answer-section">
+            <span class="box-title">✅ Lời giải BT10.2</span>
+            <pre><code>#include &lt;iostream&gt;
+#include &lt;sstream&gt;
+#include &lt;string&gt;
+
+int main() {
+    std::stringstream ss("1.23;4.56;7.89");
+    std::string val;
+    while(std::getline(ss, val, ';')) {
+        std::cout &lt;&lt; std::stod(val) &lt;&lt; "\n";
+    }
+    return 0;
+}</code></pre>
+        </div>
+    </div>
+</div>
 
 <!-- ===================================================== -->
 <!-- PHẦN 11 -->
 <!-- ===================================================== -->
 <div class="part-header-intro" id="part11">
     <h1>PHẦN 11 — DỰ ÁN THỰC HÀNH TỔNG HỢP TUẦN 2</h1>
-    <p>Dự án 1: PID Controller C++17 · Dự án 2: Waypoint CSV Tracker</p>
+    <p>Dự án 1: PID Controller C++17 · Dự án 2: Pure Pursuit Waypoint Tracker Simulator</p>
 </div>
 
 <div class="step-card">
     <span class="step-number">🛠️</span>
-    <h3>Dự án Tổng hợp: Hệ Thống Bám Quỹ Đạo Đọc CSV kèm PID Controller</h3>
+    <h3>Dự án 1: PID Controller Module C++17 Chuẩn Kỹ Thuật (Anti-Windup + Saturation)</h3>
     <pre><code>#include &lt;iostream&gt;
 #include &lt;vector&gt;
 #include &lt;cmath&gt;
 #include &lt;algorithm&gt;
 
+// Bộ điều khiển PID tích hợp thuật toán bão hòa (Saturation) và chống phình tích phân (Anti-windup)
 class PIDController {
 private:
     double kp_, ki_, kd_, dt_;
     double min_out_, max_out_;
     double prev_error_ = 0.0;
     double integral_ = 0.0;
+
 public:
     PIDController(double kp, double ki, double kd, double dt, double min_o, double max_o)
         : kp_(kp), ki_(ki), kd_(kd), dt_(dt), min_out_(min_o), max_out_(max_o) {}
@@ -1180,8 +2239,14 @@ public:
         integral_ += error * dt_;
         double derivative = (error - prev_error_) / dt_;
         double output = kp_ * error + ki_ * integral_ + kd_ * derivative;
+        
+        // Bão hòa tín hiệu đầu ra (Saturation Limit)
         double clamped = std::clamp(output, min_out_, max_out_);
-        if (output != clamped &amp;&amp; ki_ != 0.0) integral_ -= error * dt_; // Anti-windup
+        
+        // Anti-windup cho tích phân: Nếu đầu ra bị bão hòa, ngưng cộng dồn tích phân
+        if (output != clamped &amp;&amp; ki_ != 0.0) {
+            integral_ -= error * dt_;
+        }
         prev_error_ = error;
         return clamped;
     }
@@ -1190,15 +2255,74 @@ public:
 int main() {
     PIDController speed_pid(2.0, 0.1, 0.05, 0.05, -10.0, 10.0);
     double current_speed = 0.0;
-    double target_speed = 5.0; // 5 m/s
+    double target_speed = 5.0; // Vận tốc mục tiêu 5 m/s
 
-    std::cout &lt;&lt; "--- CHẠY MÔ PHỎNG ĐIỀU KHIỂN TỐC ĐỘ XE ROBOT (10 STEP) ---\n";
+    std::cout &lt;&lt; "--- MÔ PHỎNG ĐIỀU KHIỂN VẬN TỐC ROBOT ENCODER (10 BƯỚC) ---\n";
     for (int t = 1; t &lt;= 10; ++t) {
         double accel_cmd = speed_pid.compute(target_speed, current_speed);
-        current_speed += accel_cmd * 0.05; // dt = 0.05s
+        current_speed += accel_cmd * 0.05;
         std::printf("Step %2d | Target: %.1f m/s | Speed: %5.2f m/s | Accel Cmd: %5.2f m/s^2\n",
                     t, target_speed, current_speed, accel_cmd);
     }
+    return 0;
+}</code></pre>
+</div>
+
+<div class="step-card">
+    <span class="step-number">🚘</span>
+    <h3>Dự án 2: Pure Pursuit Trajectory Tracker Engine (Đọc CSV &amp; Tính Góc Lái C++17)</h3>
+    <pre><code>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;cmath&gt;
+#include &lt;algorithm&gt;
+#include &lt;fstream&gt;
+#include &lt;sstream&gt;
+
+struct Waypoint {
+    double x, y, speed;
+};
+
+// Mô phỏng thuật toán bám đường Pure Pursuit trên xe mô hình F1TENTH
+class PurePursuitTracker {
+private:
+    double lookahead_dist_; // Khoảng cách nhìn trước (Lookahead distance L)
+    double wheel_base_;     // Chiều dài cơ sở xe (Wheelbase L_wb)
+public:
+    PurePursuitTracker(double L, double wb) : lookahead_dist_(L), wheel_base_(wb) {}
+
+    // Tìm Waypoint mục tiêu gần khoảng cách L nhất trên quỹ đạo
+    Waypoint find_target_waypoint(double rx, double ry, const std::vector&lt;Waypoint&gt;&amp; path) {
+        auto target_it = std::min_element(path.begin(), path.end(), [rx, ry, this](const Waypoint&amp; a, const Waypoint&amp; b) {
+            double dist_a = std::abs(std::hypot(a.x - rx, a.y - ry) - lookahead_dist_);
+            double dist_b = std::abs(std::hypot(b.x - rx, b.y - ry) - lookahead_dist_);
+            return dist_a &lt; dist_b;
+        });
+        return *target_it;
+    }
+
+    // Tính toán góc lái theo công thức Pure Pursuit: delta = atan2(2 * L_wb * sin(alpha), L)
+    double compute_steering(double rx, double ry, double ryaw, const Waypoint&amp; target) {
+        double dx = target.x - rx;
+        double dy = target.y - ry;
+        double alpha = std::atan2(dy, dx) - ryaw;
+        double delta = std::atan2(2.0 * wheel_base_ * std::sin(alpha), lookahead_dist_);
+        return std::clamp(delta, -0.6, 0.6); // Kẹp góc lái max 35 độ
+    }
+};
+
+int main() {
+    std::vector&lt;Waypoint&gt; waypoints = {
+        {0.0, 0.0, 2.0}, {2.0, 1.0, 2.0}, {4.0, 3.0, 2.0}, {6.0, 6.0, 2.0}
+    };
+
+    PurePursuitTracker tracker(2.0, 0.33); // L = 2m, Wheelbase = 0.33m (Xe F1TENTH)
+    double robot_x = 0.0, robot_y = 0.0, robot_yaw = 0.1;
+
+    Waypoint target_wp = tracker.find_target_waypoint(robot_x, robot_y, waypoints);
+    double steer = tracker.compute_steering(robot_x, robot_y, robot_yaw, target_wp);
+
+    std::cout &lt;&lt; "Target Waypoint: (" &lt;&lt; target_wp.x &lt;&lt; ", " &lt;&lt; target_wp.y &lt;&lt; ")\n";
+    std::cout &lt;&lt; "Goc lai tinh duoc (Pure Pursuit): " &lt;&lt; steer &lt;&lt; " rad\n";
     return 0;
 }</code></pre>
 </div>
@@ -1208,64 +2332,181 @@ int main() {
 <!-- ===================================================== -->
 <div class="part-header-purple" id="part12">
     <h1>PHẦN 12 — BỘ QUIZ TỔNG KẾT TOÀN DIỆN &amp; CHEAT SHEET</h1>
-    <p>15 câu quiz tự kiểm tra năng lực + Cheat Sheet tóm tắt C++ Modern</p>
+    <p>15+ câu quiz tự kiểm tra năng lực + Cheat Sheet tóm tắt C++ Modern</p>
 </div>
 
 <div class="quiz-section">
-    <h3>🚦 Bộ Quiz Kiểm Tra Toàn Bộ Kiến Thức C++ Tuần 2</h3>
+    <h3>🚦 Bộ Quiz Kiểm Tra Toàn Bộ Kiến Thức C++ Tuần 2 (15 Câu)</h3>
 
     <div class="quiz-question">
         <p><strong>Q1:</strong> Vì sao trong code C++ Robotics, ta luôn ưu tiên dùng <code>const T&amp;</code> khi truyền mảng điểm LiDAR thay vì truyền trực tiếp <code>T</code>?</p>
         <div class="answer-section">
-            <span class="box-title">✅ Đáp án</span>
-            <p>Truyền <code>const T&amp;</code> giúp tránh tốn chi phí gian CPU copy mảng dữ liệu lớn ($0\text{ms}$ copy), đồng thời từ khóa <code>const</code> bảo vệ dữ liệu mảng không bị hàm lỡ tay sửa đổi.</p>
+            <span class="box-title">✅ Đáp án Chi Tiết</span>
+            <p>Truyền <code>const T&amp;</code> giúp tránh tốn chi phí CPU copy mảng dữ liệu lớn ($0\text{ms}$ copy), đồng thời từ khóa <code>const</code> bảo vệ dữ liệu mảng không bị sửa đổi.</p>
+            <pre><code>void process(const std::vector&lt;double&gt;&amp; data); // Zero copy overhead</code></pre>
         </div>
     </div>
 
     <div class="quiz-question">
         <p><strong>Q2:</strong> Sự khác nhau giữa <code>std::unique_ptr</code> và <code>std::shared_ptr</code> là gì? Loại nào có chi phí Overhead = 0?</p>
         <div class="answer-section">
-            <span class="box-title">✅ Đáp án</span>
-            <p><code>unique_ptr</code> sở hữu độc quyền (không copy được), chi phí Overhead = 0 (hiệu năng bằng con trỏ thô). <code>shared_ptr</code> cho phép chia sẻ quyền sở hữu bằng Reference Counting (có thêm chi phí bộ nhớ &amp; atomic count).</p>
+            <span class="box-title">✅ Đáp án Chi Tiết</span>
+            <p><code>unique_ptr</code> sở hữu độc quyền (không copy được), chi phí Overhead = 0. <code>shared_ptr</code> cho phép chia sẻ quyền sở hữu bằng Reference Counting.</p>
+            <pre><code>auto u = std::make_unique&lt;Motor&gt;(); // Zero overhead
+auto s = std::make_shared&lt;Costmap&gt;(); // Shared reference count</code></pre>
         </div>
     </div>
 
     <div class="quiz-question">
         <p><strong>Q3:</strong> Tại sao mọi lớp cha Interface trong C++ Hướng đối tượng bắt buộc phải có <code>virtual ~BaseClass()</code>?</p>
         <div class="answer-section">
-            <span class="box-title">✅ Đáp án</span>
+            <span class="box-title">✅ Đáp án Chi Tiết</span>
             <p>Để đảm bảo khi hủy đối tượng lớp con qua con trỏ lớp cha, Destructor của lớp con vẫn được gọi đầy đủ, tránh rò rỉ bộ nhớ (Memory Leak).</p>
+            <pre><code>class Base { public: virtual ~Base() = default; };</code></pre>
         </div>
     </div>
 
     <div class="quiz-question">
         <p><strong>Q4:</strong> Việc gọi <code>std::vector::reserve(N)</code> trước khi đẩy dữ liệu vào vector có tác dụng gì đối với tính năng thời gian thực (Real-time)?</p>
         <div class="answer-section">
-            <span class="box-title">✅ Đáp án</span>
+            <span class="box-title">✅ Đáp án Chi Tiết</span>
             <p>Nó cấp phát trước đúng dung lượng bộ nhớ Heap $N$ phần tử, loại bỏ hoàn toàn các lần tái cấp phát (Re-allocation) ngẫu nhiên làm giật lag vòng lặp điều khiển.</p>
+            <pre><code>std::vector&lt;Point&gt; pts; pts.reserve(1000); // Heap allocated once!</code></pre>
         </div>
     </div>
 
     <div class="quiz-question">
         <p><strong>Q5:</strong> Cú pháp Lambda capture <code>[this]</code> có ý nghĩa gì trong đăng ký Callback của ROS 2?</p>
         <div class="answer-section">
-            <span class="box-title">✅ Đáp án</span>
+            <span class="box-title">✅ Đáp án Chi Tiết</span>
             <p>Cho phép hàm Lambda truy cập trực tiếp và an toàn các biến thành viên và phương thức của lớp Node hiện tại.</p>
+            <pre><code>sub_ = create_sub([this](auto msg){ this-&gt;on_msg(msg); });</code></pre>
+        </div>
+    </div>
+
+    <div class="quiz-question">
+        <p><strong>Q6:</strong> Tại sao <code>std::array</code> lại safe cho các vòng lặp Real-Time $1000\text{ Hz}$ trong khi <code>std::vector</code> lại có nguy cơ?</p>
+        <div class="answer-section">
+            <span class="box-title">✅ Đáp án Chi Tiết</span>
+            <p>Vì <code>std::array</code> nằm hoàn toàn trên Stack (không xin bộ nhớ từ OS), trong khi <code>std::vector</code> xin bộ nhớ từ Heap (không xác định thời gian cấp phát).</p>
+            <pre><code>std::array&lt;double, 6&gt; state; // Allocated on Stack (0ms delay)</code></pre>
+        </div>
+    </div>
+
+    <div class="quiz-question">
+        <p><strong>Q7:</strong> Khi nào NÊN dùng <code>std::deque</code> thay vì <code>std::vector</code>?</p>
+        <div class="answer-section">
+            <span class="box-title">✅ Đáp án Chi Tiết</span>
+            <p>Khi bạn cần thêm/xóa phần tử ở ĐẦU mảng (Pop Front / Push Front) trong độ phức tạp $O(1)$, ví dụ bộ lọc Sliding Window.</p>
+            <pre><code>std::deque&lt;double&gt; buf; buf.pop_front(); // O(1) time complexity</code></pre>
+        </div>
+    </div>
+
+    <div class="quiz-question">
+        <p><strong>Q8:</strong> Lợi ích của <code>std::clamp(val, min_val, max_val)</code> là gì?</p>
+        <div class="answer-section">
+            <span class="box-title">✅ Đáp án Chi Tiết</span>
+            <p>Giới hạn trực tiếp giá trị trong dải an toàn (vận tốc, góc lái, PWM) chỉ với 1 dòng code ngắn gọn và tối ưu.</p>
+            <pre><code>double u = std::clamp(raw_u, -1.0, 1.0);</code></pre>
+        </div>
+    </div>
+
+    <div class="quiz-question">
+        <p><strong>Q9:</strong> Erase-Remove Idiom hoạt động thế nào để lọc phần tử trong <code>std::vector</code>?</p>
+        <div class="answer-section">
+            <span class="box-title">✅ Đáp án Chi Tiết</span>
+            <p><code>std::remove_if</code> dồn các phần tử cần giữ lên đầu và trả về iterator mới, sau đó <code>v.erase()</code> cắt bỏ phần đuôi thừa.</p>
+            <pre><code>v.erase(std::remove_if(v.begin(), v.end(), pred), v.end());</code></pre>
+        </div>
+    </div>
+
+    <div class="quiz-question">
+        <p><strong>Q10:</strong> <code>std::optional&lt;T&gt;</code> giải quyết vấn đề gì trong lập trình C++?</p>
+        <div class="answer-section">
+            <span class="box-title">✅ Đáp án Chi Tiết</span>
+            <p>Thay thế việc dùng các cờ lỗi giả (vd: -1.0, nullptr) bằng một container an toàn thể hiện dữ liệu Có hoặc Không tồn tại.</p>
+            <pre><code>std::optional&lt;Path&gt; plan_path(); // Safe return</code></pre>
+        </div>
+    </div>
+
+    <div class="quiz-question">
+        <p><strong>Q11:</strong> <code>std::string_view</code> khác <code>std::string</code> ở điểm nào?</p>
+        <div class="answer-section">
+            <span class="box-title">✅ Đáp án Chi Tiết</span>
+            <p><code>std::string_view</code> chỉ là một con trỏ + độ dài quan sát chuỗi có sẵn (Zero-copy), không tự cấp phát bộ nhớ Heap mới.</p>
+            <pre><code>void log_topic(std::string_view t); // Zero allocation</code></pre>
+        </div>
+    </div>
+
+    <div class="quiz-question">
+        <p><strong>Q12:</strong> <code>std::move</code> thực chất thực hiện hành động gì?</p>
+        <div class="answer-section">
+            <span class="box-title">✅ Đáp án Chi Tiết</span>
+            <p>Nó chỉ thực hiện Ép kiểu (Cast) một Lvalue thành Rvalue reference để kích hoạt Move Constructor / Move Assignment.</p>
+            <pre><code>auto new_buf = std::move(old_buf); // Cast to Rvalue</code></pre>
+        </div>
+    </div>
+
+    <div class="quiz-question">
+        <p><strong>Q13:</strong> Tại sao <code>std::lock_guard</code> lại an toàn hơn gõ <code>mutex.lock()</code> và <code>mutex.unlock()</code> thủ công?</p>
+        <div class="answer-section">
+            <span class="box-title">✅ Đáp án Chi Tiết</span>
+            <p>Vì <code>lock_guard</code> sử dụng RAII tự động giải phóng (unlock) mutex khi thoát khỏi scope, kể cả khi có ngoại lệ (exception) xảy ra.</p>
+            <pre><code>{ std::lock_guard&lt;std::mutex&gt; lock(mtx); } // Auto unlock</code></pre>
+        </div>
+    </div>
+
+    <div class="quiz-question">
+        <p><strong>Q14:</strong> <code>std::atomic&lt;T&gt;</code> dùng khi nào?</p>
+        <div class="answer-section">
+            <span class="box-title">✅ Đáp án Chi Tiết</span>
+            <p>Dùng cho các biến trạng thái đơn giản (bool, int) được đọc/ghi giữa nhiều thread mà không cần dùng Mutex (Lock-free).</p>
+            <pre><code>std::atomic&lt;bool&gt; estop{false}; // Lock-free atomic flag</code></pre>
+        </div>
+    </div>
+
+    <div class="quiz-question">
+        <p><strong>Q15:</strong> <code>std::stringstream</code> kết hợp <code>std::getline</code> được dùng làm gì trong xử lý dữ liệu Robot?</p>
+        <div class="answer-section">
+            <span class="box-title">✅ Đáp án Chi Tiết</span>
+            <p>Dùng để parse (phân tích) từng dòng dữ liệu từ file CSV / Text phân cách bởi dấu phẩy hoặc khoảng trắng thành các giá trị biến số.</p>
+            <pre><code>std::stringstream ss(line); std::getline(ss, val, ',');</code></pre>
         </div>
     </div>
 </div>
 
 <div class="summary-box">
-    <h2>📌 Tổng Kết Tuần 2 — C++ Hiện Đại Cho Robotics Thành Thạo</h2>
+    <h2>📌 Quick Reference Cheat Sheet — C++ Modern Cho Robotics</h2>
     <ul>
-        <li>✅ Hiểu tận gốc bản chất bộ nhớ Stack vs Heap, tránh Segfault &amp; Dangling Pointers.</li>
-        <li>✅ Làm chủ <code>unique_ptr</code> và <code>shared_ptr</code> để quản lý bộ nhớ tự động 100% không cần <code>delete</code>.</li>
-        <li>✅ Thiết kế kiến trúc Hướng đối tượng chuẩn mực với Virtual Destructor và Class Interface.</li>
-        <li>✅ Sử dụng đúng STL Containers (array, vector, deque, priority_queue) và STL Algorithms (sort, clamp, remove_if, lower_bound).</li>
-        <li>✅ Thành thạo Lambda Captures <code>[this]</code> và <code>std::function</code> sẵn sàng gõ ROS 2 rclcpp Callback ở Tuần 7.</li>
-        <li>✅ Làm quen với Modern C++17/20, Move Semantics, Multi-threading và Đọc/Ghi file CSV Waypoint.</li>
+        <li><code>const T&amp;</code>: Truyền mảng/struct lớn không copy.</li>
+        <li><code>std::make_unique&lt;T&gt;()</code>: Khởi tạo Smart Pointer độc quyền mặc định.</li>
+        <li><code>std::make_shared&lt;T&gt;()</code>: Khởi tạo Smart Pointer chia sẻ dữ liệu.</li>
+        <li><code>v.reserve(N)</code>: Cấp phát trước bộ nhớ Heap cho vector.</li>
+        <li><code>std::clamp(val, min, max)</code>: Giới hạn tín hiệu điều khiển.</li>
+        <li><code>[this](auto msg) { ... }</code>: Cú pháp Lambda Callback chuẩn ROS 2.</li>
+        <li><code>auto [x, y, yaw] = pose;</code>: Structured bindings unpack dữ liệu.</li>
+        <li><code>std::move(heavy_data)</code>: Chuyển giao bộ nhớ $0\text{ms}$.</li>
+        <li><code>std::lock_guard&lt;std::mutex&gt; lock(mtx)</code>: Khóa thread an toàn RAII.</li>
     </ul>
 </div>
+
+<h2>12.1 Hướng Dẫn Biên Dịch &amp; Chạy Code Mẫu Với `g++` Trên Ubuntu Linux</h2>
+<p>Để biên dịch tất cả các file code mẫu C++17/C++20 trong tài liệu này trên terminal Ubuntu Linux, sử dụng lệnh <code>g++</code> với các cờ tối ưu như sau:</p>
+<pre><code># 1. Biên dịch C++17 tiêu chuẩn với cảnh báo đầy đủ & tối ưu hóa O3
+g++ -std=c++17 -O3 -Wall -Wextra main.cpp -o robot_node -lpthread
+
+# 2. Chạy file thực thi
+./robot_node</code></pre>
+
+<h2>12.2 Lời Khuyên Dành Cho Kỹ Sư Robotics Khi Đọc Source Code ROS 2 &amp; Nav2</h2>
+<p>Khi đọc các gói package trong Nav2 (ví dụ <code>nav2_dwb_controller</code> hay <code>nav2_costmap_2d</code>), hãy chú ý đến cấu trúc kế thừa từ các Plugin Interface (dùng <code>pluginlib</code>). Mọi Plugin trong Nav2 đều thừa hưởng từ <code>nav2_core::GlobalPlanner</code> hoặc <code>nav2_core::Controller</code> với các hàm thuần ảo <code>configure()</code>, <code>activate()</code>, và <code>computeVelocityCommands()</code>. Việc nắm vững kiến thức OOP (Phần 2), Smart Pointers (Phần 3), và STL Containers (Phần 4) trong tài liệu này sẽ giúp bạn dễ dàng đọc hiểu 100% logic bên trong mà không cảm thấy ngợp.</p>
+
+<h2>12.3 Tổng Kết Hành Trình Học Tuần 2 &amp; Bước Chuẩn Bị Tuần 3</h2>
+<p>Chúc mừng bạn đã hoàn thành tài liệu chuyên sâu 2500+ dòng Tuần 2 về C++ Hiện đại cho Robotics! Sau khi làm chủ các khái niệm này, ở Tuần 3 chúng ta sẽ tiến tới **Toán Học Cho Control &amp; Planning: Đại Số Tuyến Tính, Ma Trận Transform 2D/3D (SE(2)/SE(3)), Quaternions và Đạo Hàm Vectơ trong Eigen C++**.</p>
+
+<footer>
+    <p>© 2026 Huỳnh Công Danh · Tài liệu thuộc Lộ trình 24 Tuần Lý Thuyết Điều Khiển & Quản Lý Robot / Xe Tự Hành.</p>
+</footer>
 
 </body>
 </html>
