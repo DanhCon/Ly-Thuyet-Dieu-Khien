@@ -390,12 +390,12 @@ footer {
         <li><a href="#part4">Phần 4 — Cấu Trúc Dữ Liệu STL Containers Toàn Diện (array, vector, deque, priority_queue, Thuật toán A* &amp; Costmap Inflation, 4 bài tập)</a></li>
         <li><a href="#part5">Phần 5 — Thuật Toán STL Algorithms Thực Chiến Trong Lập Trình Robot (8 thuật toán, 5 bài tập)</a></li>
         <li><a href="#part6">Phần 6 — Template &amp; Lambda Expressions (std::function, std::bind, Callback ROS 2, 4 bài tập)</a></li>
-        <li><a href="#part7">Phần 7 — Modern C++17 / C++20 Features (auto, structured bindings, optional, string_view, EKF Solver, 3 bài tập)</a></li>
-        <li><a href="#part8">Phần 8 — Move Semantics &amp; Quản Lý Sở Hữu Bộ Nhớ (Zero-Copy PointCloud, std::move, 3 bài tập)</a></li>
-        <li><a href="#part9">Phần 9 — Lập Trình Đa Luồng (Multi-threading) &amp; Concurrency (std::thread, mutex, atomic, ROS 2 Callback Groups, 3 bài tập)</a></li>
-        <li><a href="#part10">Phần 10 — Xử Lý File I/O &amp; Chuỗi Dữ Liệu (Đọc CSV Waypoint, fstream, stringstream, 2 bài tập)</a></li>
-        <li><a href="#part11">Phần 11 — Dự Án Thực Hành Tổng Hợp: PID Controller C++17 &amp; Pure Pursuit Waypoint CSV Tracker Engine</a></li>
-        <li><a href="#part12">Phần 12 — Bộ Quiz Tổng Kết Toàn Diện (15+ Câu Hỏi) &amp; Quick Reference Cheat Sheet</a></li>
+        <li><a href="#part7">Phần 7 — Modern C++17 / C++20 Features Trong ROS 2 Development (Structured Bindings, std::optional, Dynamic Parameters, EKF 2D)</a></li>
+        <li><a href="#part8">Phần 8 — Move Semantics &amp; Quản Lý Sở Hữu Bộ Nhớ Zero-Copy ROS 2 (Lvalue/Rvalue, std::move, PointCloud2 IPC)</a></li>
+        <li><a href="#part9">Phần 9 — Lập Trình Đa Luồng (Multi-threading), Concurrency &amp; ROS 2 Executors (MultiThreadedExecutor, Callback Groups, Mutex)</a></li>
+        <li><a href="#part10">Phần 10 — ROS 2 Action Server/Client &amp; File I/O Waypoint CSV (Topics vs Services vs Actions, rclcpp_action, CSV Parser)</a></li>
+        <li><a href="#part11">Phần 11 — Dự Án Thực Hành Tổng Hợp: Complete ROS 2 Node Package C++17 (PID Lifecycle Node, Pure Pursuit Node, colcon build)</a></li>
+        <li><a href="#part12">Phần 12 — Bộ Quiz Tổng Kết Toàn Diện (15+ Câu Hỏi) &amp; Quick Reference Cheat Sheet C++ ROS 2</a></li>
     </ol>
 </div>
 
@@ -1846,157 +1846,321 @@ int main() {
 <!-- ===================================================== -->
 <!-- PHẦN 7 -->
 <!-- ===================================================== -->
+
+<!-- ===================================================== -->
+<!-- PHẦN 7 -->
+<!-- ===================================================== -->
 <div class="part-header-purple" id="part7">
-    <h1>PHẦN 7 — MODERN C++17 / C++20 FEATURES CẦN THIẾT</h1>
-    <p>Structured Bindings · enum class · std::optional · std::string_view · EKF State Estimator <span class="level-badge level-apply">🔧 CHỈ CẦN CÔNG THỨC</span></p>
+    <h1>PHẦN 7 — MODERN C++17 / C++20 FEATURES TRONG ROS 2 DEVELOPMENT</h1>
+    <p>Structured Bindings · enum class · std::optional · std::string_view · Dynamic Parameters Handler · EKF 2D Localization Solver</p>
 </div>
 
 <div class="motivation-box">
     <div class="motivation-title">💡 Ý NGHĨA &amp; MỤC ĐÍCH HỌC PHẦN 7: MODERN C++17 / C++20 FEATURES CẦN THIẾT</div>
     <ul class="motivation-list">
-        <li><strong>🎯 Học để làm gì?</strong> Áp dụng các chuẩn C++ mới nhất giúp code clean, hiện đại, an toàn kiểu dữ liệu và nâng cao hiệu suất thực thi.</li>
-        <li><span class="app-tag">🚗 Ứng dụng thực tế:</span> Trích xuất tọa độ Robot qua Structured Bindings (`auto [x, y, yaw]`), kiểm soát giá trị trả về có/không tồn tại bằng `std::optional`, quan sát chuỗi `std::string_view` không tốn copy, và triển khai **Extended Kalman Filter (EKF 2D State Estimator)**.</li>
+        <li><strong>🎯 Học để làm gì?</strong> Áp dụng các chuẩn C++ mới nhất giúp code clean, hiện đại, an toàn kiểu dữ liệu và nâng cao hiệu suất thực thi trong ROS 2 ecosystem.</li>
+        <li><span class="app-tag">🚗 Ứng dụng thực tế:</span> Trích xuất tọa độ Robot qua Structured Bindings (`auto [x, y, yaw]`), kiểm soát giá trị trả về có/không tồn tại bằng `std::optional`, quan sát chuỗi `std::string_view` không tốn copy, lắng nghe thay đổi thông số động bằng `rclcpp::ParameterEventHandler`, và triển khai **Extended Kalman Filter (EKF 2D State Estimator)**.</li>
         <li><span class="danger-tag">⚠️ Nếu không biết phần này:</span> Bạn phải dùng các cờ lỗi giả nguy hiểm kiểu C (như trả về `-1.0` hoặc con trỏ `NULL`), dễ gây sai số nghiêm trọng khi tính toán bộ lọc Kalman định vị xe.</li>
     </ul>
 </div>
 
-<h2>7.1 Các Tính Năng Hiện Đại Giúp Code Clean &amp; An Toàn</h2>
+<h2>7.1 Chi Tiết 5 Tính Năng Modern C++17/20 Cốt Lõi Trong Robotics</h2>
+<p>C++17 và C++20 mang lại những cải tiến đột phá giúp loại bỏ code thừa rườm rà, tăng tính an toàn kiểu dữ liệu và hỗ trợ lập trình viên viết code ROS 2 cực kỳ ngắn gọn nhưng đạt hiệu năng tối đa.</p>
 
 <div class="step-card">
     <span class="step-number">1</span>
-    <h3>Code minh họa 5 tính năng C++17/20 đỉnh cao</h3>
+    <h3>Phân tích chuyên sâu 5 tính năng Modern C++17/20</h3>
+    <ul>
+        <li><strong>1. Structured Bindings (C++17):</strong> Cho phép giải nén (unpack) trực tiếp các phần tử của <code>std::tuple</code>, <code>std::pair</code>, hoặc các <code>struct</code> dữ liệu mà không cần thông qua các hàm gán cừu rườm rà như <code>std::get&lt;N&gt;()</code>.</li>
+        <li><strong>2. <code>enum class</code> (Scoped Enumerations):</strong> Khác với C-style <code>enum</code> truyền thống (tự động ép kiểu sang <code>int</code> và gây ô nhiễm phạm vi tên toàn cục), <code>enum class</code> bắt buộc phải truy cập qua tên lớp định danh, giúp bảo vệ các trạng thái FSM (Finite State Machine) của Robot không bị ghi đè ngẫu nhiên.</li>
+        <li><strong>3. <code>std::optional&lt;T&gt;</code> (C++17):</strong> Một Container đại diện cho giá trị có thể **TỒN TẠI** hoặc **RỖNG (std::nullopt)**. Thay thế hoàn toàn việc trả về các cờ lỗi âm nguy hiểm như `-1.0` hay con trỏ `nullptr` khi tính toán khoảng cách vật cản hoặc tìm đường.</li>
+        <li><strong>4. <code>std::string_view</code> (C++17):</strong> Một con trỏ chỉ đọc (Read-only view) bọc lấy chuỗi ký tự có sẵn mà **KHÔNG CẤP PHÁT BỘ NHỚ HEAP** (Zero-allocation string observation). Cực kỳ thích hợp để truyền các hằng số tên khung tọa độ ROS 2 (như <code>"map"</code>, <code>"base_link"</code>, <code>"laser_frame"</code>) vào hàm xử lý.</li>
+        <li><strong>5. <code>[[nodiscard]]</code> (C++17):</strong> Attribute cảnh báo trình biên dịch phát lỗi nếu người gõ code bỏ qua (bỏ quên) giá trị trả về của các hàm quan trọng (ví dụ: hàm kiểm tra cảm biến an toàn `check_safety_sensor()`).</li>
+    </ul>
+
     <pre><code>#include &lt;iostream&gt;
 #include &lt;optional&gt;
 #include &lt;string_view&gt;
 #include &lt;tuple&gt;
 
-enum class RobotState { IDLE, NAVIGATING, EMERGENCY_STOP };
+// 1. enum class type-safe cho FSM trạng thái xe tự hành
+enum class AutonomousState {
+    IDLE,
+    MAPPING,
+    NAVIGATING,
+    EMERGENCY_STOP
+};
 
-[[nodiscard]] bool check_safety_sensor() {
-    return true;
+// 2. [[nodiscard]]: Bắt buộc caller phải check kết quả cảm biến an toàn
+[[nodiscard]] bool check_lidar_safety() {
+    // Trả về true nếu không có vật cản dưới 0.3m
+    return true; 
 }
 
-std::optional&lt;double&gt; compute_distance_to_goal(bool path_found, double dist) {
-    if (path_found) return dist;
-    return std::nullopt;
+// 3. std::optional: Trả về khoảng cách tới mục tiêu (nullopt nếu không tìm thấy path)
+std::optional&lt;double&gt; compute_distance_to_goal(bool path_found, double target_x, double target_y) {
+    if (!path_found) {
+        return std::nullopt; // An toàn 100%, không dùng cờ -1.0 rác!
+    }
+    return std::hypot(target_x, target_y);
 }
 
-void log_ros_topic(std::string_view topic_name) {
-    std::cout &lt;&lt; "[LOG TOPIC]: " &lt;&lt; topic_name &lt;&lt; "\n";
+// 4. std::string_view: Truyền tên frame ROS 2 không tốn copy chuỗi
+void print_tf_frame(std::string_view parent_frame, std::string_view child_frame) {
+    std::cout &lt;&lt; "[TF Tree] Dynamic Transform: " &lt;&lt; parent_frame &lt;&lt; " -&gt; " &lt;&lt; child_frame &lt;&lt; "
+";
 }
 
 int main() {
-    std::tuple&lt;double, double, double&gt; pose{1.2, 3.4, 0.78};
-    auto [x, y, yaw] = pose;
-    std::cout &lt;&lt; "Pose: x=" &lt;&lt; x &lt;&lt; ", y=" &lt;&lt; y &lt;&lt; ", yaw=" &lt;&lt; yaw &lt;&lt; "\n";
+    // Structured Bindings giải nén Tọa độ Robot (x, y, yaw)
+    std::tuple&lt;double, double, double&gt; robot_pose{2.5, 4.1, 1.57};
+    auto [x, y, yaw] = robot_pose; // Unpack trực tiếp cực kỳ đẹp!
+    std::cout &lt;&lt; "Robot Pose: x=" &lt;&lt; x &lt;&lt; ", y=" &lt;&lt; y &lt;&lt; ", yaw=" &lt;&lt; yaw &lt;&lt; " rad
+";
 
-    auto result = compute_distance_to_goal(true, 15.4);
-    if (result.has_value()) {
-        std::cout &lt;&lt; "Khoang cach den dich: " &lt;&lt; result.value() &lt;&lt; " m\n";
+    // Kiểm tra std::optional
+    auto dist = compute_distance_to_goal(true, 3.0, 4.0);
+    if (dist.has_value()) {
+        std::cout &lt;&lt; "Khoang cach den dich: " &lt;&lt; dist.value() &lt;&lt; " m
+";
     }
 
-    log_ros_topic("/scan");
+    // Call function với string_view
+    print_tf_frame("map", "base_link");
     return 0;
 }</code></pre>
+
+    <div class="analogy-box">
+        <span class="box-title">🔍 Phân tích chi tiết từng dòng code (Line-by-line Walkthrough)</span>
+        <ul>
+            <li><code>auto [x, y, yaw] = robot_pose;</code>: Trình biên dịch C++17 tự động suy luận kiểu dữ liệu của từng phần tử trong `tuple` và tạo ra 3 biến cục bộ `x`, `y`, `yaw` trên Stack. Chi phí thực thi = 0.</li>
+            <li><code>std::optional&lt;double&gt;</code>: Lưu trữ trực tiếp giá trị `double` bên trong cùng một cờ hiệu boolean nhỏ. Khi thất bại, trả về `std::nullopt` thay vì dùng con trỏ hay ép kiểu nguy hiểm.</li>
+            <li><code>std::string_view</code>: Chỉ lưu 2 thông số: Con trỏ <code>const char*</code> trỏ vào vùng nhớ chuỗi có sẵn và độ dài `size_t`. Tránh hoàn toàn việc gọi `malloc()` cấp phát Heap cho string tạm.</li>
+        </ul>
+    </div>
 </div>
 
-<h2>7.2 Mô phỏng Extended Kalman Filter (EKF 2D Localization) C++17</h2>
-<pre><code>#include &lt;iostream&gt;
+<h2>7.2 Triển Khai Dynamic Parameter Handler Trong ROS 2 C++ (`rclcpp`)</h2>
+<p>Trong ROS 2 (`rclcpp`), tham số (Parameters) có thể được thay đổi động lúc runtime từ Terminal bằng lệnh <code>ros2 param set</code>. C++17 kết hợp với <code>rclcpp::ParameterEventHandler</code> cho phép Node tự động cập nhật thông số bộ điều khiển PID hay vận tốc tối đa mà không cần restart Node.</p>
+
+<div class="step-card">
+    <span class="step-number">2</span>
+    <h3>Code mẫu ROS 2 Dynamic Parameter Node C++17</h3>
+    <pre><code>#include &lt;memory&gt;
+#include &lt;iostream&gt;
+#include "rclcpp/rclcpp.hpp"
+
+class DynamicParamNode : public rclcpp::Node {
+private:
+    double max_speed_ = 1.0;
+    double pid_kp_ = 2.0;
+
+    // Dynamic Parameter Event Handler trong ROS 2 rclcpp
+    std::shared_ptr&lt;rclcpp::ParameterEventHandler&gt; param_subscriber_;
+    std::shared_ptr&lt;rclcpp::ParameterCallbackHandle&gt; cb_handle_speed_;
+    std::shared_ptr&lt;rclcpp::ParameterCallbackHandle&gt; cb_handle_kp_;
+
+public:
+    DynamicParamNode() : Node("dynamic_param_node") {
+        // 1. Khai báo tham số mặc định
+        this-&gt;declare_parameter&lt;double&gt;("max_speed", 1.0);
+        this-&gt;declare_parameter&lt;double&gt;("pid_kp", 2.0);
+
+        // Đọc giá trị ban đầu
+        max_speed_ = this-&gt;get_parameter("max_speed").as_double();
+        pid_kp_ = this-&gt;get_parameter("pid_kp").as_double();
+
+        RCLCPP_INFO(this-&gt;get_logger(), "Ban dau: max_speed = %.2f, pid_kp = %.2f", max_speed_, pid_kp_);
+
+        // 2. Khởi tạo ParameterEventHandler để lắng nghe sự kiện đổi param từ bên ngoài
+        param_subscriber_ = std::make_shared&lt;rclcpp::ParameterEventHandler&gt;(this);
+
+        // 3. Đăng ký Callback Lambda khi 'max_speed' thay đổi
+        cb_handle_speed_ = param_subscriber_-&gt;add_parameter_callback(
+            "max_speed",
+            [this](const rclcpp::Parameter &amp; p) {
+                this-&gt;max_speed_ = p.as_double();
+                RCLCPP_WARN(this-&gt;get_logger(), "⚡ CAP NHAT DONG: max_speed moi = %.2f m/s", this-&gt;max_speed_);
+            }
+        );
+    }
+};
+
+int main(int argc, char ** argv) {
+    rclcpp::init(argc, argv);
+    auto node = std::make_shared&lt;DynamicParamNode&gt;();
+    rclcpp::spin(node);
+    rclcpp::shutdown();
+    return 0;
+}</code></pre>
+
+    <div class="analogy-box">
+        <span class="box-title">🔍 Sơ đồ luồng dữ liệu Dynamic Parameter Callback (Data Flow)</span>
+        <pre>
+[User Terminal: ros2 param set /dynamic_param_node max_speed 3.5]
+                       │
+                       ▼
+            [ROS 2 Parameter Middleware]
+                       │ (Phát tín hiệu ParameterEvent)
+                       ▼
+       [rclcpp::ParameterEventHandler]
+                       │ (Kích hoạt Lambda Callback [this](const Parameter& p))
+                       ▼
+      [DynamicParamNode::max_speed_ = 3.5] (Cập nhật trực tiếp runtime)
+        </pre>
+    </div>
+</div>
+
+<h2>7.3 Mô Phỏng Extended Kalman Filter (EKF 2D Localization) C++17 Chi Tiết</h2>
+<p>Bộ lọc Kalman mở rộng (EKF) là trái tim của hệ thống định vị Robot (Localization) kết hợp giữa mô hình Động học (Kinematics Prediction) và số liệu đo Cảm biến (Sensor Measurement Update). Dưới đây là lớp EKF Solver viết bằng C++17 hoàn chỉnh.</p>
+
+<div class="step-card">
+    <span class="step-number">3</span>
+    <h3>Code EKF 2D State Estimator C++17 hoàn chỉnh</h3>
+    <pre><code>#include &lt;iostream&gt;
 #include &lt;optional&gt;
 #include &lt;tuple&gt;
 #include &lt;cmath&gt;
+#include &lt;array&gt;
 
-// Struct lưu trữ trạng thái ước lượng vị trí 2D của Xe Tự Hành
-struct State2D {
+// Struct lưu trữ trạng thái ước lượng Robot 2D [x, y, yaw]
+struct RobotState2D {
     double x = 0.0;     // Tọa độ X (mét)
     double y = 0.0;     // Tọa độ Y (mét)
-    double yaw = 0.0;   // Góc hướng Robot Heading (radian)
+    double yaw = 0.0;   // Góc Hướng Heading (radian)
 };
 
-// Lớp EKF Solver rút gọn sử dụng các tính năng C++17 hiện đại
-class EKFEstimator {
+class EKF2DSolver {
 private:
-    State2D state_;
+    RobotState2D state_;
+    // Ma trận hiệp phương sai sai số Covariance Matrix P (3x3 đơn giản hóa diagonal)
+    std::array&lt;double, 3&gt; P_{0.1, 0.1, 0.05}; 
+    // Độ nhiễu mô hình Predict Noise Q
+    const std::array&lt;double, 3&gt; Q_{0.02, 0.02, 0.01};
+    // Độ nhiễu đo cảm biến GPS Noise R
+    const std::array&lt;double, 2&gt; R_{0.5, 0.5};
+
 public:
-    // Buớc Dự Đoán (Predict Step) dựa trên mô hình Động học Xe (Kinematics)
+    EKF2DSolver(double init_x, double init_y, double init_yaw) 
+        : state_{init_x, init_y, init_yaw} {}
+
+    // 1. Bước PREDICT: Dựa trên Odometry Vận tốc v (m/s) và Tốc độ góc omega (rad/s)
     void predict(double v, double omega, double dt) {
+        // Cập nhật trạng thái theo Mô hình Động học Xe Unicycle Model
         state_.x += v * std::cos(state_.yaw) * dt;
         state_.y += v * std::sin(state_.yaw) * dt;
         state_.yaw += omega * dt;
+
+        // Chuẩn hóa góc yaw trong dải [-PI, +PI]
+        state_.yaw = std::atan2(std::sin(state_.yaw), std::cos(state_.yaw));
+
+        // Cập nhật ma trận sai số P = P + Q
+        P_[0] += Q_[0];
+        P_[1] += Q_[1];
+        P_[2] += Q_[2];
     }
 
-    // Bước Cập Nhật (Update Step) khi nhận được tín hiệu đo từ GPS/Landmark
-    void update(std::optional&lt;std::pair&lt;double, double&gt;&gt; gps_meas) {
-        if (!gps_meas.has_value()) return; // Không có tín hiệu GPS -> Bỏ qua update
-        auto [meas_x, meas_y] = gps_meas.value(); // Unpack qua Structured Bindings C++17
-        
-        // Trọng số Kalman Gain mô phỏng đơn giản alpha blending
-        double alpha = 0.4;
-        state_.x = (1.0 - alpha) * state_.x + alpha * meas_x;
-        state_.y = (1.0 - alpha) * state_.y + alpha * meas_y;
+    // 2. Bước UPDATE: Cập nhật số liệu đo GPS (x_gps, y_gps) nếu có tín hiệu (std::optional)
+    void update(std::optional&lt;std::pair&lt;double, double&gt;&gt; gps_measurement) {
+        if (!gps_measurement.has_value()) {
+            // Không có GPS (mất sóng) -> Bỏ qua bước update, giữ nguyên kết quả predict
+            return;
+        }
+
+        // Structured Bindings C++17 unpack dữ liệu GPS
+        auto [z_x, z_y] = gps_measurement.value();
+
+        // Tính Innovation (Sai số giữa số đo cảm biến và dự đoán)
+        double y_x = z_x - state_.x;
+        double y_y = z_y - state_.y;
+
+        // Tính Kalman Gain K = P / (P + R)
+        double K_x = P_[0] / (P_[0] + R_[0]);
+        double K_y = P_[1] / (P_[1] + R_[1]);
+
+        // Cập nhật Trạng thái Ước lượng mới State = State + K * Innovation
+        state_.x += K_x * y_x;
+        state_.y += K_y * y_y;
+
+        // Cập nhật Hiệp phương sai P = (1 - K) * P
+        P_[0] = (1.0 - K_x) * P_[0];
+        P_[1] = (1.0 - K_y) * P_[1];
     }
 
-    State2D get_state() const { return state_; }
+    RobotState2D get_state() const { return state_; }
 };
 
 int main() {
-    EKFEstimator ekf;
-    ekf.predict(1.0, 0.1, 0.1); // v = 1m/s, omega = 0.1 rad/s, dt = 0.1s
-    ekf.update(std::make_pair(0.12, 0.01)); // Cập nhật GPS measurement
+    EKF2DSolver ekf(0.0, 0.0, 0.0);
 
-    auto s = ekf.get_state();
-    std::cout &lt;&lt; "[EKF Filter] Estimated State: x=" &lt;&lt; s.x &lt;&lt; ", y=" &lt;&lt; s.y &lt;&lt; ", yaw=" &lt;&lt; s.yaw &lt;&lt; "\n";
+    std::cout &lt;&lt; "--- MÔ PHỎNG VÒNG LẶP EKF LOCALIZATION 5 BƯỚC ---
+";
+    for (int step = 1; step &lt;= 5; ++step) {
+        // Step predict: v = 1.0 m/s, omega = 0.1 rad/s, dt = 0.1s
+        ekf.predict(1.0, 0.1, 0.1);
+
+        // Mô phỏng GPS chỉ phát tín hiệu ở bước 3 và 5
+        std::optional&lt;std::pair&lt;double, double&gt;&gt; gps_data = std::nullopt;
+        if (step == 3) gps_data = std::make_pair(0.28, 0.02);
+        if (step == 5) gps_data = std::make_pair(0.49, 0.09);
+
+        ekf.update(gps_data);
+
+        auto s = ekf.get_state();
+        std::printf("Step %d | State: x=%5.3f m, y=%5.3f m, yaw=%5.3f rad | GPS Status: %s
+",
+                    step, s.x, s.y, s.yaw, gps_data.has_value() ? "UPDATED GPS" : "NO GPS");
+    }
     return 0;
 }</code></pre>
+</div>
 
 <div class="quiz-section">
     <h3>💪 Bài Tập Thực Hành Phần 7 (Có Lời Giải Chi Tiết)</h3>
 
     <div class="quiz-question">
-        <p><strong>BT7.1:</strong> Thay thế việc dùng giá trị âm <code>-1.0</code> để báo lỗi tính khoảng cách bằng <code>std::optional&lt;double&gt;</code>.</p>
+        <p><strong>BT7.1:</strong> Chuyển hàm tính khoảng cách hai điểm 2D từ việc trả về `-1.0` khi lỗi sang dùng `std::optional&lt;double&gt;`.</p>
         <div class="answer-section">
             <span class="box-title">✅ Lời giải BT7.1</span>
             <pre><code>#include &lt;iostream&gt;
 #include &lt;optional&gt;
+#include &lt;cmath&gt;
 
-std::optional&lt;double&gt; get_dist(bool valid) {
-    if (!valid) return std::nullopt;
-    return 5.2;
+std::optional&lt;double&gt; safe_distance(double x1, double y1, double x2, double y2, bool sensor_valid) {
+    if (!sensor_valid) return std::nullopt;
+    return std::hypot(x2 - x1, y2 - y1);
 }
 
 int main() {
-    auto d = get_dist(true);
-    if (d) std::cout &lt;&lt; "Dist: " &lt;&lt; *d &lt;&lt; "\n";
+    auto d = safe_distance(0.0, 0.0, 3.0, 4.0, true);
+    if (d) std::cout &lt;&lt; "Distance: " &lt;&lt; *d &lt;&lt; " m
+";
     return 0;
 }</code></pre>
         </div>
     </div>
 
     <div class="quiz-question">
-        <p><strong>BT7.2:</strong> Chuyển C-enum <code>enum State { IDLE, RUNNING };</code> sang <code>enum class State</code> và giải thích tại sao an toàn hơn.</p>
+        <p><strong>BT7.2:</strong> Viết enum class `SensorStatus` gồm các trạng thái `OK, NO_DATA, HARDWARE_FAULT` và hàm kiểm tra status.</p>
         <div class="answer-section">
             <span class="box-title">✅ Lời giải BT7.2</span>
-            <pre><code>enum class State { IDLE, RUNNING };
-int main() {
-    State s = State::IDLE;
-    return 0;
-}</code></pre>
-        </div>
-    </div>
-
-    <div class="quiz-question">
-        <p><strong>BT7.3:</strong> Viết hàm <code>parse_frame_id(std::string_view frame)</code> không tạo ra bản sao <code>std::string</code> mới.</p>
-        <div class="answer-section">
-            <span class="box-title">✅ Lời giải BT7.3</span>
             <pre><code>#include &lt;iostream&gt;
-#include &lt;string_view&gt;
 
-void parse_frame_id(std::string_view frame) {
-    std::cout &lt;&lt; "Parsing frame: " &lt;&lt; frame &lt;&lt; "\n";
+enum class SensorStatus { OK, NO_DATA, HARDWARE_FAULT };
+
+void print_status(SensorStatus s) {
+    switch(s) {
+        case SensorStatus::OK: std::cout &lt;&lt; "Sensor Hoat dong tot
+"; break;
+        case SensorStatus::NO_DATA: std::cout &lt;&lt; "Mat tin hieu cam bien
+"; break;
+        case SensorStatus::HARDWARE_FAULT: std::cout &lt;&lt; "Loi phan cung IMU
+"; break;
+    }
 }
 
 int main() {
-    parse_frame_id("map_frame");
+    print_status(SensorStatus::OK);
     return 0;
 }</code></pre>
         </div>
@@ -2007,80 +2171,138 @@ int main() {
 <!-- PHẦN 8 -->
 <!-- ===================================================== -->
 <div class="part-header-orange" id="part8">
-    <h1>PHẦN 8 — MOVE SEMANTICS &amp; QUẢN LÝ SỞ HỮU BỘ NHỚ</h1>
-    <p>Lvalue vs Rvalue · std::move · Move Constructor · Zero-Copy PointCloud <span class="level-badge level-deep">🔬 CẦN HIỂU SÂU</span></p>
+    <h1>PHẦN 8 — MOVE SEMANTICS &amp; QUẢN LÝ SỞ HỮU BỘ NHỚ ZERO-COPY ROS 2</h1>
+    <p>Lvalue vs Rvalue · std::move · Move Constructor · Zero-Copy IPC ROS 2 · PointCloud2 Publishing</p>
 </div>
 
 <div class="motivation-box">
-    <div class="motivation-title">💡 Ý NGHĨA &amp; MỤC ĐÍCH HỌC PHẦN 8: MOVE SEMANTICS &amp; QUẢN LÝ SỞ HỮU BỘ NHỚ ZERO-COPY</div>
+    <div class="motivation-title">💡 Ý NGHĨA &amp; MỤC ĐÍCH HỌC PHẦN 8: MOVE SEMANTICS &amp; ZERO-COPY IPC</div>
     <ul class="motivation-list">
         <li><strong>🎯 Học để làm gì?</strong> Hiểu cơ chế di chuyển tài nguyên (Move) thay vì sao chép (Copy) thông qua Lvalue và Rvalue references.</li>
-        <li><span class="app-tag">🚗 Ứng dụng thực tế:</span> Truyền mảng mây điểm LiDAR $20\text{ MB}$ hoặc Frame hình ảnh HD 4K giữa các Thread/Node với chi phí $0\text{ms}$ ($0\text{ bytes}$ memory copy time).</li>
+        <li><span class="app-tag">🚗 Ứng dụng thực tế:</span> Truyền mảng mây điểm LiDAR $20	ext{ MB}$ hoặc Frame hình ảnh HD 4K giữa các Thread/Node ROS 2 với chi phí $0	ext{ms}$ ($0	ext{ bytes}$ memory copy time) nhờ Zero-Copy Inter-Process Communication (IPC).</li>
         <li><span class="danger-tag">⚠️ Nếu không biết phần này:</span> Vòng lặp nhận dữ liệu cảm biến Camera/LiDAR của bạn sẽ bị sụt giảm FPS trầm trọng do CPU phải liên tục copy dữ liệu dung lượng khổng lồ.</li>
     </ul>
 </div>
 
-<div class="definition">
-    <span class="box-title">🎯 Khái niệm Move Semantics (C++11/17)</span>
-    <p>Khi bạn truyền một mảng mây điểm LiDAR ($20\text{ MB}$) vào hàm, thay vì <strong>Copy</strong> toàn bộ $20\text{ MB}$ bộ nhớ (mất $5\text{ms}$ CPU), <code>std::move</code> cho phép **"Chuyển giao quyền sở hữu con trỏ"** từ biến này sang biến khác trong $0.0001\text{ms}$ ($0\text{ bytes}$ memory copy)!</p>
+<h2>8.1 Bản Chất Lvalue vs Rvalue Reference &amp; `std::move`</h2>
+<p>Trong C++ truyền thống (C++03), khi bạn gán hoặc truyền một mảng dữ liệu lớn vào hàm, C++ bắt buộc phải **COPY TOÀN BỘ BỘ NHỚ HEAP** từ đối tượng nguồn sang đối tượng đích. Với Move Semantics (C++11/17):</p>
+<ul>
+    <li><strong>Lvalue (Left Value):</strong> Đối tượng có định danh tên rõ ràng, có địa chỉ bộ nhớ cố định (vd: <code>std::vector&lt;float&gt; scan1</code>).</li>
+    <li><strong>Rvalue (Right Value):</strong> Giá trị tạm thời sắp bị hủy (Temporary object), biểu diễn bằng cú pháp <code>T&amp;&amp;</code>.</li>
+    <li><strong>`std::move(x)`:</strong> Không hề di chuyển bất kỳ byte dữ liệu nào! Nó chỉ đơn thuần **ÉP KIỂU (Cast)** biến `x` thành Rvalue reference <code>T&amp;&amp;</code> để kích hoạt Move Constructor cướp con trỏ bộ nhớ internal buffer trong $0.0001	ext{ms}$.</li>
+</ul>
+
+<h2>8.2 Cơ Chế Zero-Copy IPC Trong ROS 2 (`rclcpp`)</h2>
+<div class="analogy-box">
+    <span class="box-title">🔎 Mô hình Zero-Copy Inter-Process Communication (IPC) ROS 2</span>
+    <p>Khi Publisher và Subscriber nằm trong cùng một Process (Intra-process Communication), thay vì Serialize tin nhắn ra chuẩn CDR và Copy qua mạng, ROS 2 sử dụng <code>std::unique_ptr</code>. Publisher cấp phát bộ nhớ Shared Memory, nạp dữ liệu PointCloud2, sau đó **"chuyển giao quyền sở hữu con trỏ"** sang Subscriber bằng <code>publish(std::move(msg))</code>. Chi phí copy bộ nhớ = 0 bytes!</p>
 </div>
 
-<pre><code>#include &lt;iostream&gt;
+<h2>8.3 Code Mẫu ROS 2 Zero-Copy PointCloud Publisher Node</h2>
+<div class="step-card">
+    <span class="step-number">1</span>
+    <h3>ROS 2 Node Phát 100,000 Điểm 3D Zero-Copy C++17</h3>
+    <pre><code>#include &lt;memory&gt;
 #include &lt;vector&gt;
-#include &lt;utility&gt;
+#include &lt;chrono&gt;
+#include &lt;iostream&gt;
+#include "rclcpp/rclcpp.hpp"
+#include "sensor_msgs/msg/point_cloud2.hpp"
 
-class PointCloudBuffer {
+using namespace std::chrono_literals;
+
+class ZeroCopyLidarPublisher : public rclcpp::Node {
+private:
+    rclcpp::Publisher&lt;sensor_msgs::msg::PointCloud2&gt;::SharedPtr publisher_;
+    rclcpp::TimerBase::SharedPtr timer_;
+
 public:
-    std::vector&lt;float&gt; points;
+    ZeroCopyLidarPublisher() : Node("zero_copy_lidar_publisher") {
+        // Bật tùy chọn Intra-Process Communication (IPC) cho ROS 2 Node
+        rclcpp::PublisherOptions options;
+        options.use_intra_process_comms = rclcpp::IntraProcessSetting::Enable;
 
-    PointCloudBuffer(size_t n) : points(n, 1.0f) {
-        std::cout &lt;&lt; "Cap phat " &lt;&lt; n &lt;&lt; " diem trong PointCloud.\n";
+        publisher_ = this-&gt;create_publisher&lt;sensor_msgs::msg::PointCloud2&gt;(
+            "/lidar_points", 10, options);
+
+        // Timer 10Hz (100ms)
+        timer_ = this-&gt;create_wall_timer(
+            100ms, std::bind(&amp;ZeroCopyLidarPublisher::publish_cloud, this));
     }
 
-    PointCloudBuffer(PointCloudBuffer&amp;&amp; other) noexcept 
-        : points(std::move(other.points)) {
-        std::cout &lt;&lt; "--> [MOVE CONSTRUCTOR] Chuyen giao quyen so huu mieu diem!\n";
+private:
+    void publish_cloud() {
+        // 1. Cấp phát Smart Pointer unique_ptr sở hữu độc quyền mây điểm
+        auto msg = std::make_unique&lt;sensor_msgs::msg::PointCloud2&gt;();
+
+        msg-&gt;header.stamp = this-&gt;now();
+        msg-&gt;header.frame_id = "laser_frame";
+        msg-&gt;width = 100000; // 100,000 điểm 3D
+        msg-&gt;height = 1;
+        msg-&gt;data.resize(msg-&gt;width * 16, 255); // Giả lập 1.6 MB data buffer
+
+        RCLCPP_INFO(this-&gt;get_logger(), "Publishing PointCloud2 [%s] (Buffer addr: %p)", 
+                    msg-&gt;header.frame_id.c_str(), static_cast&lt;void*&gt;(msg-&gt;data.data()));
+
+        // 2. ZERO-COPY PUBLISH: Truyền std::unique_ptr qua std::move()!
+        // ROS 2 nhận quyền sở hữu con trỏ mà KHÔNG COPY 1.6MB data!
+        publisher_-&gt;publish(std::move(msg));
+
+        // Sau std::move, msg trở thành nullptr!
+        if (msg == nullptr) {
+            // Confirm quyên so huu da duoc chuyen giao Zero-Copy!
+        }
     }
 };
 
-int main() {
-    PointCloudBuffer scan1(5000000);
-    PointCloudBuffer scan2 = std::move(scan1);
-
-    std::cout &lt;&lt; "Kich thuoc scan1 sau move: " &lt;&lt; scan1.points.size() &lt;&lt; " (Da bi rỗng)\n";
-    std::cout &lt;&lt; "Kich thuoc scan2 sau move: " &lt;&lt; scan2.points.size() &lt;&lt; " (So huu 20MB!)\n";
+int main(int argc, char ** argv) {
+    rclcpp::init(argc, argv);
+    auto node = std::make_shared&lt;ZeroCopyLidarPublisher&gt;();
+    rclcpp::spin(node);
+    rclcpp::shutdown();
     return 0;
 }</code></pre>
+
+    <div class="analogy-box">
+        <span class="box-title">🔍 Phân tích chi tiết từng dòng code (Line-by-line Walkthrough)</span>
+        <ul>
+            <li><code>options.use_intra_process_comms = rclcpp::IntraProcessSetting::Enable;</code>: Kích hoạt chế độ truyền dữ liệu nội bộ chung bộ nhớ (Shared Memory Pipeline) của ROS 2.</li>
+            <li><code>auto msg = std::make_unique&lt;PointCloud2&gt;();</code>: Tạo ra con trỏ độc quyền `unique_ptr` lưu giữ tin nhắn trên Heap. Chi phí khởi tạo con trỏ = $0	ext{ bytes}$ extra overhead.</li>
+            <li><code>publisher_-&gt;publish(std::move(msg));</code>: Chuyển giao con trỏ Heap `msg` trực tiếp cho hệ thống ROS 2 Executor mà không thực hiện thao tác copy bộ nhớ đệm 1.6MB.</li>
+        </ul>
+    </div>
+</div>
 
 <div class="quiz-section">
     <h3>💪 Bài Tập Thực Hành Phần 8 (Có Lời Giải Chi Tiết)</h3>
 
     <div class="quiz-question">
-        <p><strong>BT8.1:</strong> Viết Move Assignment Operator <code>operator=(PointCloudBuffer&amp;&amp; other)</code> cho class PointCloudBuffer.</p>
+        <p><strong>BT8.1:</strong> Viết chương trình so sánh thời gian thực thi khi Copy vs Move một `std::vector&lt;double&gt;` chứa 10,000,000 phần tử bằng `std::chrono`.</p>
         <div class="answer-section">
             <span class="box-title">✅ Lời giải BT8.1</span>
-            <pre><code>PointCloudBuffer&amp; operator=(PointCloudBuffer&amp;&amp; other) noexcept {
-    if (this != &amp;other) {
-        points = std::move(other.points);
-    }
-    return *this;
+            <pre><code>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;chrono&gt;
+
+int main() {
+    std::vector&lt;double&gt; v1(10000000, 3.14);
+
+    // Test COPY
+    auto t1 = std::chrono::high_resolution_clock::now();
+    std::vector&lt;double&gt; v2 = v1; // Copy 80MB
+    auto t2 = std::chrono::high_resolution_clock::now();
+
+    // Test MOVE
+    auto t3 = std::chrono::high_resolution_clock::now();
+    std::vector&lt;double&gt; v3 = std::move(v1); // Move con trỏ
+    auto t4 = std::chrono::high_resolution_clock::now();
+
+    std::cout &lt;&lt; "Copy time: " &lt;&lt; std::chrono::duration_cast&lt;std::chrono::microseconds&gt;(t2-t1).count() &lt;&lt; " us
+";
+    std::cout &lt;&lt; "Move time: " &lt;&lt; std::chrono::duration_cast&lt;std::chrono::microseconds&gt;(t4-t3).count() &lt;&lt; " us
+";
+    return 0;
 }</code></pre>
-        </div>
-    </div>
-
-    <div class="quiz-question">
-        <p><strong>BT8.2:</strong> Sự khác nhau giữa Lvalue reference (<code>T&amp;</code>) và Rvalue reference (<code>T&amp;&amp;</code>) là gì?</p>
-        <div class="answer-section">
-            <span class="box-title">✅ Lời giải BT8.2</span>
-            <p>Lvalue reference trỏ tới đối tượng có tên và địa chỉ cố định. Rvalue reference trỏ tới đối tượng tạm thời (temporary object) sắp bị hủy, cho phép cướp (move) tài nguyên của nó.</p>
-        </div>
-    </div>
-
-    <div class="quiz-question">
-        <p><strong>BT8.3:</strong> Tại sao sau khi gọi <code>std::move(v)</code>, ta KHÔNG NÊN truy cập lại biến <code>v</code> nữa?</p>
-        <div class="answer-section">
-            <span class="box-title">✅ Lời giải BT8.3</span>
-            <p>Vì bộ nhớ bên trong <code>v</code> đã bị chuyển giao cho biến mới. <code>v</code> rơi vào trạng thái "Moved-from state" (rỗng hoặc không xác định).</p>
         </div>
     </div>
 </div>
@@ -2089,152 +2311,148 @@ int main() {
 <!-- PHẦN 9 -->
 <!-- ===================================================== -->
 <div class="part-header-danger" id="part9">
-    <h1>PHẦN 9 — LẬP TRÌNH ĐA LUỒNG (MULTI-THREADING) CƠ BẢN</h1>
-    <p>std::thread · std::mutex · std::lock_guard · std::atomic · Lock-free SPSC Queue · ROS 2 Callback Groups <span class="level-badge level-deep">🔬 CẦN HIỂU SÂU</span></p>
+    <h1>PHẦN 9 — LẬP TRÌNH ĐA LUỒNG (MULTI-THREADING), CONCURRENCY &amp; ROS 2 EXECUTORS</h1>
+    <p>std::thread · std::mutex · std::scoped_lock · std::atomic · Lock-Free SPSC Queue · MultiThreadedExecutor · Callback Groups</p>
 </div>
 
 <div class="motivation-box">
-    <div class="motivation-title">💡 Ý NGHĨA &amp; MỤC ĐÍCH HỌC PHẦN 9: LẬP TRÌNH ĐA LUỒNG (MULTI-THREADING) &amp; CONCURRENCY</div>
+    <div class="motivation-title">💡 Ý NGHĨA &amp; MỤC ĐÍCH HỌC PHẦN 9: MULTI-THREADING &amp; ROS 2 EXECUTORS</div>
     <ul class="motivation-list">
         <li><strong>🎯 Học để làm gì?</strong> Làm chủ xử lý song song nhiều tác vụ đồng thời trên CPU đa nhân mà vẫn bảo vệ tuyệt đối dữ liệu dùng chung (Shared Data).</li>
-        <li><span class="app-tag">🚗 Ứng dụng thực tế:</span> Chạy luồng đọc IMU song song với vòng lặp điều khiển $100\text{ Hz}$, áp dụng mô hình **Lock-Free SPSC Queue**, và cấu hình ROS 2 Callback Groups (`MutuallyExclusive` vs `Reentrant`) trong `MultiThreadedExecutor`.</li>
+        <li><span class="app-tag">🚗 Ứng dụng thực tế:</span> Chạy luồng đọc IMU song song với vòng lặp điều khiển $100	ext{ Hz}$, áp dụng mô hình **Lock-Free SPSC Queue**, và cấu hình ROS 2 Callback Groups (`MutuallyExclusive` vs `Reentrant`) trong `MultiThreadedExecutor`.</li>
         <li><span class="danger-tag">⚠️ Nếu không biết phần này:</span> Chương trình xe tự hành của bạn sẽ bị đơ (Deadlock) hoặc bị xung đột dữ liệu ngầm (Race Condition) khiến xe đánh lái hỗn loạn bất ngờ.</li>
     </ul>
 </div>
 
-<div class="goal-box">
-    <strong>🎯 Mục đích:</strong> Hệ thống xe tự hành chạy hàng chục luồng song song (Luồng đọc LiDAR, luồng chạy EKF SLAM, luồng vòng lặp điều khiển $100\text{ Hz}$). Học cách bảo vệ dữ liệu dùng chung (Shared Data) chống Race Condition.
+<h2>9.1 Đa Luồng C++ &amp; Bảo Vệ Shared Data với `std::scoped_lock`</h2>
+<p>Khi hai hay nhiều Thread cùng đọc và ghi vào một biến số dùng chung (shared variable) tại một thời điểm, hiện tượng **Race Condition** sẽ xảy ra làm dữ liệu bị sai hỏng. C++17 cung cấp <code>std::scoped_lock</code> giúp khóa đồng thời nhiều Mutex một cách an toàn mà không bao giờ bị Deadlock.</p>
+
+<h2>9.2 Phân Tích Chuyên Sâu ROS 2 Executors &amp; Callback Groups</h2>
+<div class="definition">
+    <span class="box-title">📌 Phân biệt 2 loại Callback Groups trong ROS 2 (`rclcpp`)</span>
+    <ul>
+        <li><strong>`MutuallyExclusiveCallbackGroup`:</strong> Các Callback thuộc nhóm này chỉ được thực thi từng cái một (Tuần tự). Dù Executor có bao nhiêu Thread đi nữa, các Callback này KHÔNG BAO GIỜ chạy song song. <em>Dùng mặc định để bảo vệ biến thành viên của Node không cần dùng Mutex.</em></li>
+        <li><strong>`ReentrantCallbackGroup`:</strong> Các Callback thuộc nhóm này được phép thực thi **SONG SONG ĐỒNG THỜI** trên nhiều Worker Threads của MultiThreadedExecutor. <em>Bắt buộc phải dùng `std::mutex` hoặc `std::atomic` bảo vệ dữ liệu shared!</em></li>
+    </ul>
 </div>
 
-<h2>9.1 Ví dụ Multi-threading &amp; Mutex Protection</h2>
-<pre><code>#include &lt;iostream&gt;
+<h2>9.3 Code Mẫu ROS 2 MultiThreadedExecutor Node Hoàn Chỉnh</h2>
+<div class="step-card">
+    <span class="step-number">1</span>
+    <h3>Node ROS 2 Đa Luồng Xử Lý Tác Vụ Nặng Song Song 100Hz Control Loop</h3>
+    <pre><code>#include &lt;memory&gt;
 #include &lt;thread&gt;
 #include &lt;mutex&gt;
-#include &lt;atomic&gt;
 #include &lt;chrono&gt;
+#include &lt;iostream&gt;
+#include "rclcpp/rclcpp.hpp"
+#include "std_msgs/msg/float64.hpp"
 
-std::atomic&lt;bool&gt; g_emergency_stop{false};
-std::mutex g_imu_mutex;
-double g_latest_pitch = 0.0;
+using namespace std::chrono_literals;
 
-void imu_sensor_thread() {
-    for (int i = 0; i &lt; 5; ++i) {
-        {
-            std::lock_guard&lt;std::mutex&gt; lock(g_imu_mutex);
-            g_latest_pitch += 0.1;
-            std::cout &lt;&lt; "[IMU Thread] Pitch: " &lt;&lt; g_latest_pitch &lt;&lt; "\n";
-        }
-        std::this_thread::sleep_for(std::chrono::milliseconds(10));
-    }
-}
-
-void control_loop_thread() {
-    for (int i = 0; i &lt; 5; ++i) {
-        if (g_emergency_stop.load()) break;
-        {
-            std::lock_guard&lt;std::mutex&gt; lock(g_imu_mutex);
-            std::cout &lt;&lt; "  --> [Control Loop] Read Pitch: " &lt;&lt; g_latest_pitch &lt;&lt; "\n";
-        }
-        std::this_thread::sleep_for(std::chrono::milliseconds(10));
-    }
-}
-
-int main() {
-    std::thread t1(imu_sensor_thread);
-    std::thread t2(control_loop_thread);
-    t1.join();
-    t2.join();
-    return 0;
-}</code></pre>
-
-<h2>9.2 Lock-Free SPSC Queue Pattern cho Real-Time Threading</h2>
-<pre><code>#include &lt;iostream&gt;
-#include &lt;atomic&gt;
-#include &lt;array&gt;
-
-template &lt;typename T, size_t Capacity&gt;
-class LockFreeSPSCQueue {
+class MultiThreadedControlNode : public rclcpp::Node {
 private:
-    std::array&lt;T, Capacity&gt; buffer_;
-    alignas(64) std::atomic&lt;size_t&gt; head_{0};
-    alignas(64) std::atomic&lt;size_t&gt; tail_{0};
+    // Shared Data được bảo vệ bởi Mutex
+    std::mutex data_mutex_;
+    double latest_sensor_value_ = 0.0;
+
+    // Callback Groups
+    rclcpp::CallbackGroup::SharedPtr sensor_cb_group_;
+    rclcpp::CallbackGroup::SharedPtr heavy_calc_cb_group_;
+
+    rclcpp::TimerBase::SharedPtr fast_timer_;
+    rclcpp::TimerBase::SharedPtr slow_heavy_timer_;
 
 public:
-    bool push(const T&amp; item) {
-        size_t current_tail = tail_.load(std::memory_order_relaxed);
-        size_t next_tail = (current_tail + 1) % Capacity;
-        if (next_tail == head_.load(std::memory_order_acquire)) {
-            return false;
-        }
-        buffer_[current_tail] = item;
-        tail_.store(next_tail, std::memory_order_release);
-        return true;
+    MultiThreadedControlNode() : Node("multi_threaded_control_node") {
+        // 1. Tạo Callback Group 1: MutuallyExclusive cho vòng lặp điều khiển nhanh 100Hz
+        sensor_cb_group_ = this-&gt;create_callback_group(
+            rclcpp::CallbackGroupType::MutuallyExclusive);
+
+        // 2. Tạo Callback Group 2: Reentrant cho tác vụ tính toán nặng 1Hz
+        heavy_calc_cb_group_ = this-&gt;create_callback_group(
+            rclcpp::CallbackGroupType::Reentrant);
+
+        // Cấu hình Timer options gắn với từng Callback Group
+        auto fast_options = rclcpp::TimerOptions();
+        fast_options.callback_group = sensor_cb_group_;
+
+        auto slow_options = rclcpp::TimerOptions();
+        slow_options.callback_group = heavy_calc_cb_group_;
+
+        // Timer 1: Vòng lặp điều khiển 100Hz (10ms)
+        fast_timer_ = this-&gt;create_wall_timer(
+            10ms, std::bind(&amp;MultiThreadedControlNode::fast_control_loop, this), fast_options);
+
+        // Timer 2: Tác vụ quy hoạch đường đi nặng 1Hz (1000ms)
+        slow_heavy_timer_ = this-&gt;create_wall_timer(
+            1000ms, std::bind(&amp;MultiThreadedControlNode::heavy_planning_task, this), slow_options);
     }
 
-    bool pop(T&amp; item) {
-        size_t current_head = head_.load(std::memory_order_relaxed);
-        if (current_head == tail_.load(std::memory_order_acquire)) {
-            return false;
+private:
+    void fast_control_loop() {
+        std::lock_guard&lt;std::mutex&gt; lock(data_mutex_);
+        // Vòng lặp điều khiển chạy cực kỳ mượt mà 100Hz không bị ảnh hưởng bởi task nặng
+        // RCLCPP_INFO(this->get_logger(), "[100Hz Loop] Read Sensor: %.2f", latest_sensor_value_);
+    }
+
+    void heavy_planning_task() {
+        RCLCPP_WARN(this-&gt;get_logger(), "--> [Heavy Planner] Bat dau tinh toan Global Path (Mat 500ms)...");
+        std::this_thread::sleep_for(500ms); // Giả lập thuật toán A* / MPC tốn 500ms CPU
+
+        {
+            std::lock_guard&lt;std::mutex&gt; lock(data_mutex_);
+            latest_sensor_value_ += 1.0;
         }
-        item = buffer_[current_head];
-        head_.store((current_head + 1) % Capacity, std::memory_order_release);
-        return true;
+        RCLCPP_INFO(this-&gt;get_logger(), "<-- [Heavy Planner] Tinh toan xong Global Path!");
     }
 };
 
-int main() {
-    LockFreeSPSCQueue&lt;double, 100&gt; imu_queue;
-    imu_queue.push(9.81);
-    double val;
-    if (imu_queue.pop(val)) {
-        std::cout &lt;&lt; "[Real-Time Queue] Pop Accel Z: " &lt;&lt; val &lt;&lt; " m/s^2\n";
-    }
+int main(int argc, char ** argv) {
+    rclcpp::init(argc, argv);
+    auto node = std::make_shared&lt;MultiThreadedControlNode&gt;();
+
+    // 3. Sử dụng MultiThreadedExecutor với 4 Worker Threads
+    rclcpp::executors::MultiThreadedExecutor executor(rclcpp::ExecutorOptions(), 4);
+    executor.add_node(node);
+    executor.spin();
+
+    rclcpp::shutdown();
     return 0;
 }</code></pre>
 
-<h2>9.3 Phân biệt Callback Group Types trong ROS 2 (MutuallyExclusive vs Reentrant)</h2>
-<p>Trong ROS 2 rclcpp, mặc định tất cả Callback của 1 Node nằm chung trong Single-Threaded Executor. Nếu một Callback Service tốn thời gian xử lý ($500\text{ms}$), toàn bộ các Timer hay Lidar Subscriber khác sẽ bị đơ (Block). Để khắc phục, ROS 2 sử dụng 2 loại Callback Group:</p>
-<ul>
-    <li><strong>MutuallyExclusiveCallbackGroup:</strong> Các Callback trong nhóm này chỉ được thực thi từng cái một (Không bao giờ song song). Giúp tránh Race Condition mà không cần Mutex.</li>
-    <li><strong>ReentrantCallbackGroup:</strong> Các Callback trong nhóm này có thể chạy song song đồng thời trên nhiều Thread trong MultiThreadedExecutor. Bắt buộc phải bảo vệ tài nguyên dùng chung bằng <code>std::mutex</code>!</li>
-</ul>
+    <div class="analogy-box">
+        <span class="box-title">🔍 Sơ đồ luồng dữ liệu ROS 2 MultiThreadedExecutor (Data Flow)</span>
+        <pre>
+ [MultiThreadedExecutor - Pool 4 Threads]
+     ├── Thread 1 ──► [Fast Control Loop 100Hz] (Chạy liên tục không bị gián đoạn)
+     ├── Thread 2 ──► [Heavy Planner Task]     (Chạy ngầm mất 500ms)
+     └── Thread 3/4 ─► [Sẵn sàng xử lý Service / Action Callbacks khác]
+        </pre>
+    </div>
+</div>
 
 <div class="quiz-section">
     <h3>💪 Bài Tập Thực Hành Phần 9 (Có Lời Giải Chi Tiết)</h3>
 
     <div class="quiz-question">
-        <p><strong>BT9.1:</strong> Tại sao <code>std::atomic&lt;bool&gt;</code> lại an toàn hơn <code>bool</code> thông thường khi làm cờ dừng khẩn cấp giữa 2 luồng?</p>
+        <p><strong>BT9.1:</strong> Dùng `std::scoped_lock` để khóa an toàn hai mutex `m1` và `m2` cùng lúc.</p>
         <div class="answer-section">
             <span class="box-title">✅ Lời giải BT9.1</span>
-            <p>Vì <code>std::atomic</code> đảm bảo các thao tác đọc/ghi là nguyên tử (atomic instruction ở cấp CPU) và thiết lập ranh giới bộ nhớ (Memory Barriers), chống trình biên dịch tối ưu biến vào thanh ghi (register caching) gây sai lệch giữa các thread.</p>
-        </div>
-    </div>
-
-    <div class="quiz-question">
-        <p><strong>BT9.2:</strong> Sử dụng <code>std::scoped_lock</code> (C++17) để khóa đồng thời 2 mutex <code>m1, m2</code> mà không bao giờ bị Deadlock.</p>
-        <div class="answer-section">
-            <span class="box-title">✅ Lời giải BT9.2</span>
             <pre><code>#include &lt;iostream&gt;
 #include &lt;mutex&gt;
 
 std::mutex m1, m2;
-void safe_swap() {
-    std::scoped_lock lock(m1, m2);
+void safe_transfer() {
+    std::scoped_lock lock(m1, m2); // Khóa đồng thời m1, m2 chống Deadlock 100%
+    std::cout &lt;&lt; "Khóa an toan m1 va m2!
+";
 }
 
 int main() {
-    safe_swap();
-    std::cout &lt;&lt; "Scoped lock test success!\n";
+    safe_transfer();
     return 0;
 }</code></pre>
-        </div>
-    </div>
-
-    <div class="quiz-question">
-        <p><strong>BT9.3:</strong> Hiện tượng Priority Inversion trong Real-time Robotics là gì?</p>
-        <div class="answer-section">
-            <span class="box-title">✅ Lời giải BT9.3</span>
-            <p>Là khi một Thread ưu tiên thấp nắm giữ Mutex, khiến cho Thread ưu tiên rất cao (1kHz Control Loop) bị chặn đứng (blocked) chờ đợi, làm mất tính thời gian thực của hệ thống.</p>
         </div>
     </div>
 </div>
@@ -2243,241 +2461,356 @@ int main() {
 <!-- PHẦN 10 -->
 <!-- ===================================================== -->
 <div class="part-header-intro" id="part10">
-    <h1>PHẦN 10 — XỬ LÝ FILE I/O &amp; CHUỖI DỮ LIỆU WAYPOINT</h1>
-    <p>std::fstream · std::stringstream · Parse CSV Waypoints · Log Data <span class="level-badge level-apply">🔧 CHỈ CẦN CÔNG THỨC</span></p>
+    <h1>PHẦN 10 — ROS 2 ACTION SERVER/CLIENT &amp; FILE I/O WAYPOINT CSV</h1>
+    <p>Topics vs Services vs Actions · rclcpp_action · Waypoint CSV Parser · Log Data Trajectory</p>
 </div>
 
 <div class="motivation-box">
-    <div class="motivation-title">💡 Ý NGHĨA &amp; MỤC ĐÍCH HỌC PHẦN 10: XỬ LÝ FILE I/O &amp; CHUỖI DỮ LIỆU WAYPOINT</div>
+    <div class="motivation-title">💡 Ý NGHĨA &amp; MỤC ĐÍCH HỌC PHẦN 10: ACTION SERVER &amp; FILE I/O WAYPOINT</div>
     <ul class="motivation-list">
-        <li><strong>🎯 Học để làm gì?</strong> Giao tiếp đọc/ghi dữ liệu từ file đĩa cứng vào chương trình C++ và ngược lại.</li>
-        <li><span class="app-tag">🚗 Ứng dụng thực tế:</span> Parse (phân tích) file CSV chứa danh sách Waypoint quỹ đạo đường chạy `[x, y, yaw, velocity]` nạp vào xe F1TENTH, ghi log biến PID ra file `.csv` để phân tích đồ thị đáp ứng bước trong Python.</li>
+        <li><strong>🎯 Học để làm gì?</strong> Phân biệt 3 cơ chế giao tiếp ROS 2 và làm chủ Action Server/Client cho các tác vụ di chuyển dài hạn có phản hồi tiến độ (Feedback Loop).</li>
+        <li><span class="app-tag">🚗 Ứng dụng thực tế:</span> Parse file CSV chứa danh sách Waypoint quỹ đạo đường chạy `[x, y, yaw, velocity]` nạp vào xe F1TENTH, ghi log biến PID ra file `.csv` để phân tích đồ thị đáp ứng bước trong Python.</li>
         <li><span class="danger-tag">⚠️ Nếu không biết phần này:</span> Xe của bạn không thể tự nạp bản đồ đường chạy từ ngoài vào và bạn không thể trích xuất dữ liệu nghiệm thu thuật toán.</li>
     </ul>
 </div>
 
-<p>Kỹ sư Robot thường xuyên phải đọc file CSV chứa danh sách Waypoint quỹ đạo <code>[x, y, yaw, velocity]</code> được tạo bởi Python hoặc MATLAB để truyền cho bộ điều khiển C++.</p>
+<h2>10.1 So Sánh Topics vs Services vs Actions Trong ROS 2</h2>
+<table class="table">
+    <tr>
+        <th>Tiêu chí</th>
+        <th>Topics</th>
+        <th>Services</th>
+        <th>Actions (`rclcpp_action`)</th>
+    </tr>
+    <tr>
+        <td><strong>Mô hình</strong></td>
+        <td>Publish - Subscribe (1 chiều)</td>
+        <td>Request - Response (2 chiều)</td>
+        <td>Goal - Feedback - Result (2 chiều bất đồng bộ)</td>
+    </tr>
+    <tr>
+        <td><strong>Thời gian thực thi</strong></td>
+        <td>Liên tục tốc độ cao (Sensor Data)</td>
+        <td>Tức thời ngắn (&lt; 10ms)</td>
+        <td>Dài hạn (Vài giây đến vài phút)</td>
+    </tr>
+    <tr>
+        <td><strong>Tính năng hủy / Phản hồi</strong></td>
+        <td>Không thể hủy / Không feedback</td>
+        <td>Không thể hủy mid-way / Không feedback</td>
+        <td><strong>Có thể Hủy (Cancel Goal) &amp; Có Feedback tiến độ!</strong></td>
+    </tr>
+    <tr>
+        <td><strong>Ứng dụng thực tế</strong></td>
+        <td>Stream tin nhắn IMU, LiDAR, Twist</td>
+        <td>Reset Odometry, Trigger Cam snapshot</td>
+        <td>Navigation Goal (Di chuyển Robot tới đích, Bám Waypoints)</td>
+    </tr>
+</table>
 
-<pre><code>#include &lt;iostream&gt;
+<h2>10.2 Đọc File CSV Waypoints &amp; Triển Khai ROS 2 Action Server</h2>
+
+<div class="step-card">
+    <span class="step-number">1</span>
+    <h3>Code C++ Đọc CSV Waypoints &amp; Triển Khai Action Goal</h3>
+    <pre><code>#include &lt;iostream&gt;
 #include &lt;fstream&gt;
 #include &lt;sstream&gt;
 #include &lt;vector&gt;
 #include &lt;string&gt;
+#include &lt;cmath&gt;
 
 struct Waypoint2D {
-    double x, y, target_speed;
+    double x;
+    double y;
+    double target_speed;
 };
 
+// Hàm Parser đọc file CSV chuẩn Kỹ thuật
 std::vector&lt;Waypoint2D&gt; load_waypoints_from_csv(const std::string&amp; filepath) {
     std::vector&lt;Waypoint2D&gt; waypoints;
     std::ifstream file(filepath);
-    if (!file.is_open()) return waypoints;
+    if (!file.is_open()) {
+        std::cerr &lt;&lt; "❌ KHÔNG THỂ MỞ FILE CSV: " &lt;&lt; filepath &lt;&lt; "
+";
+        return waypoints;
+    }
 
     std::string line;
     while (std::getline(file, line)) {
+        // Bỏ qua dòng trống hoặc dòng comment bắt đầu bằng #
         if (line.empty() || line[0] == '#') continue;
+
         std::stringstream ss(line);
         std::string item;
         Waypoint2D wp;
+
         std::getline(ss, item, ','); wp.x = std::stod(item);
         std::getline(ss, item, ','); wp.y = std::stod(item);
         std::getline(ss, item, ','); wp.target_speed = std::stod(item);
+
         waypoints.push_back(wp);
     }
     return waypoints;
 }
 
 int main() {
-    std::ofstream outfile("test_path.csv");
-    outfile &lt;&lt; "0.0,0.0,1.0\n1.5,2.0,2.5\n3.0,4.0,3.0\n";
+    // Tạo file CSV giả lập test
+    std::ofstream outfile("f1tenth_track.csv");
+    outfile &lt;&lt; "# x, y, speed_ms
+";
+    outfile &lt;&lt; "0.0,0.0,2.0
+";
+    outfile &lt;&lt; "2.5,1.0,2.5
+";
+    outfile &lt;&lt; "5.0,3.0,3.0
+";
     outfile.close();
 
-    auto path = load_waypoints_from_csv("test_path.csv");
-    std::cout &lt;&lt; "Doc thanh cong " &lt;&lt; path.size() &lt;&lt; " waypoints tu CSV:\n";
+    auto path = load_waypoints_from_csv("f1tenth_track.csv");
+    std::cout &lt;&lt; "Doc thanh cong " &lt;&lt; path.size() &lt;&lt; " Waypoints tu CSV:
+";
     for (size_t i = 0; i &lt; path.size(); ++i) {
-        std::cout &lt;&lt; "  WP " &lt;&lt; i &lt;&lt; ": x=" &lt;&lt; path[i].x &lt;&lt; ", y=" &lt;&lt; path[i].y &lt;&lt; ", v=" &lt;&lt; path[i].target_speed &lt;&lt; "\n";
+        std::cout &lt;&lt; "  WP " &lt;&lt; i &lt;&lt; ": (" &lt;&lt; path[i].x &lt;&lt; ", " &lt;&lt; path[i].y &lt;&lt; ") | Speed: " &lt;&lt; path[i].target_speed &lt;&lt; " m/s
+";
     }
     return 0;
 }</code></pre>
-
-<div class="quiz-section">
-    <h3>💪 Bài Tập Thực Hành Phần 10 (Có Lời Giải Chi Tiết)</h3>
-
-    <div class="quiz-question">
-        <p><strong>BT10.1:</strong> Viết hàm C++ ghi log các biến <code>timestamp, error, u_output</code> ra file <code>pid_log.csv</code>.</p>
-        <div class="answer-section">
-            <span class="box-title">✅ Lời giải BT10.1</span>
-            <pre><code>#include &lt;iostream&gt;
-#include &lt;fstream&gt;
-
-void log_pid(double t, double err, double u) {
-    std::ofstream file("pid_log.csv", std::ios::app);
-    file &lt;&lt; t &lt;&lt; "," &lt;&lt; err &lt;&lt; "," &lt;&lt; u &lt;&lt; "\n";
-}
-
-int main() {
-    log_pid(0.1, 0.5, 2.1);
-    return 0;
-}</code></pre>
-        </div>
-    </div>
-
-    <div class="quiz-question">
-        <p><strong>BT10.2:</strong> Sử dụng <code>std::stringstream</code> để tách chuỗi <code>"1.23;4.56;7.89"</code> phân cách bởi dấu chấm phẩy <code>;</code>.</p>
-        <div class="answer-section">
-            <span class="box-title">✅ Lời giải BT10.2</span>
-            <pre><code>#include &lt;iostream&gt;
-#include &lt;sstream&gt;
-#include &lt;string&gt;
-
-int main() {
-    std::stringstream ss("1.23;4.56;7.89");
-    std::string val;
-    while(std::getline(ss, val, ';')) {
-        std::cout &lt;&lt; std::stod(val) &lt;&lt; "\n";
-    }
-    return 0;
-}</code></pre>
-        </div>
-    </div>
 </div>
 
 <!-- ===================================================== -->
 <!-- PHẦN 11 -->
 <!-- ===================================================== -->
 <div class="part-header-intro" id="part11">
-    <h1>PHẦN 11 — DỰ ÁN THỰC HÀNH TỔNG HỢP TUẦN 2</h1>
-    <p>Dự án 1: PID Controller C++17 · Dự án 2: Pure Pursuit Waypoint Tracker Simulator</p>
+    <h1>PHẦN 11 — DỰ ÁN THỰC HÀNH TỔNG HỢP: COMPLETE ROS 2 NODE PACKAGE C++17</h1>
+    <p>Complete PID Lifecycle Node · Pure Pursuit Trajectory Tracker Node · CMakeLists.txt &amp; package.xml colcon build</p>
 </div>
 
 <div class="motivation-box">
-    <div class="motivation-title">💡 Ý NGHĨA &amp; MỤC ĐÍCH HỌC PHẦN 11: DỰ ÁN THỰC HÀNH TỔNG HỢP TUẦN 2</div>
+    <div class="motivation-title">💡 Ý NGHĨA &amp; MỤC ĐÍCH HỌC PHẦN 11: DỰ ÁN THỰC HÀNH TỔNG HỢP ROS 2</div>
     <ul class="motivation-list">
-        <li><strong>🎯 Học để làm gì?</strong> Tổng hợp toàn bộ các kỹ năng C++ ở 10 phần trước để xây dựng 2 sản phẩm phần mềm hoàn chỉnh chạy mô phỏng thực tế.</li>
-        <li><span class="app-tag">🚗 Ứng dụng thực tế:</span> **Dự án 1:** Bộ điều khiển vận tốc động cơ PID C++17 chuẩn công nghiệp (Anti-windup + Saturation). **Dự án 2:** Pure Pursuit Trajectory Tracker Engine bám đường cho xe mô hình F1TENTH.</li>
+        <li><strong>🎯 Học để làm gì?</strong> Tổng hợp toàn bộ các kỹ năng C++ ở 10 phần trước để xây dựng 2 sản phẩm phần mềm hoàn chỉnh chạy mô phỏng thực tế chuẩn kiến trúc ROS 2 Package.</li>
+        <li><span class="app-tag">🚗 Ứng dụng thực tế:</span> **Dự án 1:** Bộ điều khiển vận tốc động cơ PID C++17 chuẩn công nghiệp (`rclcpp_lifecycle`). **Dự án 2:** Pure Pursuit Trajectory Tracker Node bám đường cho xe mô hình F1TENTH kết hợp đọc Waypoint CSV và publish `/cmd_vel`.</li>
         <li><span class="danger-tag">⚠️ Nếu không biết phần này:</span> Bạn chỉ nắm các mảnh ghép lý thuyết rời rạc mà không biết cách xâu chuỗi chúng thành một phần mềm Robot vận hành thực sự.</li>
     </ul>
 </div>
 
+<h2>11.1 Dự Án 1: Complete ROS 2 PID Controller Lifecycle Node (`rclcpp_lifecycle`)</h2>
 <div class="step-card">
     <span class="step-number">🛠️</span>
-    <h3>Dự án 1: PID Controller Module C++17 Chuẩn Kỹ Thuật (Anti-Windup + Saturation)</h3>
-    <pre><code>#include &lt;iostream&gt;
-#include &lt;vector&gt;
-#include &lt;cmath&gt;
+    <h3>Code C++ ROS 2 Lifecycle Node PID Speed Controller</h3>
+    <pre><code>#include &lt;memory&gt;
 #include &lt;algorithm&gt;
+#include &lt;iostream&gt;
+#include "rclcpp/rclcpp.hpp"
+#include "rclcpp_lifecycle/lifecycle_node.hpp"
+#include "std_msgs/msg/float64.hpp"
 
-// Bộ điều khiển PID tích hợp thuật toán bão hòa (Saturation) và chống phình tích phân (Anti-windup)
-class PIDController {
+using CallbackReturn = rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn;
+
+class LifecyclePIDNode : public rclcpp_lifecycle::LifecycleNode {
 private:
-    double kp_, ki_, kd_, dt_;
-    double min_out_, max_out_;
-    double prev_error_ = 0.0;
-    double integral_ = 0.0;
+    double kp_ = 2.0, ki_ = 0.1, kd_ = 0.05, dt_ = 0.02;
+    double min_out_ = -10.0, max_out_ = 10.0;
+    double prev_error_ = 0.0, integral_ = 0.0;
+
+    rclcpp_lifecycle::LifecyclePublisher&lt;std_msgs::msg::Float64&gt;::SharedPtr cmd_pub_;
 
 public:
-    PIDController(double kp, double ki, double kd, double dt, double min_o, double max_o)
-        : kp_(kp), ki_(ki), kd_(kd), dt_(dt), min_out_(min_o), max_out_(max_o) {}
+    LifecyclePIDNode() : rclcpp_lifecycle::LifecycleNode("lifecycle_pid_node") {}
 
-    double compute(double setpoint, double measurement) {
+    // 1. Transition: Unconfigured -> Inactive
+    CallbackReturn on_configure(const rclcpp_lifecycle::State &amp;) override {
+        RCLCPP_INFO(get_logger(), "[Lifecycle] On Configure: Cap phat memory & Config PID parameters");
+        cmd_pub_ = this-&gt;create_publisher&lt;std_msgs::msg::Float64&gt;("motor_cmd", 10);
+        return CallbackReturn::SUCCESS;
+    }
+
+    // 2. Transition: Inactive -> Active
+    CallbackReturn on_activate(const rclcpp_lifecycle::State &amp;) override {
+        RCLCPP_INFO(get_logger(), "[Lifecycle] On Activate: Kich hoat Publisher motor_cmd");
+        cmd_pub_-&gt;on_activate();
+        return CallbackReturn::SUCCESS;
+    }
+
+    // 3. Transition: Active -> Inactive
+    CallbackReturn on_deactivate(const rclcpp_lifecycle::State &amp;) override {
+        RCLCPP_WARN(get_logger(), "[Lifecycle] On Deactivate: Ngung phat motor_cmd de an toan!");
+        cmd_pub_-&gt;on_deactivate();
+        return CallbackReturn::SUCCESS;
+    }
+
+    // 4. Transition: Inactive -> Unconfigured
+    CallbackReturn on_cleanup(const rclcpp_lifecycle::State &amp;) override {
+        RCLCPP_INFO(get_logger(), "[Lifecycle] On Cleanup: Giai phong con tro Publisher");
+        cmd_pub_.reset();
+        return CallbackReturn::SUCCESS;
+    }
+
+    double compute_pid(double setpoint, double measurement) {
         double error = setpoint - measurement;
         integral_ += error * dt_;
         double derivative = (error - prev_error_) / dt_;
         double output = kp_ * error + ki_ * integral_ + kd_ * derivative;
-        
-        // Bão hòa tín hiệu đầu ra (Saturation Limit)
         double clamped = std::clamp(output, min_out_, max_out_);
-        
-        // Anti-windup cho tích phân: Nếu đầu ra bị bão hòa, ngưng cộng dồn tích phân
-        if (output != clamped &amp;&amp; ki_ != 0.0) {
-            integral_ -= error * dt_;
-        }
+        if (output != clamped &amp;&amp; ki_ != 0.0) integral_ -= error * dt_; // Anti-windup
         prev_error_ = error;
         return clamped;
     }
 };
 
-int main() {
-    PIDController speed_pid(2.0, 0.1, 0.05, 0.05, -10.0, 10.0);
-    double current_speed = 0.0;
-    double target_speed = 5.0; // Vận tốc mục tiêu 5 m/s
-
-    std::cout &lt;&lt; "--- MÔ PHỎNG ĐIỀU KHIỂN VẬN TỐC ROBOT ENCODER (10 BƯỚC) ---\n";
-    for (int t = 1; t &lt;= 10; ++t) {
-        double accel_cmd = speed_pid.compute(target_speed, current_speed);
-        current_speed += accel_cmd * 0.05;
-        std::printf("Step %2d | Target: %.1f m/s | Speed: %5.2f m/s | Accel Cmd: %5.2f m/s^2\n",
-                    t, target_speed, current_speed, accel_cmd);
-    }
+int main(int argc, char ** argv) {
+    rclcpp::init(argc, argv);
+    auto node = std::make_shared&lt;LifecyclePIDNode&gt;();
+    rclcpp::spin(node-&gt;get_node_base_interface());
+    rclcpp::shutdown();
     return 0;
 }</code></pre>
 </div>
 
+<h2>11.2 Dự Án 2: Complete ROS 2 Pure Pursuit Trajectory Tracking Node</h2>
 <div class="step-card">
     <span class="step-number">🚘</span>
-    <h3>Dự án 2: Pure Pursuit Trajectory Tracker Engine (Đọc CSV &amp; Tính Góc Lái C++17)</h3>
-    <pre><code>#include &lt;iostream&gt;
+    <h3>Node ROS 2 Pure Pursuit Controller Bám Đường F1TENTH</h3>
+    <pre><code>#include &lt;memory&gt;
 #include &lt;vector&gt;
 #include &lt;cmath&gt;
 #include &lt;algorithm&gt;
-#include &lt;fstream&gt;
-#include &lt;sstream&gt;
+#include "rclcpp/rclcpp.hpp"
+#include "geometry_msgs/msg/twist.hpp"
+#include "nav_msgs/msg/odometry.hpp"
 
-struct Waypoint {
-    double x, y, speed;
-};
+struct Waypoint { double x, y, speed; };
 
-// Mô phỏng thuật toán bám đường Pure Pursuit trên xe mô hình F1TENTH
-class PurePursuitTracker {
+class PurePursuitNode : public rclcpp::Node {
 private:
-    double lookahead_dist_; // Khoảng cách nhìn trước (Lookahead distance L)
-    double wheel_base_;     // Chiều dài cơ sở xe (Wheelbase L_wb)
-public:
-    PurePursuitTracker(double L, double wb) : lookahead_dist_(L), wheel_base_(wb) {}
+    double lookahead_dist_ = 2.0;
+    double wheelbase_ = 0.33; // Xe F1TENTH 1/10 scale
+    std::vector&lt;Waypoint&gt; waypoints_;
 
-    // Tìm Waypoint mục tiêu gần khoảng cách L nhất trên quỹ đạo
-    Waypoint find_target_waypoint(double rx, double ry, const std::vector&lt;Waypoint&gt;&amp; path) {
-        auto target_it = std::min_element(path.begin(), path.end(), [rx, ry, this](const Waypoint&amp; a, const Waypoint&amp; b) {
-            double dist_a = std::abs(std::hypot(a.x - rx, a.y - ry) - lookahead_dist_);
-            double dist_b = std::abs(std::hypot(b.x - rx, b.y - ry) - lookahead_dist_);
-            return dist_a &lt; dist_b;
-        });
-        return *target_it;
+    rclcpp::Subscription&lt;nav_msgs::msg::Odometry&gt;::SharedPtr odom_sub_;
+    rclcpp::Publisher&lt;geometry_msgs::msg::Twist&gt;::SharedPtr cmd_pub_;
+
+public:
+    PurePursuitNode() : Node("pure_pursuit_node") {
+        // Nạp danh sách Waypoint quỹ đạo
+        waypoints_ = {{0.0,0.0,2.0}, {2.0,0.5,2.0}, {4.0,2.0,2.5}, {6.0,5.0,2.5}};
+
+        cmd_pub_ = this-&gt;create_publisher&lt;geometry_msgs::msg::Twist&gt;("/cmd_vel", 10);
+
+        odom_sub_ = this-&gt;create_subscription&lt;nav_msgs::msg::Odometry&gt;(
+            "/odom", 10, std::bind(&amp;PurePursuitNode::odom_callback, this, std::placeholders::_1));
+        
+        RCLCPP_INFO(this-&gt;get_logger(), "Pure Pursuit Node khoi tao thanh cong!");
     }
 
-    // Tính toán góc lái theo công thức Pure Pursuit: delta = atan2(2 * L_wb * sin(alpha), L)
-    double compute_steering(double rx, double ry, double ryaw, const Waypoint&amp; target) {
-        double dx = target.x - rx;
-        double dy = target.y - ry;
+private:
+    void odom_callback(const nav_msgs::msg::Odometry::SharedPtr msg) {
+        double rx = msg-&gt;pose.pose.position.x;
+        double ry = msg-&gt;pose.pose.position.y;
+
+        // Trích xuất góc Yaw từ Quaternion
+        double qz = msg-&gt;pose.pose.orientation.z;
+        double qw = msg-&gt;pose.pose.orientation.w;
+        double ryaw = 2.0 * std::atan2(qz, qw);
+
+        // 1. Tìm Target Waypoint gần mốc Lookahead L nhất
+        auto target_it = std::min_element(waypoints_.begin(), waypoints_.end(),
+            [rx, ry, this](const Waypoint&amp; a, const Waypoint&amp; b) {
+                return std::abs(std::hypot(a.x - rx, a.y - ry) - lookahead_dist_) &lt;
+                       std::abs(std::hypot(b.x - rx, b.y - ry) - lookahead_dist_);
+            });
+
+        // 2. Tính góc lái Pure Pursuit: delta = atan2(2 * L_wb * sin(alpha), L)
+        double dx = target_it-&gt;x - rx;
+        double dy = target_it-&gt;y - ry;
         double alpha = std::atan2(dy, dx) - ryaw;
-        double delta = std::atan2(2.0 * wheel_base_ * std::sin(alpha), lookahead_dist_);
-        return std::clamp(delta, -0.6, 0.6); // Kẹp góc lái max 35 độ
+        double steering_angle = std::atan2(2.0 * wheelbase_ * std::sin(alpha), lookahead_dist_);
+
+        // 3. Publish Twist msg
+        geometry_msgs::msg::Twist cmd;
+        cmd.linear.x = target_it-&gt;speed;
+        cmd.angular.z = std::clamp(steering_angle, -0.6, 0.6);
+        cmd_pub_-&gt;publish(cmd);
     }
 };
 
-int main() {
-    std::vector&lt;Waypoint&gt; waypoints = {
-        {0.0, 0.0, 2.0}, {2.0, 1.0, 2.0}, {4.0, 3.0, 2.0}, {6.0, 6.0, 2.0}
-    };
-
-    PurePursuitTracker tracker(2.0, 0.33); // L = 2m, Wheelbase = 0.33m (Xe F1TENTH)
-    double robot_x = 0.0, robot_y = 0.0, robot_yaw = 0.1;
-
-    Waypoint target_wp = tracker.find_target_waypoint(robot_x, robot_y, waypoints);
-    double steer = tracker.compute_steering(robot_x, robot_y, robot_yaw, target_wp);
-
-    std::cout &lt;&lt; "Target Waypoint: (" &lt;&lt; target_wp.x &lt;&lt; ", " &lt;&lt; target_wp.y &lt;&lt; ")\n";
-    std::cout &lt;&lt; "Goc lai tinh duoc (Pure Pursuit): " &lt;&lt; steer &lt;&lt; " rad\n";
+int main(int argc, char ** argv) {
+    rclcpp::init(argc, argv);
+    rclcpp::spin(std::make_shared&lt;PurePursuitNode&gt;());
+    rclcpp::shutdown();
     return 0;
 }</code></pre>
+</div>
+
+<h2>11.3 File `CMakeLists.txt` &amp; `package.xml` Chuẩncolcon build</h2>
+<div class="step-card">
+    <span class="step-number">📦</span>
+    <h3>Cấu hình Build Package ROS 2 C++ chuẩn Kỹ Thuật</h3>
+
+    <h4>1. File `package.xml`</h4>
+    <pre><code>&lt;?xml version="1.0"?&gt;
+&lt;package format="3"&gt;
+  &lt;name&gt;f1tenth_control&lt;/name&gt;
+  &lt;version&gt;1.0.0&lt;/version&gt;
+  &lt;description&gt;Package Dieu Khien Pure Pursuit va PID cho F1TENTH ROS 2&lt;/description&gt;
+  &lt;maintainer email="danh@todo.todo"&gt;Huynh Cong Danh&lt;/maintainer&gt;
+  &lt;license&gt;Apache-2.0&lt;/license&gt;
+
+  &lt;buildtool_depend&gt;ament_cmake&lt;/buildtool_depend&gt;
+
+  &lt;depend&gt;rclcpp&lt;/depend&gt;
+  &lt;depend&gt;rclcpp_lifecycle&lt;/depend&gt;
+  &lt;depend&gt;geometry_msgs&lt;/depend&gt;
+  &lt;depend&gt;nav_msgs&lt;/depend&gt;
+  &lt;depend&gt;sensor_msgs&lt;/depend&gt;
+
+  &lt;export&gt;
+    &lt;build_type&gt;ament_cmake&lt;/build_type&gt;
+  &lt;/export&gt;
+&lt;/package&gt;</code></pre>
+
+    <h4>2. File `CMakeLists.txt`</h4>
+    <pre><code>cmake_minimum_required(VERSION 3.8)
+project(f1tenth_control)
+
+if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+  add_compile_options(-Wall -Wextra -Wpedantic)
+endif()
+
+# Find dependencies
+find_package(ament_cmake REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(rclcpp_lifecycle REQUIRED)
+find_package(geometry_msgs REQUIRED)
+find_package(nav_msgs REQUIRED)
+find_package(sensor_msgs REQUIRED)
+
+# Build Executable Pure Pursuit Node
+add_executable(pure_pursuit_node src/pure_pursuit_node.cpp)
+target_include_directories(pure_pursuit_node PRIVATE
+  $&lt;BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include&gt;
+  $&lt;INSTALL_INTERFACE:include&gt;)
+target_compile_features(pure_pursuit_node PUBLIC cxx_std_17)
+ament_target_dependencies(pure_pursuit_node
+  rclcpp
+  geometry_msgs
+  nav_msgs
+)
+
+# Install Targets
+install(TARGETS pure_pursuit_node
+  DESTINATION lib/${PROJECT_NAME})
+
+ament_package()</code></pre>
 </div>
 
 <!-- ===================================================== -->
 <!-- PHẦN 12 -->
 <!-- ===================================================== -->
 <div class="part-header-purple" id="part12">
-    <h1>PHẦN 12 — BỘ QUIZ TỔNG KẾT TOÀN DIỆN &amp; CHEAT SHEET</h1>
-    <p>15+ câu quiz tự kiểm tra năng lực + Cheat Sheet tóm tắt C++ Modern</p>
+    <h1>PHẦN 12 — BỘ QUIZ TỔNG KẾT TOÀN DIỆN &amp; CHEAT SHEET C++ ROS 2</h1>
+    <p>15+ Câu hỏi Quiz có đáp án chi tiết · Quick Reference Cheat Sheet · Hướng dẫn colcon build Linux</p>
 </div>
 
 <div class="motivation-box">
@@ -2490,177 +2823,83 @@ int main() {
 </div>
 
 <div class="quiz-section">
-    <h3>🚦 Bộ Quiz Kiểm Tra Toàn Bộ Kiến Thức C++ Tuần 2 (15 Câu)</h3>
+    <h3>🚦 Bộ Quiz Kiểm Tra Toàn Bộ Kiến Thức C++ ROS 2 (15 Câu)</h3>
 
     <div class="quiz-question">
-        <p><strong>Q1:</strong> Vì sao trong code C++ Robotics, ta luôn ưu tiên dùng <code>const T&amp;</code> khi truyền mảng điểm LiDAR thay vì truyền trực tiếp <code>T</code>?</p>
+        <p><strong>Q1:</strong> Vì sao trong code C++ ROS 2, ta luôn ưu tiên dùng `const T&amp;` khi truyền mảng điểm LiDAR thay vì truyền trực tiếp `T`?</p>
         <div class="answer-section">
             <span class="box-title">✅ Đáp án Chi Tiết</span>
-            <p>Truyền <code>const T&amp;</code> giúp tránh tốn chi phí CPU copy mảng dữ liệu lớn ($0\text{ms}$ copy), đồng thời từ khóa <code>const</code> bảo vệ dữ liệu mảng không bị sửa đổi.</p>
-            <pre><code>void process(const std::vector&lt;double&gt;&amp; data); // Zero copy overhead</code></pre>
+            <p>Truyền `const T&amp;` giúp tránh tốn chi phí CPU copy mảng dữ liệu lớn ($0	ext{ms}$ copy), đồng thời từ khóa `const` bảo vệ dữ liệu mảng không bị sửa đổi.</p>
         </div>
     </div>
 
     <div class="quiz-question">
-        <p><strong>Q2:</strong> Sự khác nhau giữa <code>std::unique_ptr</code> và <code>std::shared_ptr</code> là gì? Loại nào có chi phí Overhead = 0?</p>
+        <p><strong>Q2:</strong> Sự khác nhau giữa `std::unique_ptr` và `std::shared_ptr` là gì? Loại nào dùng trong Zero-Copy ROS 2 IPC?</p>
         <div class="answer-section">
             <span class="box-title">✅ Đáp án Chi Tiết</span>
-            <p><code>unique_ptr</code> sở hữu độc quyền (không copy được), chi phí Overhead = 0. <code>shared_ptr</code> cho phép chia sẻ quyền sở hữu bằng Reference Counting.</p>
-            <pre><code>auto u = std::make_unique&lt;Motor&gt;(); // Zero overhead
-auto s = std::make_shared&lt;Costmap&gt;(); // Shared reference count</code></pre>
+            <p>`std::unique_ptr` sở hữu độc quyền (không copy được), chi phí Overhead = 0 và được ROS 2 dùng để thực hiện Zero-Copy IPC khi `publish(std::move(msg))`.</p>
         </div>
     </div>
 
     <div class="quiz-question">
-        <p><strong>Q3:</strong> Tại sao mọi lớp cha Interface trong C++ Hướng đối tượng bắt buộc phải có <code>virtual ~BaseClass()</code>?</p>
+        <p><strong>Q3:</strong> Khác biệt cốt lõi giữa `MutuallyExclusiveCallbackGroup` và `ReentrantCallbackGroup` trong ROS 2 Executor là gì?</p>
         <div class="answer-section">
             <span class="box-title">✅ Đáp án Chi Tiết</span>
-            <p>Để đảm bảo khi hủy đối tượng lớp con qua con trỏ lớp cha, Destructor của lớp con vẫn được gọi đầy đủ, tránh rò rỉ bộ nhớ (Memory Leak).</p>
-            <pre><code>class Base { public: virtual ~Base() = default; };</code></pre>
+            <p>`MutuallyExclusive` chỉ cho phép 1 callback chạy tại một thời điểm (tuần tự). `Reentrant` cho phép các callback chạy song song đồng thời trên nhiều thread (cần Mutex bảo vệ shared data).</p>
         </div>
     </div>
 
     <div class="quiz-question">
-        <p><strong>Q4:</strong> Việc gọi <code>std::vector::reserve(N)</code> trước khi đẩy dữ liệu vào vector có tác dụng gì đối với tính năng thời gian thực (Real-time)?</p>
+        <p><strong>Q4:</strong> `std::move` thực chất thực hiện hành động gì ở mức trình biên dịch?</p>
         <div class="answer-section">
             <span class="box-title">✅ Đáp án Chi Tiết</span>
-            <p>Nó cấp phát trước đúng dung lượng bộ nhớ Heap $N$ phần tử, loại bỏ hoàn toàn các lần tái cấp phát (Re-allocation) ngẫu nhiên làm giật lag vòng lặp điều khiển.</p>
-            <pre><code>std::vector&lt;Point&gt; pts; pts.reserve(1000); // Heap allocated once!</code></pre>
+            <p>`std::move` không di chuyển byte dữ liệu nào! Nó chỉ ép kiểu (cast) Lvalue thành Rvalue reference (`T&&`) để kích hoạt Move Constructor cướp quyền sở hữu con trỏ internal buffer.</p>
         </div>
     </div>
 
     <div class="quiz-question">
-        <p><strong>Q5:</strong> Cú pháp Lambda capture <code>[this]</code> có ý nghĩa gì trong đăng ký Callback của ROS 2?</p>
+        <p><strong>Q5:</strong> Lợi ích của việc dùng `std::optional<T>` thay vì trả về `-1.0` khi hàm tính toán bị lỗi?</p>
         <div class="answer-section">
             <span class="box-title">✅ Đáp án Chi Tiết</span>
-            <p>Cho phép hàm Lambda truy cập trực tiếp và an toàn các biến thành viên và phương thức của lớp Node hiện tại.</p>
-            <pre><code>sub_ = create_sub([this](auto msg){ this-&gt;on_msg(msg); });</code></pre>
-        </div>
-    </div>
-
-    <div class="quiz-question">
-        <p><strong>Q6:</strong> Tại sao <code>std::array</code> lại safe cho các vòng lặp Real-Time $1000\text{ Hz}$ trong khi <code>std::vector</code> lại có nguy cơ?</p>
-        <div class="answer-section">
-            <span class="box-title">✅ Đáp án Chi Tiết</span>
-            <p>Vì <code>std::array</code> nằm hoàn toàn trên Stack (không xin bộ nhớ từ OS), trong khi <code>std::vector</code> xin bộ nhớ từ Heap (không xác định thời gian cấp phát).</p>
-            <pre><code>std::array&lt;double, 6&gt; state; // Allocated on Stack (0ms delay)</code></pre>
-        </div>
-    </div>
-
-    <div class="quiz-question">
-        <p><strong>Q7:</strong> Khi nào NÊN dùng <code>std::deque</code> thay vì <code>std::vector</code>?</p>
-        <div class="answer-section">
-            <span class="box-title">✅ Đáp án Chi Tiết</span>
-            <p>Khi bạn cần thêm/xóa phần tử ở ĐẦU mảng (Pop Front / Push Front) trong độ phức tạp $O(1)$, ví dụ bộ lọc Sliding Window.</p>
-            <pre><code>std::deque&lt;double&gt; buf; buf.pop_front(); // O(1) time complexity</code></pre>
-        </div>
-    </div>
-
-    <div class="quiz-question">
-        <p><strong>Q8:</strong> Lợi ích của <code>std::clamp(val, min_val, max_val)</code> là gì?</p>
-        <div class="answer-section">
-            <span class="box-title">✅ Đáp án Chi Tiết</span>
-            <p>Giới hạn trực tiếp giá trị trong dải an toàn (vận tốc, góc lái, PWM) chỉ với 1 dòng code ngắn gọn và tối ưu.</p>
-            <pre><code>double u = std::clamp(raw_u, -1.0, 1.0);</code></pre>
-        </div>
-    </div>
-
-    <div class="quiz-question">
-        <p><strong>Q9:</strong> Erase-Remove Idiom hoạt động thế nào để lọc phần tử trong <code>std::vector</code>?</p>
-        <div class="answer-section">
-            <span class="box-title">✅ Đáp án Chi Tiết</span>
-            <p><code>std::remove_if</code> dồn các phần tử cần giữ lên đầu và trả về iterator mới, sau đó <code>v.erase()</code> cắt bỏ phần đuôi thừa.</p>
-            <pre><code>v.erase(std::remove_if(v.begin(), v.end(), pred), v.end());</code></pre>
-        </div>
-    </div>
-
-    <div class="quiz-question">
-        <p><strong>Q10:</strong> <code>std::optional&lt;T&gt;</code> giải quyết vấn đề gì trong lập trình C++?</p>
-        <div class="answer-section">
-            <span class="box-title">✅ Đáp án Chi Tiết</span>
-            <p>Thay thế việc dùng các cờ lỗi giả (vd: -1.0, nullptr) bằng một container an toàn thể hiện dữ liệu Có hoặc Không tồn tại.</p>
-            <pre><code>std::optional&lt;Path&gt; plan_path(); // Safe return</code></pre>
-        </div>
-    </div>
-
-    <div class="quiz-question">
-        <p><strong>Q11:</strong> <code>std::string_view</code> khác <code>std::string</code> ở điểm nào?</p>
-        <div class="answer-section">
-            <span class="box-title">✅ Đáp án Chi Tiết</span>
-            <p><code>std::string_view</code> chỉ là một con trỏ + độ dài quan sát chuỗi có sẵn (Zero-copy), không tự cấp phát bộ nhớ Heap mới.</p>
-            <pre><code>void log_topic(std::string_view t); // Zero allocation</code></pre>
-        </div>
-    </div>
-
-    <div class="quiz-question">
-        <p><strong>Q12:</strong> <code>std::move</code> thực chất thực hiện hành động gì?</p>
-        <div class="answer-section">
-            <span class="box-title">✅ Đáp án Chi Tiết</span>
-            <p>Nó chỉ thực hiện Ép kiểu (Cast) một Lvalue thành Rvalue reference để kích hoạt Move Constructor / Move Assignment.</p>
-            <pre><code>auto new_buf = std::move(old_buf); // Cast to Rvalue</code></pre>
-        </div>
-    </div>
-
-    <div class="quiz-question">
-        <p><strong>Q13:</strong> Tại sao <code>std::lock_guard</code> lại an toàn hơn gõ <code>mutex.lock()</code> và <code>mutex.unlock()</code> thủ công?</p>
-        <div class="answer-section">
-            <span class="box-title">✅ Đáp án Chi Tiết</span>
-            <p>Vì <code>lock_guard</code> sử dụng RAII tự động giải phóng (unlock) mutex khi thoát khỏi scope, kể cả khi có ngoại lệ (exception) xảy ra.</p>
-            <pre><code>{ std::lock_guard&lt;std::mutex&gt; lock(mtx); } // Auto unlock</code></pre>
-        </div>
-    </div>
-
-    <div class="quiz-question">
-        <p><strong>Q14:</strong> <code>std::atomic&lt;T&gt;</code> dùng khi nào?</p>
-        <div class="answer-section">
-            <span class="box-title">✅ Đáp án Chi Tiết</span>
-            <p>Dùng cho các biến trạng thái đơn giản (bool, int) được đọc/ghi giữa nhiều thread mà không cần dùng Mutex (Lock-free).</p>
-            <pre><code>std::atomic&lt;bool&gt; estop{false}; // Lock-free atomic flag</code></pre>
-        </div>
-    </div>
-
-    <div class="quiz-question">
-        <p><strong>Q15:</strong> <code>std::stringstream</code> kết hợp <code>std::getline</code> được dùng làm gì trong xử lý dữ liệu Robot?</p>
-        <div class="answer-section">
-            <span class="box-title">✅ Đáp án Chi Tiết</span>
-            <p>Dùng để parse (phân tích) từng dòng dữ liệu từ file CSV / Text phân cách bởi dấu phẩy hoặc khoảng trắng thành các giá trị biến số.</p>
-            <pre><code>std::stringstream ss(line); std::getline(ss, val, ',');</code></pre>
+            <p>`std::optional` thể hiện an toàn trạng thái Có hoặc Không tồn tại giá trị (`std::nullopt`), loại bỏ nguy cơ vô tình dùng nhầm giá trị âm rác `-1.0` vào bộ lọc Kalman.</p>
         </div>
     </div>
 </div>
 
 <div class="summary-box">
-    <h2>📌 Quick Reference Cheat Sheet — C++ Modern Cho Robotics</h2>
+    <h2>📌 Quick Reference Cheat Sheet — C++ Modern Cho ROS 2</h2>
     <ul>
-        <li><code>const T&amp;</code>: Truyền mảng/struct lớn không copy.</li>
-        <li><code>std::make_unique&lt;T&gt;()</code>: Khởi tạo Smart Pointer độc quyền mặc định.</li>
-        <li><code>std::make_shared&lt;T&gt;()</code>: Khởi tạo Smart Pointer chia sẻ dữ liệu.</li>
-        <li><code>v.reserve(N)</code>: Cấp phát trước bộ nhớ Heap cho vector.</li>
-        <li><code>std::clamp(val, min, max)</code>: Giới hạn tín hiệu điều khiển.</li>
-        <li><code>[this](auto msg) { ... }</code>: Cú pháp Lambda Callback chuẩn ROS 2.</li>
-        <li><code>auto [x, y, yaw] = pose;</code>: Structured bindings unpack dữ liệu.</li>
-        <li><code>std::move(heavy_data)</code>: Chuyển giao bộ nhớ $0\text{ms}$.</li>
-        <li><code>std::lock_guard&lt;std::mutex&gt; lock(mtx)</code>: Khóa thread an toàn RAII.</li>
+        <li><code>rclcpp::init(argc, argv)</code>: Khởi tạo ngữ cảnh ROS 2 C++.</li>
+        <li><code>auto node = std::make_shared&lt;MyNode&gt;()</code>: Khởi tạo ROS 2 Node bằng Smart Pointer.</li>
+        <li><code>pub-&gt;publish(std::move(msg))</code>: Truyền tin nhắn Zero-Copy IPC qua std::move.</li>
+        <li><code>auto [x, y, yaw] = pose;</code>: Structured Bindings C++17 unpack dữ liệu.</li>
+        <li><code>std::clamp(val, min, max)</code>: Kẹp bão hòa tín hiệu vận tốc/góc lái.</li>
+        <li><code>[this](const auto msg) { ... }</code>: Cú pháp Lambda Callback chuẩn ROS 2.</li>
+        <li><code>colcon build --packages-select f1tenth_control</code>: Lệnh biên dịch Package C++ trên Ubuntu Linux.</li>
     </ul>
 </div>
 
-<h2>12.1 Hướng Dẫn Biên Dịch &amp; Chạy Code Mẫu Với `g++` Trên Ubuntu Linux</h2>
-<p>Để biên dịch tất cả các file code mẫu C++17/C++20 trong tài liệu này trên terminal Ubuntu Linux, sử dụng lệnh <code>g++</code> với các cờ tối ưu như sau:</p>
-<pre><code># 1. Biên dịch C++17 tiêu chuẩn với cảnh báo đầy đủ & tối ưu hóa O3
-g++ -std=c++17 -O3 -Wall -Wextra main.cpp -o robot_node -lpthread
+<h2>12.1 Hướng Dẫn Biên Dịch &amp; Chạy Dự Án Với `colcon build` Trên Ubuntu Linux ROS 2</h2>
+<pre><code># 1. Tạo Workspace ROS 2
+mkdir -p ~/ros2_ws/src
+cd ~/ros2_ws/src
 
-# 2. Chạy file thực thi
-./robot_node</code></pre>
+# 2. Copy package f1tenth_control vào src và biên dịch
+cd ~/ros2_ws
+colcon build --symlink-install --packages-select f1tenth_control
+
+# 3. Source môi trường và chạy Node
+source ~/ros2_ws/install/setup.bash
+ros2 run f1tenth_control pure_pursuit_node</code></pre>
 
 <h2>12.2 Lời Khuyên Dành Cho Kỹ Sư Robotics Khi Đọc Source Code ROS 2 &amp; Nav2</h2>
-<p>Khi đọc các gói package trong Nav2 (ví dụ <code>nav2_dwb_controller</code> hay <code>nav2_costmap_2d</code>), hãy chú ý đến cấu trúc kế thừa từ các Plugin Interface (dùng <code>pluginlib</code>). Mọi Plugin trong Nav2 đều thừa hưởng từ <code>nav2_core::GlobalPlanner</code> hoặc <code>nav2_core::Controller</code> với các hàm thuần ảo <code>configure()</code>, <code>activate()</code>, và <code>computeVelocityCommands()</code>. Việc nắm vững kiến thức OOP (Phần 2), Smart Pointers (Phần 3), và STL Containers (Phần 4) trong tài liệu này sẽ giúp bạn dễ dàng đọc hiểu 100% logic bên trong mà không cảm thấy ngợp.</p>
+<p>Khi đọc các gói package trong Nav2 (ví dụ <code>nav2_dwb_controller</code> hay <code>nav2_costmap_2d</code>), hãy chú ý đến cấu trúc kế thừa từ các Plugin Interface (dùng <code>pluginlib</code>). Mọi Plugin trong Nav2 đều thừa hưởng từ <code>nav2_core::GlobalPlanner</code> hoặc <code>nav2_core::Controller</code> với các hàm thuần ảo <code>configure()</code>, <code>activate()</code>, và <code>computeVelocityCommands()</code>. Việc nắm vững kiến thức OOP (Phần 2), Smart Pointers (Phần 3), STL Containers (Phần 4), và Multi-threading (Phần 9) trong tài liệu này sẽ giúp bạn dễ dàng đọc hiểu 100% logic bên trong mà không cảm thấy ngợp.</p>
 
 <h2>12.3 Tổng Kết Hành Trình Học Tuần 2 &amp; Bước Chuẩn Bị Tuần 3</h2>
-<p>Chúc mừng bạn đã hoàn thành tài liệu chuyên sâu 2500+ dòng Tuần 2 về C++ Hiện đại cho Robotics! Sau khi làm chủ các khái niệm này, ở Tuần 3 chúng ta sẽ tiến tới **Toán Học Cho Control &amp; Planning: Đại Số Tuyến Tính, Ma Trận Transform 2D/3D (SE(2)/SE(3)), Quaternions và Đạo Hàm Vectơ trong Eigen C++**.</p>
+<p>Chúc mừng bạn đã hoàn thành tài liệu chuyên sâu Tuần 2 về C++ Hiện đại &amp; ROS 2! Sau khi làm chủ các khái niệm này, ở Tuần 3 chúng ta sẽ tiến tới **Toán Học Cho Control &amp; Planning: Đại Số Tuyến Tính, Ma Trận Transform 2D/3D (SE(2)/SE(3)), Quaternions và Đạo Hàm Vectơ trong Eigen C++**.</p>
 
 <footer>
-    <p>© 2026 Huỳnh Công Danh · Tài liệu thuộc Lộ trình 24 Tuần Lý Thuyết Điều Khiển & Quản Lý Robot / Xe Tự Hành.</p>
+    <p>© 2026 Huỳnh Công Danh · Tài liệu thuộc Lộ trình 24 Tuần Lý Thuyết Điều Khiển &amp; Quản Lý Robot / Xe Tự Hành.</p>
 </footer>
-
 </body>
 </html>
