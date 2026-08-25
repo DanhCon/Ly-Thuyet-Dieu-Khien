@@ -1010,7 +1010,11 @@ int main() {
     return 0;
 }</code></pre>
 
-<h2>2.4 Ví dụ 3: Giới thiệu Rule of 5 (Quản lý tài nguyên chuẩn C++)</h2>
+<h2>2.4 Ví dụ 3: Giới thiệu Rule of 5 (Quản lý tài nguyên C++ Legacy)</h2>
+<div class="warning-box">
+    <span class="box-title">⚠️ LƯU Ý KỸ THUẬT: RULE OF 5 VS RULE OF 0</span>
+    <p>Rule of 5 giúp bạn hiểu bản chất cách C++ quản lý bộ nhớ đệm thủ công khi đọc các dự án C++ legacy cũ. Tuy nhiên, trong <strong>ROS 2 và C++ Hiện Đại</strong>, nhờ sử dụng <strong>Smart Pointers (Phần 3)</strong>, chúng ta áp dụng <strong>RULE OF 0</strong> — tức là không cần tự gõ bất kỳ Destructor hay Copy Constructor thủ công nào nữa!</p>
+</div>
 <pre><code>#include &lt;iostream&gt;
 #include &lt;cstring&gt;
 
@@ -2110,6 +2114,10 @@ int main() {
 </div>
 
 <h2>7.2 Triển Khai Dynamic Parameter Handler Trong ROS 2 C++ (`rclcpp`)</h2>
+<div class="important-note">
+    <span class="box-title">📌 VÌ SAO DÙNG RCLCPP_INFO THAY VÌ std::cout?</span>
+    <p>Trong ROS 2, câu lệnh <code>RCLCPP_INFO(this->get_logger(), "...")</code> tự động đính kèm tên Node, mốc thời gian (Timestamp), mức độ ưu tiên log (<code>INFO</code>, <code>WARN</code>, <code>ERROR</code>), đồng thời ghi log ra file ROS 2 Bag và Rviz Console. <code>std::cout</code> chỉ in ra terminal đơn thuần nên không được dùng trong codebase ROS 2 chuẩn.</p>
+</div>
 <p>Trong ROS 2 (`rclcpp`), tham số (Parameters) có thể được thay đổi động lúc runtime từ Terminal bằng lệnh <code>ros2 param set</code>. C++17 kết hợp với <code>rclcpp::ParameterEventHandler</code> cho phép Node tự động cập nhật thông số bộ điều khiển PID hay vận tốc tối đa mà không cần restart Node.</p>
 
 <div class="step-card">
@@ -2181,6 +2189,10 @@ int main(int argc, char ** argv) {
 </div>
 
 <h2>7.3 Mô Phỏng Extended Kalman Filter (EKF 2D Localization) C++17 Chi Tiết</h2>
+<div class="important-note">
+    <span class="box-title">📌 NỐI CẦU KIẾN THỨC SANG TUẦN 3 (MATH & EIGEN C++)</span>
+    <p>Trong ví dụ EKF 2D dưới đây, chúng ta rút gọn ma trận hiệp phương sai thành mảng <code>std::array</code> để tập trung làm chủ cú pháp C++17 (<code>std::optional</code>, <code>structured bindings</code>). Trong <strong>Tuần 3 (Toán học cho Control &amp; Planning)</strong>, chúng ta sẽ học thư viện ma trận <strong>Eigen C++</strong> (<code>Eigen::Matrix3d</code>, <code>Eigen::Vector3d</code>) để thực hiện tính toán ma trận EKF 3D hoàn chỉnh!</p>
+</div>
 <p>Bộ lọc Kalman mở rộng (EKF) là trái tim của hệ thống định vị Robot (Localization) kết hợp giữa mô hình Động học (Kinematics Prediction) và số liệu đo Cảm biến (Sensor Measurement Update). Dưới đây là lớp EKF Solver viết bằng C++17 hoàn chỉnh.</p>
 
 <div class="step-card">
