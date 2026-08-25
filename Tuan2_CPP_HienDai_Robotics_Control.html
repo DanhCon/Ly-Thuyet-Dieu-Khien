@@ -365,6 +365,35 @@ footer {
     font-weight: 600;
 }
 
+
+/* --- STYLING CHO THETHEORY INTUITION BOX (GIAI THICH TRUC QUAN CHONG NGOP) --- */
+.theory-intuition-box {
+    background: linear-gradient(135deg, #f0fdf4, #eef2ff);
+    border: 1px solid #a7f3d0;
+    border-left: 6px solid #10b981;
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin: 20px 0 24px;
+    font-size: 0.96em;
+    box-shadow: 0 2px 10px rgba(16, 185, 129, 0.08);
+}
+.theory-title {
+    font-weight: 700;
+    color: #065f46;
+    font-size: 1.08em;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.theory-content {
+    color: #1e293b;
+    line-height: 1.75;
+}
+.theory-content strong {
+    color: #047857;
+}
+
 </style>
 </head>
 <body>
@@ -420,6 +449,14 @@ footer {
         <li><span class="app-tag">🚗 Ứng dụng thực tế:</span> Làm chủ bản chất CPU Cache Line (L1/L2/L3) để xử lý hàng triệu dữ liệu cảm biến mỗi giây không bị trễ microgiây nào.</li>
         <li><span class="danger-tag">⚠️ Nếu không biết phần này:</span> Bạn sẽ lầm tưởng Python có thể làm mọi thứ trong Robotics, dẫn đến việc thiết kế sai kiến trúc hệ thống điều khiển làm robot bị dừng khựng bất ngờ do Garbage Collector thu gom rác.</li>
     </ul>
+</div>
+
+<div class="theory-intuition-box">
+    <div class="theory-title">🧠 TƯ DUY NỀN TẢNG: BẢN CHẤT THỜI GIAN THỰC (REAL-TIME DETERMINISM)</div>
+    <div class="theory-content">
+        <p><strong>Khái niệm cốt lõi:</strong> Tính thời gian thực (Real-time) trong Robotics <strong>KHÔNG PHẢI LÀ CHẠY NHANH NHẤT</strong>, mà là <strong>CHẠY ĐÚNG THỜI ĐIỂM (DETERMINISTIC)</strong>. Nếu một thuật toán yêu cầu chạy mỗi $1\text{ms}$ ($1000\text{Hz}$), nó bắt buộc phải hoàn thành đúng trong $1\text{ms}$.</p>
+        <p><strong>Vì sao Python/Java bị loại khỏi vòng lặp điều khiển xe?</strong> Các ngôn ngữ như Python, Java, Go sử dụng bộ thu gom rác (Garbage Collector - GC). Khi RAM đầy, GC sẽ ngầm dừng tạm thời (Pause) toàn bộ chương trình trong $20\text{ms} - 100\text{ms}$ để dọn bộ nhớ. Với chiếc xe đang chạy $80\text{km/h}$, $50\text{ms}$ gián đoạn đồng nghĩa với xe lao tự do <strong>1.1 mét</strong> mà không hề được phanh hay đánh lái! C++ cho phép giải phóng bộ nhớ tức thì, loại bỏ 100% rủi ro này.</p>
+    </div>
 </div>
 
 <div class="definition">
@@ -488,6 +525,18 @@ footer {
         <li><span class="app-tag">🚗 Ứng dụng thực tế:</span> Truyền mảng dữ liệu quét 360 tia LiDAR vào hàm xử lý mà không tốn chi phí CPU copy mảng ($0\text{ms}$ copy time), diệt sạch bug rò rỉ bộ nhớ.</li>
         <li><span class="danger-tag">⚠️ Nếu không biết phần này:</span> Chương trình xe tự hành của bạn sẽ liên tục bị sập nguồn/dừng đột ngột với lỗi kinh hoàng <strong>Segmentation Fault</strong> do con trỏ bị hoang (Dangling Pointer) hoặc tràn bộ nhớ Stack.</li>
     </ul>
+</div>
+
+<div class="theory-intuition-box">
+    <div class="theory-title">🧠 TƯ DUY NỀN TẢNG: BẢN CHẤT BỘ NHỚ STACK VS HEAP QUA ẨN DỤ THỰC TẾ</div>
+    <div class="theory-content">
+        <p>Để lập trình C++ không bị "ngợp", hãy hình dung bộ nhớ RAM như hai khu vực làm việc:</p>
+        <ul>
+            <li><strong>Bộ nhớ Stack (Tủ đồ ngăn nắp):</strong> Giống như đĩa xếp chồng trong bếp. Khi bạn khai báo <code>double speed = 5.0;</code>, C++ đặt nó vào Stack. Hàm chạy xong, đĩa tự động dọn sạch. Cực kỳ nhanh ($1\text{ns}$ access), nhưng dung lượng nhỏ ($\sim 8\text{MB}$).</li>
+            <li><strong>Bộ nhớ Heap (Bãi đỗ xe công cộng):</strong> Dung lượng khổng lồ bằng dung lượng RAM máy tính ($16\text{GB} - 64\text{GB}$). Dùng khi cần lưu dữ liệu kích thước lớn hoặc thay đổi linh hoạt (mây điểm LiDAR $100,000$ điểm). Bạn phải tự xin vé (khai báo cấp phát) và phải trả vé (giải phóng) khi dùng xong.</li>
+            <li><strong>Quy tắc vàng <code>const T&amp;</code>:</strong> Giống như cho người khác xem ảnh chụp cuốn sách qua điện thoại thay vì photo toàn bộ cuốn sách 1,000 trang gửi cho họ. Bạn tiết kiệm được $100\%$ CPU copy time!</li>
+        </ul>
+    </div>
 </div>
 
 <div class="goal-box">
@@ -797,6 +846,17 @@ int main() {
     </ul>
 </div>
 
+<div class="theory-intuition-box">
+    <div class="theory-title">🧠 TƯ DUY NỀN TẢNG: GIẢI MÃ LẬP TRÌNH HƯỚNG ĐỐI TƯỢNG (OOP) TRONG ROBOTICS</div>
+    <div class="theory-content">
+        <p>Lập trình Hướng đối tượng trong Robotics không phải là lý thuyết suông, mà là kiến trúc bảo vệ an toàn phần cứng:</p>
+        <ul>
+            <li><strong>Đóng gói (Encapsulation):</strong> Giống như vỏ bọc của chiếc động cơ. Người lái xe chỉ được đạp chân ga (gọi hàm <code>set_pwm()</code>), không được chọc tay vào cuộn dây đồng bên trong (biến <code>private</code>). Hàm <code>set_pwm()</code> sẽ tự kẹp bão hòa tín hiệu bão hòa để động cơ không bị cháy.</li>
+            <li><strong>Kế thừa &amp; Đa hình (Polymorphism):</strong> Hãy tưởng tượng bạn thiết kế xe tự hành. Bạn tạo một ổ cắm điện chuẩn (Interface <code>AbstractController</code>). Dù bạn cắm vào ổ đó bộ điều khiển <strong>Pure Pursuit</strong>, <strong>Stanley</strong> hay <strong>MPC</strong>, xe vẫn nhận lệnh và chạy mượt mà mà không cần đập đi xây lại toàn bộ thân xe.</li>
+        </ul>
+    </div>
+</div>
+
 <div class="goal-box">
     <strong>🎯 Mục đích:</strong> Kiến trúc Nav2 và ROS 2 (rclcpp) dựa hoàn toàn trên kế thừa và đa hình (Polymorphism). Học cách tạo Interface chung cho bộ điều khiển (Controller Base Class) giúp bạn hoán đổi giữa Pure Pursuit, Stanley, LQR, MPC mà không cần sửa code hệ thống chính.
 </div>
@@ -1065,6 +1125,18 @@ int main() {
     </ul>
 </div>
 
+<div class="theory-intuition-box">
+    <div class="theory-title">🧠 TƯ DUY NỀN TẢNG: GIẢI MÃ SMART POINTERS VÀ VÌ SAO PHẢI BỎ `new`/`delete`</div>
+    <div class="theory-content">
+        <p>Trong C++ cũ, gõ <code>new</code> mà quên gõ <code>delete</code> sẽ gây ra hiện tượng <strong>Rò rỉ bộ nhớ (Memory Leak)</strong> — RAM cứ bị chiếm dụng dần cho tới khi máy tính bị treo sập. C++17 giải quyết triệt để bằng Smart Pointers với nguyên lý <strong>RAII (Vừa khởi tạo là sở hữu, ra khỏi scope là tự hủy)</strong>:</p>
+        <ul>
+            <li><strong>`std::unique_ptr` (Chìa khóa xe duy nhất):</strong> Chỉ có duy nhất 1 người cầm chìa khóa sở hữu chiếc xe. Muốn đưa cho người khác phải dùng <code>std::move()</code> để trao hẳn chìa khóa đi. Chi phí Overhead = 0 bytes!</li>
+            <li><strong>`std::shared_ptr` (Sổ hồng nhà chung đứng tên 3 người):</strong> Vùng nhớ chỉ bị đập bỏ (hủy RAM) khi người đứng tên cuối cùng rút lui (Reference Count = 0). Dùng khi dữ liệu Costmap được cả 2 Node Global Planner &amp; Local Planner cùng đọc.</li>
+            <li><strong>`std::weak_ptr` (Khách tham quan):</strong> Chỉ đứng ngoài nhìn mà không đứng tên sổ hồng, giúp tránh hiện tượng 2 người giữ chìa khóa của nhau gây khóa chết (Circular Reference).</li>
+        </ul>
+    </div>
+</div>
+
 <div class="goal-box">
     <strong>🎯 Mục đích:</strong> Trong C++ hiện đại (C++17 trở lên), bạn <strong>hạn chế tối đa gõ từ khóa `new` và `delete` thủ công</strong>. Kỹ thuật RAII (Resource Acquisition Is Initialization) kết hợp với Smart Pointers giúp chương trình robot tự động giải phóng bộ nhớ ngay khi đối tượng ra khỏi scope, chống Memory Leak 100%.
 </div>
@@ -1259,6 +1331,19 @@ int main() {
         <li><span class="app-tag">🚗 Ứng dụng thực tế:</span> Dùng `std::array` cho State Vector $[x,y,\theta,v]$ (100% Real-time safe), `std::deque` cho bộ lọc IMU Sliding Window, `std::priority_queue` cho thuật toán quy hoạch đường đi **A* Path Planner**, và 1D `std::vector` cho Nav2 Costmap Grid.</li>
         <li><span class="danger-tag">⚠️ Nếu không biết phần này:</span> Chọn sai Container (vd: dùng vector xóa đầu mảng hoặc list tìm kiếm nhị phân) sẽ làm thuật toán tìm đường A* bị chậm gấp 50-100 lần, làm trễ vòng lặp điều khiển xe.</li>
     </ul>
+</div>
+
+<div class="theory-intuition-box">
+    <div class="theory-title">🧠 TƯ DUY NỀN TẢNG: CÁCH CHỌN CONTAINER CHO TỪNG LOẠI CẢM BIẾN</div>
+    <div class="theory-content">
+        <p>Đừng bao giờ dùng duy nhất <code>std::vector</code> cho mọi bài toán! Hãy chọn đúng Container cho từng loại dữ liệu:</p>
+        <ul>
+            <li><strong>Vector trạng thái Robot $[x, y, \theta, v]$:</strong> Dùng <code>std::array&lt;double, 4&gt;</code> (Nằm trên Stack, 100% Real-time safe, không tốn $1\text{ms}$ xin RAM).</li>
+            <li><strong>Mây điểm LiDAR 3D:</strong> Dùng <code>std::vector&lt;Point3D&gt;</code> (Nằm trên Heap, thay đổi số lượng điểm linh hoạt). Bắt buộc gọi <code>v.reserve(100000)</code> trước khi đẩy dữ liệu!</li>
+            <li><strong>Bộ lọc IMU Sliding Window (100 mẫu gần nhất):</strong> Dùng <code>std::deque&lt;double&gt;</code> (Cho phép xóa phần tử đầu <code>pop_front()</code> trong độ phức tạp $O(1)$ cực nhanh).</li>
+            <li><strong>Open List trong Thuật toán A* Search:</strong> Dùng <code>std::priority_queue</code> (Tự động đưa ô lưới có tổng chi phí $f(n) = g(n) + h(n)$ nhỏ nhất lên đầu cây Heap).</li>
+        </ul>
+    </div>
 </div>
 
 <div class="goal-box">
@@ -1491,6 +1576,17 @@ int main() {
     </ul>
 </div>
 
+<div class="theory-intuition-box">
+    <div class="theory-title">🧠 TƯ DUY NỀN TẢNG: VÌ SAO NÊN DÙNG STL ALGORITHMS THAY VÒNG LẶP FOR?</div>
+    <div class="theory-content">
+        <p>Viết vòng lặp <code>for (int i = 0; i &lt; n; i++)</code> thủ công rất dễ mắc phải <strong>Lỗi lệch chỉ số chỉ 1 đơn vị (Off-by-one Error)</strong> hoặc quên kiểm tra giá trị rác <code>NaN</code>. STL Algorithms giải quyết triệt để:</p>
+        <ul>
+            <li><strong>Thao tác song song SIMD:</strong> Các hàm như <code>std::transform</code>, <code>std::accumulate</code> được trình biên dịch tối ưu hóa bằng các tập lệnh CPU hiện đại (AVX2/AVX-512), tính toán 4-8 phép tính số thực cùng 1 chu kỳ xung nhịp!</li>
+            <li><strong>An toàn mã nguồn:</strong> <code>std::clamp(val, min, max)</code> thay thế hoàn toàn chuỗi `if-else` dài dòng để kẹp bão hòa tín hiệu tay lái xe tự hành.</li>
+        </ul>
+    </div>
+</div>
+
 <div class="goal-box">
     <strong>🎯 Mục đích:</strong> Đừng viết lại vòng lặp <code>for</code> thủ công! Sử dụng STL Algorithms giúp code ngắn hơn 50%, tối ưu SIMD vectorization và loại bỏ hoàn toàn các lỗi lệch chỉ số mảng (Off-by-one errors).
 </div>
@@ -1693,6 +1789,17 @@ int main() {
     </ul>
 </div>
 
+<div class="theory-intuition-box">
+    <div class="theory-title">🧠 TƯ DUY NỀN TẢNG: CƠ CHẾ BẤT ĐỒNG BỘ (ASYNC CALLBACKS) TRONG ROS 2</div>
+    <div class="theory-content">
+        <p>Trong lập trình Robot, bạn không thể bắt CPU ngồi chờ dữ liệu cảm biến (Blocking wait). Hệ thống hoạt động theo cơ chế <strong>Sự kiện bất đồng bộ (Asynchronous Event-Driven)</strong>:</p>
+        <ul>
+            <li><strong>Hàm Callback là gì?</strong> Bạn đưa cho ROS 2 một đoạn code (thông qua <strong>Lambda <code>[this](const auto msg)</code></strong>) và nói: <em>"Khi nào có dữ liệu quét LiDAR từ Topic `/scan` gửi đến, hãy tự động kích hoạt đoạn code này cho tôi!"</em>.</li>
+            <li><strong>Lambda Capture `[this]`:</strong> Giúp hàm Callback ở ngoài có thể chui vào bên trong lớp Node để đọc/ghi các biến thành viên như vận tốc xe hay vị trí Odometry.</li>
+        </ul>
+    </div>
+</div>
+
 <div class="goal-box">
     <strong>🎯 Mục đích:</strong> Lambda và <code>std::function</code> là nền tảng của cơ chế Asynchronous Callbacks trong ROS 2. Làm chủ Lambda giúp bạn viết code Subscriber, Timer và Action Handler cực kỳ gọn gàng.
 </div>
@@ -1862,6 +1969,18 @@ int main() {
         <li><span class="app-tag">🚗 Ứng dụng thực tế:</span> Trích xuất tọa độ Robot qua Structured Bindings (`auto [x, y, yaw]`), kiểm soát giá trị trả về có/không tồn tại bằng `std::optional`, quan sát chuỗi `std::string_view` không tốn copy, lắng nghe thay đổi thông số động bằng `rclcpp::ParameterEventHandler`, và triển khai **Extended Kalman Filter (EKF 2D State Estimator)**.</li>
         <li><span class="danger-tag">⚠️ Nếu không biết phần này:</span> Bạn phải dùng các cờ lỗi giả nguy hiểm kiểu C (như trả về `-1.0` hoặc con trỏ `NULL`), dễ gây sai số nghiêm trọng khi tính toán bộ lọc Kalman định vị xe.</li>
     </ul>
+</div>
+
+<div class="theory-intuition-box">
+    <div class="theory-title">🧠 TƯ DUY NỀN TẢNG: LÝ THUYẾT BỘ LỌC KALMAN (EKF 2D LOCALIZATION)</div>
+    <div class="theory-content">
+        <p>Hãy hình dung bạn đang <strong>NHẮM MẮT ĐI BỘ TRONG PHÒNG TỐI</strong>:</p>
+        <ul>
+            <li><strong>1. Bước PREDICT (Dự đoán dựa trên cảm giác bước chân):</strong> Bạn đếm bước chân và vận tốc góc quay đầu (Encoder + IMU). Tuy nhiên, sau 10 bước, vị trí của bạn bắt đầu bị lệch tích lũy (Drift error).</li>
+            <li><strong>2. Bước UPDATE (Cập nhật khi thỉnh thoảng mở mắt nhìn đèn GPS):</strong> Thỉnh thoảng cảm biến GPS phát tín hiệu cho biết vị trí thực tế. Bộ lọc EKF sẽ tính toán <strong>Kalman Gain $K$</strong> để dung hòa giữa số bước chân dự đoán và vị trí GPS quan sát, cho ra vị trí chính xác nhất!</li>
+            <li><strong>Vai trò `std::optional`:</strong> Nếu xe đi vào hầm tối mất sóng GPS, `gps_data` sẽ bằng `std::nullopt`. Bộ lọc EKF thông minh bỏ qua bước Update mà không bị crash chương trình.</li>
+        </ul>
+    </div>
 </div>
 
 <h2>7.1 Chi Tiết 5 Tính Năng Modern C++17/20 Cốt Lõi Trong Robotics</h2>
@@ -2184,6 +2303,17 @@ int main() {
     </ul>
 </div>
 
+<div class="theory-intuition-box">
+    <div class="theory-title">🧠 TƯ DUY NỀN TẢNG: BẢN CHẤT BỘ NHỚ ZERO-COPY VÀ SHARED MEMORY PIPELINE</div>
+    <div class="theory-content">
+        <p>Để hiểu sự vi diệu của <strong>Zero-Copy</strong>, hãy so sánh hai hành động đời thực:</p>
+        <ul>
+            <li><strong>Thao tác COPY truyền thống (Chậm):</strong> Bạn photo một cuốn tài liệu mây điểm LiDAR 500 trang ($20\text{MB}$) rồi đưa bản photo cho Subscriber đọc. CPU mất $5\text{ms} - 10\text{ms}$ chỉ để làm công việc photo vô ích!</li>
+            <li><strong>Thao tác MOVE / ZERO-COPY (Tức thời $0\text{ms}$):</strong> Bạn cầm đúng cuốn tài liệu gốc đưa tận tay cho Subscriber và bảo: <em>"Từ giờ cuốn sách này thuộc về bạn!"</em> (chuyển giao con trỏ <code>std::unique_ptr</code> qua <code>std::move()</code>). Không một byte dữ liệu nào bị copy!</li>
+        </ul>
+    </div>
+</div>
+
 <h2>8.1 Bản Chất Lvalue vs Rvalue Reference &amp; `std::move`</h2>
 <p>Trong C++ truyền thống (C++03), khi bạn gán hoặc truyền một mảng dữ liệu lớn vào hàm, C++ bắt buộc phải **COPY TOÀN BỘ BỘ NHỚ HEAP** từ đối tượng nguồn sang đối tượng đích. Với Move Semantics (C++11/17):</p>
 <ul>
@@ -2322,6 +2452,17 @@ int main() {
         <li><span class="app-tag">🚗 Ứng dụng thực tế:</span> Chạy luồng đọc IMU song song với vòng lặp điều khiển $100	ext{ Hz}$, áp dụng mô hình **Lock-Free SPSC Queue**, và cấu hình ROS 2 Callback Groups (`MutuallyExclusive` vs `Reentrant`) trong `MultiThreadedExecutor`.</li>
         <li><span class="danger-tag">⚠️ Nếu không biết phần này:</span> Chương trình xe tự hành của bạn sẽ bị đơ (Deadlock) hoặc bị xung đột dữ liệu ngầm (Race Condition) khiến xe đánh lái hỗn loạn bất ngờ.</li>
     </ul>
+</div>
+
+<div class="theory-intuition-box">
+    <div class="theory-title">🧠 TƯ DUY NỀN TẢNG: VÌ SAO PHẢI CÓ ROS 2 EXECUTORS VÀ CALLBACK GROUPS?</div>
+    <div class="theory-content">
+        <p>Hãy hình dung ROS 2 Node của bạn như một <strong>NHÀ HÀNG ĂN UỐNG</strong>:</p>
+        <ul>
+            <li><strong>SingleThreadedExecutor (Nhà hàng chỉ có 1 bồi bàn):</strong> Bồi bàn nhận yêu cầu làm món nướng tốn 30 phút (`heavy_planning_task`). Trong 30 phút đó, tất cả các khách hàng khác (Subscriber nhận dữ liệu IMU 100Hz) đều phải đứng chờ nhịn đói!</li>
+            <li><strong>MultiThreadedExecutor (Nhà hàng có 4 bồi bàn):</strong> Bồi bàn 1 chuyên phục vụ đồ uống 100Hz (`MutuallyExclusiveCallbackGroup`), bồi bàn 2 chuyên mang món nướng ngầm 500ms (`ReentrantCallbackGroup`). Nhà hàng vận hành trơn tru không ai bị lag!</li>
+        </ul>
+    </div>
 </div>
 
 <h2>9.1 Đa Luồng C++ &amp; Bảo Vệ Shared Data với `std::scoped_lock`</h2>
@@ -2474,6 +2615,17 @@ int main() {
     </ul>
 </div>
 
+<div class="theory-intuition-box">
+    <div class="theory-title">🧠 TƯ DUY NỀN TẢNG: NGUYÊN LÝ ROS 2 ACTION SERVER VÀ FILE CSV WAYPOINTS</div>
+    <div class="theory-content">
+        <p>Khi robot nhận lệnh di chuyển từ A đến B (tốn 30 giây):</p>
+        <ul>
+            <li><strong>Vì sao không dùng Service?</strong> Service là giao tiếp đồng bộ. Nếu dùng Service, Caller sẽ bị treo đơ 30 giây để chờ kết quả trả về, không biết robot đang đi đến đâu và không thể bấm nút <strong>DỪNG KHẨN CẤP (Cancel Goal)</strong>.</li>
+            <li><strong>Sức mạnh của Action (`rclcpp_action`):</strong> Cho phép Robot chạy ngầm 30 giây, vừa đi vừa liên tục phát tín hiệu <strong>Feedback (Đã hoàn thành bao nhiêu %)</strong> về cho người dùng, đồng thời sẵn sàng nhận lệnh Hủy mục tiêu bất kỳ lúc nào!</li>
+        </ul>
+    </div>
+</div>
+
 <h2>10.1 So Sánh Topics vs Services vs Actions Trong ROS 2</h2>
 <table class="table">
     <tr>
@@ -2593,6 +2745,19 @@ int main() {
         <li><span class="app-tag">🚗 Ứng dụng thực tế:</span> **Dự án 1:** Bộ điều khiển vận tốc động cơ PID C++17 chuẩn công nghiệp (`rclcpp_lifecycle`). **Dự án 2:** Pure Pursuit Trajectory Tracker Node bám đường cho xe mô hình F1TENTH kết hợp đọc Waypoint CSV và publish `/cmd_vel`.</li>
         <li><span class="danger-tag">⚠️ Nếu không biết phần này:</span> Bạn chỉ nắm các mảnh ghép lý thuyết rời rạc mà không biết cách xâu chuỗi chúng thành một phần mềm Robot vận hành thực sự.</li>
     </ul>
+</div>
+
+<div class="theory-intuition-box">
+    <div class="theory-title">🧠 TƯ DUY NỀN TẢNG: NGUYÊN LÝ THUẬT TOÁN PURE PURSUIT BÁM ĐƯỜNG XE F1TENTH</div>
+    <div class="theory-content">
+        <p>Thuật toán Pure Pursuit hoạt động dựa trên bản năng tự nhiên của con người khi lái xe hơi:</p>
+        <ul>
+            <li><strong>Điểm nhìn trước (Lookahead Point $L$):</strong> Khi lái xe qua đoạn cua, mắt bạn không nhìn ngay dưới mũi xe, mà nhìn vào một mốc trên mặt đường phía trước một khoảng $L$ (ví dụ $2.0\text{m}$).</li>
+            <li><strong>Công thức tính góc lái:</strong> Bằng hình học tam giác đơn giản, góc đánh lái $\delta$ được tính theo công thức:
+                $$\delta = \arctan\left(\frac{2 \cdot L_{wb} \cdot \sin(\alpha)}{L}\right)$$
+                Trong đó $L_{wb}$ là chiều dài cơ sở xe (Wheelbase), $\alpha$ là góc lệch giữa hướng xe và điểm mốc. Công thức này giúp xe ôm cua mượt mà theo một cung tròn hoàn hảo!</li>
+        </ul>
+    </div>
 </div>
 
 <h2>11.1 Dự Án 1: Complete ROS 2 PID Controller Lifecycle Node (`rclcpp_lifecycle`)</h2>
@@ -2820,6 +2985,20 @@ ament_package()</code></pre>
         <li><span class="app-tag">🚗 Ứng dụng thực tế:</span> Tự tin trả lời chính xác 100% các câu hỏi phỏng vấn vị trí **C++ Robotics / Autonomous Vehicle Software Engineer**, tra cứu nhanh cú pháp chuẩn khi gõ code hàng ngày.</li>
         <li><span class="danger-tag">⚠️ Nếu không biết phần này:</span> Bạn sẽ không đánh giá được mình còn hổng kiến thức ở đâu và mất nhiều thời gian tra cứu cú pháp khi vào làm dự án thực tế.</li>
     </ul>
+</div>
+
+<div class="theory-intuition-box">
+    <div class="theory-title">🧠 HƯỚNG DẪN ĐỌC SOURCE CODE ROS 2 / NAV2 KHÔNG BỊ NGỢP</div>
+    <div class="theory-content">
+        <p>Khi tải một gói package lớn trên GitHub về đọc (như `nav2_dwb_controller`), hãy áp dụng <strong>QUY TẮC 4 BƯỚC THẦN THÁNH</strong>:
+        <ol>
+            <li><strong>Bước 1: Đọc `package.xml`</strong> để biết gói này cần các thư viện nào.</li>
+            <li><strong>Bước 2: Đọc `CMakeLists.txt`</strong> để tìm danh sách các file `.cpp` tạo ra file thực thi.</li>
+            <li><strong>Bước 3: Đọc file Header `.hpp` trong thư mục `include/`</strong> để nắm cấu trúc các class, biến thành viên `private` và phương thức `public`.</li>
+            <li><strong>Bước 4: Đọc file `.cpp` trong `src/`</strong> để theo dõi logic thực thi chi tiết.</li>
+        </ol>
+        </p>
+    </div>
 </div>
 
 <div class="quiz-section">
