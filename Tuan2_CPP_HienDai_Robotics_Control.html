@@ -394,6 +394,43 @@ footer {
     color: #047857;
 }
 
+
+/* --- STYLING CHO CONCEPT BREAKDOWN BOX (GIẢI MÃ KHÁI NIỆM TỪNG THUẬT NGỮ) --- */
+.concept-breakdown-box {
+    background: linear-gradient(135deg, #fffbeb, #fef3c7);
+    border: 1px solid #fde68a;
+    border-left: 6px solid #d97706;
+    border-radius: 10px;
+    padding: 18px 22px;
+    margin: 18px 0 22px;
+    font-size: 0.95em;
+    box-shadow: 0 2px 8px rgba(217, 119, 6, 0.08);
+}
+.concept-breakdown-title {
+    font-weight: 700;
+    color: #b45309;
+    font-size: 1.05em;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.concept-list {
+    margin: 6px 0 6px 20px;
+    color: #1e293b;
+}
+.concept-list li {
+    margin: 6px 0;
+}
+.concept-name {
+    color: #92400e;
+    font-weight: 700;
+    font-family: Consolas, 'Fira Code', monospace;
+    background: #fef08a;
+    padding: 1px 6px;
+    border-radius: 4px;
+}
+
 </style>
 </head>
 <body>
@@ -1981,6 +2018,19 @@ int main() {
             <li><strong>Vai trò `std::optional`:</strong> Nếu xe đi vào hầm tối mất sóng GPS, `gps_data` sẽ bằng `std::nullopt`. Bộ lọc EKF thông minh bỏ qua bước Update mà không bị crash chương trình.</li>
         </ul>
     </div>
+
+<div class="concept-breakdown-box">
+    <div class="concept-breakdown-title">📌 GIẢI MÃ CÁC THUẬT NGỮ &amp; TỪ KHÓA C++17 TRONG PHẦN 7</div>
+    <ul class="concept-list">
+        <li><span class="concept-name">std::tuple</span>: Một "cái giỏ" gom N giá trị khác kiểu dữ liệu lại với nhau (ví dụ: gom `std::tuple<double, double, double>` cho tọa độ $x, y, 	ext{yaw}$). Khác với `struct` là bạn không cần đặt tên cho kiểu struct mới.</li>
+        <li><span class="concept-name">auto [x, y, yaw] = tuple;</span>: Cú pháp Structured Bindings (C++17) dùng để giải nén trực tiếp từng phần tử trong `std::tuple` hoặc `std::pair` ra thành các biến độc lập cực kỳ ngắn gọn.</li>
+        <li><span class="concept-name">std::optional&lt;T&gt;</span>: Một chiếc hộp an toàn bọc lấy dữ liệu `T`. Hộp này có thể mở ra thấy dữ liệu thực (`has_value() == true`) hoặc thấy **RỖNG** (`std::nullopt`). Tránh việc dùng các cờ âm giả nguy hiểm như `-1.0` hay `nullptr` khi cảm biến lỗi.</li>
+        <li><span class="concept-name">std::string_view</span>: Một con trỏ "chỉ nhìn" (Read-only view) quan sát chuỗi ký tự mà không copy hay tạo thêm bộ nhớ RAM Heap mới ($0	ext{ bytes}$ allocation). Rất thích hợp để truyền tên frame ROS 2 như `"map"`, `"base_link"`.</li>
+        <li><span class="concept-name">enum class</span>: Tập hợp các hằng số có tên (Scoped Enum). Giúp mã nguồn an toàn kiểu dữ liệu, không lo bị trùng tên hằng số với các thư viện khác.</li>
+        <li><span class="concept-name">[[nodiscard]]</span>: Từ khóa cảnh báo trình biên dịch báo lỗi ngay nếu người gõ code lỡ quên không hứng (lờ đi) giá trị trả về của hàm quan trọng.</li>
+        <li><span class="concept-name">rclcpp::ParameterEventHandler</span>: Lớp đối tượng trong ROS 2 C++ dùng để lắng nghe tự động khi người dùng thay đổi tham số động từ Terminal (`ros2 param set`).</li>
+    </ul>
+</div>
 </div>
 
 <h2>7.1 Chi Tiết 5 Tính Năng Modern C++17/20 Cốt Lõi Trong Robotics</h2>
@@ -2312,6 +2362,18 @@ int main() {
             <li><strong>Thao tác MOVE / ZERO-COPY (Tức thời $0\text{ms}$):</strong> Bạn cầm đúng cuốn tài liệu gốc đưa tận tay cho Subscriber và bảo: <em>"Từ giờ cuốn sách này thuộc về bạn!"</em> (chuyển giao con trỏ <code>std::unique_ptr</code> qua <code>std::move()</code>). Không một byte dữ liệu nào bị copy!</li>
         </ul>
     </div>
+
+<div class="concept-breakdown-box">
+    <div class="concept-breakdown-title">📌 GIẢI MÃ CÁC THUẬT NGỮ BỘ NHỚ &amp; MOVE SEMANTICS TRONG PHẦN 8</div>
+    <ul class="concept-list">
+        <li><span class="concept-name">Lvalue (Left Value)</span>: Biến có tên định danh rõ ràng và có địa chỉ cố định trong RAM (ví dụ: `std::vector<float> scan1;`).</li>
+        <li><span class="concept-name">Rvalue (Right Value)</span>: Giá trị tạm thời không có tên, sắp bị hủy ngay sau dòng lệnh (ví dụ: kết quả phép tính `10 + 20` hoặc `std::make_unique<PointCloud2>()`).</li>
+        <li><span class="concept-name">Rvalue Reference (T&amp;&amp;)</span>: Cú pháp tham chiếu đến giá trị tạm thời `Rvalue`, cho phép "cướp" tài nguyên vùng nhớ của nó.</li>
+        <li><span class="concept-name">std::move()</span>: Hàm ép kiểu một Lvalue thành Rvalue reference để kích hoạt Move Constructor. Giúp chuyển giao con trỏ bộ nhớ đệm chỉ mất $0.0001	ext{ms}$ ($0	ext{ bytes}$ copy memory!).</li>
+        <li><span class="concept-name">std::unique_ptr&lt;T&gt;</span>: Con trỏ thông minh độc quyền. Khi gọi `publisher->publish(std::move(msg))`, quyền sở hữu con trỏ `msg` được trao hẳn cho ROS 2 và biến `msg` ban đầu trở thành `nullptr`.</li>
+        <li><span class="concept-name">Zero-Copy IPC</span>: Cơ chế truyền dữ liệu giữa các ROS 2 Nodes nằm trong cùng 1 tiến trình bằng Shared Memory, không tốn 1 byte memory copy nào.</li>
+    </ul>
+</div>
 </div>
 
 <h2>8.1 Bản Chất Lvalue vs Rvalue Reference &amp; `std::move`</h2>
@@ -2463,6 +2525,19 @@ int main() {
             <li><strong>MultiThreadedExecutor (Nhà hàng có 4 bồi bàn):</strong> Bồi bàn 1 chuyên phục vụ đồ uống 100Hz (`MutuallyExclusiveCallbackGroup`), bồi bàn 2 chuyên mang món nướng ngầm 500ms (`ReentrantCallbackGroup`). Nhà hàng vận hành trơn tru không ai bị lag!</li>
         </ul>
     </div>
+
+<div class="concept-breakdown-box">
+    <div class="concept-breakdown-title">📌 GIẢI MÃ CÁC THUẬT NGỮ ĐA LUỒNG &amp; ROS 2 EXECUTORS TRONG PHẦN 9</div>
+    <ul class="concept-list">
+        <li><span class="concept-name">std::thread</span>: Một luồng thực thi chạy song song độc lập trên một nhân CPU khác.</li>
+        <li><span class="concept-name">std::mutex</span>: Khóa chống xung đột dữ liệu (Mutual Exclusion). Khi Thread 1 khóa mutex, Thread 2 đến sau phải đứng chờ cho tới khi Thread 1 mở khóa.</li>
+        <li><span class="concept-name">std::scoped_lock</span> (C++17): Khóa tự động cùng lúc N mutex theo thứ tự tối ưu chống khóa chết (Deadlock) $100\%$, tự động mở khóa khi thoát khỏi scope.</li>
+        <li><span class="concept-name">std::atomic&lt;T&gt;</span>: Biến nguyên tử được xử lý trực tiếp ở cấp độ phần cứng CPU (Lock-free), đọc/ghi an toàn giữa các luồng mà không cần Mutex.</li>
+        <li><span class="concept-name">MultiThreadedExecutor</span>: Trình điều phối trong ROS 2 phân chia các Callback cho nhiều Worker Threads xử lý song song.</li>
+        <li><span class="concept-name">MutuallyExclusiveCallbackGroup</span>: Nhóm callback chỉ chạy từng cái một (tuần tự), an toàn tuyệt đối không sợ race condition.</li>
+        <li><span class="concept-name">ReentrantCallbackGroup</span>: Nhóm callback cho phép nhiều thread nhảy vào chạy song song đồng thời (cần `std::mutex` bảo vệ biến chung).</li>
+    </ul>
+</div>
 </div>
 
 <h2>9.1 Đa Luồng C++ &amp; Bảo Vệ Shared Data với `std::scoped_lock`</h2>
@@ -2624,6 +2699,17 @@ int main() {
             <li><strong>Sức mạnh của Action (`rclcpp_action`):</strong> Cho phép Robot chạy ngầm 30 giây, vừa đi vừa liên tục phát tín hiệu <strong>Feedback (Đã hoàn thành bao nhiêu %)</strong> về cho người dùng, đồng thời sẵn sàng nhận lệnh Hủy mục tiêu bất kỳ lúc nào!</li>
         </ul>
     </div>
+
+<div class="concept-breakdown-box">
+    <div class="concept-breakdown-title">📌 GIẢI MÃ CÁC THUẬT NGỮ ACTION &amp; FILE I/O TRONG PHẦN 10</div>
+    <ul class="concept-list">
+        <li><span class="concept-name">std::ifstream</span>: Luồng đọc dữ liệu từ file trên đĩa cứng vào chương trình C++.</li>
+        <li><span class="concept-name">std::ofstream</span>: Luồng ghi dữ liệu từ chương trình C++ ra file đĩa cứng.</li>
+        <li><span class="concept-name">std::stringstream</span>: Biến chuỗi ký tự thành luồng I/O để dùng hàm `std::getline(ss, token, ',')` tách từng số theo dấu phẩy CSV.</li>
+        <li><span class="concept-name">std::stod()</span> (String to Double): Hàm chuyển chuỗi ký tự `"3.1415"` thành số thực `double 3.1415`.</li>
+        <li><span class="concept-name">rclcpp_action::Server</span>: Trình quản lý Action Server ROS 2 cho các tác vụ di chuyển dài hạn có Feedback &amp; Cancel Goal.</li>
+    </ul>
+</div>
 </div>
 
 <h2>10.1 So Sánh Topics vs Services vs Actions Trong ROS 2</h2>
@@ -2758,6 +2844,16 @@ int main() {
                 Trong đó $L_{wb}$ là chiều dài cơ sở xe (Wheelbase), $\alpha$ là góc lệch giữa hướng xe và điểm mốc. Công thức này giúp xe ôm cua mượt mà theo một cung tròn hoàn hảo!</li>
         </ul>
     </div>
+
+<div class="concept-breakdown-box">
+    <div class="concept-breakdown-title">📌 GIẢI MÃ CÁC THUẬT NGỮ DỰ ÁN ROS 2 PACKAGE TRONG PHẦN 11</div>
+    <ul class="concept-list">
+        <li><span class="concept-name">rclcpp_lifecycle::LifecycleNode</span>: Node ROS 2 có quản lý vòng đời trạng thái (`Unconfigured`, `Inactive`, `Active`, `Finalized`), giúp bật/tắt node an toàn khi xe đang chạy.</li>
+        <li><span class="concept-name">nav_msgs::msg::Odometry</span>: Message chuẩn của ROS 2 chứa Tọa độ 3D $[x, y, z]$, Quaternion hướng xe và Vận tốc $[v_x, v_y, \omega]$.</li>
+        <li><span class="concept-name">geometry_msgs::msg::Twist</span>: Message lệnh vận tốc gồm vận tốc thẳng `linear.x` (m/s) và vận tốc góc `angular.z` (rad/s).</li>
+        <li><span class="concept-name">CMakeLists.txt &amp; package.xml</span>: Hai file cấu hình bắt buộc của ROS 2 để công cụ `colcon build` biên dịch mã nguồn C++ ra file thực thi trên Ubuntu Linux.</li>
+    </ul>
+</div>
 </div>
 
 <h2>11.1 Dự Án 1: Complete ROS 2 PID Controller Lifecycle Node (`rclcpp_lifecycle`)</h2>
