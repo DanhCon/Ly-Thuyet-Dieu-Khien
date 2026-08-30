@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bộ Bài Tập Rèn Luyện Tư Duy Hằng Ngày (Daily Drills — Tuần 1)</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+    window.MathJax = {
+        tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']], tags: 'ams' },
+        chtml: { scale: 1 }
+    };
+    function toggle(id) {
+        var el = document.getElementById(id);
+        el.style.display = (el.style.display === 'none' || el.style.display === '') ? 'block' : 'none';
+    }
+    </script>
+    <style>
+        :root{--primary:#0f172a;--accent:#2563eb;--bg:#fff;--text:#1e293b;--text-secondary:#475569;--border:#e2e8f0;--shadow:0 4px 6px -1px rgba(0,0,0,0.1)}
+        *{box-sizing:border-box;margin:0;padding:0}
+        body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif;font-size:16.5px;line-height:1.85;color:var(--text);background:var(--bg);max-width:920px;margin:0 auto;padding:40px 25px}
+        .cover{text-align:center;padding:48px 20px;border-bottom:3px solid var(--accent);margin-bottom:42px;background:#f8fafc;border-radius:12px}
+        .cover h1{font-size:2em;color:var(--primary);margin-bottom:10px;line-height:1.3;border:none;padding:0}
+        .cover .subtitle{font-size:1.22em;color:var(--accent);font-weight:600;margin-bottom:16px}
+        .cover .tagline{font-size:0.98em;color:var(--text-secondary);font-style:italic;max-width:720px;margin:0 auto 18px}
+        h1{font-size:1.65em;color:var(--primary);margin:40px 0 15px;border-bottom:2px solid var(--accent);padding-bottom:8px}
+        h2{font-size:1.25em;color:var(--accent);margin:26px 0 11px}
+        h3{font-size:1.08em;color:var(--primary);margin:18px 0 8px}
+        .ph{color:white;padding:22px 28px;border-radius:10px;margin:44px 0 22px;box-shadow:var(--shadow)}
+        .ph h1{color:white;border:none;margin:0;font-size:1.45em;padding:0}
+        .ph p{color:rgba(255,255,255,0.85);margin-top:6px;font-size:0.98em}
+        .ph-blue{background:linear-gradient(135deg,#1e3a8a,#2563eb)}
+        .ph-green{background:linear-gradient(135deg,#065f46,#10b981)}
+        .ph-orange{background:linear-gradient(135deg,#b45309,#f59e0b)}
+        .ph-purple{background:linear-gradient(135deg,#581c87,#a855f7)}
+        .ph-red{background:linear-gradient(135deg,#991b1b,#ef4444)}
+        p{margin:9px 0;text-align:justify}
+        ul,ol{margin:8px 0 12px 22px}
+        li{margin:4px 0}
+        strong{color:#0f172a;font-weight:600}
+        blockquote{border-left:4px solid var(--accent);background:#f8fafc;padding:12px 16px;margin:15px 0;font-style:italic;color:var(--text-secondary);border-radius:0 8px 8px 0}
+        .hl{background:#fef08a;padding:2px 6px;border-radius:4px;font-weight:600}
+        .box{padding:15px 19px;border-radius:8px;margin:16px 0;border-left:5px solid;box-shadow:0 1px 3px rgba(0,0,0,0.05)}
+        .def{background:#eff6ff;border-color:#3b82f6} .def .bt{color:#1d4ed8}
+        .thm{background:#faf5ff;border-color:#a855f7} .thm .bt{color:#7e22ce}
+        .imp{background:#fffbeb;border-color:#f59e0b} .imp .bt{color:#b45309}
+        .ex{background:#f0fdf4;border-color:#22c55e} .ex .bt{color:#15803d}
+        .analogy{background:#fff7ed;border-color:#ea580c} .analogy .bt{color:#c2410c}
+        .warn{background:#fef2f2;border-color:#ef4444} .warn .bt{color:#b91c1c}
+        .bt{font-weight:700;font-size:1.01em;margin-bottom:8px;display:block}
+        .sc{background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid var(--accent);border-radius:6px;padding:12px 16px;margin:10px 0}
+        .sn{display:inline-block;background:var(--accent);color:white;padding:2px 10px;border-radius:12px;font-size:0.84em;font-weight:700;margin-right:7px}
+        table{width:100%;border-collapse:collapse;margin:14px 0;font-size:0.93em}
+        th,td{border:1px solid var(--border);padding:8px 11px;text-align:left}
+        th{background:var(--primary);color:white;font-weight:600}
+        tr:nth-child(even){background:#f8fafc}
+        pre{background:#0f172a;color:#f8fafc;padding:14px 17px;border-radius:8px;overflow-x:auto;font-family:"Fira Code",Consolas,Monaco,monospace;font-size:0.85em;line-height:1.5;margin:14px 0}
+        code{font-family:"Fira Code",Consolas,Monaco,monospace;background:#f1f5f9;padding:2px 5px;border-radius:4px;font-size:0.9em;color:#b91c1c}
+        pre code{background:transparent;color:inherit;padding:0}
+        .ascii{background:#f1f5f9;border:1px solid #cbd5e1;padding:13px 17px;border-radius:8px;font-family:"Fira Code",Consolas,Monaco,monospace;font-size:0.81em;line-height:1.4;white-space:pre;overflow-x:auto;margin:12px 0;color:var(--primary)}
+        .ans-btn{background:#2563eb;color:white;border:none;padding:7px 16px;border-radius:6px;cursor:pointer;font-weight:600;font-size:0.9em;margin-top:10px}
+        .ans-btn:hover{background:#1d4ed8}
+        .answer-box{display:none;background:#f0fdf4;border:1px solid #86efac;border-radius:8px;padding:16px;margin-top:12px}
+        .pbtn{position:fixed;bottom:30px;right:30px;background:var(--accent);color:white;border:none;padding:11px 20px;border-radius:28px;font-size:0.93em;font-weight:600;cursor:pointer;box-shadow:0 4px 14px rgba(37,99,235,0.4);transition:all 0.2s;z-index:1000}
+        .pbtn:hover{background:#1d4ed8;transform:translateY(-2px)}
+        @media print{body{padding:15px;font-size:11pt;max-width:100%}.pbtn{display:none}.ph{page-break-before:always}.box,.sc{break-inside:avoid}}
+    </style>
+</head>
+<body>
+<button class="pbtn" onclick="window.print()">📄 Xuất PDF</button>
+
+<div class="cover">
+    <h1>BỘ BÀI TẬP RÈN LUYỆN TƯ DUY HẰNG NGÀY</h1>
+    <div class="subtitle">Daily Engineering Drills — Bộ Đề Thực Hành Tuần 1</div>
+    <div class="tagline">
+        5 Bài tập thực tế cho 5 ngày trong tuần: Giải tay vật lý, Code RK4 C++ không thư viện, Tiêm lỗi chẩn đoán đồ thị, Lập trình C++ nhúng Zero-Allocation, và Tuning LQR/PID trên hệ phi tuyến.
+    </div>
+</div>
+
+<!-- THỨ 2 -->
+<div class="ph ph-blue">
+    <h1>Thứ 2: Math Derivation Drill (Tự Giải Tay Mô Hình)</h1>
+    <p>Mục tiêu: Rèn trực giác Vật lý &amp; Đại số tuyến tính từ bản chất</p>
+</div>
+
+<div class="box def">
+    <span class="bt">📝 Đề Bài: Hệ Đệm Từ (Magnetic Levitation System — MagLev)</span>
+    <p>Một hòn bi thép khối lượng $m$ được nâng bởi một nam châm điện thẳng đứng. Vị trí $x$ đo từ nam châm điện xuống bi ($x > 0$). Dòng điện cuộn dây là $i(t)$.</p>
+    
+    <div class="ascii">
+                    ┌──────────────────┐
+                    │ Nam Châm Điện    │
+                    └────────┬─────────┘
+                             │  Dòng điện i(t)
+                             ▼
+                    ┌──────────────────┐
+                    │ Lực hút F_mag(x,i)│
+                    └────────┬─────────┘
+                             │
+                             ▼  x (vị trí bi, x > 0)
+                            ●  Bi thép khối lượng m
+                             │
+                             ▼  Trọng lực mg
+    </div>
+
+    <p>Phương trình chuyển động phi tuyến của bi thép:</p>
+    $$m \ddot{x} = m g - F_{\text{mag}}(x, i) \quad \text{với } F_{\text{mag}}(x, i) = k \frac{i^2}{x^2} \quad (k > 0)$$
+
+    <p><strong>Nhiệm vụ của bạn:</strong></p>
+    <ol>
+        <li>Tìm dòng điện cân bằng $i_0$ để giữ hòn bi đứng yên tại vị trí mong muốn $x_0$.</li>
+        <li>Tuyến tính hóa $F_{\text{mag}}(x, i)$ quanh điểm cân bằng $(x_0, i_0)$ bằng khai triển Taylor bậc 1.</li>
+        <li>Đặt các độ lệch trạng thái: $x_1 = \Delta x = x - x_0$, $x_2 = \Delta \dot{x} = \dot{x}$, và đầu vào $u = \Delta i = i - i_0$.</li>
+        <li>Lập ma trận State Space $A, B$ của hệ tuyến tính hóa $\dot{\mathbf{x}} = A \mathbf{x} + B u$.</li>
+        <li>Tính trị riêng của ma trận $A$. Hệ cân bằng MagLev này ban đầu (hệ mở) là <strong>ổn định</strong> hay <strong>bất ổn định</strong>? Giải thích ý nghĩa vật lý.</li>
+    </ol>
+</div>
+
+<button class="ans-btn" onclick="toggle('ans2')">🔍 Xem Đáp Án &amp; Lời Giải Chi Tiết (Thứ 2)</button>
+<div id="ans2" class="answer-box">
+    <h3>✅ Lời Giải Bài Tập Thứ 2:</h3>
+    <p><strong>1. Điểm cân bằng:</strong> Đứng yên $\implies \ddot{x} = 0 \implies mg - k \frac{i_0^2}{x_0^2} = 0 \implies \mathbf{i_0 = x_0 \sqrt{\frac{mg}{k}}}$.</p>
+    
+    <p><strong>2. Tuyến tính hóa Taylor bậc 1 cho $F_{\text{mag}}(x, i) = k i^2 x^{-2}$ quanh $(x_0, i_0)$:</strong></p>
+    $$\frac{\partial F}{\partial x} = -2k \frac{i_0^2}{x_0^3} = -2 \frac{mg}{x_0}, \quad \frac{\partial F}{\partial i} = 2k \frac{i_0}{x_0^2} = 2 \frac{\sqrt{k mg}}{x_0}$$
+    $$F_{\text{mag}}(x, i) \approx F_{\text{mag}}(x_0, i_0) + \left(-2\frac{mg}{x_0}\right)\Delta x + \left(2\frac{\sqrt{kmg}}{x_0}\right)\Delta i$$
+
+    <p><strong>3. Phương trình chuyển động tuyến tính hóa:</strong></p>
+    $$m \Delta \ddot{x} = mg - \left[ mg - 2\frac{mg}{x_0}\Delta x + 2\frac{\sqrt{kmg}}{x_0}\Delta i \right] = 2\frac{mg}{x_0}\Delta x - 2\frac{\sqrt{kmg}}{x_0}\Delta i$$
+    $$\Delta \ddot{x} = \frac{2g}{x_0} \Delta x - \frac{2}{x_0}\sqrt{\frac{kg}{m}} \Delta i$$
+
+    <p><strong>4. Ma trận State Space $A, B$:</strong></p>
+    $$A = \begin{bmatrix} 0 & 1 \\ \frac{2g}{x_0} & 0 \end{bmatrix}, \quad B = \begin{bmatrix} 0 \\ -\frac{2}{x_0}\sqrt{\frac{kg}{m}} \end{bmatrix}$$
+
+    <p><strong>5. Trị riêng của $A$:</strong> $\det(\lambda I - A) = \lambda^2 - \frac{2g}{x_0} = 0 \implies \lambda_{1,2} = \pm \sqrt{\frac{2g}{x_0}}$.</p>
+    <p>Có 1 trị riêng dương $\lambda_1 = +\sqrt{\frac{2g}{x_0}} > 0 \implies$ **Hệ mở MagLev BẤT ỔN ĐỊNH mạnh!** (Ý nghĩa vật lý: Nếu bi nhích xuống dưới một chút, lực hút giảm $\rightarrow$ bi rơi luôn; nếu bi nhích lên trên một chút, lực hút tăng mạnh $\rightarrow$ bi bị dính chặt vào nam châm. Bắt buộc phải có bộ điều khiển LQR/PID hồi tiếp âm để giữ bi!).</p>
+</div>
+
+<!-- THỨ 3 -->
+<div class="ph ph-green">
+    <h1>Thứ 3: From-Scratch Coding Drill (C++ Thuần)</h1>
+    <p>Mục tiêu: Code bộ tích phân số Runge-Kutta 4 (RK4) không dùng thư viện ngoài</p>
+</div>
+
+<div class="box ex">
+    <span class="bt">💻 Đề Bài: Tự viết RK4 Simulator cho Con lắc Đơn trong C++</span>
+    <p>Phương trình con lắc đơn có ma sát nhớt:</p>
+    $$\ddot{\theta} = -\frac{g}{l} \sin\theta - \frac{b}{m l^2} \dot{\theta} + \frac{1}{m l^2} u(t)$$
+    <p>Cho $m = 0.5\text{ kg}$, $l = 0.4\text{ m}$, $g = 9.81\text{ m/s}^2$, $b = 0.05\text{ N}\cdot\text{s}\cdot\text{m}$.</p>
+    <p><strong>Nhiệm vụ của bạn:</strong></p>
+    <ol>
+        <li>Viết class/struct C++ `PendulumState` đại diện cho $[\theta, \omega]$.</li>
+        <li>Viết hàm `rk4_step(state, dt, u)` tự tính 4 hệ số $k_1, k_2, k_3, k_4$ bằng số mà không dùng bất kỳ thư viện ngoài nào ngoại trừ `<iostream>` và `<cmath>`.</li>
+        <li>Mô phỏng 5 giây chuyển động khi thả con lắc từ góc $\theta_0 = 45^\circ$ ($0.785\text{ rad}$) với $u = 0$. In tọa độ từng bước $50\text{ms}$ ra console.</li>
+    </ol>
+</div>
+
+<button class="ans-btn" onclick="toggle('ans3')">🔍 Xem Lời Giải Code C++ (Thứ 3)</button>
+<div id="ans3" class="answer-box">
+    <h3>✅ Lời Giải Code C++ Thuần RK4 Simulator:</h3>
+<pre><code>#include &lt;iostream&gt;
+#include &lt;cmath&gt;
+#include &lt;iomanip&gt;
+
+struct State {
+    double theta; // Góc (rad)
+    double omega; // Tốc độ góc (rad/s)
+};
+
+// Thông số vật lý
+const double m = 0.5;
+const double l = 0.4;
+const double g = 9.81;
+const double b = 0.05;
+
+// Hàm đạo hàm trạng thái dx/dt = f(x, u)
+State dynamics(const State& s, double u) {
+    State ds;
+    ds.theta = s.omega;
+    ds.omega = -(g / l) * std::sin(s.theta) - (b / (m * l * l)) * s.omega + (1.0 / (m * l * l)) * u;
+    return ds;
+}
+
+// Tích phân số Runge-Kutta 4th Order (RK4)
+State rk4_step(const State& s, double dt, double u) {
+    State k1 = dynamics(s, u);
+    
+    State s_k2 = { s.theta + 0.5 * dt * k1.theta, s.omega + 0.5 * dt * k1.omega };
+    State k2 = dynamics(s_k2, u);
+    
+    State s_k3 = { s.theta + 0.5 * dt * k2.theta, s.omega + 0.5 * dt * k2.omega };
+    State k3 = dynamics(s_k3, u);
+    
+    State s_k4 = { s.theta + dt * k3.theta, s.omega + dt * k3.omega };
+    State k4 = dynamics(s_k4, u);
+    
+    State next_s;
+    next_s.theta = s.theta + (dt / 6.0) * (k1.theta + 2.0*k2.theta + 2.0*k3.theta + k4.theta);
+    next_s.omega = s.omega + (dt / 6.0) * (k1.omega + 2.0*k2.omega + 2.0*k3.omega + k4.omega);
+    return next_s;
+}
+
+int main() {
+    State s = { 45.0 * M_PI / 180.0, 0.0 }; // 45 độ
+    double dt = 0.01; // 10ms
+    double total_time = 5.0;
+    
+    std::cout &lt;&lt; std::fixed &lt;&lt; std::setprecision(4);
+    std::cout &lt;&lt; "Time(s)\tTheta(deg)\tOmega(rad/s)\n";
+    std::cout &lt;&lt; "------------------------------------\n";
+    
+    for (double t = 0; t &lt;= total_time; t += dt) {
+        if (std::fmod(t, 0.5) &lt; dt) { // In mỗi 0.5s
+            std::cout &lt;&lt; t &lt;&lt; "\t" &lt;&lt; s.theta * 180.0 / M_PI &lt;&lt; "\t\t" &lt;&lt; s.omega &lt;&lt; "\n";
+        }
+        s = rk4_step(s, dt, 0.0); // u = 0
+    }
+    return 0;
+}
+</code></pre>
+</div>
+
+<!-- THỨ 4 -->
+<div class="ph ph-orange">
+    <h1>Thứ 4: Fault Injection &amp; Troubleshooting Drill</h1>
+    <p>Mục tiêu: Tiêm lỗi vật lý vào simulator &amp; phân tích nguyên nhân hư hỏng</p>
+</div>
+
+<div class="box warn">
+    <span class="bt">🔍 Đề Bài: Chẩn đoán 3 Hiện tượng Lỗi Vật lý trong Mô Phỏng LQR</span>
+    <p>Bạn có một simulator LQR cho Robot 2 Bánh Tự Cân Bằng đang chạy ổn định mượt mà. Lần lượt tiêm 3 loại lỗi vào code và quan sát đồ thị đáp ứng $\theta(t)$ và $u(t)$:</p>
+    
+    <ul>
+        <li><strong>Sự cố A:</strong> Thêm nhiễu trắng Gauss $\mathcal{N}(0, \sigma^2)$ với $\sigma = 0.05\text{ rad}$ vào tín hiệu cảm biến góc $\theta$.</li>
+        <li><strong>Sự cố B:</strong> Làm trễ tín hiệu điều khiển $2$ chu kỳ lấy mẫu ($u[k] = -K x[k-2]$ tại $T_s = 10\text{ms}$).</li>
+        <li><strong>Sự cố C:</strong> Áp dụng bão hòa điện áp nghiêm trọng $|u| \le 3\text{V}$ (trong khi LQR yêu cầu đỉnh $12\text{V}$).</li>
+    </ul>
+
+    <p><strong>Nhiệm vụ của bạn:</strong> Hãy nối mỗi **Hiện tượng Đồ thị** dưới đây với **Nguyên nhân Sự cố** tương ứng và giải thích cơ chế vật lý:</p>
+    <ol type="a">
+        <li>Đồ thị lực $u(t)$ bị xé rách, dao động với tần số cực cao, động cơ nóng xả rác nhiễu nhưng góc $\theta$ vẫn xấp xỉ đứng yên.</li>
+        <li>Robot bị dao động điều hòa tự do với tần số cố định $\sim 2-3\text{Hz}$ và biên độ tăng dần cho đến khi ngã hẳn.</li>
+        <li>Robot chịu được nhiễu nhẹ, nhưng khi bị đẩy nhẹ một cái là ngã ngay lập tức, lực $u(t)$ bị bẹt phẳng ở mép $\pm 3\text{V}$.</li>
+    </ol>
+</div>
+
+<button class="ans-btn" onclick="toggle('ans4')">🔍 Xem Đáp Án Chẩn Đoán Sự Cố (Thứ 4)</button>
+<div id="ans4" class="answer-box">
+    <h3>✅ Kết Quả Chẩn Đoán Sự Cố:</h3>
+    <ul>
+        <li><strong>Hiện tượng a $\rightarrow$ Sự cố A (Nhiễu Cảm Biến):</strong> Do Gain $K$ nhân trực tiếp với góc $\theta$ bị nhiễu. Nhất là thành phần tốc độ góc $\dot{\theta}$ (hoặc khâu D trong PID) khuếch đại nhiễu tần số cao lên cực đại, làm tín hiệu PWM $u(t)$ giật liên tục giữa các đỉnh, gây nóng động cơ và cháy cầu H. <em>Khắc phục: Dùng Complementary Filter hoặc Kalman Filter để lọc $\theta$.</em></li>
+        <li><strong>Hiện tượng b $\rightarrow$ Sự cố B (Trễ Pha do Delay):</strong> Trễ $2 T_s = 20\text{ms}$ làm xoay pha của đáp ứng vòng kín đi một góc $\Delta \phi = -\omega \cdot T_{\text{delay}}$. Khi Phase Margin bị sụt giảm về $0^\circ$, hệ đi vào điểm tự do phân kỳ Nyquist quanh điểm $-1$. <em>Khắc phục: Tăng tần số lấy mẫu (giảm $T_s$) hoặc dùng Smith Predictor.</em></li>
+        <li><strong>Hiện tượng c $\rightarrow$ Sự cố C (Bão Hòa Lực Actuator):</strong> Khi bão hòa ở $3\text{V}$, động cơ không đủ mô-men để tạo gia tốc đẩy bánh xe vượt qua góc đổ của trọng lực. Vòng lặp phản hồi bị bẻ gãy (Open-loop) tại ngưỡng $3\text{V}$. <em>Khắc phục: Tăng $R$ trong LQR để hạn chế LQR đòi hỏi lực quá lớn, hoặc dùng động cơ mô-men lớn hơn.</em></li>
+    </ul>
+</div>
+
+<!-- THỨ 5 -->
+<div class="ph ph-purple">
+    <h1>Thứ 5: Embedded C++ Optimization Drill</h1>
+    <p>Mục tiêu: Viết C++ Class chuẩn Nhúng Real-Time (Zero-Allocation)</p>
+</div>
+
+<div class="box thm">
+    <span class="bt">⚙️ Đề Bài: Thiết kế Class `PIDController` C++17 Zero-Allocation</span>
+    <p>Hãy viết một Class C++ `PIDController` dành riêng cho hệ thống nhúng STM32/ESP32 đáp ứng các tiêu chuẩn nghiêm ngặt của ngành Automotive/Robotics:</p>
+    
+    <ol>
+        <li><strong>Zero Heap Allocation:</strong> Không dùng `new`, `malloc`, `std::vector`, `std::shared_ptr`. Tất cả bộ nhớ nằm trên Stack/Data segment.</li>
+        <li><strong>Anti-Windup:</strong> Tích hợp Clamp cho khâu tích phân (Integral Clamping) khi đầu ra bị bão hòa $u_{\max}$.</li>
+        <li><strong>Derivative Filter:</strong> Áp dụng lọc thông thấp (Low-Pass Filter) cho khâu đạo hàm với hằng số $T_f$.</li>
+        <li>Sử dụng `constexpr`, `noexcept`, và đóng gói trong `namespace control`.</li>
+    </ol>
+</div>
+
+<button class="ans-btn" onclick="toggle('ans5')">🔍 Xem Code C++ Nhúng Chuẩn (Thứ 5)</button>
+<div id="ans5" class="answer-box">
+    <h3>✅ Lời Giải Code C++17 Embedded Zero-Allocation:</h3>
+<pre><code>#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+
+namespace control {
+
+class PIDController {
+public:
+    struct Config {
+        float kp{0.0f};
+        float ki{0.0f};
+        float kd{0.0f};
+        float tf{0.02f};    // Hằng số lọc D-term (s)
+        float u_min{-12.0f}; // Bão hòa tối thiểu (V)
+        float u_max{12.0f};  // Bão hòa tối đa (V)
+    };
+
+    explicit PIDController(const Config& config) noexcept : cfg_(config) {}
+
+    // Reset trạng thái (dùng khi bắt đầu chạy)
+    void reset() noexcept {
+        integrator_ = 0.0f;
+        prev_error_ = 0.0f;
+        d_filtered_ = 0.0f;
+    }
+
+    // Vòng lặp tính toán Real-time (Zero Heap Allocation!)
+    float update(float setpoint, float measurement, float dt) noexcept {
+        if (dt &lt;= 0.0f) return 0.0f;
+
+        float error = setpoint - measurement;
+
+        // 1. Khâu P
+        float p_term = cfg_.kp * error;
+
+        // 2. Khâu D với Low-Pass Filter: D_filter = (error - prev_error)/dt * (dt / (dt + Tf))
+        float d_raw = (error - prev_error_) / dt;
+        float alpha = dt / (dt + cfg_.tf);
+        d_filtered_ = d_filtered_ + alpha * (d_raw - d_filtered_);
+        float d_term = cfg_.kd * d_filtered_;
+
+        // 3. Khâu I tạm tính
+        float i_term_next = integrator_ + cfg_.ki * error * dt;
+
+        // 4. Tổng đầu ra thô
+        float u_raw = p_term + i_term_next + d_term;
+
+        // 5. Anti-Windup Clamping: Chỉ cộng tích phân nếu KHÔNG bị bão hòa
+        float u_sat = std::clamp(u_raw, cfg_.u_min, cfg_.u_max);
+        if (u_raw == u_sat || (error * u_raw &lt; 0.0f)) {
+            integrator_ = i_term_next; // Cập nhật tích phân nếu không bão hòa
+        }
+
+        prev_error_ = error;
+        return u_sat;
+    }
+
+private:
+    Config cfg_;
+    float integrator_{0.0f};
+    float prev_error_{0.0f};
+    float d_filtered_{0.0f};
+};
+
+} // namespace control
+
+int main() {
+    control::PIDController::Config cfg{ 10.0f, 2.0f, 0.5f, 0.01f, -12.0f, 12.0f };
+    control::PIDController pid(cfg);
+
+    float setpoint = 1.0f;
+    float measurement = 0.0f;
+    float dt = 0.005f; // 5ms (200Hz)
+
+    for (int step = 0; step &lt; 10; ++step) {
+        float u = pid.update(setpoint, measurement, dt);
+        std::cout &lt;&lt; "Step " &lt;&lt; step &lt;&lt; " | u = " &lt;&lt; u &lt;&lt; " V\n";
+        measurement += u * 0.01f; // Giả lập đáp ứng hệ thống
+    }
+    return 0;
+}
+</code></pre>
+</div>
+
+<!-- THỨ 6 -->
+<div class="ph ph-red">
+    <h1>Thứ 6: Tuning &amp; Analysis Drill</h1>
+    <p>Mục tiêu: Tuning $Q, R$ LQR trên Mô hình Phi tuyến có Bão hòa</p>
+</div>
+
+<div class="box thm">
+    <span class="bt">📊 Đề Bài: Tuning LQR cho Robot 2 Bánh Tự Cân Bằng bị Bão Hòa $V_{\max} = 12\text{V}$</span>
+    <p>Cho Robot tự cân bằng có ma trận $A, B$ đã trích xuất từ Tuần 1-2. Đầu ra điều khiển là điện áp động cơ bị bão hòa nghiêm trọng tại $u \in [-12\text{V}, 12\text{V}]$.</p>
+    
+    <p>Thực hiện các thử nghiệm Tuning trên script Python mô phỏng phi tuyến:</p>
+    <ol>
+        <li><strong>Thử nghiệm 1 (Phạt góc quá bé):</strong> Chọn $Q = \text{diag}(1, 0.1, \mathbf{1}, 0.1), R = 0.1$. Thả robot từ $\theta_0 = 8^\circ$. Quan sát đáp ứng.</li>
+        <li><strong>Thử nghiệm 2 (Lái hung hãn — Phạt điện áp quá bé):</strong> Chọn $Q = \text{diag}(1, 0.1, 200, 0.1), R = \mathbf{0.0001}$. Thả robot từ $\theta_0 = 8^\circ$. Quan sát xem lực $u(t)$ có bị bão hòa mép $\pm 12\text{V}$ không và hệ bị dao động ra sao.</li>
+        <li><strong>Thử nghiệm 3 (Tuning tối ưu bằng Bryson's Rule):</strong> Áp dụng Bryson's Rule với sai lệch vị trí tối đa $x_{\max} = 0.2\text{m}$, góc tối đa $\theta_{\max} = 0.05\text{rad} \approx 3^\circ$, và điện áp tối đa $u_{\max} = 12\text{V}$. Tìm $Q, R$ chuẩn và chạy mô phỏng.</li>
+    </ol>
+</div>
+
+<button class="ans-btn" onclick="toggle('ans6')">🔍 Xem Hướng Dẫn Tuning &amp; Kết Quả (Thứ 6)</button>
+<div id="ans6" class="answer-box">
+    <h3>✅ Kết Quả Thử Nghiệm Tuning LQR:</h3>
+    <ul>
+        <li><strong>Thử nghiệm 1 ($Q_{\theta} = 1$ quá bé):</strong> Gain $K_\theta$ tính ra quá nhỏ. Bộ điều khiển không đủ lực để chống lại mô-men trọng lực $mgl\sin\theta$. Robot ngã đổ ngay lập tức sau 0.3 giây.</li>
+        <li><strong>Thử nghiệm 2 ($R = 0.0001$ quá bé):</strong> Gain $K$ tính ra cực lớn ($K_\theta > 100$). Tín hiệu $u(t)$ bị va dập liên tục vào ngưỡng bão hòa $\pm 12\text{V}$ (Saturated). Hệ rơi vào trạng thái dao động chập chờn (Chattering) và mất ổn định do bão hòa vòng kín.</li>
+        <li><strong>Thử nghiệm 3 (Tuning Bryson's Rule tối ưu):</strong>
+            $$Q_{11} = \frac{1}{0.2^2} = 25, \quad Q_{33} = \frac{1}{0.05^2} = 400, \quad R = \frac{1}{12^2} \approx 0.00694$$
+            Kết quả: $u(t)$ vừa đúng chạm ngưỡng $10-11\text{V}$ ở thời điểm ban đầu mà **không bị bão hòa mép**, góc $\theta$ về $0^\circ$ mượt mà sau $1.2$ giây mà không bị vượt quá (overshoot). Đây là bộ tham số Tuning hoàn hảo!
+        </li>
+    </ul>
+</div>
+
+<!-- FOOTER -->
+<div style="background:linear-gradient(135deg,#0f172a,#1e293b);color:white;padding:26px;border-radius:10px;margin:35px 0;text-align:center;">
+    <h2 style="color:#60a5fa;margin-top:0;">💪 Hãy Bắt Đầu Rèn Luyện Ngay Hôm Nay!</h2>
+    <p style="color:#e2e8f0;max-width:700px;margin:10px auto;font-size:1.02em;">
+        Hãy tự tay làm từng bài tập trên giấy và gõ code bằng tay. Đừng vội xem đáp án trước khi tự mình nỗ lực suy nghĩ ít nhất 20 phút!
+    </p>
+</div>
+
+</body>
+</html>

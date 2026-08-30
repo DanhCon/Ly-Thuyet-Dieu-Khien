@@ -42,8 +42,9 @@ Kho tài liệu tự học toàn diện về **Lý thuyết Điều khiển Tố
 ### ✏️ Bài Tập & Kiểm Tra
 | # | Tài liệu | Link Xem Trực Tiếp (Website) |
 |---|----------|-------------------------------|
-| 16 | **Bài Tập LQR Toàn Tập** | 🌐 [Xem trang web](https://danhcon.github.io/Ly-Thuyet-Dieu-Khien/BaiTap_LQR_ToanTap.html) |
-| 17 | **Bài Kiểm Tra Kiến Thức Toàn Tập** | 🌐 [Xem trang web](https://danhcon.github.io/Ly-Thuyet-Dieu-Khien/BaiKiemTra_KienThuc_ToanTap.html) |
+| 16 | **Bộ Bài Tập Rèn Luyện Hằng Ngày (Daily Drills)** | 🌐 [Xem trang web](https://danhcon.github.io/Ly-Thuyet-Dieu-Khien/BaiTap_RienLuyen_HangNgay_5Ngay.html) |
+| 17 | **Bài Tập LQR Toàn Tập** | 🌐 [Xem trang web](https://danhcon.github.io/Ly-Thuyet-Dieu-Khien/BaiTap_LQR_ToanTap.html) |
+| 18 | **Bài Kiểm Tra Kiến Thức Toàn Tập** | 🌐 [Xem trang web](https://danhcon.github.io/Ly-Thuyet-Dieu-Khien/BaiKiemTra_KienThuc_ToanTap.html) |
 
 ---
 
