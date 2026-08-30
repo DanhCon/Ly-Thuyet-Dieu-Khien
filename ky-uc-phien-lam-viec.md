@@ -24,7 +24,9 @@
 | 1 | `F:\anti\Projec\TaiLieu_ThamKhao\06_Ly_Thuyet_Dieu_Khien\Kalman_Filter_ToanTap.html` | Đã tồn tại từ trước phiên. Bộ lọc Kalman toàn tập (xác suất nền, phép nhân 2 Gauss → Kalman Gain, 5 bước thuật toán, code Python/C++). Dùng làm **khuôn mẫu phong cách**. | Tham chiếu |
 | 2 | `F:\anti\Projec\TaiLieu_ThamKhao\06_Ly_Thuyet_Dieu_Khien\IMU_CanBien_ToanTap.html` | Cảm biến IMU toàn tập: 8 phần (tổng quan, gia tốc kế, con quay, từ kế, Euler/Quaternion, Sensor Fusion, hiệu chuẩn, lập trình Arduino/STM32/Python, ứng dụng). | ✅ Tạo xong |
 | 3 | `F:\anti\Projec\TaiLieu_ThamKhao\06_Ly_Thuyet_Dieu_Khien\Toan_NenTang_Robotics_Control.html` | Toán nền tảng Robotics & Control: 5 phần (cách học, đại số tuyến tính, Laplace/Z, tối ưu hóa, xác suất/random process, tổng kết lộ trình). **Điểm đặc biệt: phân cấp mức độ hiểu cho từng mục.** | ✅ Tạo xong |
-| 4 | `C:\Users\hocho\OneDrive\Documents\Default Project\ky-uc-phien-lam-viec.md` | File ký ức này. | ✅ Tạo xong |
+| 4 | `/home/danh/Ly-Thuyet-Dieu-Khien/ky-uc-phien-lam-viec.md` | File ký ức này. | ✅ Tạo xong |
+| 5 | `/home/danh/Ly-Thuyet-Dieu-Khien/Tuan2_CPP_HienDai_Robotics_Control.html` | Tài liệu kiến thức chi tiết Tuần 2: C++ Hiện đại cho Robotics & Control (OOP, RAII, Smart Pointers, STL, Template, Lambda, PID Controller project). | ✅ Tạo xong |
+| 6 | `/home/danh/Ly-Thuyet-Dieu-Khien/BaiTap_Test_Tuan1_Linux_Git_Docker.html` | Bộ bài tập test & đánh giá Tuần 1 (Linux, Terminal, Git, Docker): 4 phần với 100 điểm, trắc nghiệm tình huống, đọc lệnh, gỡ lỗi & lab thực hành. | ✅ Tạo xong |
 
 ---
 

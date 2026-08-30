@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lý Thuyết Điều Khiển & Robotics — Kho Tài Liệu Tự Học</title>
+<style>
+:root {
+    --primary: #0f172a;
+    --accent: #2563eb;
+    --accent-hover: #1d4ed8;
+    --bg: #090d16;
+    --card-bg: #1e293b;
+    --card-border: #334155;
+    --text: #f8fafc;
+    --text-muted: #94a3b8;
+    --success: #16a34a;
+    --warning: #d97706;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    padding: 30px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+header {
+    text-align: center;
+    padding: 50px 20px;
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    margin-bottom: 40px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+header h1 {
+    font-size: 2.5em;
+    color: #fff;
+    margin-bottom: 12px;
+    letter-spacing: -0.5px;
+}
+header p {
+    color: var(--text-muted);
+    font-size: 1.1em;
+    max-width: 800px;
+    margin: 0 auto 20px;
+}
+.search-box {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+}
+.search-box input {
+    width: 100%;
+    padding: 14px 20px;
+    border-radius: 30px;
+    border: 1px solid var(--card-border);
+    background-color: #0f172a;
+    color: #fff;
+    font-size: 1em;
+    outline: none;
+    transition: all 0.2s;
+}
+.search-box input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 15px rgba(37, 99, 235, 0.4);
+}
+.category-title {
+    font-size: 1.5em;
+    color: #60a5fa;
+    margin: 35px 0 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 2px solid var(--card-border);
+    padding-bottom: 10px;
+}
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 20px;
+}
+.card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(37, 99, 235, 0.2);
+    border-color: var(--accent);
+}
+.card h3 {
+    color: #fff;
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+.card p {
+    color: var(--text-muted);
+    font-size: 0.93em;
+    margin-bottom: 18px;
+    flex-grow: 1;
+}
+.card-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+}
+.tag {
+    font-size: 0.75em;
+    padding: 3px 10px;
+    border-radius: 15px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+.tag-roadmap { background: #1e1b4b; color: #818cf8; border: 1px solid #4338ca; }
+.tag-control { background: #064e3b; color: #34d399; border: 1px solid #059669; }
+.tag-sensor { background: #451a03; color: #fb923c; border: 1px solid #d97706; }
+.tag-cpp { background: #311b92; color: #b388ff; border: 1px solid #651fff; }
+.tag-quiz { background: #881337; color: #fda4af; border: 1px solid #e11d48; }
+
+.btn {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    text-decoration: none;
+    padding: 9px 18px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9em;
+    transition: background 0.2s;
+}
+.btn:hover {
+    background: var(--accent-hover);
+}
+footer {
+    text-align: center;
+    margin-top: 60px;
+    padding: 30px;
+    color: var(--text-muted);
+    font-size: 0.9em;
+    border-top: 1px solid var(--card-border);
+}
+</style>
+</head>
+<body>
+
+<header>
+    <h1>🤖 Kho Tài Liệu Robotics & Lý Thuyết Điều Khiển</h1>
+    <p>Tổng hợp lộ trình học tập, tài liệu lý thuyết, C++ hiện đại, cảm biến IMU, Kalman Filter, LQR và bài tập thực hành toàn diện.</p>
+    <div class="search-box">
+        <input type="text" id="searchInput" placeholder="🔍 Tìm kiếm tài liệu (ví dụ: C++, Kalman, Tuần 1, LQR, Test)..." onkeyup="filterCards()">
+    </div>
+</header>
+
+<main>
+    <!-- LỘ TRÌNH -->
+    <div class="category-title">🗓️ Lộ Trình & Tổng Quan</div>
+    <div class="grid">
+        <div class="card" data-title="lo trinh hoc robotics control 2026">
+            <div>
+                <h3>Lộ Trình Học Robotics & Control 2026</h3>
+                <p>Khung chương trình tổng thể 24 tuần cho Kỹ sư Điều khiển & Xe tự hành.</p>
+            </div>
+            <div class="card-meta">
+                <span class="tag tag-roadmap">Lộ trình</span>
+                <a href="LoTrinh_Hoc_Robotics_Control_2026.html" class="btn">🌐 Mở Tài Liệu</a>
+            </div>
+        </div>
+
+        <div class="card" data-title="lo trinh hang ngay 30 ngay dau">
+            <div>
+                <h3>Lộ Trình Hằng Ngày 30 Ngày Đầu</h3>
+                <p>Kế hoạch chi tiết từng ngày của Tháng 1: Linux, C++, CMake & Kalman Filter.</p>
+            </div>
+            <div class="card-meta">
+                <span class="tag tag-roadmap">30 Ngày</span>
+                <a href="LoTrinh_HangNgay_30NgayDau.html" class="btn">🌐 Mở Tài Liệu</a>
+            </div>
+        </div>
+
+        <div class="card" data-title="toan nen tang robotics control">
+            <div>
+                <h3>Toán Nền Tảng Robotics & Control</h3>
+                <p>Đại số tuyến tính, Laplace, Z-transform, Tối ưu hóa & Phân cấp mức độ hiểu.</p>
+            </div>
+            <div class="card-meta">
+                <span class="tag tag-roadmap">Toán học</span>
+                <a href="Toan_NenTang_Robotics_Control.html" class="btn">🌐 Mở Tài Liệu</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- LẬP TRÌNH & MÔI TRƯỜNG -->
+    <div class="category-title">💻 Lập Trình C++ & Môi Trường Nền Móng</div>
+    <div class="grid">
+        <div class="card" data-title="tuan 1 moi truong linux git docker">
+            <div>
+                <h3>Tuần 1: Môi Trường Linux, Git, Docker</h3>
+                <p>Ubuntu Terminal, lệnh rwx, sudo, PATH, Git commit, Docker container & Sổ tay kỹ thuật.</p>
+            </div>
+            <div class="card-meta">
+                <span class="tag tag-cpp">Tuần 1</span>
+                <a href="Tuan1_NenMong_MoiTruong_Linux_Git_Docker.html" class="btn">🌐 Mở Tài Liệu</a>
+            </div>
+        </div>
+
+        <div class="card" data-title="tuan 2 cpp hien dai robotics control">
+            <div>
+                <h3>Tuần 2: C++ Hiện Đại cho Robotics & Control</h3>
+                <p>OOP, RAII, Smart Pointers (unique/shared), STL reserve, Template & Lambda Callback ROS2.</p>
+            </div>
+            <div class="card-meta">
+                <span class="tag tag-cpp">Tuần 2</span>
+                <a href="Tuan2_CPP_HienDai_Robotics_Control.html" class="btn">🌐 Mở Tài Liệu</a>
+            </div>
+        </div>
+
+        <div class="card" data-title="cpp hien dai control av toan tap">
+            <div>
+                <h3>C++ Hiện Đại cho Control & AV (Tổng Quan)</h3>
+                <p>Tài liệu tổng hợp C++17/20 cho xe tự hành, thuật toán LQR C++ & bài tập gõ tay.</p>
+            </div>
+            <div class="card-meta">
+                <span class="tag tag-cpp">C++ AV</span>
+                <a href="CPP_HienDai_Control_AV_ToanTap.html" class="btn">🌐 Mở Tài Liệu</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- LÝ THUYẾT ĐIỀU KHIỂN & LQR -->
+    <div class="category-title">🎯 Lý Thuyết Điều Khiển, State Space & LQR</div>
+    <div class="grid">
+        <div class="card" data-title="tuan 1 2 mo hinh hoa state space">
+            <div>
+                <h3>Tuần 1-2: Mô Hình Hóa State Space</h3>
+                <p>Phương pháp Newton, Euler-Lagrange, Con lắc ngược & Tuyến tính hóa ma trận (A, B).</p>
+            </div>
+            <div class="card-meta">
+                <span class="tag tag-control">Mô hình hóa</span>
+                <a href="Tuan1_2_MoHinhHoa_StateSpace.html" class="btn">🌐 Mở Tài Liệu</a>
+            </div>
+        </div>
+
+        <div class="card" data-title="lqr toan tap">
+            <div>
+                <h3>LQR Toàn Tập</h3>
+                <p>Điều khiển Tối ưu LQR, phương trình Algebraic Riccati (ARE), chọn ma trận Q, R.</p>
+            </div>
+            <div class="card-meta">
+                <span class="tag tag-control">LQR</span>
+                <a href="LQR_ToanTap.html" class="btn">🌐 Mở Tài Liệu</a>
+            </div>
+        </div>
+
+        <div class="card" data-title="lqr nang cao lqg toan tap">
+            <div>
+                <h3>LQR Nâng Cao & LQG</h3>
+                <p>Bộ điều khiển LQG (Linear Quadratic Gaussian) = LQR + Bộ lọc Kalman trong nhiễu.</p>
+            </div>
+            <div class="card-meta">
+                <span class="tag tag-control">LQG</span>
+                <a href="LQR_NangCao_LQG_ToanTap.html" class="btn">🌐 Mở Tài Liệu</a>
+            </div>
+        </div>
+
+        <div class="card" data-title="lqr thuc chien robot that">
+            <div>
+                <h3>LQR Thực Chiến Robot Thật</h3>
+                <p>Triển khai LQR trên vi điều khiển STM32/ESP32, đọc Encoder & bão hòa tín hiệu PWM.</p>
+            </div>
+            <div class="card-meta">
+                <span class="tag tag-control">Thực chiến</span>
+                <a href="LQR_ThucChien_RobotThat.html" class="btn">🌐 Mở Tài Liệu</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- KALMAN FILTER & CẢM BIẾN -->
+    <div class="category-title">📡 Bộ Lọc Kalman & Sensor Fusion</div>
+    <div class="grid">
+        <div class="card" data-title="kalman filter toan tap">
+            <div>
+                <h3>Kalman Filter Toàn Tập</h3>
+                <p>5 bước thuật toán Kalman Filter rời rạc, dự đoán & cập nhật covariance, code C++/Python.</p>
+            </div>
+            <div class="card-meta">
+                <span class="tag tag-sensor">Kalman</span>
+                <a href="Kalman_Filter_ToanTap.html" class="btn">🌐 Mở Tài Liệu</a>
+            </div>
+        </div>
+
+        <div class="card" data-title="ekf toan tap extended kalman filter">
+            <div>
+                <h3>Extended Kalman Filter (EKF)</h3>
+                <p>Bộ lọc Kalman mở rộng cho hệ phi tuyến, ma trận Jacobian & Sensor Fusion LiDAR/GPS.</p>
+            </div>
+            <div class="card-meta">
+                <span class="tag tag-sensor">EKF</span>
+                <a href="EKF_ToanTap.html" class="btn">🌐 Mở Tài Liệu</a>
+            </div>
+        </div>
+
+        <div class="card" data-title="imu can bien toan tap">
+            <div>
+                <h3>IMU & Cảm Biến Toàn Tập</h3>
+                <p>Gia tốc kế, Con quay, Từ kế, Euler/Quaternion, Mahony/Madgwick filter & STM32.</p>
+            </div>
+            <div class="card-meta">
+                <span class="tag tag-sensor">IMU</span>
+                <a href="IMU_CanBien_ToanTap.html" class="btn">🌐 Mở Tài Liệu</a>
+            </div>
+        </div>
+
+        <div class="card" data-title="kien thuc nen tang bo sung lqr">
+            <div>
+                <h3>Kiến Thức Bổ Sung LQR (Phần 1)</h3>
+                <p>Bổ trợ toán học, tính ổn định Lyapunov, controllability & observability.</p>
+            </div>
+            <div class="card-meta">
+                <span class="tag tag-sensor">Bổ trợ 1</span>
+                <a href="KienThuc_NenTang_BoSung_LQR.html" class="btn">🌐 Mở Tài Liệu</a>
+            </div>
+        </div>
+
+        <div class="card" data-title="kien thuc nen tang bo sung phan 2 lqr">
+            <div>
+                <h3>Kiến Thức Bổ Sung LQR (Phần 2)</h3>
+                <p>Phân tích đáp ứng tần số Bode, Nyquist & thiết kế bộ quan sát trạng thái (Observer).</p>
+            </div>
+            <div class="card-meta">
+                <span class="tag tag-sensor">Bổ trợ 2</span>
+                <a href="KienThuc_NenTang_BoSung_Phan2_LQR.html" class="btn">🌐 Mở Tài Liệu</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- BÀI TẬP & KIỂM TRA -->
+    <div class="category-title">✏️ Bài Tập & Đánh Giá Năng Lực</div>
+    <div class="grid">
+        <div class="card" data-title="bai tap test tuan 1 linux git docker">
+            <div>
+                <h3>Bài Tập Test & Đánh Giá Tuần 1</h3>
+                <p>Đề test 100 điểm Linux, Terminal, Git, Docker: trắc nghiệm, đọc lệnh, gỡ lỗi & lab thực hành.</p>
+            </div>
+            <div class="card-meta">
+                <span class="tag tag-quiz">Test Tuần 1</span>
+                <a href="BaiTap_Test_Tuan1_Linux_Git_Docker.html" class="btn">🌐 Mở Bài Test</a>
+            </div>
+        </div>
+
+        <div class="card" data-title="bai tap lqr toan tap">
+            <div>
+                <h3>Bài Tập LQR Toàn Tập</h3>
+                <p>Tổng hợp bài tập thiết kế bộ điều khiển LQR có lời giải & code kiểm chứng.</p>
+            </div>
+            <div class="card-meta">
+                <span class="tag tag-quiz">Bài tập LQR</span>
+                <a href="BaiTap_LQR_ToanTap.html" class="btn">🌐 Mở Bài Tập</a>
+            </div>
+        </div>
+
+        <div class="card" data-title="bai kiem tra kien thuc toan tap">
+            <div>
+                <h3>Bài Kiểm Tra Kiến Thức Toàn Tập</h3>
+                <p>Đánh giá tổng hợp toàn bộ kiến thức lý thuyết điều khiển, toán học & lập trình.</p>
+            </div>
+            <div class="card-meta">
+                <span class="tag tag-quiz">Kiểm tra chung</span>
+                <a href="BaiKiemTra_KienThuc_ToanTap.html" class="btn">🌐 Mở Bài Kiểm Tra</a>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <p>Biên soạn bởi Huỳnh Công Danh · Tự học & Nghiên cứu Robotics, Control & Autonomous Vehicles · 2026</p>
+</footer>
+
+<script>
+function filterCards() {
+    let input = document.getElementById('searchInput').value.toLowerCase().trim();
+    let cards = document.getElementsByClassName('card');
+    
+    for (let card of cards) {
+        let title = card.getAttribute('data-title') || '';
+        let text = card.innerText.toLowerCase();
+        if (title.includes(input) || text.includes(input)) {
+            card.style.display = 'flex';
+        } else {
+            card.style.display = 'none';
+        }
+    }
+}
+</script>
+
+</body>
+</html>
